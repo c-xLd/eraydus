@@ -55,14 +55,14 @@ export function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-6 text-white/30">Keşfet</h4>
             <ul className="space-y-3.5">
-              <li><Link href="/collections" className="text-sm text-white/60 hover:text-white transition-colors">Koleksiyonlar</Link></li>
+              <li><Link href="/koleksiyonlar" className="text-sm text-white/60 hover:text-white transition-colors">Koleksiyonlar</Link></li>
               <li>
-                <Link href="/configurator" className="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1.5">
+                <Link href="/tasarla" className="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1.5">
                   Konfigüratör <ArrowUpRight className="size-3" />
                 </Link>
               </li>
-              <li><Link href="/projects" className="text-sm text-white/60 hover:text-white transition-colors">Mimari Projeler</Link></li>
-              <li><Link href="/about" className="text-sm text-white/60 hover:text-white transition-colors">Üretim & Kalite</Link></li>
+              <li><Link href="/projeler" className="text-sm text-white/60 hover:text-white transition-colors">Mimari Projeler</Link></li>
+              <li><Link href="/hakkimizda" className="text-sm text-white/60 hover:text-white transition-colors">Üretim & Kalite</Link></li>
             </ul>
           </div>
 
@@ -70,7 +70,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-6 text-white/30">Destek</h4>
             <ul className="space-y-3.5">
-              <li><Link href="/contact" className="text-sm text-white/60 hover:text-white transition-colors">İletişim</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">İletişim</Link></li>
               <li><Link href="/warranty" className="text-sm text-white/60 hover:text-white transition-colors">Garanti Şartları</Link></li>
               <li><Link href="/installation" className="text-sm text-white/60 hover:text-white transition-colors">Montaj Kılavuzu</Link></li>
               <li><Link href="/faq" className="text-sm text-white/60 hover:text-white transition-colors">SSS</Link></li>
@@ -92,7 +92,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-6 text-white/30">Kurumsal</h4>
             <ul className="space-y-3.5">
-              <li><Link href="/about" className="text-sm text-white/60 hover:text-white transition-colors">Hakkımızda</Link></li>
+              <li><Link href="/hakkimizda" className="text-sm text-white/60 hover:text-white transition-colors">Hakkımızda</Link></li>
               <li><Link href="/blog" className="text-sm text-white/60 hover:text-white transition-colors">Blog</Link></li>
               <li><Link href="/careers" className="text-sm text-white/60 hover:text-white transition-colors">Kariyer</Link></li>
               <li><Link href="/media" className="text-sm text-white/60 hover:text-white transition-colors">Basın</Link></li>

@@ -106,7 +106,7 @@ export function ConfiguratorPreview() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
         >
           <Link 
-            href="/configurator" 
+            href="/tasarla" 
             className="group inline-flex items-center justify-center rounded-full bg-white text-black px-10 h-14 text-base font-semibold hover:bg-white/95 transition-all duration-300 shadow-xl shadow-white/10"
           >
             Stüdyoyu Başlat
@@ -126,3 +126,4 @@ export function ConfiguratorPreview() {
     </section>
   )
 }
+

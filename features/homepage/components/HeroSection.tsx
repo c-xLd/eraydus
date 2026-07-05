@@ -76,7 +76,7 @@ export function HeroSection() {
           className="flex flex-col sm:flex-row gap-4 mt-12"
         >
           <Link 
-            href="/configurator" 
+            href="/tasarla" 
             className="group inline-flex items-center justify-center rounded-full bg-white text-black px-10 h-14 text-base font-semibold hover:bg-white/95 transition-all duration-300 shadow-2xl shadow-black/20 hover:shadow-3xl hover:scale-[1.02] active:scale-[0.98]"
           >
             Tasarımına Başla
@@ -85,7 +85,7 @@ export function HeroSection() {
             </svg>
           </Link>
           <Link 
-            href="/collections" 
+            href="/koleksiyonlar" 
             className="inline-flex items-center justify-center rounded-full border border-white/20 text-white px-10 h-14 text-base font-medium hover:bg-white/10 hover:border-white/30 transition-all duration-300 backdrop-blur-sm"
           >
             Koleksiyonu Keşfet
@@ -126,3 +126,4 @@ export function HeroSection() {
     </section>
   )
 }
+

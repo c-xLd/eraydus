@@ -61,7 +61,7 @@ export function ProductShowcase() {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <Link href="/collections" className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+            <Link href="/koleksiyonlar" className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Tüm Koleksiyonu İncele
               <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
             </Link>

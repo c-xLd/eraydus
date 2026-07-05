@@ -8,7 +8,24 @@ import { GlassCollectionSection } from '@/features/homepage/components/GlassColl
 import { TestimonialsSection } from '@/features/homepage/components/TestimonialsSection'
 import { FAQSection } from '@/features/homepage/components/FAQSection'
 import { FinalCTASection } from '@/features/homepage/components/FinalCTASection'
+import { Metadata } from 'next'
+import { pagesSeoData } from '@/lib/data/seo'
 
+export async function generateMetadata(): Promise<Metadata> {
+  const seoData = pagesSeoData.find(p => p.id === 'home')
+  
+  if (!seoData) return {}
+
+  return {
+    title: seoData.title,
+    description: seoData.description,
+    keywords: seoData.keywords,
+    robots: {
+      index: seoData.isIndexable,
+      follow: seoData.isIndexable,
+    }
+  }
+}
 export default function Home() {
   return (
     <div className="flex flex-col w-full">

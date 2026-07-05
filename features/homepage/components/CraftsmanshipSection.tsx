@@ -112,7 +112,7 @@ export function CraftsmanshipSection() {
               transition={{ duration: 0.8, delay: 0.4, ease }}
             >
               <Link
-                href="/about"
+                href="/hakkimizda"
                 className="group inline-flex items-center gap-3 text-foreground font-medium text-lg hover:text-champagne transition-colors"
               >
                 Kaliteyi Keşfet
@@ -125,3 +125,4 @@ export function CraftsmanshipSection() {
     </section>
   )
 }
+

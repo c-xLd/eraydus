@@ -60,11 +60,12 @@ export function Header() {
         {/* Desktop Nav — Center */}
         <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {[
-            { href: '/collections', label: 'Koleksiyonlar' },
-            { href: '/configurator', label: 'Konfigüratör' },
-            { href: '/projects', label: 'Projeler' },
-            { href: '/about', label: 'Hakkımızda' },
-            { href: '/contact', label: 'İletişim' },
+            { href: '/magaza', label: 'Mağaza' },
+            { href: '/koleksiyonlar', label: 'Katalog' },
+            { href: '/tasarla', label: 'Tasarla' },
+            { href: '/projeler', label: 'Projeler' },
+            { href: '/hakkimizda', label: 'Hakkımızda' },
+            { href: '/iletisim', label: 'İletişim' },
           ].map((item) => (
             <Link
               key={item.href}
@@ -96,7 +97,7 @@ export function Header() {
             WhatsApp
           </a>
           <Link
-            href="/configurator"
+            href="/tasarla"
             className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 group ${
               isScrolled || !isDarkHeroPage
                 ? 'bg-foreground text-background hover:bg-foreground/90 shadow-lg shadow-black/10'
@@ -134,11 +135,12 @@ export function Header() {
           <div className="flex flex-col h-full pt-28 pb-12 px-8">
             <nav className="flex flex-col gap-1 flex-1">
               {[
-                { href: '/collections', label: 'Koleksiyonlar' },
-                { href: '/configurator', label: 'Konfigüratör' },
-                { href: '/projects', label: 'Projeler' },
-                { href: '/about', label: 'Hakkımızda' },
-                { href: '/contact', label: 'İletişim' },
+                { href: '/magaza', label: 'Mağaza' },
+                { href: '/koleksiyonlar', label: 'Katalog' },
+                { href: '/tasarla', label: 'Tasarla' },
+                { href: '/projeler', label: 'Projeler' },
+                { href: '/hakkimizda', label: 'Hakkımızda' },
+                { href: '/iletisim', label: 'İletişim' },
               ].map((item, i) => (
                 <Link
                   key={item.href}
@@ -159,7 +161,7 @@ export function Header() {
 
             <div className="flex flex-col gap-4 mt-8">
               <Link
-                href="/configurator"
+                href="/tasarla"
                 onClick={() => setMobileMenuOpen(false)}
                 className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-8 h-14 text-base font-semibold"
               >
@@ -182,3 +184,4 @@ export function Header() {
     </header>
   )
 }
+

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,9 +13,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import { globalSeoData } from "@/lib/data/seo";
+
 export const metadata: Metadata = {
-  title: "ERAYDUŞ | Dijital Deneyim Platformu",
-  description: "Mimarinin zarafetini banyolarınıza taşıyan, özel üretim lüks duşakabin sistemleri.",
+  title: {
+    template: `%s ${globalSeoData.titleSeparator} ${globalSeoData.siteName}`,
+    default: `${globalSeoData.siteName} ${globalSeoData.titleSeparator} ${globalSeoData.defaultDescription}`,
+  },
+  description: globalSeoData.defaultDescription,
+  openGraph: {
+    type: "website",
+    siteName: globalSeoData.siteName,
+    title: {
+      template: `%s ${globalSeoData.titleSeparator} ${globalSeoData.siteName}`,
+      default: globalSeoData.siteName,
+    },
+    description: globalSeoData.defaultDescription,
+    images: [{ url: globalSeoData.defaultOgImage }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: globalSeoData.twitterHandle,
+  },
 };
 
 export default function RootLayout({
@@ -30,6 +50,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );

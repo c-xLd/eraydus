@@ -74,7 +74,7 @@ export function FinalCTASection() {
           className="flex flex-col sm:flex-row gap-4"
         >
           <Link
-            href="/configurator"
+            href="/tasarla"
             className="group inline-flex items-center justify-center gap-3 rounded-full bg-white text-black px-10 h-16 text-lg font-medium hover:bg-white/90 transition-colors"
           >
             Konfigüratörü Başlat
@@ -103,3 +103,4 @@ export function FinalCTASection() {
     </section>
   )
 }
+
