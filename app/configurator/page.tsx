@@ -1,304 +1,530 @@
 'use client'
 
 import { useConfiguratorStore } from '@/features/configurator/store/useConfiguratorStore'
-import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, ChevronRight, ChevronLeft, Check, Info } from 'lucide-react'
-import { useState } from 'react'
+import { 
+  MessageCircle, ChevronRight, ChevronLeft, Check, Info,
+  LayoutGrid, Palette, Box, Ruler, GlassWater, Layers, PaintBucket,
+  DoorOpen, ArrowLeftRight, Grip, Sparkles, Truck, Shield, FileCheck,
+  RotateCcw, Share2, Download, Clock
+} from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
-// Dummy Data mapped to specification
+// ─── DATA ─────────────────────────────────────────────────────────
+const STEPS = [
+  { num: 1, label: 'Yerleşim', icon: LayoutGrid },
+  { num: 2, label: 'Koleksiyon', icon: Palette },
+  { num: 3, label: 'Model', icon: Box },
+  { num: 4, label: 'Ölçüler', icon: Ruler },
+  { num: 5, label: 'Cam Tipi', icon: GlassWater },
+  { num: 6, label: 'Cam Kalınlığı', icon: Layers },
+  { num: 7, label: 'Profil Rengi', icon: PaintBucket },
+  { num: 8, label: 'Kapı Sistemi', icon: DoorOpen },
+  { num: 9, label: 'Açılım', icon: ArrowLeftRight },
+  { num: 10, label: 'Kulp', icon: Grip },
+  { num: 11, label: 'Aksesuar', icon: Sparkles },
+  { num: 12, label: 'Kurulum', icon: Truck },
+  { num: 13, label: 'Garanti', icon: Shield },
+  { num: 14, label: 'Özet', icon: FileCheck },
+]
+
 const layouts = [
-  { id: 'wall-to-wall', name: 'İki Duvar Arası', img: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=400&auto=format&fit=crop' },
-  { id: 'corner', name: 'Köşe', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&auto=format&fit=crop' },
-  { id: 'walk-in', name: 'Walk-In', img: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=400&auto=format&fit=crop' }
+  { id: 'wall-to-wall', name: 'İki Duvar Arası', desc: 'Duvardan duvara montaj', img: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=400&auto=format&fit=crop' },
+  { id: 'corner', name: 'Köşe Montaj', desc: 'İki duvarın birleştiği köşe', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&auto=format&fit=crop' },
+  { id: 'walk-in', name: 'Walk-In', desc: 'Açık geçişli, kapısız tasarım', img: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=400&auto=format&fit=crop' },
+  { id: 'sliding', name: 'Sürgülü Niş', desc: 'Niş içine sürgülü sistem', img: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=400&auto=format&fit=crop' },
 ]
 
 const collections = [
-  { id: 'edge', name: 'EDGE Serisi', price: 'Minimal ve modern profil tasarımı' },
-  { id: 'pure', name: 'PURE Serisi', price: 'Tamamen profilsiz, şeffaf görünüm' },
-  { id: 'luxury', name: 'LUXURY Serisi', price: 'Lüks donanım ve premium hissiyat' }
+  { id: 'edge', name: 'EDGE', sub: 'Minimal Profil', price: '₺8.500\'den', desc: 'Ultra ince profiller ve net geometrik çizgiler.' },
+  { id: 'pure', name: 'PURE', sub: 'Çerçevesiz', price: '₺12.000\'den', desc: 'Tamamen profilsiz, maksimum şeffaflık.' },
+  { id: 'luxury', name: 'LUXURY', sub: 'Premium', price: '₺16.500\'den', desc: 'Lüks donanım ve en üst düzey hissiyat.' },
 ]
 
 const models = [
-  { id: 'm1', name: 'Standard Sürgülü', desc: 'Klasik sürgülü sistem' },
-  { id: 'm2', name: 'Soft-Close Sürgülü', desc: 'Sessiz kapanan sürgülü sistem' },
-  { id: 'm3', name: 'Menteşeli Kapı', desc: 'Dışa veya içe açılır sistem' }
+  { id: 'sliding', name: 'Sürgülü Sistem', desc: 'Sessiz ray üzerinde süzülen cam paneller.' },
+  { id: 'softclose', name: 'Soft-Close Sürgülü', desc: 'Yavaş kapanan premium sürgü mekanizması.' },
+  { id: 'hinged', name: 'Menteşeli Kapı', desc: 'Klasik dışa veya içe açılır cam kapı.' },
+  { id: 'pivot', name: 'Pivot Kapı', desc: 'Merkez eksenli, 360° dönebilen kapı.' },
 ]
 
 const glassTypes = [
-  { id: 'clear', name: 'Şeffaf', desc: 'Tam saydamlık ve ferahlık' },
-  { id: 'smoke', name: 'Füme', desc: 'Gizlilik ve premium koyu görünüm' },
-  { id: 'bronze', name: 'Bronz', desc: 'Sıcak tonlar ve lüks ambiyans' },
-  { id: 'fluted', name: 'Fluted', desc: 'Dokulu ve mimari görünüm' }
+  { id: 'clear', name: 'Şeffaf', desc: 'Tam saydamlık', color: 'bg-white/80' },
+  { id: 'smoke', name: 'Füme', desc: 'Koyu zarif görünüm', color: 'bg-neutral-600/60' },
+  { id: 'bronze', name: 'Bronz', desc: 'Sıcak lüks tonlar', color: 'bg-amber-700/40' },
+  { id: 'fluted', name: 'Fluted', desc: 'Dikey çizgili doku', color: 'bg-white/60' },
+  { id: 'frosted', name: 'Buzlu Mat', desc: 'Gizlilik odaklı', color: 'bg-gray-300/70' },
+  { id: 'nano', name: 'Nano Kaplı', desc: 'Leke tutmaz yüzey', color: 'bg-sky-100/50' },
 ]
 
 const profileColors = [
-  { id: 'black', name: 'Mat Siyah', hex: '#111111' },
-  { id: 'chrome', name: 'Parlak Krom', hex: '#E8E9EB' },
+  { id: 'black', name: 'Mat Siyah', hex: '#1A1A1A' },
+  { id: 'chrome', name: 'Parlak Krom', hex: '#D4D4D8' },
   { id: 'gold', name: 'Fırçalı Altın', hex: '#C9A86A' },
-  { id: 'white', name: 'Mat Beyaz', hex: '#F8F8F6' }
+  { id: 'white', name: 'Mat Beyaz', hex: '#F5F5F4' },
+  { id: 'gunmetal', name: 'Antrasit', hex: '#52525B' },
+  { id: 'nickel', name: 'Fırçalı Nikel', hex: '#A1A1AA' },
 ]
 
+const accessories = [
+  { id: 'nano', name: 'Nano Kaplama', price: 750, desc: 'Leke tutmaz cam yüzeyi' },
+  { id: 'towel', name: 'Havlu Askısı', price: 450, desc: 'Profil entegre havluluk' },
+  { id: 'shelf', name: 'Cam Raf', price: 600, desc: 'Temperli cam banyo rafı' },
+  { id: 'led', name: 'LED Aydınlatma', price: 1200, desc: 'Profil içi ambiyans ışığı' },
+  { id: 'softclose', name: 'Soft-Close', price: 900, desc: 'Sessiz kapanma mekanizması' },
+  { id: 'magnetic', name: 'Manyetik Conta', price: 350, desc: 'Premium sızdırmazlık' },
+]
+
+// ─── ANIMATED PRICE DISPLAY ──────────────────────────────────────
+function AnimatedPrice({ value }: { value: number }) {
+  const [display, setDisplay] = useState(value)
+  const prev = useRef(value)
+  
+  useEffect(() => {
+    const start = prev.current
+    const end = value
+    const duration = 600
+    const startTime = performance.now()
+    
+    const animate = (time: number) => {
+      const elapsed = time - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplay(Math.round(start + (end - start) * eased))
+      if (progress < 1) requestAnimationFrame(animate)
+    }
+    
+    requestAnimationFrame(animate)
+    prev.current = value
+  }, [value])
+  
+  return <span>₺{display.toLocaleString('tr-TR')}</span>
+}
+
+// ─── OPTION CARD ─────────────────────────────────────────────────
+function OptionCard({ 
+  selected, onClick, children, className = '' 
+}: { 
+  selected: boolean; onClick: () => void; children: React.ReactNode; className?: string 
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`relative text-left rounded-2xl border-2 transition-all duration-300 overflow-hidden group ${
+        selected 
+          ? 'border-foreground bg-foreground/[0.03] shadow-sm' 
+          : 'border-transparent bg-surface hover:bg-surface-elevated hover:shadow-sm'
+      } ${className}`}
+    >
+      {children}
+      {selected && (
+        <motion.div 
+          initial={{ scale: 0 }} 
+          animate={{ scale: 1 }} 
+          className="absolute top-3 right-3 w-6 h-6 rounded-full bg-foreground flex items-center justify-center"
+        >
+          <Check className="size-3.5 text-background" />
+        </motion.div>
+      )}
+    </button>
+  )
+}
+
+// ─── MAIN COMPONENT ──────────────────────────────────────────────
 export default function ConfiguratorPage() {
   const state = useConfiguratorStore()
-  
-  const generateWhatsAppMessage = () => {
-    const phone = "+905550000000" 
-    const message = `Merhaba, Erayduş web sitesinden bir tasarım oluşturdum ve fiyat teklifi almak istiyorum.
-    
-*Tasarım Detayları:*
-- Yerleşim: ${state.layout || '-'}
-- Koleksiyon: ${state.collection || '-'}
-- Model: ${state.model || '-'}
-- Ölçüler: G:${state.width}cm Y:${state.height}cm
-- Cam: ${state.glassType || '-'} (${state.glassThickness || '8mm'})
-- Profil: ${state.profileColor || '-'}
-- Kapı/Açılım: ${state.doorSystem || '-'} / ${state.openingDirection || '-'}
-- Aksesuarlar: ${state.accessories.length > 0 ? state.accessories.join(', ') : 'Yok'}
-- Kurulum: ${state.installation || '-'}
-- Garanti: ${state.warranty || '-'}
-- Tahmini Fiyat: ₺${state.calculatePrice().toLocaleString('tr-TR')}
+  const completed = state.getCompletedSteps()
+  const price = state.calculatePrice()
 
-Yardımcı olabilir misiniz?`
-    
-    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+  const generateWhatsAppMessage = () => {
+    const phone = "+905550000000"
+    const lines = [
+      `Merhaba, Erayduş Konfigüratör'de bir tasarım oluşturdum.`,
+      ``,
+      `📐 *Tasarım Detayları:*`,
+      `• Yerleşim: ${layouts.find(l => l.id === state.layout)?.name || '-'}`,
+      `• Koleksiyon: ${collections.find(c => c.id === state.collection)?.name || '-'}`,
+      `• Model: ${models.find(m => m.id === state.model)?.name || '-'}`,
+      `• Ölçüler: ${state.width}×${state.height} cm`,
+      `• Cam: ${glassTypes.find(g => g.id === state.glassType)?.name || '-'} (${state.glassThickness || '-'})`,
+      `• Profil: ${profileColors.find(p => p.id === state.profileColor)?.name || '-'}`,
+      `• Kapı: ${state.doorSystem || '-'}`,
+      `• Aksesuarlar: ${state.accessories.length > 0 ? state.accessories.map(a => accessories.find(x => x.id === a)?.name).join(', ') : 'Yok'}`,
+      `• Kurulum: ${state.installation || '-'}`,
+      `• Garanti: ${state.warranty || '-'}`,
+      ``,
+      `💰 Tahmini: ₺${price.toLocaleString('tr-TR')} + KDV`,
+      `🚚 Teslimat: ${state.getDeliveryEstimate()}`,
+      ``,
+      `Detaylı fiyat teklifi alabilir miyim?`
+    ].join('\n')
+    return `https://wa.me/${phone}?text=${encodeURIComponent(lines)}`
   }
 
-  const toggleAccessory = (id: string) => {
-    if (state.accessories.includes(id)) {
-      state.updateField('accessories', state.accessories.filter(a => a !== id))
-    } else {
-      state.updateField('accessories', [...state.accessories, id])
+  const stepVariants = {
+    initial: { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+    exit: { opacity: 0, y: -8, transition: { duration: 0.2 } }
+  }
+
+  // Dynamic preview overlay based on glass selection
+  const glassOverlay = () => {
+    switch (state.glassType) {
+      case 'smoke': return 'bg-neutral-900/40'
+      case 'bronze': return 'bg-amber-900/30'
+      case 'frosted': return 'bg-white/50 backdrop-blur-sm'
+      case 'fluted': return 'bg-white/20 backdrop-blur-[1px]'
+      case 'nano': return 'bg-sky-200/10'
+      default: return 'bg-transparent'
     }
   }
 
-  // Animation variants
-  const stepVariants = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 }
+  const profileBorderColor = () => {
+    const p = profileColors.find(c => c.id === state.profileColor)
+    return p ? p.hex : '#E5E5E5'
   }
 
   return (
-    <div className="flex flex-col lg:flex-row h-[100dvh] pt-[72px] lg:pt-[88px] bg-surface pb-0 overflow-hidden">
+    <div className="flex flex-col lg:flex-row h-[100dvh] bg-background overflow-hidden">
       
-      {/* LEFT PANEL - CONFIGURATION STEPS (30%) */}
-      <div className="w-full lg:w-[30%] h-full flex flex-col border-r border-border bg-background shadow-xl z-20">
-        <div className="p-6 border-b border-border flex-shrink-0">
-          <div className="flex justify-between items-center mb-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Adım {state.currentStep} / 14</p>
-            <div className="flex gap-1">
-              {[...Array(14)].map((_, i) => (
-                <div key={i} className={`h-1 w-2 rounded-full ${i + 1 <= state.currentStep ? 'bg-primary' : 'bg-muted'}`} />
-              ))}
-            </div>
+      {/* ── STEP NAVIGATOR (left rail) ── */}
+      <div className="hidden lg:flex flex-col w-16 h-full bg-surface border-r border-border items-center py-6 gap-1 overflow-y-auto scrollbar-hide flex-shrink-0">
+        {STEPS.map((step) => {
+          const Icon = step.icon
+          const isActive = state.currentStep === step.num
+          const isDone = completed.includes(step.num)
+          return (
+            <button
+              key={step.num}
+              onClick={() => state.setStep(step.num)}
+              title={step.label}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 relative group ${
+                isActive
+                  ? 'bg-foreground text-background shadow-md'
+                  : isDone
+                    ? 'bg-foreground/10 text-foreground hover:bg-foreground/20'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              {isDone && !isActive ? (
+                <Check className="size-3.5" />
+              ) : (
+                <Icon className="size-4" />
+              )}
+              {/* Tooltip */}
+              <div className="absolute left-full ml-3 px-2.5 py-1 bg-foreground text-background text-[11px] font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 shadow-lg">
+                {step.label}
+              </div>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* ── MOBILE TOP BAR ── */}
+      <div className="lg:hidden flex items-center gap-2 px-4 pt-20 pb-3 bg-background border-b border-border overflow-x-auto scrollbar-hide flex-shrink-0">
+        {STEPS.map((step) => {
+          const isActive = state.currentStep === step.num
+          const isDone = completed.includes(step.num)
+          return (
+            <button
+              key={step.num}
+              onClick={() => state.setStep(step.num)}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                isActive
+                  ? 'bg-foreground text-background'
+                  : isDone
+                    ? 'bg-foreground/10 text-foreground'
+                    : 'text-muted-foreground'
+              }`}
+            >
+              {step.num}
+            </button>
+          )
+        })}
+      </div>
+
+      {/* ── CONFIGURATION PANEL ── */}
+      <div className="w-full lg:w-[380px] xl:w-[420px] h-full flex flex-col bg-background border-r border-border flex-shrink-0 z-10">
+        {/* Step Header */}
+        <div className="px-6 pt-6 lg:pt-24 pb-4 flex-shrink-0">
+          <div className="flex items-center gap-3 mb-1">
+            <span className="text-xs font-semibold text-champagne tracking-widest uppercase">Adım {state.currentStep}</span>
+            <span className="text-xs text-muted-foreground">/ 14</span>
           </div>
-          <h1 className="text-2xl font-light">
-            {state.currentStep === 1 && 'Yerleşim Biçimi'}
-            {state.currentStep === 2 && 'Koleksiyon'}
-            {state.currentStep === 3 && 'Sistem Modeli'}
-            {state.currentStep === 4 && 'Ölçülendirme'}
-            {state.currentStep === 5 && 'Cam Tipi'}
-            {state.currentStep === 6 && 'Cam Kalınlığı'}
-            {state.currentStep === 7 && 'Profil Rengi'}
-            {state.currentStep === 8 && 'Kapı Sistemi'}
-            {state.currentStep === 9 && 'Açılım Yönü'}
-            {state.currentStep === 10 && 'Kulp Seçimi'}
-            {state.currentStep === 11 && 'Aksesuarlar'}
-            {state.currentStep === 12 && 'Kurulum'}
-            {state.currentStep === 13 && 'Garanti Paketleri'}
-            {state.currentStep === 14 && 'Tasarım Özeti'}
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {STEPS[state.currentStep - 1].label}
           </h1>
         </div>
-        
-        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+
+        {/* Step Content */}
+        <div className="flex-1 overflow-y-auto px-6 pb-6 scrollbar-hide">
           <AnimatePresence mode="wait">
-            
+
             {/* Step 1: Layout */}
             {state.currentStep === 1 && (
-              <motion.div key="step1" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="grid grid-cols-2 gap-4">
+              <motion.div key="s1" {...stepVariants} className="grid grid-cols-2 gap-3">
                 {layouts.map(l => (
-                  <button key={l.id} onClick={() => state.updateField('layout', l.id)}
-                    className={`relative flex flex-col text-left overflow-hidden rounded-2xl border transition-all duration-300 ${state.layout === l.id ? 'border-primary ring-1 ring-primary' : 'border-border hover:border-primary/50'}`}>
-                    <div className="aspect-[4/3] w-full bg-muted">
-                      <img src={l.img} alt={l.name} className="w-full h-full object-cover" />
+                  <OptionCard key={l.id} selected={state.layout === l.id} onClick={() => state.updateField('layout', l.id)}>
+                    <div className="aspect-[4/3] w-full overflow-hidden">
+                      <img src={l.img} alt={l.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
-                    <div className="p-4 bg-card">
-                      <p className="font-medium text-sm">{l.name}</p>
+                    <div className="p-3">
+                      <p className="font-semibold text-sm">{l.name}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{l.desc}</p>
                     </div>
-                    {state.layout === l.id && <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1"><Check className="size-3" /></div>}
-                  </button>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 2: Collection */}
             {state.currentStep === 2 && (
-              <motion.div key="step2" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
+              <motion.div key="s2" {...stepVariants} className="flex flex-col gap-3">
                 {collections.map(c => (
-                  <button key={c.id} onClick={() => state.updateField('collection', c.id)}
-                    className={`flex flex-col p-5 rounded-2xl border transition-all duration-300 ${state.collection === c.id ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <div className="flex justify-between w-full mb-2">
-                      <p className="font-medium text-lg">{c.name}</p>
-                      {state.collection === c.id && <Check className="size-5 text-primary" />}
+                  <OptionCard key={c.id} selected={state.collection === c.id} onClick={() => state.updateField('collection', c.id)} className="p-5">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <p className="text-xl font-bold tracking-tight">{c.name}</p>
+                        <p className="text-xs text-champagne font-medium">{c.sub}</p>
+                      </div>
+                      <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">{c.price}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground text-left">{c.price}</p>
-                  </button>
+                    <p className="text-sm text-muted-foreground">{c.desc}</p>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 3: Model */}
             {state.currentStep === 3 && (
-              <motion.div key="step3" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
+              <motion.div key="s3" {...stepVariants} className="flex flex-col gap-3">
                 {models.map(m => (
-                  <button key={m.id} onClick={() => state.updateField('model', m.id)}
-                    className={`flex flex-col p-5 rounded-2xl border transition-all duration-300 ${state.model === m.id ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <div className="flex justify-between w-full mb-2">
-                      <p className="font-medium text-lg">{m.name}</p>
-                      {state.model === m.id && <Check className="size-5 text-primary" />}
-                    </div>
-                    <p className="text-sm text-muted-foreground text-left">{m.desc}</p>
-                  </button>
+                  <OptionCard key={m.id} selected={state.model === m.id} onClick={() => state.updateField('model', m.id)} className="p-5">
+                    <p className="font-semibold text-base mb-1">{m.name}</p>
+                    <p className="text-sm text-muted-foreground">{m.desc}</p>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 4: Dimensions */}
             {state.currentStep === 4 && (
-              <motion.div key="step4" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="space-y-8">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium text-foreground">Genişlik (cm)</label>
-                    <span className="text-lg font-light text-primary">{state.width} cm</span>
+              <motion.div key="s4" {...stepVariants} className="space-y-8">
+                {[
+                  { label: 'Genişlik', field: 'width', min: 70, max: 250, unit: 'cm', value: state.width },
+                  { label: 'Yükseklik', field: 'height', min: 180, max: 240, unit: 'cm', value: state.height },
+                ].map(dim => (
+                  <div key={dim.field} className="space-y-3">
+                    <div className="flex justify-between items-baseline">
+                      <label className="text-sm font-medium">{dim.label}</label>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-2xl font-light tabular-nums">{dim.value}</span>
+                        <span className="text-xs text-muted-foreground">{dim.unit}</span>
+                      </div>
+                    </div>
+                    <input
+                      type="range"
+                      min={dim.min}
+                      max={dim.max}
+                      value={dim.value}
+                      onChange={(e) => state.updateField(dim.field, parseInt(e.target.value))}
+                      className="w-full h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-foreground [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md"
+                    />
+                    <div className="flex justify-between text-[10px] text-muted-foreground">
+                      <span>{dim.min} {dim.unit}</span>
+                      <span>{dim.max} {dim.unit}</span>
+                    </div>
                   </div>
-                  <input type="range" min="80" max="250" value={state.width} onChange={(e) => state.updateField('width', parseInt(e.target.value))} className="w-full accent-primary" />
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium text-foreground">Yükseklik (cm)</label>
-                    <span className="text-lg font-light text-primary">{state.height} cm</span>
-                  </div>
-                  <input type="range" min="190" max="240" step="5" value={state.height} onChange={(e) => state.updateField('height', parseInt(e.target.value))} className="w-full accent-primary" />
-                </div>
-                <div className="p-4 bg-muted/50 rounded-xl flex gap-3 text-sm text-muted-foreground">
-                  <Info className="size-5 flex-shrink-0 text-primary" />
-                  <p>Ölçüler yaklaşık maliyet hesaplamak içindir. Kesin ölçüler profesyonel keşif ekibimiz tarafından alınacaktır.</p>
+                ))}
+                <div className="p-4 bg-champagne/10 border border-champagne/20 rounded-xl flex gap-3 text-sm text-foreground/70">
+                  <Info className="size-4 flex-shrink-0 text-champagne mt-0.5" />
+                  <p className="text-xs leading-relaxed">Kesin ölçüler profesyonel keşif ekibimiz tarafından alınacaktır. Buradaki değerler tahmini fiyat hesaplaması içindir.</p>
                 </div>
               </motion.div>
             )}
 
             {/* Step 5: Glass Type */}
             {state.currentStep === 5 && (
-              <motion.div key="step5" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="grid grid-cols-2 gap-4">
+              <motion.div key="s5" {...stepVariants} className="grid grid-cols-2 gap-3">
                 {glassTypes.map(g => (
-                  <button key={g.id} onClick={() => state.updateField('glassType', g.id)}
-                    className={`relative p-5 rounded-2xl border transition-all duration-300 text-left ${state.glassType === g.id ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <p className="font-medium mb-1">{g.name}</p>
-                    <p className="text-xs text-muted-foreground">{g.desc}</p>
-                    {state.glassType === g.id && <div className="absolute top-3 right-3"><Check className="size-4 text-primary" /></div>}
-                  </button>
+                  <OptionCard key={g.id} selected={state.glassType === g.id} onClick={() => state.updateField('glassType', g.id)} className="p-4">
+                    <div className={`w-full h-12 rounded-lg mb-3 border border-black/5 ${g.color}`} />
+                    <p className="font-semibold text-sm">{g.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{g.desc}</p>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 6: Glass Thickness */}
             {state.currentStep === 6 && (
-              <motion.div key="step6" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
-                {['6mm Standart', '8mm Premium', '10mm Ultra Premium'].map(t => (
-                  <button key={t} onClick={() => state.updateField('glassThickness', t)}
-                    className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 ${state.glassThickness === t ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <span className="font-medium">{t}</span>
-                    {state.glassThickness === t && <Check className="size-5 text-primary" />}
-                  </button>
+              <motion.div key="s6" {...stepVariants} className="flex flex-col gap-3">
+                {[
+                  { id: '6mm', name: '6mm Standart', desc: 'Ekonomik çözüm, temel koruma', weight: 'Hafif' },
+                  { id: '8mm', name: '8mm Premium', desc: 'Üstün dayanıklılık ve kalınlık hissi', weight: 'Orta' },
+                  { id: '10mm', name: '10mm Ultra', desc: 'En yüksek dayanım ve lüks his', weight: 'Ağır' },
+                ].map(t => (
+                  <OptionCard key={t.id} selected={state.glassThickness === t.id} onClick={() => state.updateField('glassThickness', t.id)} className="p-5">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-semibold text-base">{t.name}</p>
+                        <p className="text-sm text-muted-foreground mt-0.5">{t.desc}</p>
+                      </div>
+                      <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full uppercase">{t.weight}</span>
+                    </div>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 7: Profile Color */}
             {state.currentStep === 7 && (
-              <motion.div key="step7" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="grid grid-cols-2 gap-4">
+              <motion.div key="s7" {...stepVariants} className="grid grid-cols-2 gap-3">
                 {profileColors.map(p => (
-                  <button key={p.id} onClick={() => state.updateField('profileColor', p.id)}
-                    className={`flex items-center gap-3 p-4 rounded-2xl border transition-all duration-300 ${state.profileColor === p.id ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <div className="w-8 h-8 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: p.hex }} />
+                  <OptionCard key={p.id} selected={state.profileColor === p.id} onClick={() => state.updateField('profileColor', p.id)} className="p-4 flex items-center gap-3">
+                    <div 
+                      className="w-10 h-10 rounded-full border-2 border-black/10 shadow-inner flex-shrink-0" 
+                      style={{ backgroundColor: p.hex }} 
+                    />
                     <span className="font-medium text-sm">{p.name}</span>
-                  </button>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
-            {/* Step 8-10 Grouped similarly to simplify */}
-            {(state.currentStep === 8 || state.currentStep === 9 || state.currentStep === 10) && (
-              <motion.div key={`step${state.currentStep}`} variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
-                {state.currentStep === 8 && ['Sürgülü', 'Pivot (Menteşeli)', 'Walk-in (Kapısız)'].map(d => (
-                  <button key={d} onClick={() => state.updateField('doorSystem', d)} className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 ${state.doorSystem === d ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <span className="font-medium">{d}</span>{state.doorSystem === d && <Check className="size-5 text-primary" />}
-                  </button>
+            {/* Steps 8, 9, 10: Door, Direction, Handle */}
+            {[8, 9, 10].includes(state.currentStep) && (
+              <motion.div key={`s${state.currentStep}`} {...stepVariants} className="flex flex-col gap-3">
+                {state.currentStep === 8 && [
+                  { id: 'sliding', name: 'Sürgülü', desc: 'Ray üzerinde süzülen cam panel' },
+                  { id: 'pivot', name: 'Pivot (Menteşeli)', desc: 'Merkez eksenli açılır kapı' },
+                  { id: 'walkin', name: 'Walk-in (Kapısız)', desc: 'Açık geçişli modern tasarım' },
+                  { id: 'folding', name: 'Katlanır', desc: 'Dar alanlar için katlanır panel' },
+                ].map(d => (
+                  <OptionCard key={d.id} selected={state.doorSystem === d.id} onClick={() => state.updateField('doorSystem', d.id)} className="p-5">
+                    <p className="font-semibold">{d.name}</p>
+                    <p className="text-sm text-muted-foreground mt-0.5">{d.desc}</p>
+                  </OptionCard>
                 ))}
-                {state.currentStep === 9 && ['Sağdan Açılır', 'Soldan Açılır', 'Çift Yönlü', 'Sabit (Açılmaz)'].map(o => (
-                  <button key={o} onClick={() => state.updateField('openingDirection', o)} className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 ${state.openingDirection === o ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <span className="font-medium">{o}</span>{state.openingDirection === o && <Check className="size-5 text-primary" />}
-                  </button>
+                {state.currentStep === 9 && [
+                  { id: 'right', name: 'Sağdan Açılır' },
+                  { id: 'left', name: 'Soldan Açılır' },
+                  { id: 'double', name: 'Çift Yönlü' },
+                  { id: 'fixed', name: 'Sabit (Açılmaz)' },
+                ].map(o => (
+                  <OptionCard key={o.id} selected={state.openingDirection === o.id} onClick={() => state.updateField('openingDirection', o.id)} className="p-5">
+                    <p className="font-semibold">{o.name}</p>
+                  </OptionCard>
                 ))}
-                {state.currentStep === 10 && ['Minimal Kulp', 'Modern Kulp', 'Kare Kulp', 'Gizli (Profil İçi)'].map(h => (
-                  <button key={h} onClick={() => state.updateField('handleSelection', h)} className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 ${state.handleSelection === h ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <span className="font-medium">{h}</span>{state.handleSelection === h && <Check className="size-5 text-primary" />}
-                  </button>
+                {state.currentStep === 10 && [
+                  { id: 'minimal', name: 'Minimal', desc: 'İnce ve göze batmayan' },
+                  { id: 'modern', name: 'Modern', desc: 'Ergonomik dikdörtgen profil' },
+                  { id: 'square', name: 'Kare', desc: 'Geometrik keskin hatlar' },
+                  { id: 'hidden', name: 'Gizli', desc: 'Profil içine entegre' },
+                ].map(h => (
+                  <OptionCard key={h.id} selected={state.handleSelection === h.id} onClick={() => state.updateField('handleSelection', h.id)} className="p-5">
+                    <p className="font-semibold">{h.name}</p>
+                    {h.desc && <p className="text-sm text-muted-foreground mt-0.5">{h.desc}</p>}
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 11: Accessories */}
             {state.currentStep === 11 && (
-              <motion.div key="step11" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
-                {[
-                  { id: 'nano', name: 'Nano Leke Tutmaz Kaplama', price: '₺750' },
-                  { id: 'towel', name: 'Havlu Askısı', price: '₺450' },
-                  { id: 'shelf', name: 'Cam Raf Entegre', price: '₺600' }
-                ].map(a => (
-                  <button key={a.id} onClick={() => toggleAccessory(a.id)}
-                    className={`flex flex-col p-5 rounded-2xl border transition-all duration-300 ${state.accessories.includes(a.id) ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <div className="flex justify-between w-full mb-2">
-                      <span className="font-medium">{a.name}</span>
-                      {state.accessories.includes(a.id) && <Check className="size-5 text-primary" />}
+              <motion.div key="s11" {...stepVariants} className="flex flex-col gap-3">
+                <p className="text-xs text-muted-foreground mb-2">Birden fazla seçebilirsiniz.</p>
+                {accessories.map(a => (
+                  <OptionCard key={a.id} selected={state.accessories.includes(a.id)} onClick={() => state.toggleAccessory(a.id)} className="p-5">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold">{a.name}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{a.desc}</p>
+                      </div>
+                      <span className="text-xs font-medium text-champagne">+₺{a.price.toLocaleString('tr-TR')}</span>
                     </div>
-                    <span className="text-sm text-muted-foreground text-left">+{a.price}</span>
-                  </button>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 12: Installation */}
             {state.currentStep === 12 && (
-              <motion.div key="step12" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
-                {['Sadece Teslimat', 'Profesyonel Kurulum', 'Premium Kurulum (Hızlı)'].map(i => (
-                  <button key={i} onClick={() => state.updateField('installation', i)} className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 ${state.installation === i ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <span className="font-medium">{i}</span>{state.installation === i && <Check className="size-5 text-primary" />}
-                  </button>
+              <motion.div key="s12" {...stepVariants} className="flex flex-col gap-3">
+                {[
+                  { id: 'delivery', name: 'Sadece Teslimat', desc: 'Kendi ekibiniz kurar', price: 'Ücretsiz' },
+                  { id: 'professional', name: 'Profesyonel Kurulum', desc: 'Erayduş uzman ekibi', price: '+₺2.500' },
+                  { id: 'premium', name: 'Premium Ekspres', desc: 'Öncelikli üretim + hızlı kurulum', price: '+₺4.500' },
+                ].map(i => (
+                  <OptionCard key={i.id} selected={state.installation === i.id} onClick={() => state.updateField('installation', i.id)} className="p-5">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold">{i.name}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{i.desc}</p>
+                      </div>
+                      <span className="text-xs font-medium text-champagne">{i.price}</span>
+                    </div>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 13: Warranty */}
             {state.currentStep === 13 && (
-              <motion.div key="step13" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
-                {['2 Yıl Standart Garanti', '5 Yıl Uzatılmış Garanti', '10 Yıl Premium Garanti'].map(w => (
-                  <button key={w} onClick={() => state.updateField('warranty', w)} className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 ${state.warranty === w ? 'border-primary ring-1 ring-primary bg-primary/5' : 'border-border hover:border-primary/50 bg-card'}`}>
-                    <span className="font-medium">{w}</span>{state.warranty === w && <Check className="size-5 text-primary" />}
-                  </button>
+              <motion.div key="s13" {...stepVariants} className="flex flex-col gap-3">
+                {[
+                  { id: '2year', name: '2 Yıl Standart', desc: 'Üretim hatalarına karşı temel güvence', price: 'Dahil' },
+                  { id: '5year', name: '5 Yıl Uzatılmış', desc: 'Cam, profil ve mekanik parçalar dahil', price: '+₺1.500' },
+                  { id: '10year', name: '10 Yıl Premium', desc: 'Tam koruma + yıllık bakım servisi', price: '+₺3.500' },
+                ].map(w => (
+                  <OptionCard key={w.id} selected={state.warranty === w.id} onClick={() => state.updateField('warranty', w.id)} className="p-5">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold">{w.name}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{w.desc}</p>
+                      </div>
+                      <span className="text-xs font-medium text-champagne">{w.price}</span>
+                    </div>
+                  </OptionCard>
                 ))}
               </motion.div>
             )}
 
             {/* Step 14: Review */}
             {state.currentStep === 14 && (
-              <motion.div key="step14" variants={stepVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col gap-4">
-                <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl space-y-4">
-                  <h3 className="font-semibold text-lg text-primary mb-4">Tasarımınız Hazır</h3>
-                  <p className="text-sm text-foreground/80 leading-relaxed">
-                    Mimari kalitede, tamamen size özel olarak tasarlanan duşakabininiz üretime hazır. WhatsApp üzerinden bizimle iletişime geçerek anında sipariş oluşturabilir veya sorularınızı sorabilirsiniz.
+              <motion.div key="s14" {...stepVariants} className="space-y-4">
+                <div className="p-5 bg-champagne/10 border border-champagne/20 rounded-2xl">
+                  <h3 className="font-semibold text-base mb-2">Tasarımınız Hazır 🎉</h3>
+                  <p className="text-sm text-foreground/70 leading-relaxed">
+                    Tüm seçimlerinizi gözden geçirin. Herhangi bir adıma tıklayarak değişiklik yapabilirsiniz.
                   </p>
+                </div>
+                
+                <div className="space-y-3">
+                  {[
+                    { step: 1, label: 'Yerleşim', value: layouts.find(l => l.id === state.layout)?.name },
+                    { step: 2, label: 'Koleksiyon', value: collections.find(c => c.id === state.collection)?.name },
+                    { step: 3, label: 'Model', value: models.find(m => m.id === state.model)?.name },
+                    { step: 4, label: 'Ölçüler', value: `${state.width}×${state.height} cm` },
+                    { step: 5, label: 'Cam', value: glassTypes.find(g => g.id === state.glassType)?.name },
+                    { step: 6, label: 'Kalınlık', value: state.glassThickness },
+                    { step: 7, label: 'Profil', value: profileColors.find(p => p.id === state.profileColor)?.name },
+                    { step: 8, label: 'Kapı', value: state.doorSystem },
+                    { step: 9, label: 'Açılım', value: state.openingDirection },
+                    { step: 10, label: 'Kulp', value: state.handleSelection },
+                    { step: 11, label: 'Aksesuarlar', value: state.accessories.length > 0 ? `${state.accessories.length} adet` : 'Yok' },
+                    { step: 12, label: 'Kurulum', value: state.installation },
+                    { step: 13, label: 'Garanti', value: state.warranty },
+                  ].map(row => (
+                    <button 
+                      key={row.step} 
+                      onClick={() => state.setStep(row.step)}
+                      className="flex justify-between items-center w-full py-3 px-4 rounded-xl hover:bg-muted/50 transition-colors text-sm group"
+                    >
+                      <span className="text-muted-foreground">{row.label}</span>
+                      <span className="font-medium group-hover:text-champagne transition-colors">{row.value || '-'}</span>
+                    </button>
+                  ))}
                 </div>
               </motion.div>
             )}
@@ -306,93 +532,155 @@ Yardımcı olabilir misiniz?`
           </AnimatePresence>
         </div>
 
-        <div className="p-6 border-t border-border flex items-center justify-between bg-card flex-shrink-0">
-          <Button variant="outline" onClick={state.prevStep} disabled={state.currentStep === 1}>
-            <ChevronLeft className="size-4 mr-2" /> Geri
-          </Button>
-          <Button onClick={state.nextStep} disabled={state.currentStep === 14}>
-            İleri <ChevronRight className="size-4 ml-2" />
-          </Button>
+        {/* Navigation */}
+        <div className="px-6 py-4 border-t border-border flex items-center justify-between bg-background flex-shrink-0">
+          <button
+            onClick={state.prevStep}
+            disabled={state.currentStep === 1}
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium text-foreground/60 hover:text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronLeft className="size-4" /> Geri
+          </button>
+          <button
+            onClick={state.nextStep}
+            disabled={state.currentStep === 14}
+            className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-sm font-medium bg-foreground text-background hover:bg-foreground/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            İleri <ChevronRight className="size-4" />
+          </button>
         </div>
       </div>
 
-      {/* CENTER - 3D VISUALIZATION (45%) */}
-      <div className="w-full lg:w-[45%] h-[40vh] lg:h-full relative flex items-center justify-center bg-surface-elevated overflow-hidden z-0 flex-shrink-0">
-        <div className="absolute inset-0 bg-gradient-to-tr from-background to-transparent pointer-events-none" />
-        <motion.div 
-          key={`${state.layout}-${state.glassType}-${state.profileColor}`}
-          initial={{ opacity: 0, scale: 0.95 }}
+      {/* ── PREVIEW AREA ── */}
+      <div className="flex-1 h-full relative flex items-center justify-center bg-surface overflow-hidden">
+        {/* Subtle Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
+          backgroundSize: '24px 24px'
+        }} />
+
+        <motion.div
+          key={`${state.layout}-${state.collection}-${state.glassType}-${state.profileColor}`}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-[90%] max-w-lg aspect-[3/4] bg-white shadow-2xl rounded-3xl overflow-hidden border border-black/5"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-[85%] max-w-xl aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl"
+          style={{ borderColor: profileBorderColor(), borderWidth: '4px', borderStyle: 'solid' }}
         >
-          {/* Dynamic Image logic */}
-          <img 
+          <img
             src={
-              state.glassType === 'smoke' ? "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" :
-              "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&auto=format&fit=crop"
-            } 
-            alt="Preview" 
+              state.layout === 'corner' 
+                ? "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop"
+                : state.layout === 'walk-in'
+                  ? "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=800&auto=format&fit=crop"
+                  : "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&auto=format&fit=crop"
+            }
+            alt="Önizleme"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-8">
-            <div className="text-white">
-              <p className="font-light text-xl mb-1">
-                {state.collection ? collections.find(c=>c.id===state.collection)?.name : 'Tasarım Bekleniyor'}
-              </p>
-              <p className="text-sm opacity-80 font-light">
-                {state.profileColor && profileColors.find(p=>p.id===state.profileColor)?.name} 
-                {state.glassType && ` • ${glassTypes.find(g=>g.id===state.glassType)?.name} Cam`}
-              </p>
-            </div>
+          {/* Glass overlay */}
+          <div className={`absolute inset-0 transition-all duration-700 ${glassOverlay()}`} />
+          {/* Bottom info */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+            <p className="text-white font-semibold text-lg">
+              {state.collection ? collections.find(c => c.id === state.collection)?.name + ' Serisi' : 'Tasarımınız'}
+            </p>
+            <p className="text-white/60 text-sm">
+              {[
+                profileColors.find(p => p.id === state.profileColor)?.name,
+                glassTypes.find(g => g.id === state.glassType)?.name,
+                state.glassThickness
+              ].filter(Boolean).join(' · ') || 'Seçimleriniz burada görünecek'}
+            </p>
           </div>
         </motion.div>
+
+        {/* Toolbar */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/80 dark:bg-black/60 backdrop-blur-xl rounded-full px-2 py-1.5 shadow-lg border border-black/5">
+          {[
+            { icon: RotateCcw, label: 'Sıfırla' },
+            { icon: Share2, label: 'Paylaş' },
+            { icon: Download, label: 'PDF' },
+          ].map(tool => (
+            <button key={tool.label} title={tool.label} className="p-2.5 rounded-full hover:bg-black/5 text-foreground/50 hover:text-foreground transition-colors">
+              <tool.icon className="size-4" />
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* RIGHT PANEL - SUMMARY & PRICE (25%) */}
-      <div className="w-full lg:w-[25%] h-full border-l border-border bg-background flex flex-col z-20 shadow-xl lg:overflow-hidden">
-        <div className="p-8 flex-1 overflow-y-auto scrollbar-hide">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-8">Sipariş Özeti</h2>
+      {/* ── PRICE PANEL (right) ── */}
+      <div className="hidden xl:flex flex-col w-72 h-full border-l border-border bg-background flex-shrink-0">
+        <div className="p-6 pt-24 flex-1 overflow-y-auto scrollbar-hide">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-6">Fiyat Detayı</h2>
           
-          <div className="space-y-6 text-sm">
-            <div className="flex justify-between items-center border-b border-border pb-4">
-              <span className="text-muted-foreground">Yerleşim</span>
-              <span className="font-medium text-right">{layouts.find(l=>l.id===state.layout)?.name || '-'}</span>
+          <div className="space-y-4 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Taban Fiyat</span>
+              <span className="font-medium">
+                {state.collection === 'edge' ? '₺8.500' : state.collection === 'pure' ? '₺12.000' : state.collection === 'luxury' ? '₺16.500' : '-'}
+              </span>
             </div>
-            <div className="flex justify-between items-center border-b border-border pb-4">
-              <span className="text-muted-foreground">Koleksiyon</span>
-              <span className="font-medium text-right">{collections.find(c=>c.id===state.collection)?.name || '-'}</span>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Ölçü Farkı</span>
+              <span className="font-medium">+₺{Math.round((state.width / 100) * (state.height / 100) * 2800).toLocaleString('tr-TR')}</span>
             </div>
-            <div className="flex justify-between items-center border-b border-border pb-4">
-              <span className="text-muted-foreground">Ölçüler</span>
-              <span className="font-medium text-right">{state.width}x{state.height} cm</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-border pb-4">
-              <span className="text-muted-foreground">Cam</span>
-              <span className="font-medium text-right">{glassTypes.find(g=>g.id===state.glassType)?.name || '-'}</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-border pb-4">
-              <span className="text-muted-foreground">Profil Rengi</span>
-              <span className="font-medium text-right">{profileColors.find(p=>p.id===state.profileColor)?.name || '-'}</span>
-            </div>
+            {state.glassType && state.glassType !== 'clear' && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Cam Seçimi</span>
+                <span className="font-medium text-champagne">+₺{glassTypes.find(g => g.id === state.glassType) ? (['smoke','bronze','fluted','frosted','nano'].includes(state.glassType) ? (state.glassType === 'fluted' ? '2.000' : state.glassType === 'bronze' ? '1.500' : state.glassType === 'smoke' ? '1.200' : '800') : '0') : '0'}</span>
+              </div>
+            )}
+            {state.accessories.length > 0 && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Aksesuarlar ({state.accessories.length})</span>
+                <span className="font-medium text-champagne">
+                  +₺{state.accessories.reduce((sum, a) => sum + (accessories.find(x => x.id === a)?.price || 0), 0).toLocaleString('tr-TR')}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="my-6 h-[1px] bg-border" />
+
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Clock className="size-4" />
+            <span>Tahmini Teslimat: <strong className="text-foreground">{state.getDeliveryEstimate()}</strong></span>
           </div>
         </div>
 
-        <div className="p-8 bg-surface-dark text-white rounded-t-[32px] mt-auto relative z-30">
-          <p className="text-white/60 text-sm font-medium uppercase tracking-wider mb-2">Tahmini Tutar</p>
-          <div className="flex items-end gap-2 mb-8">
-            <span className="text-4xl font-light tracking-tight">₺{state.calculatePrice().toLocaleString('tr-TR')}</span>
-            <span className="text-white/60 text-sm pb-1">+ KDV</span>
+        {/* Bottom Price + CTA */}
+        <div className="p-6 bg-[#0A0A0A] text-white rounded-t-3xl">
+          <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest mb-1">Toplam Tahmini</p>
+          <div className="flex items-end gap-1.5 mb-6">
+            <span className="text-3xl font-light tracking-tight">
+              <AnimatedPrice value={price} />
+            </span>
+            <span className="text-white/40 text-xs pb-1">+ KDV</span>
           </div>
 
-          <a href={generateWhatsAppMessage()} target="_blank" rel="noreferrer" className="w-full block">
-            <Button size="lg" className="w-full bg-champagne hover:bg-champagne/90 text-black font-semibold rounded-2xl shadow-lg shadow-champagne/20 h-14">
-              <MessageCircle className="size-5 mr-2" />
+          <a href={generateWhatsAppMessage()} target="_blank" rel="noreferrer" className="block w-full">
+            <button className="w-full flex items-center justify-center gap-2 bg-champagne hover:bg-champagne/90 text-black font-semibold rounded-2xl h-13 text-sm transition-colors shadow-lg shadow-champagne/20">
+              <MessageCircle className="size-4" />
               WhatsApp ile Teklif Al
-            </Button>
+            </button>
           </a>
-          <p className="text-center text-white/40 text-xs mt-4">Fiyatlar tahmini olup, keşif sonrası netleşecektir.</p>
+          <p className="text-center text-white/30 text-[10px] mt-3">Fiyatlar tahmini olup keşif sonrası netleşir.</p>
         </div>
+      </div>
+
+      {/* ── MOBILE STICKY BOTTOM BAR ── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border px-4 py-3 flex items-center justify-between z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div>
+          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Tahmini</p>
+          <p className="text-xl font-semibold tracking-tight"><AnimatedPrice value={price} /></p>
+        </div>
+        <a href={generateWhatsAppMessage()} target="_blank" rel="noreferrer">
+          <button className="flex items-center gap-2 bg-champagne text-black px-6 py-3 rounded-full text-sm font-semibold shadow-md">
+            <MessageCircle className="size-4" />
+            Teklif Al
+          </button>
+        </a>
       </div>
 
     </div>
