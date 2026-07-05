@@ -6,9 +6,10 @@ import {
   MessageCircle, ChevronRight, ChevronLeft, Check, Info,
   LayoutGrid, Palette, Box, Ruler, GlassWater, Layers, PaintBucket,
   DoorOpen, ArrowLeftRight, Grip, Sparkles, Truck, Shield, FileCheck,
-  RotateCcw, Share2, Download, Clock
+  RotateCcw, Share2, Download, Clock, Home, X
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 
 // ─── DATA ─────────────────────────────────────────────────────────
 const STEPS = [
@@ -163,7 +164,7 @@ export default function ConfiguratorPage() {
 
   const stepVariants = {
     initial: { opacity: 0, y: 12 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const } },
     exit: { opacity: 0, y: -8, transition: { duration: 0.2 } }
   }
 
@@ -189,6 +190,17 @@ export default function ConfiguratorPage() {
       
       {/* ── STEP NAVIGATOR (left rail) ── */}
       <div className="hidden lg:flex flex-col w-16 h-full bg-surface border-r border-border items-center py-6 gap-1 overflow-y-auto scrollbar-hide flex-shrink-0">
+        <Link
+          href="/"
+          title="Ana Sayfaya Dön"
+          className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-500/10 text-red-600 hover:bg-red-500/20 transition-all duration-200 relative group mb-4"
+        >
+          <X className="size-5" />
+          <div className="absolute left-full ml-3 px-2.5 py-1 bg-foreground text-background text-[11px] font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 shadow-lg">
+            Kapat
+          </div>
+        </Link>
+
         {STEPS.map((step) => {
           const Icon = step.icon
           const isActive = state.currentStep === step.num
@@ -221,7 +233,13 @@ export default function ConfiguratorPage() {
       </div>
 
       {/* ── MOBILE TOP BAR ── */}
-      <div className="lg:hidden flex items-center gap-2 px-4 pt-20 pb-3 bg-background border-b border-border overflow-x-auto scrollbar-hide flex-shrink-0">
+      <div className="lg:hidden flex items-center gap-2 px-4 pt-4 pb-3 bg-background border-b border-border overflow-x-auto scrollbar-hide flex-shrink-0">
+        <Link
+          href="/"
+          className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-red-500/10 text-red-600 mr-2"
+        >
+          <X className="size-4" />
+        </Link>
         {STEPS.map((step) => {
           const isActive = state.currentStep === step.num
           const isDone = completed.includes(step.num)
@@ -246,7 +264,7 @@ export default function ConfiguratorPage() {
       {/* ── CONFIGURATION PANEL ── */}
       <div className="w-full lg:w-[380px] xl:w-[420px] h-full flex flex-col bg-background border-r border-border flex-shrink-0 z-10">
         {/* Step Header */}
-        <div className="px-6 pt-6 lg:pt-24 pb-4 flex-shrink-0">
+        <div className="px-6 pt-4 lg:pt-8 pb-4 flex-shrink-0">
           <div className="flex items-center gap-3 mb-1">
             <span className="text-xs font-semibold text-champagne tracking-widest uppercase">Adım {state.currentStep}</span>
             <span className="text-xs text-muted-foreground">/ 14</span>
@@ -611,7 +629,7 @@ export default function ConfiguratorPage() {
 
       {/* ── PRICE PANEL (right) ── */}
       <div className="hidden xl:flex flex-col w-72 h-full border-l border-border bg-background flex-shrink-0">
-        <div className="p-6 pt-24 flex-1 overflow-y-auto scrollbar-hide">
+        <div className="p-6 pt-8 flex-1 overflow-y-auto scrollbar-hide">
           <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-6">Fiyat Detayı</h2>
           
           <div className="space-y-4 text-sm">
