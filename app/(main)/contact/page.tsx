@@ -227,7 +227,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Ad Soyad */}
                       <div className="flex flex-col gap-2">
-                        <Label htmlFor="name">Ad Soyad</Label>
+                        <Label htmlFor="name" className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Ad Soyad</Label>
                         <Input
                           id="name"
                           name="name"
@@ -235,13 +235,13 @@ export default function ContactPage() {
                           value={formData.name}
                           onChange={handleChange}
                           required
-                          className="h-12 rounded-xl bg-background border-border px-4 text-base"
+                          className="h-12 bg-transparent border-0 border-b border-border rounded-none px-0 text-base focus-visible:ring-0 focus-visible:border-champagne focus-visible:outline-none transition-colors duration-300 placeholder:text-muted-foreground/50"
                         />
                       </div>
 
                       {/* E-posta */}
                       <div className="flex flex-col gap-2">
-                        <Label htmlFor="email">E-posta</Label>
+                        <Label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">E-posta</Label>
                         <Input
                           id="email"
                           name="email"
@@ -250,7 +250,7 @@ export default function ContactPage() {
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          className="h-12 rounded-xl bg-background border-border px-4 text-base"
+                          className="h-12 bg-transparent border-0 border-b border-border rounded-none px-0 text-base focus-visible:ring-0 focus-visible:border-champagne focus-visible:outline-none transition-colors duration-300 placeholder:text-muted-foreground/50"
                         />
                       </div>
                     </div>
@@ -258,7 +258,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Telefon */}
                       <div className="flex flex-col gap-2">
-                        <Label htmlFor="phone">Telefon</Label>
+                        <Label htmlFor="phone" className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Telefon</Label>
                         <Input
                           id="phone"
                           name="phone"
@@ -266,46 +266,52 @@ export default function ContactPage() {
                           placeholder="+90 (5xx) xxx xx xx"
                           value={formData.phone}
                           onChange={handleChange}
-                          className="h-12 rounded-xl bg-background border-border px-4 text-base"
+                          className="h-12 bg-transparent border-0 border-b border-border rounded-none px-0 text-base focus-visible:ring-0 focus-visible:border-champagne focus-visible:outline-none transition-colors duration-300 placeholder:text-muted-foreground/50"
                         />
                       </div>
 
                       {/* Konu */}
                       <div className="flex flex-col gap-2">
-                        <Label htmlFor="subject">Konu</Label>
-                        <select
-                          id="subject"
-                          name="subject"
-                          value={formData.subject}
-                          onChange={handleChange}
-                          required
-                          className="h-12 w-full rounded-xl border border-border bg-background px-4 text-base text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none cursor-pointer"
-                        >
-                          {subjectOptions.map((option) => (
-                            <option
-                              key={option.value}
-                              value={option.value}
-                              disabled={option.value === ''}
-                            >
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
+                        <Label htmlFor="subject" className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Konu</Label>
+                        <div className="relative">
+                          <select
+                            id="subject"
+                            name="subject"
+                            value={formData.subject}
+                            onChange={handleChange}
+                            required
+                            className="h-12 w-full bg-transparent border-0 border-b border-border rounded-none px-0 text-base text-foreground outline-none transition-colors duration-300 focus:border-champagne appearance-none cursor-pointer"
+                          >
+                            {subjectOptions.map((option) => (
+                              <option
+                                key={option.value}
+                                value={option.value}
+                                disabled={option.value === ''}
+                                className="bg-background text-foreground"
+                              >
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+                            ↓
+                          </div>
+                        </div>
                       </div>
                     </div>
 
                     {/* Mesaj */}
                     <div className="flex flex-col gap-2">
-                      <Label htmlFor="message">Mesaj</Label>
+                      <Label htmlFor="message" className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Mesaj</Label>
                       <textarea
                         id="message"
                         name="message"
-                        rows={5}
+                        rows={4}
                         placeholder="Projeniz hakkında bize bilgi verin..."
                         value={formData.message}
                         onChange={handleChange}
                         required
-                        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors resize-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 placeholder:text-muted-foreground"
+                        className="w-full bg-transparent border-0 border-b border-border rounded-none px-0 py-3 text-base text-foreground outline-none transition-colors duration-300 resize-none focus:border-champagne placeholder:text-muted-foreground/50"
                       />
                     </div>
 
