@@ -8,8 +8,11 @@ export type ConfiguratorState = {
   width: number
   height: number
   glassType: string | null
+  glassThickness: string | null
   profileColor: string | null
   doorSystem: string | null
+  openingDirection: string | null
+  handleSelection: string | null
   accessories: string[]
   installation: string | null
   warranty: string | null
@@ -30,8 +33,11 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   width: 100,
   height: 200,
   glassType: null,
+  glassThickness: null,
   profileColor: null,
   doorSystem: null,
+  openingDirection: null,
+  handleSelection: null,
   accessories: [],
   installation: null,
   warranty: null,
