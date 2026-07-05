@@ -64,30 +64,21 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col w-full">
       {/* ───────────── Hero Section ───────────── */}
-      <section className="relative min-h-[90vh] w-full overflow-hidden flex items-center justify-center bg-surface-dark">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-10" />
-          <img
-            src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070&auto=format&fit=crop"
-            alt="Modern mimari iç mekan"
-            className="w-full h-full object-cover object-center opacity-50"
-          />
-        </div>
-
-        <div className="relative z-20 container mx-auto px-6 max-w-[1440px] text-center">
+      <section className="pt-40 pb-16 md:pt-48 md:pb-20 bg-background">
+        <div className="container mx-auto px-6 max-w-[1440px]">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease }}
-            className="text-champagne text-sm md:text-base tracking-[0.3em] uppercase mb-8 font-medium"
+            className="text-champagne text-sm tracking-[0.3em] uppercase font-medium mb-6"
           >
             Hakkımızda
           </motion.p>
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.15, ease }}
-            className="text-white text-4xl md:text-6xl lg:text-[5.5rem] font-light tracking-tight leading-[1.1] max-w-5xl mx-auto"
+            transition={{ duration: 1.2, delay: 0.1, ease }}
+            className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-4xl leading-[1.1]"
           >
             Mühendislik ve Tasarımın{' '}
             <span className="font-semibold">Buluştuğu Yer</span>
@@ -95,26 +86,14 @@ export default function AboutPage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.35, ease }}
-            className="text-white/70 mt-8 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed"
+            transition={{ duration: 1, delay: 0.25, ease }}
+            className="text-muted-foreground text-lg md:text-xl font-light mt-6 max-w-2xl"
           >
             ERAYDUŞ, mimarinin zarafetini banyolarınıza taşıyan premium
             duşakabin sistemleri üretmektedir. Her ürünümüz, on yılı aşkın
             deneyimimizin ve mühendislik tutkumuzun bir eseridir.
           </motion.p>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
-        >
-          <span className="text-white/50 text-xs tracking-widest uppercase">
-            Keşfetmek İçin Kaydır
-          </span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
-        </motion.div>
       </section>
 
       {/* ───────────── Brand Story ───────────── */}
@@ -155,11 +134,11 @@ export default function AboutPage() {
               transition={{ duration: 1.2, ease }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-surface">
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface group">
                 <img
                   src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
                   alt="ERAYDUŞ üretim tesisi"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                 />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-surface-dark text-white p-8 rounded-2xl max-w-[280px]">
@@ -176,24 +155,27 @@ export default function AboutPage() {
       </section>
 
       {/* ───────────── Brand Values ───────────── */}
-      <section className="py-32 md:py-44 bg-surface">
-        <div className="container mx-auto px-6 max-w-[1440px]">
+      <section className="py-32 md:py-44 bg-surface relative overflow-hidden">
+        {/* Background ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-champagne/5 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="container mx-auto px-6 max-w-[1440px] relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease }}
-            className="text-center mb-20"
+            className="text-center mb-24"
           >
-            <span className="text-champagne text-sm tracking-[0.3em] uppercase font-medium">
+            <span className="text-champagne text-xs tracking-[0.3em] uppercase font-semibold">
               Değerlerimiz
             </span>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight mt-6">
-              Bizi Biz Yapan <span className="font-semibold">İlkeler</span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mt-6">
+              Bizi Biz Yapan <span className="font-semibold italic">İlkeler</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
@@ -201,17 +183,22 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 1, delay: index * 0.15, ease }}
-                className="group bg-background rounded-2xl p-10 md:p-12 hover:shadow-2xl hover:shadow-black/5 transition-shadow duration-700"
+                className="group relative bg-background rounded-3xl p-10 md:p-14 overflow-hidden border border-border hover:border-champagne/40 transition-colors duration-700"
               >
-                <div className="w-14 h-14 rounded-full bg-surface-dark flex items-center justify-center mb-8 group-hover:bg-champagne transition-colors duration-500">
-                  <value.icon className="w-6 h-6 text-white" strokeWidth={1.5} />
+                {/* Subtle hover gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-champagne/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-surface flex items-center justify-center mb-10 group-hover:bg-champagne group-hover:scale-110 transition-all duration-500 ease-out">
+                    <value.icon className="w-7 h-7 text-foreground group-hover:text-background transition-colors duration-500" strokeWidth={1.5} />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-5 group-hover:text-champagne transition-colors duration-500">
+                    {value.title}
+                  </h3>
+                  <p className="text-muted-foreground text-base md:text-lg font-light leading-relaxed">
+                    {value.description}
+                  </p>
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">
-                  {value.title}
-                </h3>
-                <p className="text-muted-foreground text-base md:text-lg font-light leading-relaxed">
-                  {value.description}
-                </p>
               </motion.div>
             ))}
           </div>
@@ -420,13 +407,13 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-10 h-14 text-base font-medium hover:opacity-80 transition-opacity"
+                className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-10 h-14 text-base font-semibold hover:scale-105 hover:shadow-xl transition-all duration-300"
               >
                 İletişime Geçin
               </Link>
               <Link
                 href="/projects"
-                className="inline-flex items-center justify-center rounded-full border border-border px-10 h-14 text-base font-medium hover:bg-surface transition-colors"
+                className="inline-flex items-center justify-center rounded-full border border-border bg-transparent px-10 h-14 text-base font-medium hover:border-foreground hover:bg-surface transition-all duration-300"
               >
                 Projeleri İnceleyin
               </Link>

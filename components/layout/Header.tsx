@@ -10,7 +10,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  const isDarkHeroPage = pathname === '/' || pathname === '/about'
+  const isDarkHeroPage = pathname === '/'
 
   useEffect(() => {
     const handleScroll = () => {
