@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, ArrowRight, MessageCircle, Phone } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Menu, X, ArrowRight, MessageCircle } from 'lucide-react'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  const isDarkHeroPage = pathname === '/' || pathname === '/about'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,15 +43,15 @@ export function Header() {
         <Link href="/" className="z-50 flex items-center gap-3 group">
           <div className="relative">
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 ${
-              isScrolled ? 'bg-foreground' : 'bg-white'
+              isScrolled || !isDarkHeroPage ? 'bg-foreground' : 'bg-white'
             }`}>
               <span className={`text-xs font-black tracking-tighter transition-colors duration-500 ${
-                isScrolled ? 'text-background' : 'text-black'
+                isScrolled || !isDarkHeroPage ? 'text-background' : 'text-black'
               }`}>E</span>
             </div>
           </div>
           <span className={`text-xl font-bold tracking-tight transition-colors duration-500 ${
-            isScrolled ? 'text-foreground' : 'text-white'
+            isScrolled || !isDarkHeroPage ? 'text-foreground' : 'text-white'
           }`}>
             ERAYDUŞ
           </span>
@@ -66,7 +70,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full hover:bg-black/5 dark:hover:bg-white/5 ${
-                isScrolled
+                isScrolled || !isDarkHeroPage
                   ? 'text-foreground/70 hover:text-foreground'
                   : 'text-white/70 hover:text-white'
               }`}
@@ -83,7 +87,7 @@ export function Header() {
             target="_blank"
             rel="noreferrer"
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-              isScrolled
+              isScrolled || !isDarkHeroPage
                 ? 'text-foreground/60 hover:text-foreground hover:bg-black/5'
                 : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
@@ -94,7 +98,7 @@ export function Header() {
           <Link
             href="/configurator"
             className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 group ${
-              isScrolled
+              isScrolled || !isDarkHeroPage
                 ? 'bg-foreground text-background hover:bg-foreground/90 shadow-lg shadow-black/10'
                 : 'bg-white text-black hover:bg-white/90 shadow-lg shadow-black/20'
             }`}
@@ -109,7 +113,7 @@ export function Header() {
           className={`lg:hidden z-50 p-2.5 rounded-full transition-colors duration-300 ${
             mobileMenuOpen
               ? 'text-foreground'
-              : isScrolled
+              : isScrolled || !isDarkHeroPage
                 ? 'text-foreground hover:bg-black/5'
                 : 'text-white hover:bg-white/10'
           }`}
