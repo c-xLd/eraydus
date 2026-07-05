@@ -1,16 +1,32 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Search, Filter, Download, Edit, Trash2, Plus, Square } from "lucide-react"
-import { products } from "@/lib/data/products"
+import { createClient } from '@/services/supabase/client'
 
 export default function AdminProductsPage() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [products, setProducts] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+      
+      if (data) setProducts(data)
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
 
   const filteredProducts = products.filter(p => 
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    p.collectionName.toLowerCase().includes(searchQuery.toLowerCase())
+    p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    p.series?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -86,24 +102,43 @@ export default function AdminProductsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredProducts.map((product) => (
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
+                    Ürünler yükleniyor...
+                  </td>
+                </tr>
+              ) : filteredProducts.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
+                    Henüz ürün eklenmemiş veya arama kriterinize uygun ürün yok.
+                  </td>
+                </tr>
+              ) : filteredProducts.map((product) => {
+                const imageUrl = Array.isArray(product.images) && product.images.length > 0 
+                  ? product.images[0] 
+                  : 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=200&auto=format&fit=crop'
+                
+                return (
                 <tr key={product.id} className="hover:bg-gray-50 transition-colors group">
                   <td className="px-4 py-4"><Square className="size-4 text-gray-300" /></td>
                   <td className="px-4 py-4">
                     <div className="size-10 rounded-md overflow-hidden bg-gray-100 border border-gray-200">
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" />
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors cursor-pointer">{product.name}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">ID: {product.id}</div>
+                    <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors cursor-pointer">{product.title}</div>
+                    <div className="text-xs text-gray-400 mt-0.5" title={product.id}>ID: {product.id.split('-')[0]}</div>
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-700">{product.collectionName}</td>
-                  <td className="px-6 py-4 text-gray-500">{product.layoutType}</td>
-                  <td className="px-6 py-4 font-medium text-gray-900">₺{product.price.toLocaleString('tr-TR')}</td>
+                  <td className="px-6 py-4 font-medium text-gray-700">{product.series}</td>
+                  <td className="px-6 py-4 text-gray-500">{product.category}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900">₺{product.price?.toLocaleString('tr-TR')}</td>
                   <td className="px-6 py-4">
-                    <span className="bg-green-50 text-green-700 border border-green-200 text-[11px] font-medium px-2.5 py-1 rounded-full">
-                      Yayında
+                    <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full ${
+                      product.status === 'published' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-gray-100 text-gray-600 border border-gray-200'
+                    }`}>
+                      {product.status === 'published' ? 'Yayında' : 'Taslak'}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -117,7 +152,7 @@ export default function AdminProductsPage() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )})}
             </tbody>
           </table>
         </div>

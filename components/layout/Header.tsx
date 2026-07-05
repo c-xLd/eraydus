@@ -60,8 +60,7 @@ export function Header() {
         {/* Desktop Nav — Center */}
         <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {[
-            { href: '/magaza', label: 'Mağaza' },
-            { href: '/koleksiyonlar', label: 'Katalog' },
+            { href: '/koleksiyonlar', label: 'Koleksiyonlar' },
             { href: '/tasarla', label: 'Tasarla' },
             { href: '/projeler', label: 'Projeler' },
             { href: '/hakkimizda', label: 'Hakkımızda' },
@@ -135,8 +134,7 @@ export function Header() {
           <div className="flex flex-col h-full pt-28 pb-12 px-8">
             <nav className="flex flex-col gap-1 flex-1">
               {[
-                { href: '/magaza', label: 'Mağaza' },
-                { href: '/koleksiyonlar', label: 'Katalog' },
+                { href: '/koleksiyonlar', label: 'Koleksiyonlar' },
                 { href: '/tasarla', label: 'Tasarla' },
                 { href: '/projeler', label: 'Projeler' },
                 { href: '/hakkimizda', label: 'Hakkımızda' },
