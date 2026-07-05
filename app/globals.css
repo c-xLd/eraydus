@@ -1,0 +1,164 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Default Shadcn Mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+
+  /* Eraydus Design Tokens mapped to Shadcn */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Eraydus Custom Colors */
+  --color-champagne: #C9A86A;
+  --color-platinum: #BFC5CB;
+  --color-bronze: #8F6B4F;
+  --color-glass: rgba(255,255,255,0.55);
+  
+  --color-background-secondary: var(--background-secondary);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-dark: var(--surface-dark);
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
+  --radius-full: 999px;
+  --radius: 20px;
+}
+
+:root {
+  /* Eraydus Neutral Tokens */
+  --background: #FFFFFF;
+  --background-secondary: #F8F8F6;
+  --surface: #F2F2F2;
+  --surface-elevated: #FCFCFC;
+  --surface-dark: #111111;
+  --surface-black: #090909;
+
+  /* Eraydus Text Tokens -> Mapped to Foreground */
+  --foreground: #111111;
+  --text-secondary: #5F6368;
+  --text-muted: #8B9098;
+  --text-inverse: #FFFFFF;
+
+  /* Shadcn Aliases */
+  --card: #FCFCFC;
+  --card-foreground: #111111;
+  --popover: #FFFFFF;
+  --popover-foreground: #111111;
+  
+  --primary: #111111;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #F8F8F6;
+  --secondary-foreground: #111111;
+  
+  --muted: #F2F2F2;
+  --muted-foreground: #8B9098;
+  
+  --accent: #F8F8F6;
+  --accent-foreground: #111111;
+  
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  
+  /* Eraydus Border Tokens */
+  --border: #DDDDDD;
+  --input: #DDDDDD;
+  --ring: #111111;
+  
+  --sidebar-background: #F8F8F6;
+  --sidebar-foreground: #111111;
+  --sidebar-primary: #111111;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F2F2F2;
+  --sidebar-accent-foreground: #111111;
+  --sidebar-border: #DDDDDD;
+  --sidebar-ring: #111111;
+}
+
+.dark {
+  --background: #090909;
+  --background-secondary: #121212;
+  --surface: #1E1E1E;
+  --surface-elevated: #2A2A2A;
+  --surface-dark: #FFFFFF;
+  --surface-black: #FFFFFF;
+
+  --foreground: #FFFFFF;
+  --text-secondary: #A0A0A0;
+  --text-muted: #666666;
+  --text-inverse: #111111;
+
+  --card: #121212;
+  --card-foreground: #FFFFFF;
+  --popover: #090909;
+  --popover-foreground: #FFFFFF;
+  
+  --primary: #FFFFFF;
+  --primary-foreground: #111111;
+  
+  --secondary: #1A1A1A;
+  --secondary-foreground: #FFFFFF;
+  
+  --muted: #1A1A1A;
+  --muted-foreground: #A0A0A0;
+  
+  --accent: #1A1A1A;
+  --accent-foreground: #FFFFFF;
+  
+  --destructive: #7f1d1d;
+  --destructive-foreground: #FFFFFF;
+  
+  --border: #333333;
+  --input: #333333;
+  --ring: #FFFFFF;
+  
+  --sidebar-background: #121212;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FFFFFF;
+  --sidebar-primary-foreground: #111111;
+  --sidebar-accent: #1A1A1A;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #333333;
+  --sidebar-ring: #FFFFFF;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}

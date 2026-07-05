@@ -367,3 +367,393 @@ Animated underline.
 ---
 
 # Forms
+
+Large inputs.
+
+Rounded corners.
+
+Minimal labels.
+
+Floating labels.
+
+Inline validation.
+
+Helpful hints.
+
+Never use tiny form elements.
+
+---
+
+# Cards
+
+Floating appearance.
+
+Large image.
+
+Minimal text.
+
+Rounded corners.
+
+Soft borders.
+
+Glass hover effect.
+
+Lift on hover.
+
+Subtle glow.
+
+---
+
+# Navigation
+
+Floating navigation bar.
+
+Transparent initially.
+
+Glass effect while scrolling.
+
+Logo centered or left.
+
+Minimal menu.
+
+Sticky after scrolling.
+
+Smooth transitions.
+
+---
+
+# Hero Section
+
+Full screen.
+
+Cinematic video background.
+
+Luxury bathroom.
+
+Slow motion.
+
+Elegant typography.
+
+One primary CTA.
+
+One secondary CTA.
+
+Subtle scroll indicator.
+
+---
+
+# Motion Design
+
+Motion must communicate quality.
+
+Never animate for decoration.
+
+Every animation should explain.
+
+Use smooth easing.
+
+Avoid sudden movements.
+
+Duration:
+
+150ms
+
+250ms
+
+400ms
+
+600ms
+
+1000ms
+
+---
+
+# Scroll Storytelling
+
+Scrolling should reveal information progressively.
+
+Large transitions.
+
+Fade.
+
+Scale.
+
+Parallax.
+
+Depth.
+
+Glass reflections.
+
+Section pinning.
+
+Luxury storytelling.
+
+---
+
+# Hover Effects
+
+Lift.
+
+Glow.
+
+Reflection.
+
+Depth.
+
+Cursor interaction.
+
+Magnetic buttons.
+
+Never use flashy effects.
+
+---
+
+# Product Showcase
+
+Large photography.
+
+Minimal text.
+
+Huge whitespace.
+
+Interactive comparison.
+
+360° preview.
+
+Zoom.
+
+Video.
+
+---
+
+# Configurator UI
+
+Left Panel
+
+Configuration options.
+
+Center
+
+Large live visualization.
+
+Right
+
+Live pricing.
+
+Delivery estimate.
+
+Summary.
+
+Sticky action button.
+
+Everything updates instantly.
+
+---
+
+# Pricing Card
+
+Always visible.
+
+Floating.
+
+Glass surface.
+
+Animated number transitions.
+
+Highlight savings.
+
+Clear hierarchy.
+
+Premium appearance.
+
+---
+
+# WhatsApp CTA
+
+Floating button.
+
+Always accessible.
+
+Never intrusive.
+
+Shows current configured price.
+
+Generates complete order summary.
+
+---
+
+# Blog Design
+
+Magazine layout.
+
+Large featured article.
+
+Editorial typography.
+
+Reading progress bar.
+
+Table of contents.
+
+Sticky share buttons.
+
+Related articles.
+
+Newsletter.
+
+---
+
+# About Page
+
+Brand story.
+
+Factory.
+
+Production.
+
+Timeline.
+
+Certificates.
+
+Awards.
+
+Craftsmanship.
+
+Team.
+
+---
+
+# Contact
+
+Interactive map.
+
+WhatsApp.
+
+Phone.
+
+Email.
+
+Measurement request.
+
+Quote request.
+
+Working hours.
+
+FAQ.
+
+---
+
+# Footer
+
+Large typography.
+
+Minimal links.
+
+Luxury spacing.
+
+Dark background.
+
+Glass divider.
+
+Social links.
+
+Copyright.
+
+Newsletter.
+
+---
+
+# Responsive Design
+
+Desktop First.
+
+Tablet Optimized.
+
+Mobile Perfect.
+
+Thumb-friendly navigation.
+
+Bottom actions.
+
+Floating configurator summary.
+
+Sticky WhatsApp.
+
+---
+
+# Accessibility
+
+WCAG AA compliance.
+
+Keyboard navigation.
+
+Visible focus states.
+
+High contrast.
+
+Readable typography.
+
+Alt text.
+
+Screen reader support.
+
+---
+
+# Performance Rules
+
+Use lazy loading.
+
+Optimize images.
+
+Use WebP and AVIF.
+
+Reduce JavaScript.
+
+Server Components.
+
+Code splitting.
+
+Instant page transitions.
+
+Target Lighthouse score above 95.
+
+---
+
+# SEO Design Rules
+
+Every page should support:
+
+Semantic HTML.
+
+Single H1.
+
+Logical H2-H6 structure.
+
+Structured data.
+
+Breadcrumbs.
+
+Internal linking.
+
+Fast loading.
+
+Core Web Vitals optimization.
+
+Image SEO.
+
+FAQ sections.
+
+Schema-ready components.
+
+---
+
+# Final Design Principle
+
+The website should feel like entering a luxury architectural showroom.
+
+Users should remember the experience long after they leave the site.
+
+Every interaction should increase trust.
+
+Every animation should communicate precision.
+
+Every page should reinforce the premium identity of ERAYDUŞ.
