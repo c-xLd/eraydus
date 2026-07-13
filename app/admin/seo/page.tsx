@@ -27,7 +27,7 @@ export default function SeoAdminPage() {
   const [pages, setPages] = useState(mockSeoPages)
   const [editingPageId, setEditingPageId] = useState(null)
 
-  const handleGlobalChange = (key, value) => {
+  const handleGlobalChange = (key: string, value: string) => {
     setGlobalData(prev => ({ ...prev, [key]: value }))
   }
 
@@ -240,8 +240,8 @@ export default function SeoAdminPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                        page.rank <= 3 ? 'bg-green-100 text-green-700' :
-                        page.rank <= 10 ? 'bg-yellow-100 text-yellow-700' :
+                        parseInt(page.rank) <= 3 ? 'bg-green-100 text-green-700' :
+                        parseInt(page.rank) <= 10 ? 'bg-yellow-100 text-yellow-700' :
                         'bg-gray-100 text-gray-700'
                       }`}>
                         #{page.rank}

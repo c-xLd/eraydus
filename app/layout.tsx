@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-// NOTE: Temporarily disabled due to Next 16 Turbopack RSC bundler bug
-// import { SpeedInsights } from "@vercel/speed-insights/next";
-// import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,8 +51,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         {children}
-        {/* <SpeedInsights /> */}
-        {/* <Analytics /> */}
+        <Analytics />
       </body>
     </html>
   );

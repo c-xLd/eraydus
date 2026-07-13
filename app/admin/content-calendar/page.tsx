@@ -22,7 +22,7 @@ export default function ContentCalendarPage() {
     return langMatch && statusMatch
   })
 
-  const getStatusBadgeColor = (status) => {
+  const getStatusBadgeColor = (status: string) => {
     switch(status) {
       case 'published': return 'bg-green-100 text-green-700'
       case 'scheduled': return 'bg-blue-100 text-blue-700'
@@ -31,7 +31,7 @@ export default function ContentCalendarPage() {
     }
   }
 
-  const getStatusLabel = (status) => {
+  const getStatusLabel = (status: string) => {
     switch(status) {
       case 'published': return 'Yayınlandı'
       case 'scheduled': return 'Planlandı'
