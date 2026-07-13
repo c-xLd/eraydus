@@ -23,11 +23,11 @@ export default function NotificationsPage() {
     return typeMatch && readMatch
   })
 
-  const markAsRead = (id) => {
+  const markAsRead = (id: number) => {
     setNotifications(notifications.map(n => n.id === id ? { ...n, read: true } : n))
   }
 
-  const deleteNotification = (id) => {
+  const deleteNotification = (id: number) => {
     setNotifications(notifications.filter(n => n.id !== id))
   }
 

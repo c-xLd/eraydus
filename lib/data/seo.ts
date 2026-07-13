@@ -17,12 +17,43 @@ export interface GlobalSEO {
   twitterHandle: string;
 }
 
-export const globalSeoData: GlobalSEO = {
-  siteName: 'Erayduş - Ankara Duşakabin',
+export const globalSeoData = {
+  siteName: 'Erayduş - Ankara Lüks Duşakabin Sistemleri',
   titleSeparator: '|',
-  defaultDescription: 'Ankara merkezli Erayduş, banyonuz için özel ölçü, modern ve lüks duşakabin çözümleri sunar. Hayalinizdeki tasarıma bizimle ulaşın.',
+  defaultDescription: 'Ankara merkezli Erayduş, Çankaya, Yenimahalle, Çayyolu ve İncek bölgelerine özel ölçü, modern, lüks duşakabin ve banyo dolabı çözümleri sunar.',
   defaultOgImage: '/images/og-default.jpg',
   twitterHandle: '@eraydus',
+  // GEO & Local Business Data
+  contact: {
+    phone: '+90 555 123 4567',
+    email: 'info@eraydus.com.tr',
+    address: {
+      streetAddress: 'Ostim OSB, 100. Yıl Bulvarı',
+      addressLocality: 'Yenimahalle',
+      addressRegion: 'Ankara',
+      postalCode: '06374',
+      addressCountry: 'TR'
+    }
+  },
+  geo: {
+    region: 'TR-06', // Ankara
+    placename: 'Ankara',
+    position: '39.9334;32.8597'
+  },
+  localBusiness: {
+    openingHours: 'Mo,Tu,We,Th,Fr,Sa 09:00-19:00',
+    priceRange: '₺₺',
+    areaServed: [
+      'Ankara',
+      'Çankaya',
+      'Yenimahalle',
+      'Çayyolu',
+      'İncek',
+      'Ümitköy',
+      'Keçiören',
+      'Etimesgut'
+    ]
+  }
 };
 
 export const pagesSeoData: PageSEO[] = [

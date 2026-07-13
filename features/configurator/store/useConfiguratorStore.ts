@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createClient } from '@/services/supabase/client'
 
 export type ConfiguratorState = {
   currentStep: number
@@ -18,6 +19,9 @@ export type ConfiguratorState = {
   installation: string | null
   warranty: string | null
   
+  baseProducts: any[]
+  isFetchingProducts: boolean
+
   setStep: (step: number) => void
   nextStep: () => void
   prevStep: () => void
@@ -26,24 +30,8 @@ export type ConfiguratorState = {
   calculatePrice: () => number
   getDeliveryEstimate: () => string
   getCompletedSteps: () => number[]
+  fetchBaseProducts: () => Promise<void>
 }
-
-const STEPS = [
-  { key: 'layout' },
-  { key: 'collection' },
-  { key: 'model' },
-  { key: 'dimensions' },
-  { key: 'glassType' },
-  { key: 'glassThickness' },
-  { key: 'profileColor' },
-  { key: 'doorSystem' },
-  { key: 'openingDirection' },
-  { key: 'handleSelection' },
-  { key: 'accessories' },
-  { key: 'installation' },
-  { key: 'warranty' },
-  { key: 'review' },
-]
 
 export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   currentStep: 1,
@@ -63,6 +51,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   installation: null,
   warranty: null,
 
+  baseProducts: [],
+  isFetchingProducts: false,
+
   setStep: (step) => set({ currentStep: step }),
   nextStep: () => set((s) => ({ currentStep: Math.min(s.currentStep + 1, 14) })),
   prevStep: () => set((s) => ({ currentStep: Math.max(s.currentStep - 1, 1) })),
@@ -77,29 +68,49 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     }
   },
 
+  fetchBaseProducts: async () => {
+    set({ isFetchingProducts: true })
+    try {
+      const supabase = createClient()
+      const { data } = await supabase.from('products').select('*').eq('status', 'published')
+      if (data) {
+        set({ baseProducts: data })
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      set({ isFetchingProducts: false })
+    }
+  },
+
   calculatePrice: () => {
     const s = get()
     let total = 0
 
-    // Base by collection
-    if (s.collection === 'edge') total += 8500
-    else if (s.collection === 'pure') total += 12000
-    else if (s.collection === 'luxury') total += 16500
-    else total += 8500
+    // Dinamik Ürün Fiyatlandırması (Admin'den gelir)
+    const product = s.baseProducts.find(p => p.category === s.layout && p.series === s.collection)
+    if (product && product.price) {
+      total += product.price
+    } else {
+      // Fallback
+      if (s.collection === 'edge') total += 8500
+      else if (s.collection === 'pure') total += 12000
+      else if (s.collection === 'luxury') total += 16500
+      else total += 8500
+    }
 
     // Size modifier (per m²)
     const area = (s.width / 100) * (s.height / 100)
     total += area * 2800
 
-    // Glass type
+    // Glass type add-ons (Global rules)
     if (s.glassType === 'smoke') total += 1200
     if (s.glassType === 'bronze') total += 1500
     if (s.glassType === 'fluted') total += 2000
     if (s.glassType === 'frosted') total += 800
 
     // Glass thickness
-    if (s.glassThickness === '10mm') total += 1800
-    else if (s.glassThickness === '8mm') total += 800
+    if (s.glassThickness === '6mm') total += 800
 
     // Profile
     if (s.profileColor === 'gold') total += 2200

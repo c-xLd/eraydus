@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react'
+import { NewsletterForm } from './NewsletterForm'
 
 export function Footer() {
   return (
@@ -11,16 +12,7 @@ export function Footer() {
             <h3 className="text-2xl font-light mb-2">İlham Almak İçin Abone Olun</h3>
             <p className="text-white/40 text-sm">Yeni koleksiyonlar, mimari ilham ve özel teklifler.</p>
           </div>
-          <div className="flex w-full lg:w-auto gap-3">
-            <input 
-              type="email" 
-              placeholder="E-posta adresiniz"
-              className="flex-1 lg:w-80 px-5 py-3 rounded-full bg-white/5 border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:border-champagne/50 focus:ring-1 focus:ring-champagne/20 transition-all"
-            />
-            <button className="px-6 py-3 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors shrink-0">
-              Abone Ol
-            </button>
-          </div>
+          <NewsletterForm />
         </div>
       </div>
 
@@ -71,9 +63,9 @@ export function Footer() {
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-6 text-white/30">Destek</h4>
             <ul className="space-y-3.5">
               <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">İletişim</Link></li>
-              <li><Link href="/warranty" className="text-sm text-white/60 hover:text-white transition-colors">Garanti Şartları</Link></li>
-              <li><Link href="/installation" className="text-sm text-white/60 hover:text-white transition-colors">Montaj Kılavuzu</Link></li>
-              <li><Link href="/faq" className="text-sm text-white/60 hover:text-white transition-colors">SSS</Link></li>
+              <li><Link href="/hakkimizda" className="text-sm text-white/60 hover:text-white transition-colors">Garanti Şartları</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">Montaj Kılavuzu</Link></li>
+              <li><Link href="/hakkimizda" className="text-sm text-white/60 hover:text-white transition-colors">SSS</Link></li>
             </ul>
           </div>
 
@@ -81,10 +73,10 @@ export function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-6 text-white/30">Profesyoneller</h4>
             <ul className="space-y-3.5">
-              <li><Link href="/architect" className="text-sm text-white/60 hover:text-white transition-colors">Mimar Portalı</Link></li>
-              <li><Link href="/cad-files" className="text-sm text-white/60 hover:text-white transition-colors">CAD Dosyaları</Link></li>
-              <li><Link href="/catalogs" className="text-sm text-white/60 hover:text-white transition-colors">Teknik Kataloglar</Link></li>
-              <li><Link href="/dealer" className="text-sm text-white/60 hover:text-white transition-colors">Bayi Başvurusu</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">Mimar Portalı</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">CAD Dosyaları</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">Teknik Kataloglar</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">Bayi Başvurusu</Link></li>
             </ul>
           </div>
 
@@ -94,8 +86,8 @@ export function Footer() {
             <ul className="space-y-3.5">
               <li><Link href="/hakkimizda" className="text-sm text-white/60 hover:text-white transition-colors">Hakkımızda</Link></li>
               <li><Link href="/blog" className="text-sm text-white/60 hover:text-white transition-colors">Blog</Link></li>
-              <li><Link href="/careers" className="text-sm text-white/60 hover:text-white transition-colors">Kariyer</Link></li>
-              <li><Link href="/media" className="text-sm text-white/60 hover:text-white transition-colors">Basın</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">Kariyer</Link></li>
+              <li><Link href="/iletisim" className="text-sm text-white/60 hover:text-white transition-colors">Basın</Link></li>
             </ul>
           </div>
         </div>
@@ -106,9 +98,9 @@ export function Footer() {
         <div className="container mx-auto px-6 max-w-[1440px] py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-white/30">
           <p>© {new Date().getFullYear()} ERAYDUŞ. Tüm hakları saklıdır.</p>
           <div className="flex gap-6">
-            <Link href="/privacy-policy" className="hover:text-white/60 transition-colors">Gizlilik Politikası</Link>
+            <Link href="/gizlilik-politikasi" className="hover:text-white/60 transition-colors">Gizlilik Politikası</Link>
             <Link href="/kvkk" className="hover:text-white/60 transition-colors">KVKK</Link>
-            <Link href="/cookies" className="hover:text-white/60 transition-colors">Çerez Politikası</Link>
+            <Link href="/cerez-politikasi" className="hover:text-white/60 transition-colors">Çerez Politikası</Link>
           </div>
         </div>
       </div>

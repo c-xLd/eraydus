@@ -27,8 +27,43 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 export default function Home() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Ölçü alma işlemi nasıl gerçekleştiriliyor?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Profesyonel ölçüm ekibimiz, randevu oluşturmanızın ardından banyonuza gelerek lazer ölçüm cihazıyla milimetrik hassasiyette ölçüm yapar."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Üretim süresi ne kadar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sipariş onayı ve ölçüm tamamlandıktan sonra standart üretim süremiz 7-10 iş günüdür. Özel tasarım ve kaplamalar için bu süre 12-15 iş gününe uzayabilir."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Garanti kapsamı neleri içeriyor?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Tüm ürünlerimiz 10 yıl üretici garantisi kapsamındadır. Bu garanti; cam bütünlüğü, profil korozyonu, menteşe ve rulman mekanizmaları ile su sızdırmazlık contalarını kapsar."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="flex flex-col w-full">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <HeroSection />
       <StatementSection />
       <CraftsmanshipSection />

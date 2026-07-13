@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 import { Search, Filter, SlidersHorizontal, Box, Check } from 'lucide-react'
 import { Product } from '@/lib/data/products'
 
@@ -12,11 +13,25 @@ interface CollectionsClientProps {
 }
 
 export function CollectionsClient({ products }: CollectionsClientProps) {
+  const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCollections, setSelectedCollections] = useState<string[]>([])
-  const [selectedLayouts, setSelectedLayouts] = useState<string[]>([])
+  
+  // URL parametresinden 'kategori' varsa onu başlangıç durumu olarak al
+  const initialCategory = searchParams.get('kategori')
+  const [selectedLayouts, setSelectedLayouts] = useState<string[]>(initialCategory ? [initialCategory] : [])
+  
+  const [selectedProfiles, setSelectedProfiles] = useState<string[]>([])
   const [priceRange, setPriceRange] = useState<number>(30000)
   const [sortOrder, setSortOrder] = useState<'newest' | 'price-asc' | 'price-desc'>('newest')
+
+  // URL parametresi değiştiğinde (örneğin Header'dan tıklandığında) state'i güncelle
+  useEffect(() => {
+    const category = searchParams.get('kategori')
+    if (category) {
+      setSelectedLayouts(prev => prev.includes(category) ? prev : [...prev, category])
+    }
+  }, [searchParams])
 
   const toggleCollection = (id: string) => {
     setSelectedCollections(prev => 
@@ -27,6 +42,12 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
   const toggleLayout = (layout: string) => {
     setSelectedLayouts(prev => 
       prev.includes(layout) ? prev.filter(x => x !== layout) : [...prev, layout]
+    )
+  }
+
+  const toggleProfile = (id: string) => {
+    setSelectedProfiles(prev => 
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     )
   }
 
@@ -41,6 +62,9 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
     }
     if (selectedLayouts.length > 0) {
       result = result.filter(p => selectedLayouts.includes(p.layoutType))
+    }
+    if (selectedProfiles.length > 0) {
+      result = result.filter(p => p.compatibleProfiles.some(profile => selectedProfiles.includes(profile.id)))
     }
     result = result.filter(p => p.price <= priceRange)
 
@@ -58,7 +82,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
     }
 
     return result
-  }, [products, searchQuery, selectedCollections, selectedLayouts, priceRange, sortOrder])
+  }, [products, searchQuery, selectedCollections, selectedLayouts, selectedProfiles, priceRange, sortOrder])
 
   return (
     <div className="pt-32 pb-24 min-h-screen bg-background">
@@ -70,7 +94,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
             <p className="text-muted-foreground">Kusursuz duşakabin tasarımınızı bulun ve özelleştirin.</p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{filteredProducts.length} Ürün Listeleniyor</span>
+            <span className="text-sm text-muted-foreground">{filteredProducts.length} Ürün Listeleniyor (Toplam: {products.length})</span>
             <select 
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as any)}
@@ -96,6 +120,54 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-surface border border-border text-foreground rounded-xl pl-12 pr-4 py-3 outline-none focus:border-champagne transition-colors"
               />
+            </div>
+
+            {/* Kategoriler */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Box className="size-4 text-champagne" /> Kategoriler
+              </h3>
+              <div className="space-y-3">
+                {[
+                  'Askılı Sistem',
+                  'Kare Cam Duşakabin',
+                  'Katlanır Duşakabin',
+                  'Livorno Serisi',
+                  'Mika Duşakabin',
+                  'Ön Cephe Duşakabin',
+                  'Oval Cam Duşakabin',
+                ].map((cat) => (
+                  <label key={cat} onClick={() => toggleLayout(cat)} className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`size-5 rounded border flex items-center justify-center transition-colors ${selectedLayouts.includes(cat) ? 'bg-champagne border-champagne' : 'border-border group-hover:border-champagne/50'}`}>
+                      {selectedLayouts.includes(cat) && <Check className="size-3 text-black" />}
+                    </div>
+                    <span className="text-foreground/80 group-hover:text-foreground">{cat}</span>
+                  </label>
+                ))}
+                
+                {/* Pivot Duşakabin (With Subcategories) */}
+                <div className="pt-2 pb-1">
+                  <span className="text-foreground font-medium flex items-center gap-2 mb-2">Pivot Duşakabin</span>
+                  <div className="pl-6 space-y-3 border-l-2 border-border/50 ml-2">
+                    {['Boy Menteşe', 'Nokta Menteşe'].map((sub) => (
+                      <label key={sub} onClick={() => toggleLayout(sub)} className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`size-5 rounded border flex items-center justify-center transition-colors ${selectedLayouts.includes(sub) ? 'bg-champagne border-champagne' : 'border-border group-hover:border-champagne/50'}`}>
+                          {selectedLayouts.includes(sub) && <Check className="size-3 text-black" />}
+                        </div>
+                        <span className="text-foreground/80 group-hover:text-foreground text-sm">{sub}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Banyo Dolabı Filter */}
+                <label onClick={() => toggleLayout('Banyo Dolabı')} className="flex items-center gap-3 cursor-pointer group mt-2 pt-2 border-t border-border/50">
+                  <div className={`size-5 rounded border flex items-center justify-center transition-colors ${selectedLayouts.includes('Banyo Dolabı') ? 'bg-champagne border-champagne' : 'border-border group-hover:border-champagne/50'}`}>
+                    {selectedLayouts.includes('Banyo Dolabı') && <Check className="size-3 text-black" />}
+                  </div>
+                  <span className="text-foreground/80 group-hover:text-foreground">Banyo Dolabı</span>
+                </label>
+              </div>
             </div>
 
             {/* Collections */}
@@ -129,6 +201,25 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                     <span className="text-foreground/80 group-hover:text-foreground">{layout}</span>
                   </label>
                 ))}
+              </div>
+            </div>
+
+            {/* Profil Rengi */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Box className="size-4 text-champagne" /> Profil Rengi
+              </h3>
+              <div className="space-y-3">
+                {['black', 'chrome', 'gold', 'white'].map((profileId) => {
+                  const names: Record<string, string> = { black: 'Siyah', chrome: 'Krom', gold: 'Altın', white: 'Beyaz' }
+                  return (
+                  <label key={profileId} onClick={() => toggleProfile(profileId)} className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`size-5 rounded border flex items-center justify-center transition-colors ${selectedProfiles.includes(profileId) ? 'bg-champagne border-champagne' : 'border-border group-hover:border-champagne/50'}`}>
+                      {selectedProfiles.includes(profileId) && <Check className="size-3 text-black" />}
+                    </div>
+                    <span className="text-foreground/80 group-hover:text-foreground">{names[profileId]}</span>
+                  </label>
+                )})}
               </div>
             </div>
 
@@ -175,7 +266,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
             ) : (
               <div className="space-y-6">
                 {/* Active Filters Bar */}
-                {(selectedCollections.length > 0 || selectedLayouts.length > 0 || searchQuery || priceRange < 30000) && (
+                {(selectedCollections.length > 0 || selectedLayouts.length > 0 || selectedProfiles.length > 0 || searchQuery || priceRange < 30000) && (
                   <div className="flex flex-wrap items-center gap-2 bg-surface/50 border border-border/60 p-4 rounded-2xl backdrop-blur-sm">
                     <span className="text-xs text-muted-foreground mr-1">Aktif Filtreler:</span>
                     {searchQuery && (
@@ -196,6 +287,14 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                         <button onClick={() => toggleLayout(layout)} className="hover:text-foreground font-semibold">×</button>
                       </span>
                     ))}
+                    {selectedProfiles.map(id => {
+                      const names: Record<string, string> = { black: 'Siyah', chrome: 'Krom', gold: 'Altın', white: 'Beyaz' }
+                      return (
+                      <span key={id} className="bg-champagne/10 border border-champagne/20 text-champagne text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        {names[id] || id} Profil
+                        <button onClick={() => toggleProfile(id)} className="hover:text-foreground font-semibold">×</button>
+                      </span>
+                    )})}
                     {priceRange < 30000 && (
                       <span className="bg-champagne/10 border border-champagne/20 text-champagne text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
                         Maks: ₺{priceRange.toLocaleString('tr-TR')}
@@ -207,6 +306,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                         setSearchQuery('')
                         setSelectedCollections([])
                         setSelectedLayouts([])
+                        setSelectedProfiles([])
                         setPriceRange(30000)
                       }}
                       className="text-xs text-champagne hover:underline ml-auto"
@@ -230,7 +330,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                       >
                         {/* Whole Card Click Link */}
                         <Link 
-                          href={`/collections/${product.id}`} 
+                          href={`/koleksiyonlar/${product.slug}`} 
                           className="absolute inset-0 z-10" 
                           aria-label={product.name}
                         />

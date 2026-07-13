@@ -139,6 +139,15 @@ export default function ConfiguratorPage() {
   const price = state.calculatePrice()
   const [isSubmittingQuote, setIsSubmittingQuote] = useState(false)
 
+  useEffect(() => {
+    state.fetchBaseProducts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const activeProduct = state.baseProducts.find(
+    p => p.category === state.layout && p.series === state.collection
+  )
+
   const generateWhatsAppMessage = () => {
     const phone = "+905550000000"
     const lines = [
@@ -369,13 +378,20 @@ export default function ConfiguratorPage() {
               {/* Step 5: Glass Type */}
               {state.currentStep === 5 && (
                 <motion.div key="s5" {...stepVariants} className="grid grid-cols-2 gap-3">
-                  {glassTypes.map(g => (
-                    <OptionCard key={g.id} selected={state.glassType === g.id} onClick={() => state.updateField('glassType', g.id)} className="p-4">
+                  {glassTypes.map(g => {
+                    const isAvailable = activeProduct?.features?.availableGlasses?.includes(g.id) ?? true // Eğer ürün yoksa hepsi açık (fallback)
+                    return (
+                    <OptionCard 
+                      key={g.id} 
+                      selected={state.glassType === g.id} 
+                      onClick={() => isAvailable && state.updateField('glassType', g.id)} 
+                      className={`p-4 ${!isAvailable ? 'opacity-30 cursor-not-allowed grayscale' : ''}`}
+                    >
                       <div className={`w-full h-12 rounded-lg mb-3 border border-white/10 ${g.color}`} />
                       <p className="font-semibold text-sm">{g.name}</p>
-                      <p className="text-xs text-white/50 mt-0.5">{g.desc}</p>
+                      <p className="text-xs text-white/50 mt-0.5">{isAvailable ? g.desc : 'Bu modelle uyumsuz'}</p>
                     </OptionCard>
-                  ))}
+                  )})}
                 </motion.div>
               )}
 
@@ -383,9 +399,8 @@ export default function ConfiguratorPage() {
               {state.currentStep === 6 && (
                 <motion.div key="s6" {...stepVariants} className="flex flex-col gap-3">
                   {[
-                    { id: '6mm', name: '6mm Standart', desc: 'Ekonomik çözüm, temel koruma', weight: 'Hafif' },
-                    { id: '8mm', name: '8mm Premium', desc: 'Üstün dayanıklılık ve kalınlık hissi', weight: 'Orta' },
-                    { id: '10mm', name: '10mm Ultra', desc: 'En yüksek dayanım ve lüks his', weight: 'Ağır' },
+                    { id: '4mm', name: '4mm Standart', desc: 'Ekonomik çözüm, temel koruma', weight: 'Hafif' },
+                    { id: '6mm', name: '6mm Premium (Önerilen)', desc: 'Kabin sallanma yapmaz, daha sağlıklı ve sağlamdır.', weight: 'Orta' },
                   ].map(t => (
                     <OptionCard key={t.id} selected={state.glassThickness === t.id} onClick={() => state.updateField('glassThickness', t.id)} className="p-5">
                       <div className="flex items-start justify-between">
@@ -403,15 +418,25 @@ export default function ConfiguratorPage() {
               {/* Step 7: Profile Color */}
               {state.currentStep === 7 && (
                 <motion.div key="s7" {...stepVariants} className="grid grid-cols-2 gap-3">
-                  {profileColors.map(p => (
-                    <OptionCard key={p.id} selected={state.profileColor === p.id} onClick={() => state.updateField('profileColor', p.id)} className="p-4 flex items-center gap-3">
+                  {profileColors.map(p => {
+                    const isAvailable = activeProduct?.features?.availableProfiles?.includes(p.id) ?? true
+                    return (
+                    <OptionCard 
+                      key={p.id} 
+                      selected={state.profileColor === p.id} 
+                      onClick={() => isAvailable && state.updateField('profileColor', p.id)} 
+                      className={`p-4 flex items-center gap-3 ${!isAvailable ? 'opacity-30 cursor-not-allowed grayscale' : ''}`}
+                    >
                       <div 
                         className="w-10 h-10 rounded-full border-2 border-white/10 shadow-inner flex-shrink-0" 
                         style={{ backgroundColor: p.hex }} 
                       />
-                      <span className="font-medium text-sm">{p.name}</span>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-sm">{p.name}</span>
+                        {!isAvailable && <span className="text-[10px] text-white/50">Uyumsuz</span>}
+                      </div>
                     </OptionCard>
-                  ))}
+                  )})}
                 </motion.div>
               )}
 

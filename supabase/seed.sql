@@ -31,7 +31,7 @@ INSERT INTO public.products (
     'PURE-WLK', 'pure-walkin', 'Pure Walk-in', 
     'Tamamen çerçevesiz, kapısız ve eşiksiz. Maksimum şeffaflık ve özgürlük hissi için tasarlandı.',
     'Pure Walk-in, duş deneyimini tamamen açık ve özgür kılan bir mimari harikadır. Yerde eşik olmaması ve kapı kullanılmaması sayesinde banyoyla bütünleşir. 10mm veya 12mm kalınlığındaki temperli camlar, sadece zeminden ve duvardan gizli kanallarla sabitlenerek havada süzülüyor hissi yaratır.',
-    'b2c3d4e5-f67a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', 'd4e5f67a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', 
+    'b2c3d4e5-f67a-8b9c-0d1e-2f3a4b5c6d7e', 'd4e5f67a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', 
     12000.00, 12000.00, 'active', true, false, false
   ),
   (
@@ -55,3 +55,46 @@ SET
   description = EXCLUDED.description, 
   base_price = EXCLUDED.base_price, 
   starting_price = EXCLUDED.starting_price;
+
+-- Public blog posts shown on /blog after the admin features schema is applied.
+INSERT INTO public.content_calendar (
+  title, slug, content_type, description, body, language, status,
+  featured_image, published_at, seo_title, seo_description, tags
+) VALUES
+  (
+    'Duşakabin Seçerken Dikkat Edilmesi Gerekenler',
+    'dusakabin-secerken-dikkat-edilmesi-gerekenler',
+    'blog',
+    'Banyonuz için doğru duşakabini seçerken ölçü, cam kalınlığı ve kullanım alışkanlıklarını birlikte değerlendirin.',
+    E'Doğru duşakabin, banyonun hem konforunu hem de mekânsal algısını belirler. İlk adım, net ölçüleri ve kapının açılım alanını değerlendirmektir.\n\nCam kalınlığı, profil yapısı ve menteşe kalitesi uzun ömürlü bir kullanım için önemlidir. Günlük temizlik alışkanlığınıza uygun cam koruma seçenekleri de karar sürecini kolaylaştırır.\n\nERAYDUŞ uzmanları, banyonuzun ölçülerine ve yaşam tarzınıza göre en uygun sistemi belirlemenize yardımcı olur.',
+    'tr', 'published',
+    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop',
+    '2026-07-01T09:00:00+03:00',
+    'Duşakabin Seçim Rehberi | ERAYDUŞ',
+    'Duşakabin seçerken ölçü, cam ve kullanım detaylarını keşfedin.',
+    ARRAY['duşakabin', 'banyo tasarımı', 'rehber']
+  ),
+  (
+    'Küçük Banyolar İçin Ferah Tasarım Önerileri',
+    'kucuk-banyolar-icin-ferah-tasarim-onerileri',
+    'blog',
+    'Şeffaf cam yüzeyler, doğru aydınlatma ve yalın detaylarla küçük banyolarda daha geniş bir his yaratın.',
+    E'Küçük banyolarda tasarımın ana hedefi, gereksiz görsel sınırları azaltmaktır. Çerçevesiz cam yüzeyler alanın kesintisiz algılanmasına yardımcı olur.\n\nAçık tonlar, katmanlı aydınlatma ve duvar içine yerleşen depolama çözümleri günlük kullanımda büyük fark yaratır.\n\nWalk-in duş sistemleri, eşiksiz geçişleri sayesinde hem çağdaş hem de ferah bir görünüm sunar.',
+    'tr', 'published',
+    'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop',
+    '2026-06-24T09:00:00+03:00',
+    'Küçük Banyo Tasarımı | ERAYDUŞ',
+    'Küçük banyoları ferah ve işlevsel kılan tasarım önerileri.',
+    ARRAY['küçük banyo', 'walk-in', 'dekorasyon']
+  )
+ON CONFLICT (slug) WHERE content_type = 'blog' AND slug IS NOT NULL DO UPDATE
+SET
+  title = EXCLUDED.title,
+  description = EXCLUDED.description,
+  body = EXCLUDED.body,
+  featured_image = EXCLUDED.featured_image,
+  published_at = EXCLUDED.published_at,
+  seo_title = EXCLUDED.seo_title,
+  seo_description = EXCLUDED.seo_description,
+  tags = EXCLUDED.tags,
+  updated_at = now();

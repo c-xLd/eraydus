@@ -5,6 +5,7 @@ import { glassOptions, profileOptions, Product as UIProduct } from '@/lib/data/p
 const MOCK_PRODUCTS: UIProduct[] = [
   {
     id: 'edge-corner',
+    slug: 'edge-corner',
     name: 'Edge Köşe Kabin',
     collectionId: 'edge',
     collectionName: 'EDGE Serisi',
@@ -20,7 +21,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
     ],
     features: ['12mm Ultra İnce Profil', 'Köşe Yerleşimi', 'Gizli Menteşe Sistemi', 'Nano Kaplama Cam', 'Çift Yönlü Açılım Opsiyonu'],
     technicalSpecs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '190cm - 220cm',
       widthRange: '80x80cm - 120x120cm',
       installation: 'Zemin üstü veya Tekne üstü'
@@ -30,6 +31,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
   },
   {
     id: 'pure-walkin',
+    slug: 'pure-walkin',
     name: 'Pure Walk-in',
     collectionId: 'pure',
     collectionName: 'PURE Serisi',
@@ -44,7 +46,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
     ],
     features: ['%100 Çerçevesiz Tasarım', 'Kapısız Serbest Geçiş', 'Zemine Sıfır Montaj', 'Paslanmaz Çelik Sabitleme Kolu', 'Kolay Temizlik'],
     technicalSpecs: {
-      glassThickness: ['8mm', '10mm', '12mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '200cm - 240cm',
       widthRange: '90cm - 160cm',
       installation: 'Sadece Zemin üstü (Eşiksiz)'
@@ -54,6 +56,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
   },
   {
     id: 'luxury-sliding',
+    slug: 'luxury-sliding',
     name: 'Luxury Sürgülü',
     collectionId: 'luxury',
     collectionName: 'LUXURY Serisi',
@@ -68,7 +71,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
     ],
     features: ['Soft-Close Yavaşlatıcı', 'Ağır Yük Rulmanları', 'Akustik Fitiller', 'Akıllı Kulp', 'Özel Renk Seçenekleri'],
     technicalSpecs: {
-      glassThickness: ['8mm', '10mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '190cm - 220cm',
       widthRange: '120cm - 200cm',
       installation: 'İki duvar arası veya Sabit camlı L yerleşim'
@@ -78,6 +81,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
   },
   {
     id: 'edge-pivot',
+    slug: 'edge-pivot',
     name: 'Edge Pivot (İki Duvar Arası)',
     collectionId: 'edge',
     collectionName: 'EDGE Serisi',
@@ -92,13 +96,82 @@ const MOCK_PRODUCTS: UIProduct[] = [
     ],
     features: ['Zemin ve Tavan Pivot Menteşe', 'Manyetik Fitil', 'Dışa ve İçe Açılım', 'Ultra Dar Profil'],
     technicalSpecs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '190cm - 220cm',
       widthRange: '70cm - 110cm',
       installation: 'Sadece İki Duvar Arası'
     },
     compatibleGlass: [glassOptions[0], glassOptions[1], glassOptions[4]],
     compatibleProfiles: [profileOptions[0], profileOptions[1]]
+  },
+  {
+    id: 'luxury-vanity-wood',
+    slug: 'luxury-vanity-wood',
+    name: 'Naturel Ahşap Banyo Dolabı',
+    collectionId: 'luxury',
+    collectionName: 'LUXURY Serisi',
+    layoutType: 'Banyo Dolabı',
+    price: 24000,
+    isNew: true,
+    description: 'Doğal ahşap dokusuyla banyonuza sıcaklık katan, geniş depolama alanlı premium dolap.',
+    longDescription: 'Suya ve neme ekstra dayanıklı marin kontraplak üzeri doğal meşe kaplama. Yavaş kapanan (soft-close) çekmece rayları ve entegre aydınlatmalı yekpare lavabosuyla hem şık hem fonksiyonel.',
+    image: 'https://images.unsplash.com/photo-1620408844471-7352591ce1cb?auto=format&fit=crop&q=80',
+    gallery: [],
+    features: ['Doğal Meşe Kaplama', 'Soft-Close Çekmeceler', 'Akrilik Yekpare Lavabo', 'Led Aydınlatmalı Ayna'],
+    technicalSpecs: {
+      glassThickness: ['Standart'],
+      height: '50cm (Alt Modül)',
+      widthRange: '80cm / 100cm / 120cm',
+      installation: 'Asma (Duvara Monte)'
+    },
+    compatibleGlass: [],
+    compatibleProfiles: [profileOptions[0], profileOptions[1], profileOptions[3]]
+  },
+  {
+    id: 'pure-vanity-white',
+    slug: 'pure-vanity-white',
+    name: 'Pure Beyaz Minimalist Dolap',
+    collectionId: 'pure',
+    collectionName: 'PURE Serisi',
+    layoutType: 'Banyo Dolabı',
+    price: 18500,
+    isNew: false,
+    description: 'Modern ve ferah bir banyo için kulpsuz, mat beyaz lake boyalı minimalist tasarım.',
+    longDescription: 'Pure Minimalist Banyo Dolabı, pürüzsüz mat beyaz yüzeyi ve kulpsuz tasarımıyla banyonuza sadelik getirir. Suya dayanıklı MDF gövde, seramik lavabo ve geniş alt çekmece hacmiyle günlük kullanım için idealdir.',
+    image: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&q=80',
+    gallery: [],
+    features: ['Mat Beyaz Lake', 'Kulpsuz Bas-Aç Sistem', 'Seramik Lavabo', 'Neme Dayanıklı MDF'],
+    technicalSpecs: {
+      glassThickness: ['Standart'],
+      height: '60cm (Alt Modül)',
+      widthRange: '65cm / 85cm / 105cm',
+      installation: 'Asma (Duvara Monte)'
+    },
+    compatibleGlass: [],
+    compatibleProfiles: [profileOptions[1], profileOptions[4]]
+  },
+  {
+    id: 'edge-vanity-black',
+    slug: 'edge-vanity-black',
+    name: 'Edge Endüstriyel Siyah Dolap',
+    collectionId: 'edge',
+    collectionName: 'EDGE Serisi',
+    layoutType: 'Banyo Dolabı',
+    price: 21000,
+    isNew: true,
+    description: 'Siyah metal iskelet ve antrasit gövdesiyle endüstriyel tarza sahip iddialı banyo dolabı.',
+    longDescription: 'Edge Endüstriyel Dolap, paslanmaz çelik siyah mat ayakları ve antrasit renkli gövdesiyle banyolara maskülen ve modern bir hava katar. Alt raf kısmı havlular için şık bir depolama alanı sunar.',
+    image: 'https://images.unsplash.com/photo-1600566753086-00f18efc2291?auto=format&fit=crop&q=80',
+    gallery: [],
+    features: ['Paslanmaz Metal İskelet', 'Antrasit Yüzey', 'Açık Alt Raf', 'Mat Siyah Batarya Uyumlu'],
+    technicalSpecs: {
+      glassThickness: ['Standart'],
+      height: '85cm (Ayaklı)',
+      widthRange: '80cm / 100cm',
+      installation: 'Yerden Ayaklı'
+    },
+    compatibleGlass: [],
+    compatibleProfiles: [profileOptions[0]]
   }
 ]
 
@@ -106,6 +179,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
 function mapDatabaseProduct(dbRow: any): UIProduct {
   return {
     id: dbRow.id,
+    slug: dbRow.slug || dbRow.id,
     name: dbRow.name,
     collectionId: dbRow.collection_id || '',
     collectionName: dbRow.collections?.name || 'Genel',
@@ -115,7 +189,7 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
     gallery: dbRow.gallery || [],
     features: dbRow.features || [],
     technicalSpecs: {
-      glassThickness: dbRow.technical_specs?.glassThickness || ['8mm'],
+      glassThickness: dbRow.technical_specs?.glassThickness || ['4mm', '6mm'],
       height: dbRow.technical_specs?.height || '190cm - 220cm',
       widthRange: dbRow.technical_specs?.widthRange || '80cm - 160cm',
       installation: dbRow.technical_specs?.installation || 'Standart Kurulum'
@@ -129,27 +203,7 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
 }
 
 export async function getProducts(): Promise<UIProduct[]> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('products')
-      .select('*, collections(name)')
-      .eq('status', 'active')
-    
-    if (error) {
-      console.warn('Supabase products fetch error, using fallback:', error.message)
-      return MOCK_PRODUCTS
-    }
-    
-    if (!data || data.length === 0) {
-      return MOCK_PRODUCTS
-    }
-    
-    return data.map(mapDatabaseProduct)
-  } catch (err) {
-    console.warn('Failed to fetch products, using fallback:', err)
-    return MOCK_PRODUCTS
-  }
+  return MOCK_PRODUCTS
 }
 
 export async function getProductsByCollection(collectionId: string): Promise<UIProduct[]> {
@@ -191,5 +245,24 @@ export async function getProductById(id: string): Promise<UIProduct | null> {
     return mapDatabaseProduct(data)
   } catch {
     return MOCK_PRODUCTS.find(p => p.id === id) || null
+  }
+}
+
+export async function getProductBySlug(slug: string): Promise<UIProduct | null> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('products')
+      .select('*, collections(name)')
+      .eq('slug', slug)
+      .single()
+    
+    if (error) {
+      return MOCK_PRODUCTS.find(p => p.slug === slug) || null
+    }
+    
+    return mapDatabaseProduct(data)
+  } catch {
+    return MOCK_PRODUCTS.find(p => p.slug === slug) || null
   }
 }

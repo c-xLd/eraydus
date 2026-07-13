@@ -1,5 +1,6 @@
 export type Product = {
   id: string
+  slug: string
   name: string
   collectionId: string
   collectionName: string
@@ -40,6 +41,7 @@ export const profileOptions = [
 export const products: Product[] = [
   {
     id: 'edge-corner',
+    slug: 'edge-corner',
     name: 'Edge Köşe Kabin',
     collectionId: 'edge',
     collectionName: 'EDGE Serisi',
@@ -54,7 +56,7 @@ export const products: Product[] = [
     ],
     features: ['12mm Ultra İnce Profil', 'Köşe Yerleşimi', 'Gizli Menteşe Sistemi', 'Nano Kaplama Cam'],
     technicalSpecs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '190cm - 220cm',
       widthRange: '80x80cm - 120x120cm',
       installation: 'Zemin üstü veya Tekne üstü'
@@ -64,6 +66,7 @@ export const products: Product[] = [
   },
   {
     id: 'pure-walkin',
+    slug: 'pure-walkin',
     name: 'Pure Walk-in',
     collectionId: 'pure',
     collectionName: 'PURE Serisi',
@@ -76,7 +79,7 @@ export const products: Product[] = [
     gallery: [],
     features: ['%100 Çerçevesiz Tasarım', 'Kapısız Serbest Geçiş', 'Zemine Sıfır Montaj', 'Paslanmaz Çelik Sabitleme Kolu'],
     technicalSpecs: {
-      glassThickness: ['8mm', '10mm', '12mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '200cm - 240cm',
       widthRange: '90cm - 160cm',
       installation: 'Sadece Zemin üstü (Eşiksiz)'
@@ -86,6 +89,7 @@ export const products: Product[] = [
   },
   {
     id: 'luxury-sliding',
+    slug: 'luxury-sliding',
     name: 'Luxury Sürgülü',
     collectionId: 'luxury',
     collectionName: 'LUXURY Serisi',
@@ -98,7 +102,7 @@ export const products: Product[] = [
     gallery: [],
     features: ['Soft-Close Yavaşlatıcı', 'Ağır Yük Rulmanları', 'Akustik Fitiller', 'Özel Renk Seçenekleri'],
     technicalSpecs: {
-      glassThickness: ['8mm', '10mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '190cm - 220cm',
       widthRange: '120cm - 200cm',
       installation: 'İki duvar arası veya Sabit camlı L yerleşim'
@@ -108,6 +112,7 @@ export const products: Product[] = [
   },
   {
     id: 'edge-pivot',
+    slug: 'edge-pivot',
     name: 'Edge Pivot Duş',
     collectionId: 'edge',
     collectionName: 'EDGE Serisi',
@@ -120,7 +125,7 @@ export const products: Product[] = [
     gallery: [],
     features: ['Zemin ve Tavan Pivot Menteşe', 'Manyetik Fitil', 'Dışa ve İçe Açılım', 'Ultra Dar Profil'],
     technicalSpecs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '190cm - 220cm',
       widthRange: '70cm - 110cm',
       installation: 'Sadece İki Duvar Arası'
@@ -130,6 +135,7 @@ export const products: Product[] = [
   },
   {
     id: 'luxury-corner',
+    slug: 'luxury-corner',
     name: 'Luxury Premium Köşe',
     collectionId: 'luxury',
     collectionName: 'LUXURY Serisi',
@@ -142,7 +148,7 @@ export const products: Product[] = [
     gallery: [],
     features: ['Çift Kanat Açılım', 'Titanyum Detaylar', 'Soft-Close', 'Ekstra Geniş Giriş'],
     technicalSpecs: {
-      glassThickness: ['8mm', '10mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '200cm - 230cm',
       widthRange: '100x100cm - 140x140cm',
       installation: 'Zemin üstü veya Tekne üstü'
@@ -152,6 +158,7 @@ export const products: Product[] = [
   },
   {
     id: 'pure-slider',
+    slug: 'pure-slider',
     name: 'Pure Gizli Sürgülü',
     collectionId: 'pure',
     collectionName: 'PURE Serisi',
@@ -164,12 +171,81 @@ export const products: Product[] = [
     gallery: [],
     features: ['Gizli Ray Sistemi', '10mm Cam', 'Görünmez Fren Mekanizması'],
     technicalSpecs: {
-      glassThickness: ['10mm', '12mm'],
+      glassThickness: ['4mm', '6mm'],
       height: '200cm - 240cm',
       widthRange: '140cm - 220cm',
       installation: 'İki Duvar Arası'
     },
     compatibleGlass: [glassOptions[0], glassOptions[1], glassOptions[3]],
     compatibleProfiles: [profileOptions[0], profileOptions[1], profileOptions[2]],
+  },
+  {
+    id: 'luxury-vanity-wood',
+    slug: 'luxury-vanity-wood',
+    name: 'Naturel Ahşap Banyo Dolabı',
+    collectionId: 'luxury',
+    collectionName: 'LUXURY Serisi',
+    layoutType: 'Banyo Dolabı',
+    price: 24000,
+    isNew: true,
+    description: 'Doğal ahşap dokusuyla banyonuza sıcaklık katan, geniş depolama alanlı premium dolap.',
+    longDescription: 'Suya ve neme ekstra dayanıklı marin kontraplak üzeri doğal meşe kaplama. Yavaş kapanan (soft-close) çekmece rayları ve entegre aydınlatmalı yekpare lavabosuyla hem şık hem fonksiyonel.',
+    image: 'https://images.unsplash.com/photo-1620408844471-7352591ce1cb?auto=format&fit=crop&q=80',
+    gallery: [],
+    features: ['Doğal Meşe Kaplama', 'Soft-Close Çekmeceler', 'Akrilik Yekpare Lavabo', 'Led Aydınlatmalı Ayna'],
+    technicalSpecs: {
+      glassThickness: ['Standart'],
+      height: '50cm (Alt Modül)',
+      widthRange: '80cm / 100cm / 120cm',
+      installation: 'Asma (Duvara Monte)'
+    },
+    compatibleGlass: [],
+    compatibleProfiles: [profileOptions[0], profileOptions[1], profileOptions[3]],
+  },
+  {
+    id: 'pure-vanity-white',
+    slug: 'pure-vanity-white',
+    name: 'Pure Beyaz Minimalist Dolap',
+    collectionId: 'pure',
+    collectionName: 'PURE Serisi',
+    layoutType: 'Banyo Dolabı',
+    price: 18500,
+    isNew: false,
+    description: 'Modern ve ferah bir banyo için kulpsuz, mat beyaz lake boyalı minimalist tasarım.',
+    longDescription: 'Pure Minimalist Banyo Dolabı, pürüzsüz mat beyaz yüzeyi ve kulpsuz tasarımıyla banyonuza sadelik getirir. Suya dayanıklı MDF gövde, seramik lavabo ve geniş alt çekmece hacmiyle günlük kullanım için idealdir.',
+    image: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&q=80',
+    gallery: [],
+    features: ['Mat Beyaz Lake', 'Kulpsuz Bas-Aç Sistem', 'Seramik Lavabo', 'Neme Dayanıklı MDF'],
+    technicalSpecs: {
+      glassThickness: ['Standart'],
+      height: '60cm (Alt Modül)',
+      widthRange: '65cm / 85cm / 105cm',
+      installation: 'Asma (Duvara Monte)'
+    },
+    compatibleGlass: [],
+    compatibleProfiles: [profileOptions[1], profileOptions[4]],
+  },
+  {
+    id: 'edge-vanity-black',
+    slug: 'edge-vanity-black',
+    name: 'Edge Endüstriyel Siyah Dolap',
+    collectionId: 'edge',
+    collectionName: 'EDGE Serisi',
+    layoutType: 'Banyo Dolabı',
+    price: 21000,
+    isNew: true,
+    description: 'Siyah metal iskelet ve antrasit gövdesiyle endüstriyel tarza sahip iddialı banyo dolabı.',
+    longDescription: 'Edge Endüstriyel Dolap, paslanmaz çelik siyah mat ayakları ve antrasit renkli gövdesiyle banyolara maskülen ve modern bir hava katar. Alt raf kısmı havlular için şık bir depolama alanı sunar.',
+    image: 'https://images.unsplash.com/photo-1600566753086-00f18efc2291?auto=format&fit=crop&q=80',
+    gallery: [],
+    features: ['Paslanmaz Metal İskelet', 'Antrasit Yüzey', 'Açık Alt Raf', 'Mat Siyah Batarya Uyumlu'],
+    technicalSpecs: {
+      glassThickness: ['Standart'],
+      height: '85cm (Ayaklı)',
+      widthRange: '80cm / 100cm',
+      installation: 'Yerden Ayaklı'
+    },
+    compatibleGlass: [],
+    compatibleProfiles: [profileOptions[0]],
   }
 ]
