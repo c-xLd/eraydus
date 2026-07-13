@@ -24,7 +24,7 @@ export default function QuotesPage() {
     return matchesSearch && matchesStatus
   })
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch(status) {
       case 'pending': return 'bg-red-100 text-red-700'
       case 'sent': return 'bg-blue-100 text-blue-700'
@@ -35,7 +35,7 @@ export default function QuotesPage() {
     }
   }
 
-  const getStatusLabel = (status) => {
+  const getStatusLabel = (status: string) => {
     switch(status) {
       case 'pending': return 'Bekliyor'
       case 'sent': return 'Gönderildi'
@@ -46,7 +46,7 @@ export default function QuotesPage() {
     }
   }
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch(status) {
       case 'pending': return AlertCircle
       case 'sent': return Send

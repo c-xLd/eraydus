@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Search, Plus, Edit, Trash2, Eye, Package, TrendingUp, AlertCircle } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Eye, Package, TrendingUp, AlertCircle, Filter, Square } from "lucide-react"
 
 // Mock data
 const mockProducts = [
@@ -16,6 +16,7 @@ export default function AdminProductsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [sortBy, setSortBy] = useState('name')
+  const loading = false
 
   const filteredProducts = mockProducts.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -227,25 +228,23 @@ export default function AdminProductsPage() {
                   </td>
                 </tr>
               ) : filteredProducts.map((product) => {
-                const imageUrl = Array.isArray(product.images) && product.images.length > 0 
-                  ? product.images[0] 
-                  : 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=200&auto=format&fit=crop'
+                const imageUrl = 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=200&auto=format&fit=crop'
                 
                 return (
                 <tr key={product.id} className="hover:bg-gray-50 transition-colors group">
                   <td className="px-4 py-4"><Square className="size-4 text-gray-300" /></td>
                   <td className="px-4 py-4">
                     <div className="size-10 rounded-md overflow-hidden bg-gray-100 border border-gray-200">
-                      <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" />
+                      <img src={imageUrl} alt={product.name} className="w-full h-full object-cover" />
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors cursor-pointer">{product.title}</div>
-                    <div className="text-xs text-gray-400 mt-0.5" title={product.id}>ID: {product.id.split('-')[0]}</div>
+                    <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors cursor-pointer">{product.name}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">SKU: {product.sku}</div>
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-700">{product.series}</td>
+                  <td className="px-6 py-4 font-medium text-gray-700">{product.collection}</td>
                   <td className="px-6 py-4 text-gray-500">{product.category}</td>
-                  <td className="px-6 py-4 font-medium text-gray-900">₺{product.price?.toLocaleString('tr-TR')}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900">{product.price}</td>
                   <td className="px-6 py-4">
                     <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full ${
                       product.status === 'published' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-gray-100 text-gray-600 border border-gray-200'
