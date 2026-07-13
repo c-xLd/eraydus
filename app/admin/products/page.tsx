@@ -1,51 +1,163 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
-import { Search, Filter, Download, Edit, Trash2, Plus, Square } from "lucide-react"
-import { createClient } from '@/services/supabase/client'
+import { Search, Plus, Edit, Trash2, Eye, Package, TrendingUp, AlertCircle } from "lucide-react"
+
+// Mock data
+const mockProducts = [
+  { id: 1, sku: 'EDGE-CRN', name: 'Edge Köşe Kabin', collection: 'EDGE', category: 'Duşakabin', price: '₺8.500', stock: 45, status: 'active', featured: true, sales: '↑ 12%' },
+  { id: 2, sku: 'PURE-WLK', name: 'Pure Walk-in', collection: 'PURE', category: 'Duşakabin', price: '₺12.000', stock: 28, status: 'active', featured: true, sales: '↑ 8%' },
+  { id: 3, sku: 'LUX-SLD', name: 'Luxury Sürgülü', collection: 'LUXURY', category: 'Duşakabin', price: '₺16.500', stock: 5, status: 'active', featured: false, sales: '↑ 15%' },
+  { id: 4, sku: 'EDGE-PVT', name: 'Edge Pivot', collection: 'EDGE', category: 'Duşakabin', price: '₺9.200', stock: 0, status: 'inactive', featured: false, sales: '↓ 2%' },
+]
 
 export default function AdminProductsPage() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [products, setProducts] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+  const [filterStatus, setFilterStatus] = useState('all')
+  const [sortBy, setSortBy] = useState('name')
 
-  useEffect(() => {
-    async function fetchProducts() {
-      const supabase = createClient()
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (data) setProducts(data)
-      setLoading(false)
-    }
-    fetchProducts()
-  }, [])
-
-  const filteredProducts = products.filter(p => 
-    p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    p.series?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredProducts = mockProducts.filter(p => {
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         p.sku.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesStatus = filterStatus === 'all' || (filterStatus === 'in-stock' ? p.stock > 0 : filterStatus === 'low-stock' ? p.stock > 0 && p.stock < 10 : p.stock === 0)
+    return matchesSearch && matchesStatus
+  })
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Ürünler</h1>
-          <p className="text-sm text-gray-500 mt-1">Sitenizdeki duşakabin modellerini, fiyatlarını ve özelliklerini yönetin.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Ürün Yönetimi</h1>
+          <p className="text-sm text-gray-500 mt-1">Tüm ürünlerinizi, stoklarını ve performanslarını yönetin.</p>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm text-gray-700">
-            <Download className="size-4" />
-            Dışa Aktar
+          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+            <Package className="size-4" />
+            Stok Alma
           </button>
           <Link href="/admin/products/new" className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-black/90 transition-colors shadow-sm">
             <Plus className="size-4" />
-            Yeni Ürün Ekle
+            Yeni Ürün
           </Link>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+          { title: 'Toplam Ürün', value: mockProducts.length, icon: Package, color: 'text-blue-600' },
+          { title: 'Aktif Ürünler', value: mockProducts.filter(p => p.status === 'active').length, icon: TrendingUp, color: 'text-green-600' },
+          { title: 'Düşük Stok', value: mockProducts.filter(p => p.stock > 0 && p.stock < 10).length, icon: AlertCircle, color: 'text-orange-600' },
+          { title: 'Stokta Yok', value: mockProducts.filter(p => p.stock === 0).length, icon: AlertCircle, color: 'text-red-600' },
+        ].map((stat, i) => {
+          const Icon = stat.icon
+          return (
+            <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="flex justify-between items-start mb-4">
+                <div className={`p-2 rounded-lg ${stat.color.replace('text-', 'bg-').replace('-600', '-100')}`}>
+                  <Icon className={`size-5 ${stat.color}`} />
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+              <p className="text-sm text-gray-500 font-medium mt-1">{stat.title}</p>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Filters & Search */}
+      <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+        <div className="flex gap-4 flex-wrap">
+          <div className="flex-1 min-w-[250px] relative">
+            <Search className="absolute left-3 top-2.5 size-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Ürün adı, SKU ara..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+            />
+          </div>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+          >
+            <option value="all">Tüm Stoklar</option>
+            <option value="in-stock">Stokta Var</option>
+            <option value="low-stock">Düşük Stok</option>
+            <option value="out-of-stock">Stokta Yok</option>
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+          >
+            <option value="name">Ada Göre Sırala</option>
+            <option value="price-low">Fiyata Göre (Düşük)</option>
+            <option value="price-high">Fiyata Göre (Yüksek)</option>
+            <option value="stock">Stok Miktarı</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Products Table */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-100 bg-gray-50">
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Ürün Adı</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">SKU</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Koleksiyon</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Fiyat</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Stok</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Satış</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Durum</th>
+                <th className="px-6 py-3 text-center text-sm font-semibold text-gray-900">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {filteredProducts.map((product) => (
+                <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4">
+                    <p className="font-medium text-gray-900">{product.name}</p>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{product.sku}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{product.collection}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900">{product.price}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-900">{product.stock}</span>
+                      {product.stock === 0 && <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">Yok</span>}
+                      {product.stock > 0 && product.stock < 10 && <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Düşük</span>}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{product.sales}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                      product.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                    }`}>
+                      {product.status === 'active' ? 'Aktif' : 'Pasif'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 flex justify-center gap-2">
+                    <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Görüntüle">
+                      <Eye className="size-4" />
+                    </button>
+                    <button className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Düzenle">
+                      <Edit className="size-4" />
+                    </button>
+                    <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
+                      <Trash2 className="size-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 

@@ -1,31 +1,34 @@
 "use client"
 
 import { useState } from "react"
-import { Save, Globe, FileText, Search, Plus, Trash2, Eye } from "lucide-react"
-import { globalSeoData, pagesSeoData, type PageSEO, type GlobalSEO } from "@/lib/data/seo"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Save, Globe, FileText, Search, Plus, Trash2, TrendingUp, BarChart3 } from "lucide-react"
+
+// Mock data
+const mockSeoPages = [
+  { id: 1, slug: '/', title: 'Ana Sayfa', metaTitle: 'Eraydus - Modern Duşakabin Tasarımı', metaDesc: 'Premium duşakabin çözümleri ile banyo tasarımı değiştirin.', rank: '1', keyword: 'duşakabin', volume: 1200, status: 'optimized' },
+  { id: 2, slug: '/magaza', title: 'Mağaza', metaTitle: 'Duşakabin Modelleri | Eraydus', metaDesc: 'Tüm duşakabin serileri ve koleksiyonlarımızı keşfedin.', rank: '3', keyword: 'uygun duşakabin', volume: 800, status: 'optimized' },
+  { id: 3, slug: '/koleksiyonlar/edge', title: 'Edge Koleksiyonu', metaTitle: 'Edge Serisi | Minimalist Duşakabin', metaDesc: 'Ultra ince profillerle tasarlanmış modern duşakabin.', rank: '5', keyword: 'modern duşakabin', volume: 600, status: 'needs-improvement' },
+  { id: 4, slug: '/tasarla', title: 'Konfigüratör', metaTitle: 'Kendi Duşakabini Tasarla | Eraydus', metaDesc: 'Özel duşakabin tasarımını konfigüratör ile oluştur.', rank: '12', keyword: 'duşakabin konfigüratör', volume: 400, status: 'needs-improvement' },
+]
+
+const globalSeo = {
+  siteTitle: 'Eraydus - Modern Duşakabin Tasarımı',
+  siteDesc: 'Premium duşakabin çözümleri ile banyo tasarımını değiştirin. Edge, Pure ve Luxury serileri.',
+  keywords: 'duşakabin, cam duşakabin, modern banyo, duşa tasarımı',
+  robots: 'index, follow',
+  language: 'tr',
+  favicon: '/favicon.ico',
+  ogImage: '/og-image.jpg',
+}
 
 export default function SeoAdminPage() {
-  const [activeTab, setActiveTab] = useState<"global" | "pages">("global")
-  const [globalData, setGlobalData] = useState<GlobalSEO>(globalSeoData)
-  const [pages, setPages] = useState<PageSEO[]>(pagesSeoData)
-  
-  // State for the currently selected page to edit
-  const [editingPageId, setEditingPageId] = useState<string | null>(null)
-  
-  const editingPage = pages.find(p => p.id === editingPageId) || null
+  const [activeTab, setActiveTab] = useState('pages')
+  const [globalData, setGlobalData] = useState(globalSeo)
+  const [pages, setPages] = useState(mockSeoPages)
+  const [editingPageId, setEditingPageId] = useState(null)
 
-  const handleGlobalChange = (key: keyof GlobalSEO, value: string) => {
+  const handleGlobalChange = (key, value) => {
     setGlobalData(prev => ({ ...prev, [key]: value }))
-  }
-
-  const handlePageChange = (key: keyof PageSEO, value: string | boolean) => {
-    if (!editingPageId) return
-    setPages(prev => prev.map(p => 
-      p.id === editingPageId ? { ...p, [key]: value } : p
-    ))
   }
 
   return (
@@ -34,11 +37,11 @@ export default function SeoAdminPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">SEO Yönetimi</h1>
-          <p className="text-sm text-gray-500 mt-1">Sitenizin arama motorlarındaki görünürlüğünü ve performansını yönetin.</p>
+          <p className="text-sm text-gray-500 mt-1">Sitenizin arama motorlarındaki görünürlüğünü optimize edin.</p>
         </div>
         <button className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-black/90 transition-colors">
           <Save className="size-4" />
-          Tüm Ayarları Kaydet
+          Kaydet
         </button>
       </div>
 
@@ -50,10 +53,7 @@ export default function SeoAdminPage() {
             activeTab === "global" ? "border-black text-black" : "border-transparent text-gray-500 hover:text-black"
           }`}
         >
-          <div className="flex items-center gap-2">
-            <Globe className="size-4" />
-            Genel Site Ayarları
-          </div>
+          Global Ayarlar
         </button>
         <button
           onClick={() => setActiveTab("pages")}
@@ -61,237 +61,201 @@ export default function SeoAdminPage() {
             activeTab === "pages" ? "border-black text-black" : "border-transparent text-gray-500 hover:text-black"
           }`}
         >
-          <div className="flex items-center gap-2">
-            <FileText className="size-4" />
-            Sayfa Bazlı SEO
-          </div>
+          Sayfa Optimizasyonu
+        </button>
+        <button
+          onClick={() => setActiveTab("keywords")}
+          className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
+            activeTab === "keywords" ? "border-black text-black" : "border-transparent text-gray-500 hover:text-black"
+          }`}
+        >
+          Anahtar Kelimeler
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Main Content Area */}
-        <div className="lg:col-span-2 space-y-6">
-          {activeTab === "global" && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-              <h2 className="text-lg font-semibold mb-6">Global SEO Değişkenleri</h2>
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="siteName">Site Adı (Title Suffix)</Label>
-                    <Input 
-                      id="siteName" 
-                      value={globalData.siteName} 
-                      onChange={e => handleGlobalChange('siteName', e.target.value)}
-                    />
-                    <p className="text-[11px] text-gray-500">Arama sonuçlarında başlığın sonuna eklenir (Örn: Sayfa | SİTE ADI).</p>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="titleSeparator">Başlık Ayırıcı (Separator)</Label>
-                    <Input 
-                      id="titleSeparator" 
-                      value={globalData.titleSeparator} 
-                      onChange={e => handleGlobalChange('titleSeparator', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="defaultDescription">Varsayılan Meta Açıklaması</Label>
-                  <Textarea 
-                    id="defaultDescription" 
-                    rows={3} 
-                    value={globalData.defaultDescription}
-                    onChange={e => handleGlobalChange('defaultDescription', e.target.value)}
-                  />
-                  <p className="text-[11px] text-gray-500">Özel açıklaması olmayan sayfalar için bu metin kullanılır.</p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="twitterHandle">Twitter/X Kullanıcı Adı</Label>
-                  <Input 
-                    id="twitterHandle" 
-                    value={globalData.twitterHandle} 
-                    onChange={e => handleGlobalChange('twitterHandle', e.target.value)}
-                  />
-                </div>
-              </div>
+      {/* Tab Content */}
+      {activeTab === "global" && (
+        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+          <h3 className="text-lg font-semibold text-gray-900">Global Site Ayarları</h3>
+          
+          <div className="grid grid-cols-1 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Site Başlığı</label>
+              <input
+                type="text"
+                value={globalData.siteTitle}
+                onChange={(e) => handleGlobalChange('siteTitle', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+              />
+              <p className="text-xs text-gray-500 mt-1">Arama sonuçlarında görünecek başlık</p>
             </div>
-          )}
 
-          {activeTab === "pages" && !editingPageId && (
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-              <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-                <h2 className="font-semibold text-sm">Site Sayfaları</h2>
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                  <Input placeholder="Sayfa ara..." className="w-64 pl-9 h-8 text-xs bg-white" />
-                </div>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {pages.map(p => (
-                  <div key={p.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                    <div>
-                      <h3 className="font-medium text-sm text-gray-900">{p.title}</h3>
-                      <p className="text-xs text-gray-500 font-mono mt-0.5">{p.path}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      {p.isIndexable ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-semibold tracking-wide uppercase">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                          İndeksleniyor
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-semibold tracking-wide uppercase">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                          No-Index
-                        </span>
-                      )}
-                      <button 
-                        onClick={() => setEditingPageId(p.id)}
-                        className="text-xs font-medium text-blue-600 hover:text-blue-800"
-                      >
-                        SEO Düzenle
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Site Açıklaması</label>
+              <textarea
+                value={globalData.siteDesc}
+                onChange={(e) => handleGlobalChange('siteDesc', e.target.value)}
+                rows={3}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+              />
+              <p className="text-xs text-gray-500 mt-1">Meta açıklaması (155 karakter tavsiye edilir)</p>
             </div>
-          )}
 
-          {activeTab === "pages" && editingPage && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold">{editingPage.title} - SEO Ayarları</h2>
-                <button 
-                  onClick={() => setEditingPageId(null)}
-                  className="text-xs font-medium text-gray-500 hover:text-black"
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Anahtar Kelimeler</label>
+              <textarea
+                value={globalData.keywords}
+                onChange={(e) => handleGlobalChange('keywords', e.target.value)}
+                rows={2}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+              />
+              <p className="text-xs text-gray-500 mt-1">Virgülle ayrılmış anahtar kelimeler</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Dil</label>
+                <select
+                  value={globalData.language}
+                  onChange={(e) => handleGlobalChange('language', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
                 >
-                  ← Sayfa Listesine Dön
-                </button>
+                  <option value="tr">Türkçe</option>
+                  <option value="en">İngilizce</option>
+                </select>
               </div>
-
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="pageTitle">Meta Başlık (Title)</Label>
-                  <Input 
-                    id="pageTitle" 
-                    value={editingPage.title} 
-                    onChange={e => handlePageChange('title', e.target.value)}
-                  />
-                  <div className="flex justify-between items-center mt-1">
-                    <p className="text-[11px] text-gray-500">Arama sonuçlarında tıklanabilir ana başlık.</p>
-                    <span className={`text-[11px] font-mono ${editingPage.title.length > 60 ? 'text-red-500' : 'text-green-600'}`}>
-                      {editingPage.title.length} / 60
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="pageDesc">Meta Açıklama (Description)</Label>
-                  <Textarea 
-                    id="pageDesc" 
-                    rows={3} 
-                    value={editingPage.description}
-                    onChange={e => handlePageChange('description', e.target.value)}
-                  />
-                  <div className="flex justify-between items-center mt-1">
-                    <p className="text-[11px] text-gray-500">İçeriğinizi özetleyen ve tıklamaya teşvik eden açıklama.</p>
-                    <span className={`text-[11px] font-mono ${editingPage.description.length > 160 ? 'text-red-500' : 'text-green-600'}`}>
-                      {editingPage.description.length} / 160
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="pageKw">Anahtar Kelimeler (Keywords)</Label>
-                  <Input 
-                    id="pageKw" 
-                    value={editingPage.keywords} 
-                    onChange={e => handlePageChange('keywords', e.target.value)}
-                    placeholder="virgül, ile, ayırın"
-                  />
-                </div>
-
-                <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-                  <div>
-                    <h4 className="text-sm font-medium">Arama Motorlarına İzin Ver (Index)</h4>
-                    <p className="text-[11px] text-gray-500">Bu sayfanın Google tarafından taranmasına izin verin.</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      className="sr-only peer" 
-                      checked={editingPage.isIndexable}
-                      onChange={e => handlePageChange('isIndexable', e.target.checked)}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
-                  </label>
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Robots</label>
+                <select
+                  value={globalData.robots}
+                  onChange={(e) => handleGlobalChange('robots', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+                >
+                  <option value="index, follow">Index, Follow</option>
+                  <option value="noindex, follow">No Index, Follow</option>
+                  <option value="index, nofollow">Index, No Follow</option>
+                  <option value="noindex, nofollow">No Index, No Follow</option>
+                </select>
               </div>
-            </div>
-          )}
-        </div>
-
-        {/* Sidebar / Preview Area */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm sticky top-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Eye className="size-4 text-blue-600" />
-              <h3 className="font-semibold text-sm">Google Arama Önizlemesi</h3>
-            </div>
-            
-            {/* Google Snippet Simulator */}
-            <div className="bg-white border border-[#dfe1e5] rounded-lg p-4 shadow-[0_1px_6px_rgba(32,33,36,.28)]">
-              <div className="flex items-center gap-3 mb-1">
-                <div className="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center">
-                  <span className="text-[10px] font-bold">E</span>
-                </div>
-                <div>
-                  <div className="text-[14px] text-[#202124] leading-tight">{globalData.siteName}</div>
-                  <div className="text-[12px] text-[#4d5156] leading-tight">
-                    https://eraydus.com{activeTab === 'pages' && editingPage ? editingPage.path : '/'}
-                  </div>
-                </div>
-              </div>
-              <h4 className="text-[20px] text-[#1a0dab] leading-[1.3] font-normal hover:underline cursor-pointer line-clamp-1">
-                {activeTab === 'pages' && editingPage 
-                  ? `${editingPage.title} ${globalData.titleSeparator} ${globalData.siteName}` 
-                  : `Erayduş ${globalData.titleSeparator} Lüks Duşakabin Sistemleri`}
-              </h4>
-              <p className="text-[14px] text-[#4d5156] leading-[1.58] mt-1 line-clamp-2">
-                {activeTab === 'pages' && editingPage 
-                  ? editingPage.description 
-                  : globalData.defaultDescription}
-              </p>
-            </div>
-
-            <div className="mt-6 pt-6 border-t border-gray-100">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">SEO Skoru</h4>
-              {activeTab === 'pages' && editingPage ? (
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Başlık Uzunluğu</span>
-                    {editingPage.title.length >= 30 && editingPage.title.length <= 60 
-                      ? <span className="text-green-600 font-medium">İyi</span>
-                      : <span className="text-orange-500 font-medium">Geliştirilmeli</span>}
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Açıklama Uzunluğu</span>
-                    {editingPage.description.length >= 120 && editingPage.description.length <= 160 
-                      ? <span className="text-green-600 font-medium">İyi</span>
-                      : <span className="text-orange-500 font-medium">Geliştirilmeli</span>}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-xs text-gray-500">Skor analizini görmek için sayfalar sekmesinden bir sayfa seçin.</p>
-              )}
             </div>
           </div>
         </div>
+      )}
 
-      </div>
+      {activeTab === "pages" && (
+        <div className="space-y-6">
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { title: 'Toplam Sayfa', value: pages.length, icon: FileText, color: 'text-blue-600' },
+              { title: 'Optimize Edilmiş', value: pages.filter(p => p.status === 'optimized').length, icon: TrendingUp, color: 'text-green-600' },
+              { title: 'İyileştirilmesi Gereken', value: pages.filter(p => p.status === 'needs-improvement').length, icon: BarChart3, color: 'text-orange-600' },
+            ].map((stat, i) => {
+              const Icon = stat.icon
+              return (
+                <div key={i} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className={`p-2 rounded-lg ${stat.color.replace('text-', 'bg-').replace('-600', '-100')}`}>
+                      <Icon className={`size-4 ${stat.color}`} />
+                    </div>
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-xs text-gray-500 mt-1">{stat.title}</p>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Pages List */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-gray-50">
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Sayfa</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Meta Başlık</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Durum</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Sıra</th>
+                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-900">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {pages.map((page) => (
+                    <tr key={page.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div>
+                          <p className="font-medium text-gray-900">{page.title}</p>
+                          <p className="text-xs text-gray-500">{page.slug}</p>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">{page.metaTitle}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                          page.status === 'optimized' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                        }`}>
+                          {page.status === 'optimized' ? 'Optimize' : 'İyileştir'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-gray-900">#{page.rank}</span>
+                          <span className="text-xs text-gray-500">Google</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 flex justify-center gap-2">
+                        <button className="px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                          Düzenle
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "keywords" && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Anahtar Kelime</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Sayfa</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Arama Hacmi</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Sıralama</th>
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-900">Trend</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {pages.map((page) => (
+                  <tr key={page.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-gray-900">{page.keyword}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{page.title}</td>
+                    <td className="px-6 py-4">
+                      <span className="text-sm font-medium text-gray-900">{page.volume}</span>
+                      <span className="text-xs text-gray-500 ml-1">arama/ay</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                        page.rank <= 3 ? 'bg-green-100 text-green-700' :
+                        page.rank <= 10 ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        #{page.rank}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm font-semibold text-green-600">↑ 2</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
+

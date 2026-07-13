@@ -1,19 +1,55 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowLeft, Check, Ruler, Info, Box } from "lucide-react"
 import { getProductById } from "@/features/products/services/products"
-import { Metadata } from "next"
+import { Metadata, ResolvingMetadata } from "next"
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const id = (await params).id
-  const product = await getProductById(id)
-  if (!product) return { title: 'Bulunamadı' }
-  return { title: `${product.name} | Erayduş` }
+type Props = {
+  params: { id: string }
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = params.id
   const product = await getProductById(id)
+
+  if (!product) {
+    return {
+      title: 'Ürün Bulunamadı',
+      description: "Aradığınız ürün mevcut değil veya kaldırılmış olabilir.",
+    }
+  }
+
+  // Üst layout'tan gelen metadata'yı al
+  const previousImages = (await parent).openGraph?.images || []
+
+  // Anahtar kelimeler oluştur
+  const keywords = [product.name, product.collectionName, product.layoutType, 'duşakabin', 'erayduş', ...product.features].join(', ');
+
+  return {
+    title: `${product.name} | ${product.collectionName}`,
+    description: product.description,
+    keywords: keywords,
+    openGraph: {
+      title: `${product.name} | Erayduş`,
+      description: product.description,
+      images: [{ url: product.image }, ...previousImages],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.name} | Erayduş`,
+      description: product.description,
+      images: [product.image],
+    },
+  }
+}
+
+export default async function ProductDetailPage({ params }: Props) {
+  const product = await getProductById(params.id)
   
   if (!product) {
     notFound()
@@ -35,7 +71,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           {/* Left: Gallery Sticky */}
           <div className="lg:sticky lg:top-32 space-y-6">
             <div className="aspect-[4/5] rounded-[2rem] overflow-hidden bg-muted relative border border-border">
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+              <Image src={product.image} alt={product.name} fill className="object-cover" />
               <div className="absolute top-6 left-6">
                 <span className="bg-black/50 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-white/10">
                   {product.collectionName}
@@ -45,8 +81,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {product.gallery.length > 0 && (
               <div className="grid grid-cols-2 gap-6">
                 {product.gallery.map((img, i) => (
-                  <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-muted border border-border">
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-muted border border-border relative">
+                    <Image src={img} alt={`${product.name} galeri resmi ${i + 1}`} fill className="object-cover" />
                   </div>
                 ))}
               </div>

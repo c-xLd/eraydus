@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, Filter, SlidersHorizontal, Box, Check } from 'lucide-react'
 import { Product } from '@/lib/data/products'
 
@@ -225,29 +226,47 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.3 }}
                         key={product.id}
-                        className="group flex flex-col bg-surface rounded-2xl overflow-hidden border border-border hover:border-champagne/30 transition-colors shadow-sm hover:shadow-xl"
+                        className="group relative flex flex-col bg-surface rounded-2xl overflow-hidden border border-border hover:border-champagne/30 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 cursor-pointer"
                       >
-                        <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-                          <img 
+                        {/* Whole Card Click Link */}
+                        <Link 
+                          href={`/collections/${product.id}`} 
+                          className="absolute inset-0 z-10" 
+                          aria-label={product.name}
+                        />
+
+                        <div className="relative aspect-[4/5] overflow-hidden bg-muted z-0">
+                          <Image 
                             src={product.image} 
                             alt={product.name} 
-                            className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+                            fill
+                            className="object-cover transition-transform duration-[1.5s] group-hover:scale-105"
                           />
                           {product.isNew && (
-                            <div className="absolute top-3 right-3">
+                            <div className="absolute top-3 right-3 z-20">
                               <span className="bg-champagne text-black text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-lg">
                                 Yeni
                               </span>
                             </div>
                           )}
-                          <div className="absolute top-3 left-3">
+                          <div className="absolute top-3 left-3 z-20">
                             <span className="bg-black/50 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-white/10">
                               {product.collectionName}
                             </span>
                           </div>
+
+                          {/* Premium Hover Action Bar (Glassmorphic - Tasarla Only) */}
+                          <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/95 via-black/30 to-transparent pt-12 transform translate-y-0 opacity-100 lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 transition-all duration-300 flex z-20">
+                            <Link 
+                              href={`/configurator?model=${product.id}`}
+                              className="w-full py-2.5 rounded-xl bg-champagne text-black text-[10px] md:text-xs font-semibold hover:bg-champagne/90 hover:shadow-[0_0_15px_rgba(201,168,106,0.5)] transition-all text-center relative z-30"
+                            >
+                              Tasarla (Konfigüre Et)
+                            </Link>
+                          </div>
                         </div>
 
-                        <div className="p-3 md:p-4 flex flex-col flex-1">
+                        <div className="p-3 md:p-4 flex flex-col flex-1 z-0">
                           <div className="flex justify-between items-baseline mb-2">
                             <h3 className="text-xs md:text-sm font-semibold tracking-tight">{product.name}</h3>
                             <span className="text-[11px] md:text-xs font-semibold text-champagne">
@@ -256,7 +275,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                           </div>
 
                           {/* Technical Specs Inline */}
-                          <div className="text-[10px] md:text-xs text-muted-foreground/80 mb-3 flex flex-wrap items-center gap-1 font-normal">
+                          <div className="text-[10px] md:text-xs text-muted-foreground/80 mb-2 flex flex-wrap items-center gap-1 font-normal">
                             <span>{product.technicalSpecs.glassThickness.join('/')} Cam</span>
                             <span className="text-muted-foreground/40">•</span>
                             <span>{product.technicalSpecs.height}</span>
@@ -264,19 +283,19 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                             <span className="truncate">{product.layoutType}</span>
                           </div>
 
-                          <div className="mt-auto grid grid-cols-2 gap-1.5">
-                            <Link 
-                              href={`/collections/${product.id}`}
-                              className="flex items-center justify-center py-1.5 rounded-lg border border-border text-[9px] md:text-xs font-medium hover:bg-muted transition-colors text-center"
-                            >
-                              İncele
-                            </Link>
-                            <Link 
-                              href={`/configurator?model=${product.id}`}
-                              className="flex items-center justify-center py-1.5 rounded-lg bg-foreground text-background text-[9px] md:text-xs font-medium hover:bg-foreground/90 transition-colors group-hover:bg-champagne group-hover:text-black group-hover:shadow-[0_0_15px_rgba(201,168,106,0.3)] text-center"
-                            >
-                              Tasarla
-                            </Link>
+                          {/* Profiles Preview Dots */}
+                          <div className="flex items-center gap-1.5 border-t border-border/40 pt-2 mt-auto">
+                            <span className="text-[9px] text-muted-foreground/60">Profil Seçenekleri:</span>
+                            <div className="flex -space-x-1">
+                              {product.compatibleProfiles.map((profile) => (
+                                <span 
+                                  key={profile.id} 
+                                  className="size-3 rounded-full border border-surface shadow-sm block flex-shrink-0"
+                                  style={{ backgroundColor: profile.hex }}
+                                  title={profile.name}
+                                />
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </motion.div>

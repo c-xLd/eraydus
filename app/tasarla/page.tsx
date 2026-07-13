@@ -137,6 +137,7 @@ export default function ConfiguratorPage() {
   const state = useConfiguratorStore()
   const completed = state.getCompletedSteps()
   const price = state.calculatePrice()
+  const [isSubmittingQuote, setIsSubmittingQuote] = useState(false)
 
   const generateWhatsAppMessage = () => {
     const phone = "+905550000000"
@@ -161,6 +162,30 @@ export default function ConfiguratorPage() {
       `Detaylı fiyat teklifi alabilir miyim?`
     ].join('\n')
     return `https://wa.me/${phone}?text=${encodeURIComponent(lines)}`
+  }
+
+  const handleQuoteSubmission = async () => {
+    try {
+      setIsSubmittingQuote(true)
+      const whatsappUrl = generateWhatsAppMessage()
+      window.open(whatsappUrl, '_blank')
+      
+      // Save to database
+      const supabase = createClient()
+      await supabase.from('quotes').insert({
+        customer_name: 'Konfigüratör Kullanıcısı',
+        phone: '+905550000000',
+        email: null,
+        configuration_data: state,
+        estimated_price: price,
+        status: 'new',
+        source: 'configurator'
+      })
+    } catch (error) {
+      console.error('Teklif gönderilirken hata:', error)
+    } finally {
+      setIsSubmittingQuote(false)
+    }
   }
 
   const stepVariants = {

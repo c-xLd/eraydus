@@ -1,8 +1,20 @@
 import { Metadata } from 'next'
+import { pagesSeoData } from '@/lib/data/seo'
 
-export const metadata: Metadata = {
-  title: 'Hakkımızda | ERAYDUŞ',
-  description: 'ERAYDUŞ markasının hikayesi, vizyonu ve üretim kalitesi.',
+export async function generateMetadata(): Promise<Metadata> {
+  const seoData = pagesSeoData.find(p => p.id === 'hakkimizda')
+  
+  if (!seoData) return {}
+
+  return {
+    title: seoData.title,
+    description: seoData.description,
+    keywords: seoData.keywords,
+    robots: {
+      index: seoData.isIndexable,
+      follow: seoData.isIndexable,
+    }
+  }
 }
 
 export default function AboutLayout({

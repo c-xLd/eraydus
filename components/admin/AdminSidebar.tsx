@@ -9,14 +9,26 @@ import {
   Settings, 
   LogOut,
   Hexagon,
-  Search
+  Search,
+  Users,
+  BarChart3,
+  Calendar,
+  Bell,
+  Users2,
+  TrendingUp
 } from "lucide-react"
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
-  { icon: MessageSquareQuote, label: "Teklifler", href: "/admin/quotes" },
-  { icon: Package, label: "Ürünler", href: "/admin/products" },
+  { icon: Package, label: "Ürün Yönetimi", href: "/admin/products" },
+  { icon: MessageSquareQuote, label: "Teklif Workflow", href: "/admin/quotes" },
+  { icon: Users, label: "Müşteri Yönetimi", href: "/admin/customers" },
   { icon: Search, label: "SEO Yönetimi", href: "/admin/seo" },
+  { icon: Calendar, label: "İçerik Takvimi", href: "/admin/content-calendar" },
+  { icon: Bell, label: "Bildirimler", href: "/admin/notifications" },
+  { icon: BarChart3, label: "Raporlar", href: "/admin/reports" },
+  { icon: TrendingUp, label: "Analitikler", href: "/admin/analytics" },
+  { icon: Users2, label: "Takım Yönetimi", href: "/admin/team" },
   { icon: Settings, label: "Ayarlar", href: "/admin/settings" },
 ]
 
