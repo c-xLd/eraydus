@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Target, Lightbulb, Leaf, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -134,11 +135,13 @@ export default function AboutPage() {
               transition={{ duration: 1.2, ease }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface group">
-                <img
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface group relative">
+                <Image
                   src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
                   alt="ERAYDUŞ üretim tesisi"
-                  className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-surface-dark text-white p-8 rounded-2xl max-w-[280px]">
@@ -375,11 +378,13 @@ export default function AboutPage() {
               transition={{ duration: 1.2, ease }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-white/5">
-                <img
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-white/5 relative">
+                <Image
                   src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop"
                   alt="ERAYDUŞ üretim ekibi"
-                  className="w-full h-full object-cover opacity-80"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover opacity-80"
                 />
               </div>
             </motion.div>

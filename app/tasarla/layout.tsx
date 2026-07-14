@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { pagesSeoData } from '@/lib/data/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const seoData = pagesSeoData.find(p => p.id === 'projeler')
+  const seoData = pagesSeoData.find(p => p.id === 'tasarla')
 
   if (!seoData) return {}
 
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function ProjectsLayout({
+export default function TasarlaLayout({
   children,
 }: {
   children: React.ReactNode

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/services/supabase/client'
 
 // ─── DATA ─────────────────────────────────────────────────────────
@@ -224,9 +225,9 @@ export default function ConfiguratorPage() {
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full h-full"
+          className="w-full h-full relative"
         >
-          <img
+          <Image
             src={
               state.layout === 'corner' 
                 ? "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop"
@@ -297,8 +298,8 @@ export default function ConfiguratorPage() {
                 <motion.div key="s1" {...stepVariants} className="grid grid-cols-2 gap-3">
                   {layouts.map(l => (
                     <OptionCard key={l.id} selected={state.layout === l.id} onClick={() => state.updateField('layout', l.id)}>
-                      <div className="aspect-[4/3] w-full overflow-hidden">
-                        <img src={l.img} alt={l.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="aspect-[4/3] w-full overflow-hidden relative">
+                        <Image src={l.img} alt={l.name} fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
                       <div className="p-3">
                         <p className="font-semibold text-sm">{l.name}</p>

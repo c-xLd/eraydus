@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+
 import { ArrowRight, MessageCircle } from 'lucide-react'
 
 export function ConfiguratorPreview() {

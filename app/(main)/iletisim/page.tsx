@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import {
   MapPin,
   Phone,
@@ -379,10 +380,12 @@ export default function ContactPage() {
               </span>
             </div>
             <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden bg-surface-dark">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop"
                 alt="Harita konumu"
-                className="w-full h-full object-cover opacity-40"
+                fill
+                sizes="100vw"
+                className="object-cover opacity-40"
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <div className="w-12 h-12 rounded-full bg-champagne flex items-center justify-center mb-4">
