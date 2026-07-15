@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Save, Globe, FileText, Search, Plus, Trash2, TrendingUp, BarChart3 } from "lucide-react"
+import { Save, Globe, FileText, Search, Plus, Trash2, TrendingUp, BarChart3, Edit, Edit2, FileEdit } from "lucide-react"
 
 // Mock data
 const mockSeoPages = [
@@ -25,10 +25,14 @@ export default function SeoAdminPage() {
   const [activeTab, setActiveTab] = useState('pages')
   const [globalData, setGlobalData] = useState(globalSeo)
   const [pages, setPages] = useState(mockSeoPages)
-  const [editingPageId, setEditingPageId] = useState(null)
+  const [editingPageId, setEditingPageId] = useState<number | null>(null)
 
   const handleGlobalChange = (key: string, value: string) => {
     setGlobalData(prev => ({ ...prev, [key]: value }))
+  }
+
+  const handlePageChange = (id: number, key: string, value: string) => {
+    setPages(prev => prev.map(p => p.id === id ? { ...p, [key]: value } : p))
   }
 
   return (
@@ -39,29 +43,35 @@ export default function SeoAdminPage() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">SEO Yönetimi</h1>
           <p className="text-sm text-gray-500 mt-1">Sitenizin arama motorlarındaki görünürlüğünü optimize edin.</p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-black/90 transition-colors">
+        <button
+          onClick={() => {
+            alert('Tüm değişiklikler kaydedildi (Mock)');
+            setEditingPageId(null);
+          }}
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-black/90 transition-colors"
+        >
           <Save className="size-4" />
           Kaydet
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-4 border-b border-gray-200">
-        <button
-          onClick={() => { setActiveTab("global"); setEditingPageId(null); }}
-          className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
-            activeTab === "global" ? "border-black text-black" : "border-transparent text-gray-500 hover:text-black"
-          }`}
-        >
-          Global Ayarlar
-        </button>
+      <div className="flex items-center gap-6 border-b border-gray-200">
         <button
           onClick={() => setActiveTab("pages")}
           className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
             activeTab === "pages" ? "border-black text-black" : "border-transparent text-gray-500 hover:text-black"
           }`}
         >
-          Sayfa Optimizasyonu
+          Sayfalar
+        </button>
+        <button
+          onClick={() => setActiveTab("global")}
+          className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
+            activeTab === "global" ? "border-black text-black" : "border-transparent text-gray-500 hover:text-black"
+          }`}
+        >
+          Global Ayarlar
         </button>
         <button
           onClick={() => setActiveTab("keywords")}
@@ -180,35 +190,86 @@ export default function SeoAdminPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {pages.map((page) => (
-                    <tr key={page.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-medium text-gray-900">{page.title}</p>
-                          <p className="text-xs text-gray-500">{page.slug}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{page.metaTitle}</td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                          page.status === 'optimized' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
-                        }`}>
-                          {page.status === 'optimized' ? 'Optimize' : 'İyileştir'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-900">#{page.rank}</span>
-                          <span className="text-xs text-gray-500">Google</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 flex justify-center gap-2">
-                        <button className="px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                          Düzenle
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {pages.map((page) => {
+                    const isEditing = editingPageId === page.id;
+                    return (
+                      <tr key={page.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="font-medium text-gray-900">{page.title}</p>
+                            <p className="text-xs text-gray-500">{page.slug}</p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          {isEditing ? (
+                            <div className="flex flex-col gap-2">
+                              <input
+                                className="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-black"
+                                value={page.metaTitle}
+                                onChange={(e) => handlePageChange(page.id, 'metaTitle', e.target.value)}
+                                placeholder="Meta Başlık"
+                              />
+                              <input
+                                className="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-black"
+                                value={page.metaDesc}
+                                onChange={(e) => handlePageChange(page.id, 'metaDesc', e.target.value)}
+                                placeholder="Meta Açıklama"
+                              />
+                            </div>
+                          ) : (
+                            <div className="text-sm">
+                              <p className="text-gray-900 font-medium">{page.metaTitle}</p>
+                              <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{page.metaDesc}</p>
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {isEditing ? (
+                            <select
+                              value={page.status}
+                              onChange={(e) => handlePageChange(page.id, 'status', e.target.value)}
+                              className="text-xs border border-gray-200 rounded p-1"
+                            >
+                              <option value="optimized">Optimize</option>
+                              <option value="needs-improvement">İyileştir</option>
+                            </select>
+                          ) : (
+                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                              page.status === 'optimized' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                            }`}>
+                              {page.status === 'optimized' ? 'Optimize' : 'İyileştir'}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {isEditing ? (
+                            <input
+                              type="number"
+                              className="w-16 px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-black"
+                              value={page.rank}
+                              onChange={(e) => handlePageChange(page.id, 'rank', e.target.value)}
+                            />
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-900">#{page.rank}</span>
+                              <span className="text-xs text-gray-500">Google</span>
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 flex justify-center gap-2">
+                          {isEditing ? (
+                            <button onClick={() => setEditingPageId(null)} className="px-3 py-1 text-sm text-white bg-black hover:bg-black/90 rounded-lg transition-colors">
+                              Tamam
+                            </button>
+                          ) : (
+                            <button onClick={() => setEditingPageId(page.id)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -258,4 +319,3 @@ export default function SeoAdminPage() {
     </div>
   )
 }
-
