@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import type { Metadata } from "next"
 import { BlogIndex } from "@/components/blog/BlogIndex"
 import { getPublishedPosts } from "@/lib/data/blog"

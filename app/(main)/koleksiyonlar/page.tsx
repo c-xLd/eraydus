@@ -1,17 +1,7 @@
 import { Suspense } from 'react'
-import { Metadata } from 'next'
 import { getProducts } from '@/features/products/services/products'
 import { CollectionsClient } from './CollectionsClient'
 import { globalSeoData } from '@/lib/data/seo'
-
-export const metadata: Metadata = {
-  title: 'Özel Ölçü Lüks Duşakabin Modelleri ve Fiyatları',
-  description: 'Erayduş premium duşakabin koleksiyonları. Şeffaf, füme, bronz cam seçenekleri ve antrasit, altın, siyah profil renkleriyle banyonuza özel tasarım.',
-  keywords: 'duşakabin, lüks duşakabin, özel ölçü duşakabin, füme cam duşakabin, siyah profil duşakabin, ankara duşakabin',
-  alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar`,
-  }
-}
 
 export const dynamic = 'force-dynamic'
 
