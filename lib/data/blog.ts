@@ -1,6 +1,5 @@
 import { cache } from "react"
-
-import { createClient } from "@/lib/server"
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 export type BlogPost = {
   id: string
@@ -68,9 +67,16 @@ export const fallbackBlogPosts: BlogPost[] = [
 
 const postFields = "id, title, slug, description, body, featured_image, published_at, seo_title, seo_description, tags"
 
+function getSupabase() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
+  )
+}
+
 export const getPublishedPosts = cache(async (): Promise<BlogPost[]> => {
   try {
-    const supabase = await createClient()
+    const supabase = getSupabase()
     const { data, error } = await supabase.from("content_calendar").select(postFields).eq("content_type", "blog").eq("status", "published").not("slug", "is", null).order("published_at", { ascending: false })
     if (error) throw error
     return data?.length ? (data as BlogPost[]) : fallbackBlogPosts
@@ -82,7 +88,7 @@ export const getPublishedPosts = cache(async (): Promise<BlogPost[]> => {
 
 export const getPublishedPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   try {
-    const supabase = await createClient()
+    const supabase = getSupabase()
     const { data, error } = await supabase.from("content_calendar").select(postFields).eq("content_type", "blog").eq("status", "published").eq("slug", slug).maybeSingle()
     if (error) throw error
     return (data as BlogPost | null) || fallbackBlogPosts.find((post) => post.slug === slug) || null
