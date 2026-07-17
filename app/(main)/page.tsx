@@ -10,6 +10,7 @@ import { FAQSection } from '@/features/homepage/components/FAQSection'
 import { FinalCTASection } from '@/features/homepage/components/FinalCTASection'
 import { Metadata } from 'next'
 import { pagesSeoData } from '@/lib/data/seo'
+import { getHomepageFaqs, getTestimonials, getFeaturedCategories } from '@/features/homepage/services/homepage'
 
 export async function generateMetadata(): Promise<Metadata> {
   const seoData = pagesSeoData.find(p => p.id === 'home')
@@ -26,40 +27,50 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   }
 }
-export default function Home() {
+
+export default async function Home() {
+  const [faqs, testimonials, categories] = await Promise.all([
+    getHomepageFaqs(),
+    getTestimonials(),
+    getFeaturedCategories()
+  ])
+
+  // Fallback to static if no faqs found (before migration runs)
+  const safeFaqs = faqs.length > 0 ? faqs : [
+    {
+      id: '1',
+      question: 'Ölçü alma işlemi nasıl gerçekleştiriliyor?',
+      answer: 'Profesyonel ölçüm ekibimiz, randevu oluşturmanızın ardından banyonuza gelerek lazer ölçüm cihazıyla milimetrik hassasiyette ölçüm yapar.',
+      sort_order: 1
+    }
+  ];
+
+  const safeTestimonials = testimonials.length > 0 ? testimonials : [
+    {
+      id: '1',
+      name: 'Elif Karaca',
+      role: 'İç Mimar',
+      quote: 'Projelerimde yıllardır Erayduş ile çalışıyorum...',
+      rating: 5,
+      image_url: ''
+    }
+  ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Ölçü alma işlemi nasıl gerçekleştiriliyor?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Profesyonel ölçüm ekibimiz, randevu oluşturmanızın ardından banyonuza gelerek lazer ölçüm cihazıyla milimetrik hassasiyette ölçüm yapar."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Üretim süresi ne kadar?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Sipariş onayı ve ölçüm tamamlandıktan sonra standart üretim süremiz 7-10 iş günüdür. Özel tasarım ve kaplamalar için bu süre 12-15 iş gününe uzayabilir."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Garanti kapsamı neleri içeriyor?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Tüm ürünlerimiz 10 yıl üretici garantisi kapsamındadır. Bu garanti; cam bütünlüğü, profil korozyonu, menteşe ve rulman mekanizmaları ile su sızdırmazlık contalarını kapsar."
-        }
+    "mainEntity": safeFaqs.map(f => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
       }
-    ]
+    }))
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -67,12 +78,12 @@ export default function Home() {
       <HeroSection />
       <StatementSection />
       <CraftsmanshipSection />
-      <ProductShowcase />
+      <ProductShowcase categories={categories} />
       <WhyEraydusSection />
       <ConfiguratorPreview />
       <GlassCollectionSection />
-      <TestimonialsSection />
-      <FAQSection />
+      <TestimonialsSection testimonials={safeTestimonials} />
+      <FAQSection faqs={safeFaqs} />
       <FinalCTASection />
     </div>
   )

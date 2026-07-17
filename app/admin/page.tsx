@@ -1,30 +1,67 @@
-"use client"
-
-import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar
-} from 'recharts'
+import { createClient } from '@/lib/server'
 import { ArrowUpRight, ArrowDownRight, Package, Users, FileText, CheckCircle } from 'lucide-react'
+import { DashboardCharts } from './components/DashboardCharts'
 
-// Mock Data
-const revenueData = [
-  { name: 'Oca', value: 4000 },
-  { name: 'Şub', value: 3000 },
-  { name: 'Mar', value: 2000 },
-  { name: 'Nis', value: 2780 },
-  { name: 'May', value: 1890 },
-  { name: 'Haz', value: 2390 },
-  { name: 'Tem', value: 3490 },
-]
+export default async function AdminDashboardPage() {
+  const supabase = await createClient()
 
-const recentQuotes = [
-  { id: '#1045', name: 'Ahmet Yılmaz', type: 'Configurator', model: 'Edge Serisi', status: 'Bekliyor', date: 'Bugün, 14:30' },
-  { id: '#1044', name: 'Ayşe Demir', type: 'WhatsApp', model: 'Pure Serisi', status: 'Cevaplandı', date: 'Bugün, 11:15' },
-  { id: '#1043', name: 'Mehmet Kaya', type: 'İletişim', model: '-', status: 'Bekliyor', date: 'Dün, 16:45' },
-  { id: '#1042', name: 'Zeynep Çelik', type: 'Configurator', model: 'Luxury Serisi', status: 'Tamamlandı', date: 'Dün, 09:20' },
-]
+  // 1. Fetch total quotes
+  const { count: totalQuotesCount } = await supabase
+    .from('quotes')
+    .select('*', { count: 'exact', head: true })
 
-export default function AdminDashboardPage() {
+  // 2. Fetch completed quotes
+  const { count: completedOrdersCount } = await supabase
+    .from('quotes')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'accepted')
+
+  // 3. Fetch active products
+  const { count: activeProductsCount } = await supabase
+    .from('products')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'active')
+
+  // 4. Visitors count (simplified for now)
+  const { count: visitorsCount } = await supabase
+    .from('visitor_tracking')
+    .select('*', { count: 'exact', head: true })
+
+  // 5. Recent Quotes
+  const { data: recentQuotesData } = await supabase
+    .from('quotes')
+    .select('id, quote_number, customer_name, source, status, created_at')
+    .order('created_at', { ascending: false })
+    .limit(5)
+
+  const recentQuotes = (recentQuotesData || []).map((quote: any) => ({
+    id: quote.quote_number || `#${quote.id.substring(0, 4)}`,
+    name: quote.customer_name,
+    type: quote.source,
+    status: quote.status === 'pending' ? 'Bekliyor' : quote.status === 'accepted' ? 'Tamamlandı' : 'Cevaplandı',
+    date: new Date(quote.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+  }))
+
+  // 6. Chart data
+  const { data: allQuotes } = await supabase
+    .from('quotes')
+    .select('created_at')
+  
+  const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+  const revenueData = months.map(m => ({ name: m, value: 0 }))
+  
+  if (allQuotes) {
+    allQuotes.forEach((q: any) => {
+      const date = new Date(q.created_at)
+      const monthIndex = date.getMonth()
+      revenueData[monthIndex].value += 1
+    })
+  }
+  
+  // Filter to just show up to current month (or all)
+  const currentMonth = new Date().getMonth()
+  const displayData = revenueData.slice(Math.max(0, currentMonth - 5), currentMonth + 1)
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-end">
@@ -45,10 +82,10 @@ export default function AdminDashboardPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: "Toplam Teklif", value: "128", trend: "+12.5%", isUp: true, icon: FileText },
-          { title: "Ziyaretçi (Aylık)", value: "14.2k", trend: "+8.2%", isUp: true, icon: Users },
-          { title: "Tamamlanan Sipariş", value: "45", trend: "-2.4%", isUp: false, icon: CheckCircle },
-          { title: "Aktif Ürün", value: "24", trend: "0%", isUp: true, icon: Package },
+          { title: "Toplam Teklif", value: totalQuotesCount || "0", trend: "0%", isUp: true, icon: FileText },
+          { title: "Ziyaretçi (Toplam)", value: visitorsCount || "0", trend: "0%", isUp: true, icon: Users },
+          { title: "Tamamlanan Sipariş", value: completedOrdersCount || "0", trend: "0%", isUp: true, icon: CheckCircle },
+          { title: "Aktif Ürün", value: activeProductsCount || "0", trend: "0%", isUp: true, icon: Package },
         ].map((stat, i) => {
           const Icon = stat.icon
           return (
@@ -79,20 +116,7 @@ export default function AdminDashboardPage() {
               <option>Bu Yıl</option>
             </select>
           </div>
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} />
-                <Tooltip 
-                  cursor={{ fill: '#F3F4F6' }}
-                  contentStyle={{ borderRadius: '12px', border: '1px solid #E5E7EB', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                />
-                <Bar dataKey="value" fill="#000000" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <DashboardCharts revenueData={displayData} />
         </div>
 
         {/* Recent Quotes */}
@@ -102,12 +126,12 @@ export default function AdminDashboardPage() {
             <button className="text-sm font-medium text-blue-600 hover:text-blue-800">Tümü</button>
           </div>
           <div className="flex-1 flex flex-col gap-4">
-            {recentQuotes.map((quote) => (
+            {recentQuotes.length > 0 ? recentQuotes.map((quote: any) => (
               <div key={quote.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 cursor-pointer">
                 <div>
                   <p className="text-sm font-semibold text-gray-900">{quote.name}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">{quote.type}</span>
+                    <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md capitalize">{quote.type?.replace('_', ' ')}</span>
                     <span className="text-xs text-gray-400">{quote.date}</span>
                   </div>
                 </div>
@@ -121,7 +145,9 @@ export default function AdminDashboardPage() {
                   </span>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-sm text-gray-500 text-center py-4">Henüz talep bulunmuyor.</div>
+            )}
           </div>
         </div>
       </div>

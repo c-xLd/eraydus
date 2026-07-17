@@ -32,26 +32,30 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? 'bg-white/80 dark:bg-black/80 backdrop-blur-2xl backdrop-saturate-150 border-b border-black/[0.04] dark:border-white/[0.06] py-3'
-          : 'bg-transparent py-5'
+      className={`fixed top-[var(--admin-bar-height,0px)] left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled || mobileMenuOpen
+          ? 'bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-black/[0.04] dark:border-white/[0.06] py-3'
+          : 'bg-transparent py-4 md:py-6'
       }`}
     >
-      <div className="container mx-auto px-6 max-w-[1440px] flex items-center justify-between">
+      <div className="container mx-auto px-5 md:px-6 max-w-[1440px] flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="z-50 flex items-center gap-3 group">
+        <Link 
+          href="/" 
+          className="z-50 flex items-center gap-2.5 group"
+          onClick={() => setMobileMenuOpen(false)}
+        >
           <div className="relative">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 ${
-              isScrolled || !isDarkHeroPage ? 'bg-foreground' : 'bg-white'
+            <div className={`w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center transition-all duration-500 ${
+              mobileMenuOpen || isScrolled || !isDarkHeroPage ? 'bg-foreground' : 'bg-white'
             }`}>
-              <span className={`text-xs font-black tracking-tighter transition-colors duration-500 ${
-                isScrolled || !isDarkHeroPage ? 'text-background' : 'text-black'
+              <span className={`text-[10px] md:text-xs font-black tracking-tighter transition-colors duration-500 ${
+                mobileMenuOpen || isScrolled || !isDarkHeroPage ? 'text-background' : 'text-black'
               }`}>E</span>
             </div>
           </div>
-          <span className={`text-xl font-bold tracking-tight transition-colors duration-500 ${
-            isScrolled || !isDarkHeroPage ? 'text-foreground' : 'text-white'
+          <span className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-500 ${
+            mobileMenuOpen || isScrolled || !isDarkHeroPage ? 'text-foreground' : 'text-white'
           }`}>
             ERAYDUŞ
           </span>
@@ -148,7 +152,7 @@ export function Header() {
 
         {/* Mobile Menu Toggle */}
         <button
-          className={`lg:hidden relative z-50 p-2 rounded-full transition-colors ${
+          className={`lg:hidden relative z-50 p-2 -mr-2 rounded-full transition-colors ${
             mobileMenuOpen || isScrolled || !isDarkHeroPage
               ? 'text-foreground hover:bg-black/5 dark:hover:bg-white/5'
               : 'text-white hover:bg-white/10'
@@ -156,18 +160,18 @@ export function Header() {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          {mobileMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
         </button>
 
         {/* Mobile Menu Overlay */}
         <div
-          className={`fixed inset-0 bg-background z-40 lg:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`fixed inset-0 bg-background/98 z-40 lg:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             mobileMenuOpen
-              ? 'opacity-100 pointer-events-auto'
-              : 'opacity-0 pointer-events-none'
+              ? 'opacity-100 pointer-events-auto translate-y-0 backdrop-blur-3xl visible'
+              : 'opacity-0 pointer-events-none -translate-y-4 invisible'
           }`}
         >
-          <div className="flex flex-col h-full pt-28 pb-12 px-8 overflow-y-auto">
+          <div className="flex flex-col h-full pt-[100px] pb-10 px-6 overflow-y-auto">
             <nav className="flex flex-col gap-1 flex-1">
               {[
                 { label: 'Duşakabin Koleksiyonları', href: '/koleksiyonlar' },
@@ -176,7 +180,6 @@ export function Header() {
                 { label: 'Jakuzi ve Tekneler', href: '/jakuzi-tekneler' },
                 { href: '/tasarla', label: 'Tasarla' },
                 { href: '/projeler', label: 'Projeler' },
-                { href: '/blog', label: 'Blog' },
                 { href: '/hakkimizda', label: 'Hakkımızda' },
                 { href: '/iletisim', label: 'İletişim' },
               ].map((item, i) => (
@@ -184,12 +187,12 @@ export function Header() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-light py-3 text-foreground hover:text-champagne transition-colors border-b border-border/50"
+                  className="text-2xl font-light py-3.5 text-foreground/80 hover:text-foreground transition-colors border-b border-border/40"
                   style={{ 
-                    transitionDelay: mobileMenuOpen ? `${i * 30}ms` : '0ms',
+                    transitionDelay: mobileMenuOpen ? `${100 + (i * 30)}ms` : '0ms',
                     opacity: mobileMenuOpen ? 1 : 0,
-                    transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
-                    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                    transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(15px)',
+                    transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
                   }}
                 >
                   {item.label}
@@ -197,11 +200,19 @@ export function Header() {
               ))}
             </nav>
 
-            <div className="flex flex-col gap-4 mt-8">
+            <div 
+              className="flex flex-col gap-3 mt-8"
+              style={{ 
+                transitionDelay: mobileMenuOpen ? '400ms' : '0ms',
+                opacity: mobileMenuOpen ? 1 : 0,
+                transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(15px)',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
               <Link
                 href="/tasarla"
                 onClick={() => setMobileMenuOpen(false)}
-                className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-8 h-14 text-base font-semibold"
+                className="inline-flex items-center justify-center rounded-2xl bg-foreground text-background px-8 h-14 text-sm uppercase tracking-widest font-semibold active:scale-[0.98] transition-transform shadow-xl shadow-foreground/10"
               >
                 Tasarla ve Başla
                 <ArrowRight className="ml-2 size-4" />
@@ -210,7 +221,7 @@ export function Header() {
                 href="https://wa.me/905550000000"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-8 h-14 text-base font-medium text-foreground"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface/50 px-8 h-14 text-sm uppercase tracking-widest font-semibold text-foreground active:scale-[0.98] transition-transform"
               >
                 <MessageCircle className="size-4" />
                 WhatsApp ile Ara
@@ -222,4 +233,3 @@ export function Header() {
     </header>
   )
 }
-

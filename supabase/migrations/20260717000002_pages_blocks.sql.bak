@@ -1,0 +1,6 @@
+-- Migration to add Gutenberg CMS block columns to site_pages
+
+ALTER TABLE public.site_pages
+ADD COLUMN IF NOT EXISTS blocks jsonb DEFAULT '[]'::jsonb,
+ADD COLUMN IF NOT EXISTS seo jsonb DEFAULT '{}'::jsonb,
+ADD COLUMN IF NOT EXISTS status text DEFAULT 'published';

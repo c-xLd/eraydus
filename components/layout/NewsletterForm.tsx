@@ -40,7 +40,7 @@ export function NewsletterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full lg:w-auto">
-      <div className="flex w-full lg:w-auto gap-3 relative">
+      <div className="flex flex-col sm:flex-row w-full lg:w-auto gap-3 relative">
         <input 
           type="email" 
           placeholder="E-posta adresiniz"
@@ -48,12 +48,12 @@ export function NewsletterForm() {
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'loading' || status === 'success'}
           required
-          className="flex-1 lg:w-80 px-5 py-3 rounded-full bg-white/5 border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:border-champagne/50 focus:ring-1 focus:ring-champagne/20 transition-all disabled:opacity-50"
+          className="w-full sm:flex-1 lg:w-80 px-5 py-3.5 sm:py-3 rounded-full bg-white/5 border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:border-champagne/50 focus:ring-1 focus:ring-champagne/20 transition-all disabled:opacity-50 min-w-0"
         />
         <button 
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="px-6 py-3 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors shrink-0 flex items-center justify-center min-w-[110px] disabled:opacity-50"
+          className="w-full sm:w-auto px-6 py-3.5 sm:py-3 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors shrink-0 flex items-center justify-center sm:min-w-[110px] disabled:opacity-50"
         >
           {status === 'loading' ? (
             <Loader2 className="w-4 h-4 animate-spin text-black" />

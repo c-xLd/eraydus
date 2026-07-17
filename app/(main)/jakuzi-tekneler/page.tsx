@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { JakuziClient } from './JakuziClient'
 import { globalSeoData } from '@/lib/data/seo'
+import { getSitePage } from '@/features/pages/services/pages'
 
 export const metadata: Metadata = {
   title: 'Jakuzi ve Küvet Modelleri | Lüks Banyo Deneyimi',
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
   }
 }
 
-export default function JakuziPage() {
+export const revalidate = 3600
+
+export default async function JakuziPage() {
+  const page = await getSitePage('jakuzi-tekneler')
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -49,7 +54,7 @@ export default function JakuziPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <JakuziClient />
+      <JakuziClient content={page?.content} />
     </>
   )
 }

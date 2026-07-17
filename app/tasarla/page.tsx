@@ -198,9 +198,9 @@ export default function ConfiguratorPage() {
   }
 
   const stepVariants = {
-    initial: { opacity: 0, x: 20 },
+    initial: { opacity: 0.01, x: 20 },
     animate: { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const } },
-    exit: { opacity: 0, x: -20, transition: { duration: 0.2 } }
+    exit: { opacity: 0.01, x: -20, transition: { duration: 0.2 } }
   }
 
   const glassOverlay = () => {
@@ -221,7 +221,7 @@ export default function ConfiguratorPage() {
       <div className="absolute inset-0 z-0">
         <motion.div
           key={`${state.layout}-${state.collection}-${state.glassType}-${state.profileColor}`}
-          initial={{ opacity: 0, scale: 1.05 }}
+          initial={{ opacity: 0.01, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="w-full h-full"

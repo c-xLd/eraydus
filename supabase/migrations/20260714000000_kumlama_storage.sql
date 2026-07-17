@@ -4,15 +4,14 @@ values (
   'kumlama-models',
   'kumlama-models',
   true,
-  '10MiB',
+  10485760,
   '{image/png,image/jpeg,image/webp,image/gif}'
 )
 on conflict (id) do nothing;
 
 -- Herkese açık okuma (site vitrininde gösterim için)
-create policy "Public can read kumlama model images"
-  on storage.objects for select
-  using ( bucket_id = 'kumlama-models' );
+-- Not: Public bucket'larda objelere erişim için SELECT policy gerekmez.
+-- SELECT policy sadece client üzerinden .list() yapılmak istenirse eklenir.
 
 -- Yükleme (admin anon istemcisi ile)
 create policy "Allow upload to kumlama-models"

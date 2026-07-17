@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getProductBySlug } from '@/features/products/services/products'
-import { products } from '@/lib/data/products'
+import { getProductBySlug, getProductById } from '@/features/products/services/products'
 import { ProductDetailClient } from './ProductDetailClient'
 import { VanityDetailClient } from './VanityDetailClient'
 
@@ -11,7 +10,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
-  const product = products.find(p => p.id === id) || await getProductBySlug(id)
+  const product = (await getProductBySlug(id)) || (await getProductById(id))
   if (!product) return { title: 'Ürün Bulunamadı | ERAYDUŞ' }
   return {
     title: `${product.name} ${product.layoutType === 'Banyo Dolabı' ? 'Banyo Dolabı Modeli' : 'Özel Ölçü Duşakabin'}`,
@@ -37,10 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params
-  let product = products.find(p => p.id === id)
-  if (!product) {
-    product = await getProductBySlug(id) || undefined
-  }
+  const product = (await getProductBySlug(id)) || (await getProductById(id))
+  
   if (!product) notFound()
 
   // Google için yapısal veri şemaları (Product, AggregateRating ve Breadcrumbs)

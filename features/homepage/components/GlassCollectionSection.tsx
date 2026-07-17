@@ -19,7 +19,7 @@ const glassTypes: GlassType[] = [
     name: 'Şeffaf',
     description: 'Kristal berraklığında, mekâna ferahlık katan klasik tercih.',
     overlay: 'bg-transparent',
-    opacity: 0,
+    opacity: 0.01,
   },
   {
     id: 'fume',
@@ -62,23 +62,23 @@ export function GlassCollectionSection() {
   const [selected, setSelected] = useState(glassTypes[0])
 
   return (
-    <section className="py-32 md:py-40 bg-background overflow-hidden">
+    <section className="py-32 md:py-40 bg-background ">
       <div className="container mx-auto px-6 max-w-[1440px]">
         {/* Header */}
         <div className="text-center mb-20">
           <motion.span
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease }}
             className="text-champagne text-sm font-medium tracking-widest uppercase mb-6 block"
           >
             Malzeme Seçimi
           </motion.span>
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0.01, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease }}
             className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight"
           >
@@ -87,14 +87,14 @@ export function GlassCollectionSection() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0.01, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.2, ease }}
           className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start"
         >
           {/* Preview — 3 columns */}
-          <div className="lg:col-span-3 relative aspect-[4/3] rounded-3xl overflow-hidden bg-surface">
+          <div className="lg:col-span-3 relative aspect-[4/3] rounded-3xl  bg-surface">
             <img
               src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2070&auto=format&fit=crop"
               alt="Duşakabin cam önizlemesi"
@@ -104,9 +104,9 @@ export function GlassCollectionSection() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={selected.id}
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0.01 }}
                 animate={{ opacity: selected.opacity }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0.01 }}
                 transition={{ duration: 0.6, ease }}
                 className={`absolute inset-0 ${selected.overlay}`}
               />
@@ -117,9 +117,9 @@ export function GlassCollectionSection() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selected.id}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0.01, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  exit={{ opacity: 0.01, y: -10 }}
                   transition={{ duration: 0.4, ease }}
                 >
                   <p className="text-white text-2xl font-light mb-1">

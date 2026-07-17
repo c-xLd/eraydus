@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import {
   MapPin,
   Phone,
@@ -16,8 +15,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/services/supabase/client'
-
-const ease = [0.16, 1, 0.3, 1] as const
 
 const contactInfo = [
   {
@@ -104,32 +101,23 @@ export default function ContactPage() {
       {/* ───────────── Hero ───────────── */}
       <section className="pt-40 pb-20 md:pt-48 md:pb-28 bg-background">
         <div className="container mx-auto px-6 max-w-[1440px]">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease }}
+          <p
             className="text-champagne text-sm tracking-[0.3em] uppercase font-medium mb-6"
           >
             İletişim
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.1, ease }}
+          </p>
+          <h1
             className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-4xl leading-[1.1]"
           >
             Projenizi Birlikte{' '}
             <span className="font-semibold">Şekillendirelim</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.25, ease }}
+          </h1>
+          <p
             className="text-muted-foreground text-lg md:text-xl font-light mt-6 max-w-2xl"
           >
             Hayalinizdeki banyo deneyimi için ilk adımı atın. Uzman ekibimiz
             size yardımcı olmaktan memnuniyet duyar.
-          </motion.p>
+          </p>
         </div>
       </section>
 
@@ -138,25 +126,13 @@ export default function ContactPage() {
         <div className="container mx-auto px-6 max-w-[1440px]">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-20">
             {/* Left: Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 1, ease }}
+            <div
               className="lg:col-span-2"
             >
               <div className="flex flex-col gap-10">
-                {contactInfo.map((item, index) => (
-                  <motion.div
+                {contactInfo.map((item) => (
+                  <div
                     key={item.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.8,
-                      delay: index * 0.1,
-                      ease,
-                    }}
                     className="group"
                   >
                     <div className="flex items-start gap-5">
@@ -190,16 +166,12 @@ export default function ContactPage() {
                         )}
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
               {/* WhatsApp Quick Contact */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4, ease }}
+              <div
                 className="mt-14"
               >
                 <a
@@ -211,23 +183,16 @@ export default function ContactPage() {
                   <MessageCircle className="w-5 h-5" strokeWidth={1.5} />
                   WhatsApp ile Hızlı İletişim
                 </a>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
             {/* Right: Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 1, delay: 0.2, ease }}
+            <div
               className="lg:col-span-3"
             >
               <div className="bg-surface rounded-2xl p-8 md:p-12">
                 {isSubmitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, ease }}
+                  <div
                     className="text-center py-16"
                   >
                     <div className="w-16 h-16 rounded-full bg-champagne/10 flex items-center justify-center mx-auto mb-6">
@@ -240,7 +205,7 @@ export default function ContactPage() {
                       En kısa sürede sizinle iletişime geçeceğiz. İlginiz
                       için teşekkür ederiz.
                     </p>
-                  </motion.div>
+                  </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -355,7 +320,7 @@ export default function ContactPage() {
                   </form>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -363,12 +328,7 @@ export default function ContactPage() {
       {/* ───────────── Map Placeholder ───────────── */}
       <section className="bg-surface">
         <div className="container mx-auto px-6 max-w-[1440px] py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1, ease }}
-          >
+          <div>
             <div className="flex items-center gap-3 mb-8">
               <Building2
                 className="w-5 h-5 text-champagne"
@@ -402,7 +362,7 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>

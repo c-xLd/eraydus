@@ -118,7 +118,7 @@ export default function ProjectsPage() {
       <section className="pt-40 pb-16 md:pt-48 md:pb-20 bg-background">
         <div className="container mx-auto px-6 max-w-[1440px]">
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.01, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease }}
             className="text-champagne text-sm tracking-[0.3em] uppercase font-medium mb-6"
@@ -126,7 +126,7 @@ export default function ProjectsPage() {
             Referanslarımız
           </motion.p>
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0.01, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.1, ease }}
             className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-3xl leading-[1.1]"
@@ -135,7 +135,7 @@ export default function ProjectsPage() {
             <span className="font-semibold">Projeler</span>
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.01, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.25, ease }}
             className="text-muted-foreground text-lg md:text-xl font-light mt-6 max-w-2xl"
@@ -150,7 +150,7 @@ export default function ProjectsPage() {
       <section className="pb-16 md:pb-20 bg-background">
         <div className="container mx-auto px-6 max-w-[1440px]">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0.01, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease }}
             className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-hide"
@@ -178,16 +178,16 @@ export default function ProjectsPage() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0.01 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0.01 }}
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
               {filteredProjects.map((project, index) => (
                 <motion.div
                   key={project.id}
-                  initial={{ opacity: 0, y: 40 }}
+                  initial={{ opacity: 0.01, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-30px' }}
                   transition={{
@@ -256,7 +256,7 @@ export default function ProjectsPage() {
           {/* Empty state */}
           {filteredProjects.length === 0 && (
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0.01 }}
               animate={{ opacity: 1 }}
               className="text-center py-32"
             >
@@ -273,9 +273,9 @@ export default function ProjectsPage() {
         {selected && (
           <motion.div
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0.01 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0.01 }}
             transition={{ duration: 0.3, ease }}
           >
             {/* Backdrop */}
@@ -315,9 +315,9 @@ export default function ProjectsPage() {
             <motion.div
               key={selected.id}
               className="relative w-full max-w-4xl"
-              initial={{ scale: 0.96, opacity: 0, y: 12 }}
+              initial={{ scale: 0.96, opacity: 0.01, y: 12 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0, y: 12 }}
+              exit={{ scale: 0.96, opacity: 0.01, y: 12 }}
               transition={{ duration: 0.35, ease }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -356,7 +356,7 @@ export default function ProjectsPage() {
       <section className="py-32 md:py-44 bg-surface-dark text-white">
         <div className="container mx-auto px-6 max-w-[1440px] text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0.01, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease }}

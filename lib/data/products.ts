@@ -4,6 +4,7 @@ export type Product = {
   name: string
   collectionId: string
   collectionName: string
+  collectionSlug?: string
   layoutType: string
   price: number
   isNew: boolean

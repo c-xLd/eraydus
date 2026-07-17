@@ -8,7 +8,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 export function FinalCTASection() {
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[85vh] flex items-center justify-center ">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
@@ -25,16 +25,16 @@ export function FinalCTASection() {
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, ease }}
           className="w-16 h-[2px] bg-champagne mb-12 origin-center"
         />
 
         {/* Pre-heading */}
         <motion.span
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.01, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, ease }}
           className="text-champagne text-sm font-medium tracking-widest uppercase mb-8 block"
         >
@@ -43,9 +43,9 @@ export function FinalCTASection() {
 
         {/* Headline */}
         <motion.h2
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0.01, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.1, ease }}
           className="text-white text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-5xl leading-[1.1] mb-8"
         >
@@ -55,9 +55,9 @@ export function FinalCTASection() {
 
         {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.01, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.2, ease }}
           className="text-white/60 text-lg md:text-xl max-w-2xl mb-14"
         >
@@ -67,9 +67,9 @@ export function FinalCTASection() {
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.01, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.3, ease }}
           className="flex flex-col sm:flex-row gap-4"
         >
@@ -91,9 +91,9 @@ export function FinalCTASection() {
 
         {/* Trust line */}
         <motion.p
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0.01 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.5, ease }}
           className="text-white/30 text-sm mt-16 tracking-wide"
         >

@@ -72,7 +72,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     set({ isFetchingProducts: true })
     try {
       const supabase = createClient()
-      const { data } = await supabase.from('products').select('*').eq('status', 'published')
+      const { data } = await supabase.from('products').select('*').eq('status', 'active')
       if (data) {
         set({ baseProducts: data })
       }
@@ -91,12 +91,6 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     const product = s.baseProducts.find(p => p.category === s.layout && p.series === s.collection)
     if (product && product.price) {
       total += product.price
-    } else {
-      // Fallback
-      if (s.collection === 'edge') total += 8500
-      else if (s.collection === 'pure') total += 12000
-      else if (s.collection === 'luxury') total += 16500
-      else total += 8500
     }
 
     // Size modifier (per m²)

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export function StatementSection() {
   return (
-    <section className="py-40 md:py-56 bg-background flex items-center justify-center relative overflow-hidden">
+    <section className="py-40 md:py-56 bg-background flex items-center justify-center relative ">
       {/* Subtle Background Element */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-surface to-transparent opacity-60" />
@@ -12,7 +12,7 @@ export function StatementSection() {
 
       <div className="container mx-auto px-6 max-w-[1200px] text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0.01, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -22,7 +22,7 @@ export function StatementSection() {
         </motion.div>
 
         <motion.h2 
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0.01, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
@@ -38,7 +38,7 @@ export function StatementSection() {
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="w-24 h-[1px] bg-champagne mx-auto mt-12"
         />

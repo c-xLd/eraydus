@@ -8,16 +8,16 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 export function CraftsmanshipSection() {
   return (
-    <section className="py-32 md:py-40 bg-background overflow-hidden">
+    <section className="py-32 md:py-40 bg-background ">
       <div className="container mx-auto px-6 max-w-[1440px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left — Image */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0.01, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1.2, ease }}
-            className="relative aspect-[4/5] lg:aspect-[3/4] rounded-3xl overflow-hidden bg-surface"
+            className="relative aspect-[4/5] lg:aspect-[3/4] rounded-3xl  bg-surface"
           >
             <img
               src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070&auto=format&fit=crop"
@@ -39,9 +39,9 @@ export function CraftsmanshipSection() {
           {/* Right — Story */}
           <div className="flex flex-col justify-center">
             <motion.span
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.01, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, ease }}
               className="text-champagne text-sm font-medium tracking-widest uppercase mb-6"
             >
@@ -49,9 +49,9 @@ export function CraftsmanshipSection() {
             </motion.span>
 
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0.01, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 1, delay: 0.1, ease }}
               className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-8 leading-[1.1]"
             >
@@ -60,9 +60,9 @@ export function CraftsmanshipSection() {
             </motion.h2>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.01, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.2, ease }}
               className="space-y-6 mb-12"
             >
@@ -85,9 +85,9 @@ export function CraftsmanshipSection() {
 
             {/* Stats */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.01, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.3, ease }}
               className="grid grid-cols-3 gap-8 mb-12 border-t border-border pt-8"
             >
@@ -106,9 +106,9 @@ export function CraftsmanshipSection() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.01, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.4, ease }}
             >
               <Link

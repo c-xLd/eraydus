@@ -29,7 +29,26 @@ export async function updateSession(request: NextRequest) {
 
   // This will refresh session if expired - required for Server Components
   // and Route Handlers to access the current user
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Protect /admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!user) {
+      // no user, redirect to login
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // If user is logged in and tries to access /login, redirect to /admin
+  if (request.nextUrl.pathname.startsWith('/login')) {
+    if (user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin'
+      return NextResponse.redirect(url)
+    }
+  }
 
   return supabaseResponse
 }

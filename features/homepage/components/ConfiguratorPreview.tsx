@@ -6,9 +6,9 @@ import { ArrowRight, MessageCircle } from 'lucide-react'
 
 export function ConfiguratorPreview() {
   return (
-    <section className="py-32 lg:py-40 bg-[#0A0A0A] text-white relative overflow-hidden">
+    <section className="py-32 lg:py-40 bg-[#0A0A0A] text-white relative ">
       {/* Ambient Glow */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-0  pointer-events-none">
         <div className="absolute -top-1/3 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] rounded-full bg-champagne/[0.04] blur-[150px]" />
         <div className="absolute bottom-0 left-0 w-[600px] h-[400px] rounded-full bg-white/[0.02] blur-[120px]" />
       </div>
@@ -17,18 +17,18 @@ export function ConfiguratorPreview() {
         {/* Header */}
         <div className="text-center mb-20">
           <motion.span 
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0.01, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             className="text-champagne text-sm font-medium tracking-[0.2em] uppercase block mb-4"
           >
             Erayduş Studio
           </motion.span>
           
           <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0.01, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-4xl mx-auto leading-[1.05]"
           >
@@ -37,9 +37,9 @@ export function ConfiguratorPreview() {
           </motion.h2>
 
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-white/50 text-lg max-w-2xl mx-auto mt-6"
           >
@@ -49,11 +49,11 @@ export function ConfiguratorPreview() {
 
         {/* Preview Card */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0.01, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="w-full max-w-5xl mx-auto aspect-[16/9] bg-white/[0.03] border border-white/[0.06] rounded-3xl overflow-hidden relative group shadow-2xl shadow-black/40"
+          className="w-full max-w-5xl mx-auto aspect-[16/9] bg-white/[0.03] border border-white/[0.06] rounded-3xl  relative group shadow-2xl shadow-black/40"
         >
           <img 
             src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2070&auto=format&fit=crop" 
@@ -99,9 +99,9 @@ export function ConfiguratorPreview() {
 
         {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.01, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
         >

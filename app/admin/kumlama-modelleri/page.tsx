@@ -99,7 +99,17 @@ export default function AdminKumlamaPage() {
         return
       }
       setSaving(true)
-      const path = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
+      // SEO Uyumlu Dosya İsmi Oluşturma
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const seoSlug = title
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Aksanları kaldır
+        .replace(/[^a-zA-Z0-9]/g, '-') // Harf ve rakam dışındakileri tireye çevir
+        .replace(/-+/g, '-') // Yanyana tireleri tek tireye düşür
+        .replace(/^-|-$/g, '') // Baş ve sondaki tireleri temizle
+        .toLowerCase()
+      
+      const path = `${seoSlug}-${Date.now()}.${extension}`
       const { error: upErr } = await supabase.storage
         .from(BUCKET)
         .upload(path, file, { cacheControl: '3600', upsert: false })

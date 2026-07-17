@@ -54,7 +54,7 @@ const containerVariants = {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0.01, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
@@ -64,23 +64,23 @@ const cardVariants = {
 
 export function WhyEraydusSection() {
   return (
-    <section className="py-32 md:py-40 bg-surface overflow-hidden">
+    <section className="py-32 md:py-40 bg-surface ">
       <div className="container mx-auto px-6 max-w-[1440px]">
         {/* Header */}
         <div className="text-center mb-20">
           <motion.span
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease }}
             className="text-champagne text-sm font-medium tracking-widest uppercase mb-6 block"
           >
             Neden Erayduş?
           </motion.span>
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0.01, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease }}
             className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight"
           >
