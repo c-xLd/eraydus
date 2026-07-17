@@ -3,7 +3,9 @@
 import { useState } from 'react'
 import { Plus, Calendar, Edit, Trash2, Eye } from 'lucide-react'
 import { deleteContent, createContent, updateContent } from '../actions'
+import { generateContentIdea } from '../../actions/ai'
 import { toast } from 'sonner'
+import { Sparkles, Loader2 } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -18,6 +20,7 @@ export default function ContentClient({ initialContent }: { initialContent: any[
   const [filterStatus, setFilterStatus] = useState('all')
   const [content, setContent] = useState(initialContent)
   const [loadingId, setLoadingId] = useState<string | null>(null)
+  const [isAiLoading, setIsAiLoading] = useState(false)
 
   // Dialog State
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -76,6 +79,19 @@ export default function ContentClient({ initialContent }: { initialContent: any[
       scheduled_for: item.scheduled_for ? new Date(item.scheduled_for).toISOString().slice(0, 16) : ''
     })
     setIsDialogOpen(true)
+  }
+
+  const handleAiGenerateTitle = async () => {
+    setIsAiLoading(true)
+    const result = await generateContentIdea(formData.content_type, formData.language)
+    setIsAiLoading(false)
+    
+    if (result.success && result.title) {
+      setFormData(prev => ({ ...prev, title: result.title }))
+      toast.success("AI tarafından yeni bir başlık üretildi!")
+    } else {
+      toast.error(result.error || "AI başlık üretemedi.")
+    }
   }
 
   const handleSaveContent = async (e: React.FormEvent) => {
@@ -263,7 +279,18 @@ export default function ContentClient({ initialContent }: { initialContent: any[
           </DialogHeader>
           <form onSubmit={handleSaveContent} className="space-y-4 pt-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Başlık</label>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-700">Başlık</label>
+                <button 
+                  type="button" 
+                  onClick={handleAiGenerateTitle}
+                  disabled={isAiLoading}
+                  className="text-xs flex items-center gap-1.5 text-champagne hover:text-champagne/80 font-medium transition-colors"
+                >
+                  {isAiLoading ? <Loader2 className="size-3.5 animate-spin" /> : <Sparkles className="size-3.5" />}
+                  AI Başlık Önerisi
+                </button>
+              </div>
               <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />
             </div>
 

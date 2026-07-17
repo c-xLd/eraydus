@@ -4,7 +4,6 @@ import { CraftsmanshipSection } from '@/features/homepage/components/Craftsmansh
 import { ProductShowcase } from '@/features/homepage/components/ProductShowcase'
 import { WhyEraydusSection } from '@/features/homepage/components/WhyEraydusSection'
 import { ConfiguratorPreview } from '@/features/homepage/components/ConfiguratorPreview'
-import { GlassCollectionSection } from '@/features/homepage/components/GlassCollectionSection'
 import { TestimonialsSection } from '@/features/homepage/components/TestimonialsSection'
 import { FAQSection } from '@/features/homepage/components/FAQSection'
 import { FinalCTASection } from '@/features/homepage/components/FinalCTASection'
@@ -17,7 +16,7 @@ export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
   const seoData = pagesSeoData.find(p => p.id === 'home')
-  
+
   if (!seoData) return {}
 
   return {
@@ -79,12 +78,11 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <HeroSection />
+      <ProductShowcase categories={categories} />
       <StatementSection />
       <CraftsmanshipSection />
-      <ProductShowcase categories={categories} />
       <WhyEraydusSection />
       <ConfiguratorPreview />
-      <GlassCollectionSection />
       <TestimonialsSection testimonials={safeTestimonials} />
       <FAQSection faqs={safeFaqs} />
       <FinalCTASection />

@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { Save, Globe, FileText, Search, Plus, Trash2, TrendingUp, BarChart3, Edit } from "lucide-react"
 import { saveGlobalSeo, updateSeoMetadata, deleteSeoMetadata } from "../actions"
+import { generateSeoMeta } from '../../actions/ai'
 import { toast } from "sonner"
+import { Sparkles, Loader2 } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -17,6 +19,7 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
   const [activeTab, setActiveTab] = useState('pages')
   const [pages, setPages] = useState(initialPages)
   const [loadingId, setLoadingId] = useState<string | null>(null)
+  const [isAiLoading, setIsAiLoading] = useState(false)
 
   const [globalData, setGlobalData] = useState({
     siteTitle: initialGlobal?.title || 'Eraydus - Modern Duşakabin Tasarımı',
@@ -60,6 +63,29 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
       status: page.status || 'optimized'
     })
     setIsDialogOpen(true)
+  }
+
+  const handleAiGenerateSeo = async () => {
+    if (!editingPage) return
+    
+    setIsAiLoading(true)
+    // Send either the existing title to improve it, or at least the slug
+    const currentTitle = formData.title || editingPage.title || ''
+    const slug = editingPage.page_slug || ''
+    
+    const result = await generateSeoMeta(slug, currentTitle)
+    setIsAiLoading(false)
+    
+    if (result.success) {
+      setFormData(prev => ({
+        ...prev,
+        title: result.title || prev.title,
+        description: result.description || prev.description
+      }))
+      toast.success("AI tarafından SEO verileri oluşturuldu!")
+    } else {
+      toast.error(result.error || "AI veri üretemedi.")
+    }
   }
 
   const handleSavePage = async (e: React.FormEvent) => {
@@ -283,6 +309,17 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSavePage} className="space-y-4 pt-4">
+            <div className="flex justify-end mb-2">
+              <button 
+                type="button" 
+                onClick={handleAiGenerateSeo}
+                disabled={isAiLoading}
+                className="text-xs flex items-center gap-1.5 text-champagne hover:text-champagne/80 font-medium transition-colors bg-champagne/10 px-3 py-1.5 rounded-full"
+              >
+                {isAiLoading ? <Loader2 className="size-3.5 animate-spin" /> : <Sparkles className="size-3.5" />}
+                AI ile Doldur
+              </button>
+            </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Meta Başlık</label>
               <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />

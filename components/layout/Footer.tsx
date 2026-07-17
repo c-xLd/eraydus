@@ -37,10 +37,10 @@ export function Footer() {
                 <Phone className="size-4" /> +90 555 000 00 00
               </a>
               <a href="mailto:info@eraydus.com" className="flex items-center gap-3 hover:text-white transition-colors w-fit">
-                <Mail className="size-4" /> info@eraydus.com
+                <Mail className="size-4" /> info@eraydus.net
               </a>
               <span className="flex items-center gap-3 w-fit">
-                <MapPin className="size-4" /> İstanbul, Türkiye
+                <MapPin className="size-4" /> Siteler/Ankara, Türkiye
               </span>
             </div>
           </div>
@@ -58,7 +58,6 @@ export function Footer() {
                   </Link>
                 </li>
                 <li><Link href="/projeler" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Mimari Projeler</Link></li>
-                <li><Link href="/hakkimizda" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Üretim & Kalite</Link></li>
               </ul>
             </div>
 
@@ -67,9 +66,9 @@ export function Footer() {
               <h4 className="text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.15em] mb-4 lg:mb-6 text-white/30">Destek</h4>
               <ul className="space-y-3 lg:space-y-3.5">
                 <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">İletişim</Link></li>
-                <li><Link href="/hakkimizda" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Garanti Şartları</Link></li>
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Montaj Kılavuzu</Link></li>
-                <li><Link href="/hakkimizda" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">SSS</Link></li>
+                <li><Link href="/garanti-sartlari" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Garanti Şartları</Link></li>
+                <li><Link href="/montaj-kilavuzu" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Montaj Kılavuzu</Link></li>
+                <li><Link href="/sss" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">SSS</Link></li>
               </ul>
             </div>
 
@@ -77,10 +76,6 @@ export function Footer() {
             <div>
               <h4 className="text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.15em] mb-4 lg:mb-6 text-white/30">Profesyoneller</h4>
               <ul className="space-y-3 lg:space-y-3.5">
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Mimar Portalı</Link></li>
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">CAD Dosyaları</Link></li>
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Teknik Kataloglar</Link></li>
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Bayi Başvurusu</Link></li>
               </ul>
             </div>
 
@@ -90,8 +85,7 @@ export function Footer() {
               <ul className="space-y-3 lg:space-y-3.5">
                 <li><Link href="/hakkimizda" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Hakkımızda</Link></li>
                 <li><Link href="/blog" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Blog</Link></li>
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Kariyer</Link></li>
-                <li><Link href="/iletisim" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Basın</Link></li>
+                <li><Link href="/bayi-basvurusu" className="text-[13px] lg:text-sm text-white/60 hover:text-white transition-colors block py-1 lg:py-0">Bayi Başvurusu</Link></li>
               </ul>
             </div>
           </div>

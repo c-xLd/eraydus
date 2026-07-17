@@ -16,7 +16,7 @@ const reasons = [
     icon: Gem,
     title: 'Premium Cam',
     description:
-      '6mm temperli güvenlik camı, nano kaplama seçeneği ile yıllarca ilk günkü parlaklığını korur.',
+      'Yüksek dayanıklılığa sahip 6mm temperli güvenlik camı, yıllar boyu güvenli ve kusursuz bir görünüm sağlar.',
   },
   {
     icon: Ruler,

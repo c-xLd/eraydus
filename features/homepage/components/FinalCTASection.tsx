@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MessageCircle } from 'lucide-react'
+import { storageUrl } from '@/lib/utils'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -13,7 +14,7 @@ export function FinalCTASection() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop"
+          src={storageUrl('uploads', 'homepage/final-cta.webp')}
           alt="Modern banyo tasarımı"
           fill
           loading="lazy"

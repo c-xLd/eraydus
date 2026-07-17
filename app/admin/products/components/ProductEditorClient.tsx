@@ -3,12 +3,12 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Save, Image as ImageIcon, Plus, Trash2, RefreshCw } from "lucide-react"
+import { ArrowLeft, Save, Image as ImageIcon, Plus, Trash2, RefreshCw, Sparkles } from "lucide-react"
 import { createClient } from '@/services/supabase/client'
 import { toast } from 'sonner'
 import { generateSlug } from '@/lib/utils'
 import { X, UploadCloud } from "lucide-react"
-import { revalidateProductPaths } from "../actions"
+import { revalidateProductPaths, generateProductDescription, generateSEOTitle, generateMetaDescription, generateBlogIntro, generateWhatsAppText } from "../actions"
 
 interface ProductFormData {
   title: string
@@ -68,6 +68,11 @@ export default function ProductEditorClient({
   })
 
   const [isUploading, setIsUploading] = useState(false)
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false)
+  const [isGeneratingSEOTitle, setIsGeneratingSEOTitle] = useState(false)
+  const [isGeneratingMetaDescription, setIsGeneratingMetaDescription] = useState(false)
+  const [isGeneratingBlogIntro, setIsGeneratingBlogIntro] = useState(false)
+  const [isGeneratingWhatsAppText, setIsGeneratingWhatsAppText] = useState(false)
 
   // Reverse engineer active attributes and variations from initialData
   const { initialVariations, initialActiveAttributes } = useMemo(() => {
@@ -269,7 +274,7 @@ export default function ProductEditorClient({
           .insert({ ...payload, sku: 'PRD-' + Math.floor(Math.random() * 10000) })
           .select()
           .single()
-        
+
         if (insertError) throw insertError
         productId = data.id
       }
@@ -306,6 +311,135 @@ export default function ProductEditorClient({
       toast.error('Kaydedilirken hata oluştu: ' + err.message)
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  // AI Content Generation Functions
+  // AI Content Generation Functions - Uses Server Actions
+  const handleGenerateDescription = async () => {
+    if (!formData.title) {
+      toast.error("Lütfen önce ürün adını giriniz.")
+      return
+    }
+
+    setIsGeneratingDescription(true)
+
+    try {
+      const result = await generateProductDescription({
+        productName: formData.title,
+        features: formData.description || "lüks duşakabin"
+      })
+
+      if ('error' in result) {
+        throw new Error(result.error)
+      }
+
+      setFormData({ ...formData, description: result.content })
+      toast.success("Ürün açıklaması AI tarafından üretildi!")
+    } catch (err: any) {
+      toast.error('Açıklama üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingDescription(false)
+    }
+  }
+
+  const handleGenerateSEOTitle = async () => {
+    if (!formData.title) {
+      toast.error("Lütfen önce ürün adını giriniz.")
+      return
+    }
+
+    setIsGeneratingSEOTitle(true)
+
+    try {
+      const result = await generateSEOTitle({
+        productName: formData.title,
+        mainFeature: 'lüks duşakabin'
+      })
+
+      if ('error' in result) {
+        throw new Error(result.error)
+      }
+
+      setFormData({ ...formData, title: result.content })
+      toast.success("SEO başlığı AI tarafından üretildi!")
+    } catch (err: any) {
+      toast.error('SEO başlığı üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingSEOTitle(false)
+    }
+  }
+
+  const handleGenerateMetaDescription = async () => {
+    setIsGeneratingMetaDescription(true)
+
+    try {
+      const result = await generateMetaDescription({
+        productDescription: formData.description || "Eraydus lüks duşakabin ürünleri"
+      })
+
+      if ('error' in result) {
+        throw new Error(result.error)
+      }
+
+      setFormData({ ...formData, short_description: result.content })
+      toast.success("Meta açıklaması AI tarafından üretildi!")
+    } catch (err: any) {
+      toast.error('Meta açıklaması üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingMetaDescription(false)
+    }
+  }
+
+  const handleGenerateBlogIntro = async () => {
+    if (!formData.description) {
+      toast.error("Lütfen önce ürün açıklamasını giriniz.")
+      return
+    }
+
+    setIsGeneratingBlogIntro(true)
+
+    try {
+      const result = await generateBlogIntro({
+        productDescription: formData.description
+      })
+
+      if ('error' in result) {
+        throw new Error(result.error)
+      }
+
+      toast.success("Blog girişi AI tarafından üretildi! (Açıklamaya eklendi)")
+      setFormData({ ...formData, description: formData.description + '\n\n---\n\n' + result.content })
+    } catch (err: any) {
+      toast.error('Blog girişi üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingBlogIntro(false)
+    }
+  }
+
+  const handleGenerateWhatsAppText = async () => {
+    if (!formData.title) {
+      toast.error("Lütfen önce ürün adını giriniz.")
+      return
+    }
+
+    setIsGeneratingWhatsAppText(true)
+
+    try {
+      const result = await generateWhatsAppText({
+        productName: formData.title
+      })
+
+      if ('error' in result) {
+        throw new Error(result.error)
+      }
+
+      toast.success("WhatsApp mesajı AI tarafından üretildi!")
+      console.log("WhatsApp text:", result.content)
+    } catch (err: any) {
+      toast.error('WhatsApp mesajı üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingWhatsAppText(false)
     }
   }
 
@@ -392,22 +526,42 @@ export default function ProductEditorClient({
         <div className="lg:col-span-3 space-y-6">
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
             <div>
-              <input 
-                type="text" 
-                value={formData.title}
-                onChange={e => setFormData({...formData, title: e.target.value})}
-                placeholder="Ürün Adı (Örn: Minimalist Banyo Dolabı)" 
-                className="w-full px-4 py-3 text-lg font-medium border border-gray-200 rounded-lg focus:ring-2 focus:ring-black/5 outline-none text-black placeholder:font-normal" 
-              />
+              <div className="flex items-center gap-3 mb-2">
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={e => setFormData({...formData, title: e.target.value})}
+                  placeholder="Ürün Adı (Örn: Minimalist Banyo Dolabı)"
+                  className="flex-1 px-4 py-3 text-lg font-medium border border-gray-200 rounded-lg focus:ring-2 focus:ring-black/5 outline-none text-black placeholder:font-normal"
+                />
+                <button
+                  onClick={handleGenerateSEOTitle}
+                  disabled={isGeneratingSEOTitle}
+                  className="shrink-0 px-3 py-2 bg-blue-50 border border-blue-200 text-sm font-medium rounded-lg text-blue-700 hover:bg-blue-100 disabled:opacity-50 flex items-center gap-1.5"
+                >
+                  {isGeneratingSEOTitle ? <RefreshCw className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+                  SEO Başlığı
+                </button>
+              </div>
             </div>
             <div>
-              <textarea 
-                rows={4} 
-                value={formData.description}
-                onChange={e => setFormData({...formData, description: e.target.value})}
-                placeholder="Detaylı ürün açıklaması..."
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black/5 outline-none resize-y text-black"
-              />
+              <div className="flex items-center gap-2 mb-2">
+                <textarea
+                  rows={4}
+                  value={formData.description}
+                  onChange={e => setFormData({...formData, description: e.target.value})}
+                  placeholder="Detaylı ürün açıklaması..."
+                  className="flex-1 w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black/5 outline-none resize-y text-black"
+                />
+                <button
+                  onClick={handleGenerateDescription}
+                  disabled={isGeneratingDescription}
+                  className="px-3 py-2 bg-purple-50 border border-purple-200 text-sm font-medium rounded-lg text-purple-700 hover:bg-purple-100 disabled:opacity-50 flex items-center gap-1"
+                >
+                  {isGeneratingDescription ? <RefreshCw className="size-3 animate-spin" /> : <Sparkles className="size-3" />}
+                  AI Açıklama
+                </button>
+              </div>
             </div>
           </div>
 
@@ -638,9 +792,19 @@ export default function ProductEditorClient({
           </div>
           
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2">Ürün Kısa Açıklaması</h3>
-            <textarea 
-              rows={3} 
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2">Ürün Kısa Açıklaması</h3>
+              <button
+                onClick={handleGenerateMetaDescription}
+                disabled={isGeneratingMetaDescription}
+                className="px-3 py-1.5 bg-green-50 border border-green-200 text-xs font-medium rounded-lg text-green-700 hover:bg-green-100 disabled:opacity-50 flex items-center gap-1"
+              >
+                {isGeneratingMetaDescription ? <RefreshCw className="size-3 animate-spin" /> : <Sparkles className="size-3" />}
+                AI Meta
+              </button>
+            </div>
+            <textarea
+              rows={3}
               value={formData.short_description}
               onChange={e => setFormData({...formData, short_description: e.target.value})}
               placeholder="Ürün sayfasında fiyatın altında görünecek kısa özet..."

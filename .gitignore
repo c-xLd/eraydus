@@ -28,15 +28,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local  # Explicitly ignore local env file
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-.claude/  
+# Gemini API key protection
+GeminiAPI*  # Ignore any file containing Gemini API key
+*.GeminiAPI  # Additional pattern for safety

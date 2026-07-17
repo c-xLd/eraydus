@@ -5,6 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * Bir Supabase Storage nesnesinin public URL'ini üretir.
+ * Örn: storageUrl('uploads', 'homepage/hero.jpg')
+ */
+export function storageUrl(bucket: string, path: string) {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  const clean = path.replace(/^\/+/, '')
+  return `${base}/storage/v1/object/public/${bucket}/${clean}`
+}
+
 export function generateSlug(text: string) {
   if (!text) return '';
   return text
