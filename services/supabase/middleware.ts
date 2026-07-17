@@ -8,7 +8,7 @@ export async function updateSession(request: NextRequest) {
   // Calling auth.getUser() here would force every matched route into dynamic
   // rendering and kill static/ISR caching (hurting TTFB and the Real
   // Experience Score). Only admin/login paths need the session check.
-  const needsAuth = pathname.startsWith('/admin') || pathname.startsWith('/login')
+  const needsAuth = pathname.startsWith('/admin') || pathname.startsWith('/giris')
   if (!needsAuth) {
     return NextResponse.next({ request })
   }
@@ -43,19 +43,28 @@ export async function updateSession(request: NextRequest) {
   if (pathname.startsWith('/admin')) {
     if (!user) {
       const url = request.nextUrl.clone()
-      url.pathname = '/login'
+      url.pathname = '/giris'
+      url.searchParams.delete('redirectedFrom')
       return NextResponse.redirect(url)
     }
   }
 
-  // If user is logged in and tries to access /login, redirect to /admin
-  if (pathname.startsWith('/login')) {
+  // If user is logged in and tries to access /giris, redirect to /admin
+  if (pathname.startsWith('/giris')) {
     if (user) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin'
+      url.search = ''
       return NextResponse.redirect(url)
     }
   }
+
+  // Harden auth-sensitive responses against clickjacking / MIME sniffing and
+  // keep them out of shared caches.
+  supabaseResponse.headers.set('X-Frame-Options', 'DENY')
+  supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
+  supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  supabaseResponse.headers.set('Cache-Control', 'no-store, max-age=0')
 
   return supabaseResponse
 }

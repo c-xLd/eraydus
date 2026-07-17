@@ -60,7 +60,7 @@ export const pagesSeoData: PageSEO[] = [
   {
     id: 'home',
     path: '/',
-    title: 'Ana Sayfa',
+    title: 'Ankara Duşakabin Sistemleri',
     description: 'Erayduş ile lüks ve modern duşakabin deneyimini keşfedin. Özel ölçü üretim mimari cam kabinler.',
     keywords: 'duşakabin, cam kabin, mimari tasarım, lüks banyo, özel üretim',
     isIndexable: true,

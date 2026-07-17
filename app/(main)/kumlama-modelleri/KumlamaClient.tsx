@@ -26,7 +26,7 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
 
       {/* Gallery Grid */}
       <section className="container mx-auto px-6 max-w-[1440px]">
-        <div className="grid grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
           {initialModels.map((model) => (
             <div
               key={model.id}
