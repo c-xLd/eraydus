@@ -3,75 +3,80 @@
 import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
-export async function createContent(data: any) {
-  const supabase = await createClient()
+export async function createContent(data: {
+  title: string
+  content_type: string
+  language: string
+  status: string
+  scheduled_for: string | null
+}) {
+  try {
+    const supabase = await createClient()
+    const { data: content, error } = await supabase
+      .from('content_calendar')
+      .insert({
+        ...data,
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single()
 
-  const { data: newContent, error } = await supabase
-    .from('content_calendar')
-    .insert([
-      {
-        title: data.title,
-        content_type: data.content_type || 'blog',
-        status: data.status || 'draft',
-        language: data.language || 'tr',
-        scheduled_for: data.scheduled_for || null,
-        author_id: data.author_id || null,
-      }
-    ])
-    .select()
-    .single()
+    if (error) {
+      return { success: false, error: error.message }
+    }
 
-  if (error) {
-    return { success: false, error: error.message }
+    revalidatePath('/admin/content-calendar')
+    return { success: true, content }
+  } catch (error: any) {
+    return { success: false, error: error?.message || 'Bir hata oluştu' }
   }
-
-  revalidatePath('/admin/content-calendar')
-  revalidatePath('/admin')
-  
-  return { success: true, content: newContent }
 }
 
-export async function updateContent(id: string, data: any) {
-  const supabase = await createClient()
+export async function updateContent(id: string, data: {
+  title: string
+  content_type: string
+  language: string
+  status: string
+  scheduled_for: string | null
+}) {
+  try {
+    const supabase = await createClient()
+    const { data: content, error } = await supabase
+      .from('content_calendar')
+      .update({
+        ...data,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
 
-  const { data: updatedContent, error } = await supabase
-    .from('content_calendar')
-    .update({
-      title: data.title,
-      content_type: data.content_type,
-      status: data.status,
-      language: data.language,
-      scheduled_for: data.scheduled_for || null,
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', id)
-    .select()
-    .single()
+    if (error) {
+      return { success: false, error: error.message }
+    }
 
-  if (error) {
-    return { success: false, error: error.message }
+    revalidatePath('/admin/content-calendar')
+    return { success: true, content }
+  } catch (error: any) {
+    return { success: false, error: error?.message || 'Bir hata oluştu' }
   }
-
-  revalidatePath('/admin/content-calendar')
-  revalidatePath('/admin')
-  
-  return { success: true, content: updatedContent }
 }
 
 export async function deleteContent(id: string) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase
+      .from('content_calendar')
+      .delete()
+      .eq('id', id)
 
-  const { error } = await supabase
-    .from('content_calendar')
-    .delete()
-    .eq('id', id)
+    if (error) {
+      return { success: false, error: error.message }
+    }
 
-  if (error) {
-    return { success: false, error: error.message }
+    revalidatePath('/admin/content-calendar')
+    return { success: true }
+  } catch (error: any) {
+    return { success: false, error: error?.message || 'Bir hata oluştu' }
   }
-
-  revalidatePath('/admin/content-calendar')
-  revalidatePath('/admin')
-
-  return { success: true }
 }
