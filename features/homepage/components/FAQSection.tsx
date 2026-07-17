@@ -6,6 +6,15 @@ import { Plus } from 'lucide-react'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+export interface FAQ {
+  question: string
+  answer: string
+}
+
+interface FAQSectionProps {
+  faqs: FAQ[]
+}
+
 function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
   const [isOpen, setIsOpen] = useState(false)
 

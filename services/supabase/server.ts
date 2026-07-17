@@ -29,10 +29,35 @@ export async function createClient() {
   )
 }
 
-// Admin client with service_role key to bypass RLS
-export function createAdminClient() {
+// Public read-only client WITHOUT cookies.
+// Use for public data (products, published posts) in build-time contexts
+// (sitemap, generateStaticParams) and statically/PPR-rendered pages so they
+// don't bail out to dynamic rendering via `cookies()`.
+// Only reads data allowed by public RLS SELECT policies.
+export function createPublicClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    }
   )
+}
+
+// Admin client with service_role key to bypass RLS.
+// Prefer createClient() with authenticated RLS policies when possible.
+export function createAdminClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!url || !serviceRoleKey) {
+    throw new Error(
+      'Missing Supabase admin credentials. Add SUPABASE_SERVICE_ROLE_KEY to .env.local (Supabase Dashboard → Settings → API → service_role key).'
+    )
+  }
+
+  return createSupabaseClient(url, serviceRoleKey)
 }

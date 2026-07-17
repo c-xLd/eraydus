@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
@@ -42,7 +42,7 @@ function AnimatedSection({ children, className = '', delay = 0 }: { children: Re
 
 /* ─── Component ─── */
 interface ProductDetailClientProps {
-  product: any // relaxed from strictly Product type in case it's fetched from DB and has an 'id'
+  product: Product
 }
 
 export function ProductDetailClient({ product }: ProductDetailClientProps) {
@@ -51,6 +51,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [faqOpen, setFaqOpen] = useState<number | null>(null)
   const [hoveredProfile, setHoveredProfile] = useState<string | null>(null)
   const [hoveredGlass, setHoveredGlass] = useState<string | null>(null)
+  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({})
 
   const [reviews, setReviews] = useState<any[]>([])
   const [isLoadingReviews, setIsLoadingReviews] = useState(true)
@@ -101,8 +102,57 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
     }
   }
 
-  const allImages = [product.image, ...product.gallery]
   const averageRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : '0'
+
+  // gallery already contains all images including the main one
+  const allImages = product.gallery.length > 0 ? product.gallery : [product.image]
+
+  // ─── Variation Logic ───
+  const variants = product.variants ?? []
+  const hasVariants = variants.length > 0
+
+  // Build attribute groups: { "profil-rengi": ["mat-siyah", "krom"], ... }
+  const attributeGroups = useMemo(() => {
+    const groups: Record<string, string[]> = {}
+    variants.forEach(v => {
+      Object.entries(v.attributes || {}).forEach(([key, val]) => {
+        if (!groups[key]) groups[key] = []
+        if (!groups[key].includes(val)) groups[key].push(val)
+      })
+    })
+    return groups
+  }, [variants])
+
+  const attributeKeys = Object.keys(attributeGroups)
+
+  // Find the variant matching all currently selected attributes
+  const selectedVariant = useMemo(() => {
+    if (!hasVariants) return null
+    // Only match when every attribute group has a selection
+    const allSelected = attributeKeys.every(k => selectedAttributes[k])
+    if (!allSelected) return null
+    return variants.find(v =>
+      attributeKeys.every(k => (v.attributes || {})[k] === selectedAttributes[k])
+    ) || null
+  }, [hasVariants, attributeKeys, selectedAttributes, variants])
+
+  // Displayed price: selected variant price (with sale) → cheapest variant → base product price
+  const displayPrice = useMemo(() => {
+    if (selectedVariant) {
+      return selectedVariant.salePrice ?? selectedVariant.price
+    }
+    if (hasVariants) {
+      const prices = variants.map(v => v.salePrice ?? v.price).filter(p => p > 0)
+      return prices.length > 0 ? Math.min(...prices) : product.price
+    }
+    return product.price
+  }, [selectedVariant, hasVariants, variants, product.price])
+
+  const humanizeValue = (val: string) =>
+    val.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+
+  const humanizeKey = (key: string) =>
+    key.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
   const faqs = [
     { q: 'Teslimat süresi ne kadar?', a: 'Siparişiniz onaylandıktan sonra özel ölçü üretimimiz 7-10 iş günü sürmektedir. Montaj, ürün tesliminden sonra 1 iş günü içinde profesyonel ekibimiz tarafından tamamlanır.' },
@@ -247,8 +297,17 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
                   {/* Price */}
                   <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-semibold tracking-tight">₺{product.price.toLocaleString('tr-TR')}</span>
-                    <span className="text-sm text-muted-foreground">başlangıç fiyatı</span>
+                    {selectedVariant?.salePrice ? (
+                      <>
+                        <span className="text-3xl font-semibold tracking-tight">₺{selectedVariant.salePrice.toLocaleString('tr-TR')}</span>
+                        <span className="text-lg text-muted-foreground line-through">₺{selectedVariant.price.toLocaleString('tr-TR')}</span>
+                      </>
+                    ) : (
+                      <span className="text-3xl font-semibold tracking-tight">₺{displayPrice.toLocaleString('tr-TR')}</span>
+                    )}
+                    <span className="text-sm text-muted-foreground">
+                      {hasVariants && !selectedVariant ? 'başlangıç fiyatı' : selectedVariant ? 'seçili varyasyon' : 'başlangıç fiyatı'}
+                    </span>
                   </div>
                 </div>
 
@@ -257,6 +316,53 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
                 {/* Divider */}
                 <div className="h-px bg-gradient-to-r from-border via-border/50 to-transparent" />
+
+                {/* Variation Selectors */}
+                {hasVariants && attributeKeys.length > 0 && (
+                  <div className="space-y-5">
+                    {attributeKeys.map(key => (
+                      <div key={key} className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-[13px] font-semibold uppercase tracking-wider">{humanizeKey(key)}</h3>
+                          {selectedAttributes[key] && (
+                            <span className="text-xs text-champagne font-medium">{humanizeValue(selectedAttributes[key])}</span>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-2.5">
+                          {attributeGroups[key].map(val => {
+                            const isSelected = selectedAttributes[key] === val
+                            return (
+                              <button
+                                key={val}
+                                onClick={() => setSelectedAttributes(prev => ({ ...prev, [key]: val }))}
+                                className={`px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 min-h-[44px] ${
+                                  isSelected
+                                    ? 'bg-champagne text-black border-champagne shadow-[0_2px_12px_rgba(201,168,106,0.25)]'
+                                    : 'bg-surface text-foreground border-border/60 hover:border-champagne/50'
+                                }`}
+                              >
+                                {humanizeValue(val)}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Selection hint */}
+                    {!selectedVariant && (
+                      <p className="text-xs text-muted-foreground">
+                        Net fiyat için tüm seçenekleri belirleyin.
+                      </p>
+                    )}
+                    {selectedVariant && selectedVariant.stockQuantity <= 0 && (
+                      <p className="text-xs text-red-500 font-medium">Bu varyasyon şu anda stokta yok.</p>
+                    )}
+
+                    {/* Divider */}
+                    <div className="h-px bg-gradient-to-r from-border via-border/50 to-transparent" />
+                  </div>
+                )}
 
                 {/* Profile Swatches */}
                 <div className="space-y-3">

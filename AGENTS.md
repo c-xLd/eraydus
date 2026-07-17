@@ -4,8 +4,8 @@
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
-This project uses the latest Next.js App Router architecture.
-Always check current framework conventions before implementing features.
+This project uses the latest Next.js 15 App Router architecture.
+Always check current framework conventions before implementing features (e.g., using 'proxy.ts' instead of deprecated 'middleware.ts').
 <!-- END:nextjs-agent-rules -->
 
 ---
@@ -40,7 +40,7 @@ Frontend
 Backend
 - Next.js Server Actions
 - Route Handlers
-- Edge Middleware
+- Edge Proxy (`proxy.ts` - formerly Edge Middleware)
 
 Database
 - Supabase PostgreSQL
@@ -63,6 +63,7 @@ Database
 - Simplify requested functionality
 - Create UI-only implementations
 - Ignore Core Web Vitals
+- Use the deprecated `middleware.ts` convention (Use `proxy.ts` instead)
 
 ### ALWAYS
 - Persist data to Supabase
@@ -133,7 +134,8 @@ Every public page must be perfectly optimized for search engines.
 - **Open Graph & Twitter Cards:** Implement dynamic OG images (`next/og`) for shareability.
 - **Semantic HTML5:** Use `<article>`, `<nav>`, `<aside>`, `<main>`, `<section>`, and perfect heading hierarchy (H1, H2, H3).
 - **Structured Data (JSON-LD):** Inject rich snippets for Products, Breadcrumbs, and Organization.
-- **Sitemaps & Robots:** Maintain dynamic `sitemap.xml` and properly configured `robots.txt`.
+- **Sitemaps & Robots:** Maintain dynamic `sitemap.ts` and properly configured `robots.txt`.
+  - *Rule for Dynamic Sitemaps:* Always fetch dynamic routes from Supabase using `Promise.all` for parallel performance. Ensure a static fallback exists via try-catch to prevent build failures or missing sitemaps on DB timeout.
 - **Canonical URLs:** Prevent duplicate content penalties.
 
 ---
@@ -170,25 +172,26 @@ Every admin feature must include:
 
 ## 11. FILE STRUCTURE RULES
 
-Use a feature-based architecture (Colocation):
+Use a feature-based architecture (Colocation). Keep routing and logic files named strictly to Next.js 15 conventions (e.g., `proxy.ts`, `page.tsx`, `layout.tsx`):
 
 ```text
-features/feature-name/
-  components/
-  actions/
-  hooks/
-  types/
-  validations/
-  utils/
+src/
+  proxy.ts           <-- App-wide proxy (formerly middleware)
+  app/
+  features/feature-name/
+    components/
+    actions/
+    hooks/
+    types/
+    validations/
+    utils/
 Do not place all logic in a single page file. Keep Route Handlers (api/) and Server Actions clean and isolated.
 
 12. DESIGN SYSTEM & VISUAL RULES
 Visual style:
-
 Minimal, Architectural, Luxury, Editorial, Modern, Timeless.
 
 Avoid:
-
 Generic dashboards, excessive gradients, cluttered layouts, heavy drop shadows, inconsistent spacing.
 
 13. ANIMATION RULES
@@ -258,21 +261,25 @@ In ERAYDUŞ, a "page" means a fully functional production feature.
 
 UI without working business logic, Supabase persistence, validation, native-mobile mechanics, and antigravity performance optimization is considered unfinished work.
 
-## STORAGE RULES
-
+18. STORAGE RULES
 Use Supabase Storage for all uploaded assets:
-- Product images
-- Collection images
-- Blog images
-- PDF proposals
-- 3D files
-- Videos
+
+Product images
+
+Collection images
+
+Blog images
+
+PDF proposals
+
+3D files
+
+Videos
 
 Do not configure or use S3-compatible storage unless explicitly requested.
 Use next/image with Supabase public URLs for optimized delivery.
 
-## CONTENT EDITOR RULES
-
+19. CONTENT EDITOR RULES
 Use a block-based content system similar to Gutenberg.
 
 Store page content as structured JSON blocks in Supabase JSONB columns.
@@ -281,15 +288,25 @@ Render blocks using Next.js Server Components.
 Never store raw unstructured HTML when a structured block type exists.
 
 Supported blocks:
-- hero
-- text
-- image
-- gallery
-- video
-- cta
-- quote
-- product_showcase
-- comparison_table
-- faq
+
+hero
+
+text
+
+image
+
+gallery
+
+video
+
+cta
+
+quote
+
+product_showcase
+
+comparison_table
+
+faq
 
 All rendered content must be SEO-friendly, semantic, and optimized for Lighthouse 95+ mobile performance.

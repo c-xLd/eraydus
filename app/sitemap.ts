@@ -1,43 +1,86 @@
 import { MetadataRoute } from 'next'
-import { getProducts } from '@/features/products/services/products'
+import { createClient } from '@supabase/supabase-js'
+
+// Next.js 15: Bu dosyanın ne sıklıkla yeniden oluşturulacağını belirtir (Saniye cinsinden: 3600 = 1 saat)
+// Eğer verilerin çok sık değişiyorsa bu süreyi kısaltabilirsin.
+export const revalidate = 3600 
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // TODO: Alan adınızı buraya girin
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.eraydus.com'
+  // Ortam değişkenlerinden base URL'i güvenli bir şekilde alma
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'
 
-  // Statik rotaları al
-  const staticRoutes = [
-    '/',
-    '/hakkimizda',
-    '/iletisim',
-    '/koleksiyonlar',
-    '/projeler',
-    '/tasarla'
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'monthly' as const,
-    priority: route === '/' ? 1.0 : 0.8,
-  }));
+  // Sunucu tarafında (Server-side) sadece okuma yapacak hafif Supabase istemcisi
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-  // Dinamik ürün rotalarını al
-  const products = await getProducts();
-  const productRoutes = products.map((product) => ({
-    url: `${baseUrl}/koleksiyonlar/${product.id}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }));
-  
-  // Koleksiyon sayfalarını (benzersiz) al
-  const collectionIds = [...new Set(products.map(p => p.collectionId))];
-  const collectionRoutes = collectionIds.map((collectionId) => ({
-      url: `${baseUrl}/koleksiyonlar?collection=${collectionId}`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'weekly' as const,
+  // 1. Statik Rotalar (Showroom'un ana hatları)
+  const staticRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/koleksiyonlar`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/hakkimizda`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
       priority: 0.7,
-  }));
+    },
+    {
+      url: `${baseUrl}/iletisim`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
+  ]
 
+  try {
+    // 2. Performans (Antigravity): Ürünleri ve Koleksiyonları PARALEL olarak çek
+    const [productsResponse, collectionsResponse] = await Promise.all([
+      supabase
+        .from('products')
+        .select('slug, updated_at')
+        .eq('status', 'active'), // Sadece yayındaki ürünler
 
-  return [...staticRoutes, ...productRoutes, ...collectionRoutes];
+      supabase
+        .from('collections') // Koleksiyonlar/Kategoriler tablon varsa (Örn: Minimal, Luxury vs.)
+        .select('slug, updated_at')
+        .eq('status', 'active')
+    ])
+
+    if (productsResponse.error) throw new Error(`Products Error: ${productsResponse.error.message}`)
+    if (collectionsResponse.error) throw new Error(`Collections Error: ${collectionsResponse.error.message}`)
+
+    // 3. Verileri Sitemap formatına dönüştür (Mapping)
+    const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product) => ({
+      url: `${baseUrl}/koleksiyonlar/${product.slug}`,
+      lastModified: new Date(product.updated_at || new Date()),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }))
+
+    const collectionRoutes: MetadataRoute.Sitemap = (collectionsResponse.data || []).map((collection) => ({
+      url: `${baseUrl}/koleksiyonlar/kategori/${collection.slug}`,
+      lastModified: new Date(collection.updated_at || new Date()),
+      changeFrequency: 'weekly',
+      priority: 0.9, // Koleksiyonlar SEO'da genellikle tekil ürünlerden daha yüksek önceliğe sahiptir
+    }))
+
+    // Tüm rotaları birleştir ve Next.js'e teslim et
+    return [...staticRoutes, ...collectionRoutes, ...productRoutes]
+
+  } catch (error) {
+    // Hata durumunda derlemenin (build) veya sitenin çökmesini engelle
+    // Sadece statik sayfaları döndür ve hatayı logla
+    console.error('Sitemap oluşturulurken kritik bir hata oluştu:', error)
+    return staticRoutes
+  }
 }

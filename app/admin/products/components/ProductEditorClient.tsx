@@ -9,7 +9,21 @@ import { toast } from 'sonner'
 import { generateSlug } from '@/lib/utils'
 import { X, UploadCloud } from "lucide-react"
 
-export default function ProductEditorClient({ 
+interface ProductFormData {
+  title: string
+  description: string
+  short_description: string
+  price: string
+  sale_price: string
+  product_type: string
+  manage_stock: boolean
+  stock_quantity: string
+  category_id: string
+  status: string
+  images: string[]
+}
+
+export default function ProductEditorClient({
   initialData, 
   globalAttributes = [],
   categories = []
@@ -30,7 +44,7 @@ export default function ProductEditorClient({
     return new Intl.NumberFormat('tr-TR').format(Number(numeric))
   }
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProductFormData>({
     title: initialData?.name || initialData?.title || '',
     description: initialData?.description || '',
     short_description: initialData?.short_description || '',
@@ -41,7 +55,9 @@ export default function ProductEditorClient({
     stock_quantity: initialData?.stock_quantity?.toString() || '0',
     category_id: initialData?.category_id || '', 
     status: initialData?.status || 'active',
-    images: Array.isArray(initialData?.images) ? initialData.images : []
+    images: Array.isArray(initialData?.images)
+      ? initialData.images.filter((url: unknown): url is string => typeof url === 'string')
+      : []
   })
 
   const [isUploading, setIsUploading] = useState(false)
@@ -671,7 +687,7 @@ export default function ProductEditorClient({
             <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2">Ürün Görselleri</h3>
             
             <div className="grid grid-cols-2 gap-3">
-              {formData.images.map((img, idx) => (
+              {formData.images.map((img: string, idx: number) => (
                 <div key={idx} className={`relative aspect-square rounded-lg overflow-hidden border border-gray-200 group ${idx === 0 ? 'col-span-2' : ''}`}>
                   <img src={img} alt={`Görsel ${idx + 1}`} className="w-full h-full object-cover" />
                   {idx === 0 && (

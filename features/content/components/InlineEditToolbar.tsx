@@ -40,6 +40,16 @@ export function InlineEditToolbar() {
   const [seoScore, setSeoScore] = useState<number | null>(null)
   const [perfScore, setPerfScore] = useState<number | null>(null)
 
+  // Performance URL - only computed on client to avoid hydration mismatch
+  const [performanceUrl, setPerformanceUrl] = useState(
+    'https://pagespeed.web.dev/analysis?url=https%3A%2F%2Feraydus.com.tr'
+  )
+  useEffect(() => {
+    setPerformanceUrl(
+      `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(window.location.href)}`
+    )
+  }, [pathname])
+
   // Add padding to body when admin bar is active
   useEffect(() => {
     if (isAdmin) {
@@ -189,8 +199,6 @@ export function InlineEditToolbar() {
       toast.error(result.error || 'SEO güncellenirken hata oluştu.')
     }
   }
-
-  const performanceUrl = `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : 'https://eraydus.com.tr')}`
 
   // Color helpers
   const getScoreColor = (score: number | null) => {

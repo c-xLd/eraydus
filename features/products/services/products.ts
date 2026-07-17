@@ -1,4 +1,4 @@
-import { createClient } from '@/services/supabase/server'
+import { createPublicClient } from '@/services/supabase/server'
 import { Product as UIProduct, glassOptions, profileOptions } from '@/lib/data/products'
 
 // Database row mapper helper
@@ -67,7 +67,7 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
 
 export async function getProducts(): Promise<UIProduct[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('products')
       .select('*, categories(name, slug)')
@@ -88,7 +88,7 @@ export async function getProducts(): Promise<UIProduct[]> {
 
 export async function getProductsByCollection(categoryId: string): Promise<UIProduct[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('products')
       .select('*, categories(name, slug)')
@@ -109,10 +109,10 @@ export async function getProductsByCollection(categoryId: string): Promise<UIPro
 
 export async function getProductById(id: string): Promise<UIProduct | null> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('products')
-      .select('*, categories(name, slug)')
+      .select('*, categories(name, slug), variants:product_variants(*)')
       .eq('id', id)
       .single()
     
@@ -125,7 +125,7 @@ export async function getProductById(id: string): Promise<UIProduct | null> {
 
 export async function getProductBySlug(slug: string): Promise<UIProduct | null> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('products')
       .select('*, categories(name, slug), variants:product_variants(*)')

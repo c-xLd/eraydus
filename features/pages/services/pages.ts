@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/services/supabase/server'
+import { createClient, createPublicClient } from '@/services/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export interface SitePage {
@@ -16,7 +16,7 @@ export interface SitePage {
 
 export async function getSitePage(slug: string): Promise<SitePage | null> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('site_pages')
       .select('*')
@@ -33,7 +33,7 @@ export async function getSitePage(slug: string): Promise<SitePage | null> {
 
 export async function getAllSitePages(): Promise<SitePage[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('site_pages')
       .select('slug, title, updated_at')

@@ -1,4 +1,4 @@
-import { createClient } from '@/services/supabase/server'
+import { createPublicClient } from '@/services/supabase/server'
 
 export interface FAQ {
   id: string
@@ -18,7 +18,7 @@ export interface Testimonial {
 
 export async function getHomepageFaqs(): Promise<FAQ[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('homepage_faqs')
       .select('*')
@@ -38,7 +38,7 @@ export async function getHomepageFaqs(): Promise<FAQ[]> {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('testimonials')
       .select('*')
@@ -68,7 +68,7 @@ export interface FeaturedCategory {
 
 export async function getFeaturedCategories(): Promise<FeaturedCategory[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('categories')
       .select('*')

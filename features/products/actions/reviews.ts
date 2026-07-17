@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient, createAdminClient } from '@/services/supabase/server'
+import { createClient } from '@/services/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function getApprovedReviews(productId: string) {
@@ -22,7 +22,12 @@ export async function getApprovedReviews(productId: string) {
 }
 
 export async function getAllReviews() {
-  const supabase = createAdminClient()
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { success: false, data: [] }
+  }
 
   const { data, error } = await supabase
     .from('product_reviews')
@@ -104,8 +109,7 @@ export async function updateReviewStatus(reviewId: string, isApproved: boolean) 
     return { success: false, error: 'Yetkisiz erişim.' }
   }
 
-  const supabase = createAdminClient()
-  const { error } = await supabase
+  const { error } = await authClient
     .from('product_reviews')
     .update({ is_approved: isApproved, updated_at: new Date().toISOString() })
     .eq('id', reviewId)
@@ -127,8 +131,7 @@ export async function deleteReview(reviewId: string) {
     return { success: false, error: 'Yetkisiz erişim.' }
   }
 
-  const supabase = createAdminClient()
-  const { error } = await supabase
+  const { error } = await authClient
     .from('product_reviews')
     .delete()
     .eq('id', reviewId)

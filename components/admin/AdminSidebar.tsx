@@ -203,11 +203,9 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
 
                       if (isCollapsed) {
                         return (
-                          <TooltipProvider key={item.href} delayDuration={0}>
+                          <TooltipProvider delay={0}>
                             <Tooltip>
-                              <TooltipTrigger asChild>
-                                {linkContent}
-                              </TooltipTrigger>
+                              <TooltipTrigger render={linkContent} />
                               <TooltipContent side="right" sideOffset={16} className="bg-[#1A1A1A] border-white/10 text-white text-[12px] font-medium shadow-xl">
                                 {item.label}
                               </TooltipContent>
