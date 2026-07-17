@@ -3,15 +3,15 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getProductsByCollection } from '@/features/products/services/products'
 import { getCategoryBySlug, getCategories } from '@/features/products/services/categories'
-import { CollectionsClient } from '../../CollectionsClient'
+import { CollectionsClient } from '../CollectionsClient'
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ categorySlug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const category = await getCategoryBySlug(slug)
+  const { categorySlug } = await params
+  const category = await getCategoryBySlug(categorySlug)
   
   if (!category) return { title: 'Kategori Bulunamadı | Erayduş' }
   
@@ -22,10 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${category.name} Modelleri | Erayduş`,
       description: `Banyonuzun mimarisine uyum sağlayan üstün İtalyan tasarımı ${category.name} serisi.`,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/kategori/${category.slug}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`,
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/kategori/${category.slug}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`,
     }
   }
 }
@@ -33,9 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // export const revalidate = 3600
 
 export default async function CategoryPage({ params }: Props) {
-  const { slug } = await params
+  const { categorySlug } = await params
   
-  const category = await getCategoryBySlug(slug)
+  const category = await getCategoryBySlug(categorySlug)
   if (!category) notFound()
 
   const products = await getProductsByCollection(category.id)
@@ -47,11 +47,11 @@ export default async function CategoryPage({ params }: Props) {
     "@type": "CollectionPage",
     "name": `${category.name} Modelleri`,
     "description": `Erayduş ${category.name} serisi ürünleri.`,
-    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/kategori/${category.slug}`,
+    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`,
     "hasPart": products.map((product) => ({
       "@type": "Product",
       "name": product.name,
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.slug}`
+      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}/${product.slug}`
     }))
   };
 
@@ -76,7 +76,7 @@ export default async function CategoryPage({ params }: Props) {
         "@type": "ListItem",
         "position": 3,
         "name": category.name,
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/kategori/${category.slug}`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`
       }
     ]
   };

@@ -63,9 +63,9 @@ function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
 
 export function FAQSection({ faqs }: FAQSectionProps) {
   return (
-    <section className="py-32 md:py-40 bg-surface ">
+    <section className="py-20 md:py-24 bg-surface ">
       <div className="container mx-auto px-6 max-w-[1440px]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
           {/* Left — Header */}
           <div className="lg:col-span-4">
             <motion.span
@@ -73,7 +73,7 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, ease }}
-              className="text-champagne text-sm font-medium tracking-widest uppercase mb-6 block"
+              className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
             >
               SSS
             </motion.span>
@@ -82,7 +82,7 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 1, delay: 0.1, ease }}
-              className="text-4xl md:text-5xl font-light tracking-tight mb-6 leading-[1.1]"
+              className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight mb-4 leading-[1.1]"
             >
               Sıkça Sorulan{' '}
               <span className="font-semibold">Sorular</span>

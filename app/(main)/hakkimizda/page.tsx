@@ -20,7 +20,7 @@ export default async function AboutPage() {
         "name": "Erayduş markası ne zaman kuruldu?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Erayduş, banyo sistemleri sektöründe 15 yılı aşkın süredir yenilikçi ve kaliteli çözümler üretmektedir."
+          "text": "Erayduş, 1997 yılından beri Ankara'da yenilikçi ve kaliteli çözümler üretmektedir."
         }
       },
       {

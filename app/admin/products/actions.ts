@@ -101,3 +101,17 @@ export async function updateAttributeTerm(id: string, attribute_id: string, data
   return { success: true }
 }
 
+export async function revalidateProductPaths(categorySlug?: string, productSlug?: string) {
+  revalidatePath('/koleksiyonlar')
+  revalidatePath('/koleksiyonlar', 'layout')
+  if (categorySlug) {
+    revalidatePath(`/koleksiyonlar/${categorySlug}`)
+    revalidatePath(`/koleksiyonlar/${categorySlug}`, 'layout')
+    if (productSlug) {
+      revalidatePath(`/koleksiyonlar/${categorySlug}/${productSlug}`)
+    }
+  }
+  revalidatePath('/')
+  return { success: true }
+}
+

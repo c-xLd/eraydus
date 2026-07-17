@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export function StatementSection() {
   return (
-    <section className="py-40 md:py-56 bg-background flex items-center justify-center relative ">
+    <section className="py-20 md:py-28 bg-background flex items-center justify-center relative overflow-hidden">
       {/* Subtle Background Element */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-surface to-transparent opacity-60" />
@@ -26,7 +26,7 @@ export function StatementSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(2rem,5vw,5rem)] font-light tracking-[-0.02em] text-foreground leading-[1.1] max-w-4xl mx-auto"
+          className="text-[clamp(1.75rem,4vw,3.5rem)] font-light tracking-[-0.02em] text-foreground leading-[1.1] max-w-4xl mx-auto"
         >
           Her Banyo{' '}
           <span className="text-muted-foreground">Sıradan Bir</span>

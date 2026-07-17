@@ -8,6 +8,7 @@ import { createClient } from '@/services/supabase/client'
 import { toast } from 'sonner'
 import { generateSlug } from '@/lib/utils'
 import { X, UploadCloud } from "lucide-react"
+import { revalidateProductPaths } from "../actions"
 
 interface ProductFormData {
   title: string
@@ -21,6 +22,9 @@ interface ProductFormData {
   category_id: string
   status: string
   images: string[]
+  glass_type: string
+  height: string
+  cabin_shape: string
 }
 
 export default function ProductEditorClient({
@@ -57,7 +61,10 @@ export default function ProductEditorClient({
     status: initialData?.status || 'active',
     images: Array.isArray(initialData?.images)
       ? initialData.images.filter((url: unknown): url is string => typeof url === 'string')
-      : []
+      : [],
+    glass_type: initialData?.technical_specs?.glassType || 'temperli',
+    height: initialData?.technical_specs?.height || 'Standart 190 veya Özel',
+    cabin_shape: initialData?.technical_specs?.cabinShape || 'Köşe'
   })
 
   const [isUploading, setIsUploading] = useState(false)
@@ -238,7 +245,13 @@ export default function ProductEditorClient({
       stock_quantity: Number(formData.stock_quantity),
       category_id: formData.category_id || null,
       status: status,
-      images: formData.images
+      images: formData.images,
+      technical_specs: {
+        glassType: formData.glass_type,
+        height: formData.height,
+        cabinShape: formData.cabin_shape,
+        layoutType: initialData?.technical_specs?.layoutType || 'Standart'
+      }
     }
 
     try {
@@ -280,6 +293,11 @@ export default function ProductEditorClient({
         const { error: varError } = await supabase.from('product_variants').insert(varPayloads)
         if (varError) throw varError
       }
+
+      // Revalidate cache for list and product details
+      const category = categories.find(c => c.id === formData.category_id)
+      const categorySlug = category?.slug
+      await revalidateProductPaths(categorySlug, slug)
 
       toast.success(isEdit ? 'Ürün başarıyla güncellendi.' : 'Yeni ürün başarıyla eklendi.')
       router.push('/admin/products')
@@ -654,6 +672,80 @@ export default function ProductEditorClient({
               {categories.length === 0 && (
                 <p className="text-sm text-gray-500">Henüz kategori bulunmuyor.</p>
               )}
+            </div>
+          </div>
+
+          {/* Cam Tipi & Yükseklik Card */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            <h3 className="font-semibold text-gray-950 border-b border-gray-100 pb-2">Cam Tipi & Yükseklik</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Kabin Cam Tipi</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({
+                      ...formData, 
+                      glass_type: 'temperli',
+                      height: 'Standart 190 veya Özel'
+                    })}
+                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center cursor-pointer transition-colors ${formData.glass_type === 'temperli' ? 'bg-black text-white border-black' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}
+                  >
+                    Temperli Cam
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({
+                      ...formData, 
+                      glass_type: 'mika',
+                      height: '180'
+                    })}
+                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center cursor-pointer transition-colors ${formData.glass_type === 'mika' ? 'bg-black text-white border-black' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}
+                  >
+                    Mika Cam
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Cam Yüksekliği (cm)</label>
+                {formData.glass_type === 'temperli' ? (
+                  <select
+                    value={formData.height}
+                    onChange={e => setFormData({...formData, height: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none text-sm text-black bg-white"
+                  >
+                    <option value="Standart 190 veya Özel">Standart 190 veya Özel</option>
+                    <option value="Standart 190">Standart 190</option>
+                    <option value="Tavana Kadar Özel">Tavana Kadar Özel</option>
+                  </select>
+                ) : (
+                  <select
+                    value={formData.height}
+                    onChange={e => setFormData({...formData, height: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none text-sm text-black bg-white"
+                  >
+                    <option value="180">Standart 180</option>
+                  </select>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Kabin Şekli Card */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            <h3 className="font-semibold text-gray-950 border-b border-gray-100 pb-2">Kabin Şekli</h3>
+            <div>
+              <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Görseldeki Kabin Şekli</label>
+              <select
+                value={formData.cabin_shape}
+                onChange={e => setFormData({...formData, cabin_shape: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none text-sm text-black bg-white"
+              >
+                <option value="Köşe">Köşe</option>
+                <option value="Oval">Oval</option>
+                <option value="İki Duvar Arası">İki Duvar Arası</option>
+              </select>
             </div>
           </div>
 

@@ -44,38 +44,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // 2. Performans (Antigravity): Ürünleri ve Koleksiyonları PARALEL olarak çek
-    const [productsResponse, collectionsResponse] = await Promise.all([
+    const [productsResponse, categoriesResponse] = await Promise.all([
       supabase
         .from('products')
-        .select('slug, updated_at')
+        .select('slug, updated_at, categories(slug)')
         .eq('status', 'active'), // Sadece yayındaki ürünler
 
       supabase
-        .from('collections') // Koleksiyonlar/Kategoriler tablon varsa (Örn: Minimal, Luxury vs.)
+        .from('categories') // Kategoriler tablosu (Örn: Minimal, Luxury vs.)
         .select('slug, updated_at')
         .eq('status', 'active')
     ])
 
     if (productsResponse.error) throw new Error(`Products Error: ${productsResponse.error.message}`)
-    if (collectionsResponse.error) throw new Error(`Collections Error: ${collectionsResponse.error.message}`)
+    if (categoriesResponse.error) throw new Error(`Categories Error: ${categoriesResponse.error.message}`)
 
     // 3. Verileri Sitemap formatına dönüştür (Mapping)
-    const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product) => ({
-      url: `${baseUrl}/koleksiyonlar/${product.slug}`,
-      lastModified: new Date(product.updated_at || new Date()),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }))
+    const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product: any) => {
+      const catSlug = product.categories?.slug || 'genel'
+      return {
+        url: `${baseUrl}/koleksiyonlar/${catSlug}/${product.slug}`,
+        lastModified: new Date(product.updated_at || new Date()),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      }
+    })
 
-    const collectionRoutes: MetadataRoute.Sitemap = (collectionsResponse.data || []).map((collection) => ({
-      url: `${baseUrl}/koleksiyonlar/kategori/${collection.slug}`,
-      lastModified: new Date(collection.updated_at || new Date()),
+    const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category) => ({
+      url: `${baseUrl}/koleksiyonlar/${category.slug}`,
+      lastModified: new Date(category.updated_at || new Date()),
       changeFrequency: 'weekly',
-      priority: 0.9, // Koleksiyonlar SEO'da genellikle tekil ürünlerden daha yüksek önceliğe sahiptir
+      priority: 0.9, // Kategoriler SEO'da genellikle tekil ürünlerden daha yüksek önceliğe sahiptir
     }))
 
     // Tüm rotaları birleştir ve Next.js'e teslim et
-    return [...staticRoutes, ...collectionRoutes, ...productRoutes]
+    return [...staticRoutes, ...categoryRoutes, ...productRoutes]
 
   } catch (error) {
     // Hata durumunda derlemenin (build) veya sitenin çökmesini engelle

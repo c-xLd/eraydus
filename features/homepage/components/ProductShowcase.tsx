@@ -13,15 +13,15 @@ interface ProductShowcaseProps {
 
 export function ProductShowcase({ categories }: ProductShowcaseProps) {
   return (
-    <section className="py-32 bg-background text-foreground ">
-      <div className="container mx-auto px-6 max-w-[1440px] mb-20">
+    <section className="py-20 md:py-24 bg-background text-foreground ">
+      <div className="container mx-auto px-6 max-w-[1440px] mb-10">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
           <div>
             <motion.span
               initial={{ opacity: 0.01, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "200px" }}
-              className="text-champagne text-sm font-medium tracking-[0.2em] uppercase block mb-4"
+              className="text-champagne text-xs font-semibold tracking-[0.2em] uppercase block mb-3"
             >
               Koleksiyonlar
             </motion.span>
@@ -30,7 +30,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-4xl md:text-6xl font-light tracking-tight"
+              className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight"
             >
               Mimari Koleksiyon
             </motion.h2>
@@ -60,7 +60,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
               <Link href={`/koleksiyonlar?kategori=${model.slug}`} className="group block">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-6 bg-surface">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-4 bg-surface">
                   {model.image_url ? (
                     <Image
                       src={model.image_url}

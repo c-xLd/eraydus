@@ -9,7 +9,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 export function FinalCTASection() {
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center ">
+    <section className="relative min-h-[60vh] flex items-center justify-center ">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -24,14 +24,14 @@ export function FinalCTASection() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 max-w-[1440px] text-center flex flex-col items-center py-32">
+      <div className="relative z-10 container mx-auto px-6 max-w-[1440px] text-center flex flex-col items-center py-20 md:py-24">
         {/* Champagne Accent Line */}
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, ease }}
-          className="w-16 h-[2px] bg-champagne mb-12 origin-center"
+          className="w-16 h-[2px] bg-champagne mb-8 origin-center"
         />
 
         {/* Pre-heading */}
@@ -40,7 +40,7 @@ export function FinalCTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, ease }}
-          className="text-champagne text-sm font-medium tracking-widest uppercase mb-8 block"
+          className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
         >
           Bir Sonraki Adım
         </motion.span>
@@ -51,7 +51,7 @@ export function FinalCTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.1, ease }}
-          className="text-white text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-5xl leading-[1.1] mb-8"
+          className="text-white text-2xl md:text-3xl lg:text-4xl font-light tracking-tight max-w-3xl leading-[1.1] mb-6"
         >
           Hayalinizdeki Duşakabini{' '}
           <span className="font-semibold">Tasarlamaya Hazır Mısınız?</span>
@@ -63,7 +63,7 @@ export function FinalCTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.2, ease }}
-          className="text-white/60 text-lg md:text-xl max-w-2xl mb-14"
+          className="text-white/60 text-sm md:text-base max-w-xl mb-10"
         >
           Online konfigüratörümüzle dakikalar içinde tasarlayın veya
           uzmanlarımızla hemen iletişime geçin.
@@ -79,16 +79,18 @@ export function FinalCTASection() {
         >
           <Link
             href="/tasarla"
-            className="group inline-flex items-center justify-center gap-3 rounded-full bg-white text-black px-10 h-16 text-lg font-medium hover:bg-white/90 transition-colors"
+            className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-white text-black px-8 h-14 text-base font-semibold hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             Konfigüratörü Başlat
-            <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
-            href="#"
-            className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/30 text-white px-10 h-16 text-lg font-medium hover:bg-white/10 transition-colors"
+            href="https://wa.me/905000000000"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center justify-center gap-3 rounded-2xl border border-white/30 text-white px-8 h-14 text-base font-semibold hover:bg-white/10 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
-            <MessageCircle className="size-5" />
+            <MessageCircle className="size-4" />
             WhatsApp ile İletişime Geç
           </Link>
         </motion.div>
@@ -101,7 +103,7 @@ export function FinalCTASection() {
           transition={{ duration: 0.8, delay: 0.5, ease }}
           className="text-white/30 text-sm mt-16 tracking-wide"
         >
-          10 Yıl Garanti &nbsp;·&nbsp; Ücretsiz Keşif &nbsp;·&nbsp; Taksit İmkânı
+          2 Yıl Garanti &nbsp;·&nbsp; Ücretsiz Keşif &nbsp;·&nbsp; Taksit İmkânı
         </motion.p>
       </div>
     </section>

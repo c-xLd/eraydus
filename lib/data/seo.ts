@@ -26,7 +26,7 @@ export const globalSeoData = {
   // GEO & Local Business Data
   contact: {
     phone: '+90 555 123 4567',
-    email: 'info@eraydus.com.tr',
+    email: 'info@eraydus.net',
     address: {
       streetAddress: 'Ostim OSB, 100. Yıl Bulvarı',
       addressLocality: 'Yenimahalle',

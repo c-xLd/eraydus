@@ -233,7 +233,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
             
             return (
               <div key={cat.id} className="pt-2">
-                <Link href={`/koleksiyonlar/kategori/${cat.slug}`} className="flex items-center gap-3 cursor-pointer group mb-3">
+                <Link href={`/koleksiyonlar/${cat.slug}`} className="flex items-center gap-3 cursor-pointer group mb-3">
                   <div className={`size-4 rounded-full border flex items-center justify-center transition-all duration-300 ${activeCategorySlug === cat.slug ? 'bg-champagne border-champagne' : 'border-border group-hover:border-champagne/50'}`}>
                     <motion.div initial={false} animate={{ scale: activeCategorySlug === cat.slug ? 1 : 0 }} className="size-1.5 rounded-full bg-black" />
                   </div>
@@ -243,7 +243,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
                 {subCategories.length > 0 && (
                   <div className="pl-4 space-y-4 border-l border-border/50 ml-2">
                     {subCategories.map((sub) => (
-                      <Link href={`/koleksiyonlar/kategori/${sub.slug}`} key={sub.id} className="flex items-center gap-3 cursor-pointer group">
+                      <Link href={`/koleksiyonlar/${sub.slug}`} key={sub.id} className="flex items-center gap-3 cursor-pointer group">
                         <div className={`size-4 rounded-full border flex items-center justify-center transition-all duration-300 ${activeCategorySlug === sub.slug ? 'bg-champagne border-champagne' : 'border-border group-hover:border-champagne/50'}`}>
                           <motion.div initial={false} animate={{ scale: activeCategorySlug === sub.slug ? 1 : 0 }} className="size-1.5 rounded-full bg-black" />
                         </div>
@@ -433,7 +433,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
                     key={product.id}
                     className="group flex flex-col cursor-pointer animate-in fade-in zoom-in duration-500"
                   >
-                    <Link href={`/koleksiyonlar/${product.slug}`} className="block relative aspect-[4/5] w-full overflow-hidden bg-surface mb-4 rounded-xl group-hover:rounded-2xl transition-all duration-500">
+                    <Link href={`/koleksiyonlar/${product.collectionSlug || 'genel'}/${product.slug}`} className="block relative aspect-[4/5] w-full overflow-hidden bg-surface mb-4 rounded-xl group-hover:rounded-2xl transition-all duration-500">
                       {product.image && !imageError[product.id] ? (
                         <Image
                           src={product.image}
@@ -466,18 +466,18 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
                       <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-[0.15em] mb-1.5 line-clamp-1">
                         <span>{product.collectionName}</span>
                         <span className="opacity-50">/</span>
-                        <span>{product.layoutType}</span>
+                        <span>{product.cabinShape || product.layoutType}</span>
                       </div>
                       
                       {/* Title and Price */}
                       <div className="flex justify-between items-start gap-3 mb-3">
-                        <Link href={`/koleksiyonlar/${product.slug}`} className="group-hover:text-champagne transition-colors">
+                        <Link href={`/koleksiyonlar/${product.collectionSlug || 'genel'}/${product.slug}`} className="group-hover:text-champagne transition-colors">
                           <h3 className="text-sm sm:text-base font-medium tracking-tight text-foreground leading-snug line-clamp-2">
                             {product.name}
                           </h3>
                         </Link>
                         <span className="text-sm sm:text-base font-medium tracking-tight text-foreground whitespace-nowrap mt-0.5">
-                          ₺{product.price.toLocaleString('tr-TR')}
+                          {product.price > 0 ? `₺${product.price.toLocaleString('tr-TR')}` : 'Fiyat Alın'}
                         </span>
                       </div>
 

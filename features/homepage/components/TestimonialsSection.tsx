@@ -25,7 +25,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   }, [next])
 
   return (
-    <section className="py-32 md:py-40 bg-surface-dark text-white  relative">
+    <section className="py-20 md:py-24 bg-surface-dark text-white  relative">
       {/* Subtle background glow */}
       <div className="absolute inset-0 pointer-events-none ">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-champagne/5 blur-[150px]" />
@@ -33,13 +33,13 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
       <div className="container mx-auto px-6 max-w-[1440px] relative z-10">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-10">
           <motion.span
             initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease }}
-            className="text-champagne text-sm font-medium tracking-widest uppercase mb-6 block"
+            className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
           >
             Müşteri Deneyimleri
           </motion.span>
@@ -48,7 +48,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight"
+            className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight"
           >
             Güven, <span className="font-semibold">Söze Değil İşe Bakar</span>
           </motion.h2>
@@ -66,32 +66,32 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
               className="flex flex-col items-center"
             >
               {/* Quote Mark */}
-              <span className="text-champagne/30 text-[120px] md:text-[160px] font-serif leading-none select-none -mb-12 md:-mb-16">
+              <span className="text-champagne/30 text-[80px] md:text-[100px] font-serif leading-none select-none -mb-6 md:-mb-8">
                 &ldquo;
               </span>
 
               {/* Quote */}
-              <blockquote className="text-xl md:text-2xl lg:text-3xl font-light leading-relaxed text-white/90 max-w-3xl mb-10">
+              <blockquote className="text-base md:text-lg lg:text-xl font-light leading-relaxed text-white/90 max-w-2xl mb-6">
                 {testimonials[currentIndex].quote}
               </blockquote>
 
               {/* Stars */}
-              <div className="flex gap-1.5 mb-6">
+              <div className="flex gap-1.5 mb-4">
                 {Array.from({ length: testimonials[currentIndex].rating }).map(
                   (_, i) => (
                     <Star
                       key={i}
-                      className="size-5 text-champagne fill-champagne"
+                      className="size-4 text-champagne fill-champagne"
                     />
                   )
                 )}
               </div>
 
               {/* Author */}
-              <p className="text-lg font-medium text-white">
+              <p className="text-base font-medium text-white">
                 {testimonials[currentIndex].name}
               </p>
-              <p className="text-white/50 text-sm mt-1">
+              <p className="text-white/50 text-xs mt-1">
                 {testimonials[currentIndex].role}
               </p>
             </motion.div>

@@ -7,7 +7,7 @@ import { ArrowRight, MessageCircle } from 'lucide-react'
 
 export function ConfiguratorPreview() {
   return (
-    <section className="py-32 lg:py-40 bg-[#0A0A0A] text-white relative ">
+    <section className="py-20 md:py-24 bg-[#0A0A0A] text-white relative ">
       {/* Ambient Glow */}
       <div className="absolute inset-0 z-0  pointer-events-none">
         <div className="absolute -top-1/3 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] rounded-full bg-champagne/[0.04] blur-[150px]" />
@@ -16,12 +16,12 @@ export function ConfiguratorPreview() {
 
       <div className="container mx-auto px-6 max-w-[1440px] relative z-10">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-10">
           <motion.span 
             initial={{ opacity: 0.01, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
-            className="text-champagne text-sm font-medium tracking-[0.2em] uppercase block mb-4"
+            className="text-champagne text-xs font-semibold tracking-[0.2em] uppercase block mb-3"
           >
             Erayduş Studio
           </motion.span>
@@ -31,7 +31,7 @@ export function ConfiguratorPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-4xl mx-auto leading-[1.05]"
+            className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight max-w-2xl mx-auto"
           >
             Hayalinizdeki Tasarımı{' '}
             <span className="font-semibold">Yapılandırın</span>
@@ -42,7 +42,7 @@ export function ConfiguratorPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-white/50 text-lg max-w-2xl mx-auto mt-6"
+            className="text-white/50 text-sm md:text-base max-w-xl mx-auto mt-4"
           >
             Ölçüleri girin, cam rengini seçin, donanım özelliklerini belirleyin. Anında görüntüleyip fiyat alın.
           </motion.p>

@@ -5,19 +5,19 @@ import { ProductDetailClient } from './ProductDetailClient'
 import { VanityDetailClient } from './VanityDetailClient'
 
 interface Props {
-  params: Promise<{ id: string }>
+  params: Promise<{ categorySlug: string; productSlug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
-  const product = (await getProductBySlug(id)) || (await getProductById(id))
+  const { categorySlug, productSlug } = await params
+  const product = (await getProductBySlug(productSlug)) || (await getProductById(productSlug))
   if (!product) return { title: 'Ürün Bulunamadı | ERAYDUŞ' }
   return {
     title: `${product.name} ${product.layoutType === 'Banyo Dolabı' ? 'Banyo Dolabı Modeli' : 'Özel Ölçü Duşakabin'}`,
     description: `${product.name} serisi ${product.collectionName} modeli. ${product.description} Ankara Erayduş kalitesiyle banyonuza özel tasarım ve ücretsiz montaj.`,
     keywords: `${product.name.toLowerCase()} ${product.layoutType === 'Banyo Dolabı' ? 'banyo dolabı' : 'duşakabin'}, ${product.collectionName.toLowerCase()} serisi, ankara ${product.name.toLowerCase()}, özel tasarım`,
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.id}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${categorySlug}/${product.slug}`,
     },
     openGraph: {
       title: `${product.name} Serisi | ERAYDUŞ`,
@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { id } = await params
-  const product = (await getProductBySlug(id)) || (await getProductById(id))
+  const { categorySlug, productSlug } = await params
+  const product = (await getProductBySlug(productSlug)) || (await getProductById(productSlug))
   
   if (!product) notFound()
 
@@ -53,7 +53,7 @@ export default async function ProductDetailPage({ params }: Props) {
     },
     "offers": {
       "@type": "Offer",
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.id}`,
+      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${categorySlug}/${product.slug}`,
       "priceCurrency": "TRY",
       "price": product.price,
       "itemCondition": "https://schema.org/NewCondition",
@@ -90,7 +90,7 @@ export default async function ProductDetailPage({ params }: Props) {
         "@type": "ListItem",
         "position": 3,
         "name": product.name,
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.id}`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${categorySlug}/${product.slug}`
       }
     ]
   };

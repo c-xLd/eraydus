@@ -143,3 +143,18 @@ export async function deleteReview(reviewId: string) {
   revalidatePath('/admin/reviews')
   return { success: true }
 }
+
+export async function getSandblastedModels() {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('sandblasted_models')
+    .select('*')
+    .order('title', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching sandblasted models:', error)
+    return { success: false, data: [] }
+  }
+
+  return { success: true, data: data || [] }
+}

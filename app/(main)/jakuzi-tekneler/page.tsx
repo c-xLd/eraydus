@@ -34,7 +34,7 @@ export default async function JakuziPage() {
         "name": "Akrilik tekneler sararma yapar mı?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Kesinlikle hayır. Tüm küvet ve teknelerimiz 1. sınıf antibakteriyel dökme akrilik malzemeden üretilir. Sararma ve solmalara karşı 10 yıl garantilidir."
+          "text": "Kesinlikle hayır. Tüm küvet ve teknelerimiz 1. sınıf antibakteriyel dökme akrilik malzemeden üretilir. Sararma ve solmalara karşı 2 yıl garantilidir."
         }
       },
       {

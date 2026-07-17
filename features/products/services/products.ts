@@ -49,17 +49,26 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
     longDescription: dbRow.description || 'Erayduş kalitesiyle üretilmiş, milimetrik hassasiyete sahip özel tasarım. Uzun ömürlü kullanım ve estetik görünüm sunar.',
     image: Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images[0] : 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80',
     gallery: Array.isArray(dbRow.images) ? dbRow.images : [],
-    features: Array.isArray(dbRow.features) && dbRow.features.length > 0 ? dbRow.features : ['10 Yıl Üretici Garantisi', 'Ücretsiz Profesyonel Montaj', 'Kişiye Özel Üretim', 'Paslanmaz Malzeme'],
+    features: Array.isArray(dbRow.features) && dbRow.features.length > 0 ? dbRow.features : ['2 Yıl Üretici Garantisi', 'Ücretsiz Profesyonel Montaj', 'Kişiye Özel Üretim', 'Paslanmaz Malzeme'],
     technicalSpecs: {
-      glassThickness: dbRow.technical_specs?.glassThickness || ['6mm / 8mm Temperli Şişecam'],
+      glassThickness: dbRow.technical_specs?.glassThickness || ['6mm Temperli Şişecam'],
       height: dbRow.technical_specs?.height || 'Standart veya Tavana Kadar Özel',
       widthRange: dbRow.technical_specs?.widthRange || 'Mekana Özel Milimetrik',
       installation: dbRow.technical_specs?.installation || 'Zemin Üstü / Tekne Üstü'
     },
     compatibleGlass,
     compatibleProfiles,
-    price: Number(dbRow.sale_price || dbRow.base_price || dbRow.price || 0),
+    price: (() => {
+      const base = Number(dbRow.sale_price || dbRow.base_price || dbRow.price || 0)
+      if (base > 0) return base
+      if (variants.length > 0) {
+        const prices = variants.map((v: any) => v.salePrice ?? v.price).filter((p: number) => p > 0)
+        if (prices.length > 0) return Math.min(...prices)
+      }
+      return 0
+    })(),
     layoutType: dbRow.technical_specs?.layoutType || 'Standart',
+    cabinShape: dbRow.technical_specs?.cabinShape || '',
     isNew: dbRow.new_product || true,
     variants
   }
@@ -70,7 +79,7 @@ export async function getProducts(): Promise<UIProduct[]> {
     const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('products')
-      .select('*, categories(name, slug)')
+      .select('*, categories(name, slug), variants:product_variants(*)')
       .eq('status', 'active')
       .order('created_at', { ascending: false })
     
@@ -91,7 +100,7 @@ export async function getProductsByCollection(categoryId: string): Promise<UIPro
     const supabase = createPublicClient()
     const { data, error } = await supabase
       .from('products')
-      .select('*, categories(name, slug)')
+      .select('*, categories(name, slug), variants:product_variants(*)')
       .eq('category_id', categoryId)
       .eq('status', 'active')
     

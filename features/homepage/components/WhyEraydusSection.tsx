@@ -16,7 +16,7 @@ const reasons = [
     icon: Gem,
     title: 'Premium Cam',
     description:
-      '8mm temperli güvenlik camı, nano kaplama seçeneği ile yıllarca ilk günkü parlaklığını korur.',
+      '6mm temperli güvenlik camı, nano kaplama seçeneği ile yıllarca ilk günkü parlaklığını korur.',
   },
   {
     icon: Ruler,
@@ -32,15 +32,15 @@ const reasons = [
   },
   {
     icon: Award,
-    title: '10 Yıl Garanti',
+    title: '2 Yıl Garanti',
     description:
-      'Ürünlerimize olan güvenimizin kanıtı: 10 yıl üretici garantisi sunuyoruz.',
+      'Ürünlerimize olan güvenimizin kanıtı: 2 yıl üretici garantisi sunuyoruz.',
   },
   {
     icon: Zap,
     title: 'Hızlı Üretim',
     description:
-      'Sipariş onayından sonra 7-10 iş günü içinde üretim ve teslimat gerçekleştiriyoruz.',
+      'Sipariş onayından sonra 5-7 iş günü içinde üretim ve teslimat gerçekleştiriyoruz.',
   },
 ]
 
@@ -64,16 +64,16 @@ const cardVariants = {
 
 export function WhyEraydusSection() {
   return (
-    <section className="py-32 md:py-40 bg-surface ">
+    <section className="py-20 md:py-24 bg-surface ">
       <div className="container mx-auto px-6 max-w-[1440px]">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-10">
           <motion.span
             initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease }}
-            className="text-champagne text-sm font-medium tracking-widest uppercase mb-6 block"
+            className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
           >
             Neden Erayduş?
           </motion.span>
@@ -82,7 +82,7 @@ export function WhyEraydusSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease }}
-            className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight"
+            className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight"
           >
             Farkımız, <span className="font-semibold">Detaylarda</span>
           </motion.h2>
