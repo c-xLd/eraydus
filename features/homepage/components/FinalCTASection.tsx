@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, MessageCircle } from 'lucide-react'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -11,10 +12,13 @@ export function FinalCTASection() {
     <section className="relative min-h-[85vh] flex items-center justify-center ">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop"
           alt="Modern banyo tasarımı"
-          className="w-full h-full object-cover"
+          fill
+          loading="lazy"
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-black/65" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -17,12 +18,15 @@ export function CraftsmanshipSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1.2, ease }}
-            className="relative aspect-[4/5] lg:aspect-[3/4] rounded-3xl  bg-surface"
+            className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden rounded-3xl  bg-surface"
           >
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070&auto=format&fit=crop"
               alt="Lüks banyo mimarisi"
-              className="w-full h-full object-cover"
+              fill
+              loading="lazy"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
             />
             {/* Subtle gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />

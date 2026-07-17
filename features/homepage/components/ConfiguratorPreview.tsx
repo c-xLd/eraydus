@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, MessageCircle } from 'lucide-react'
 
 export function ConfiguratorPreview() {
@@ -53,12 +54,15 @@ export function ConfiguratorPreview() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="w-full max-w-5xl mx-auto aspect-[16/9] bg-white/[0.03] border border-white/[0.06] rounded-3xl  relative group shadow-2xl shadow-black/40"
+          className="w-full max-w-5xl mx-auto aspect-[16/9] overflow-hidden bg-white/[0.03] border border-white/[0.06] rounded-3xl  relative group shadow-2xl shadow-black/40"
         >
-          <img 
-            src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2070&auto=format&fit=crop" 
-            alt="Configurator Preview" 
-            className="w-full h-full object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-[2s]"
+          <Image
+            src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2070&auto=format&fit=crop"
+            alt="Duşakabin konfigüratör önizlemesi"
+            fill
+            loading="lazy"
+            sizes="(max-width: 1024px) 100vw, 1024px"
+            className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-[2s]"
           />
           
           {/* Floating Config Bar */}

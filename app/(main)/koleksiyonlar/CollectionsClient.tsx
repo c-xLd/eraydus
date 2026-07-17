@@ -428,17 +428,19 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
               </motion.div>
             ) : (
               <div className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-4 sm:gap-x-6 gap-y-12 sm:gap-y-16">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product, index) => (
                   <div
                     key={product.id}
                     className="group flex flex-col cursor-pointer animate-in fade-in zoom-in duration-500"
                   >
                     <Link href={`/koleksiyonlar/${product.slug}`} className="block relative aspect-[4/5] w-full overflow-hidden bg-surface mb-4 rounded-xl group-hover:rounded-2xl transition-all duration-500">
                       {product.image && !imageError[product.id] ? (
-                        <Image 
-                          src={product.image} 
-                          alt={product.name} 
+                        <Image
+                          src={product.image}
+                          alt={product.name}
                           fill
+                          priority={index < 3}
+                          loading={index < 3 ? 'eager' : 'lazy'}
                           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                           onError={() => setImageError(prev => ({ ...prev, [product.id]: true }))}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -94,11 +95,14 @@ export function GlassCollectionSection() {
           className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start"
         >
           {/* Preview — 3 columns */}
-          <div className="lg:col-span-3 relative aspect-[4/3] rounded-3xl  bg-surface">
-            <img
+          <div className="lg:col-span-3 relative aspect-[4/3] overflow-hidden rounded-3xl  bg-surface">
+            <Image
               src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2070&auto=format&fit=crop"
               alt="Duşakabin cam önizlemesi"
-              className="w-full h-full object-cover"
+              fill
+              loading="lazy"
+              sizes="(max-width: 1024px) 100vw, 60vw"
+              className="object-cover"
             />
             {/* Glass overlay */}
             <AnimatePresence mode="wait">

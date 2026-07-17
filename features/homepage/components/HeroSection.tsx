@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export function HeroSection() {
   return (
@@ -9,10 +10,15 @@ export function HeroSection() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/80 z-10" />
-        <img 
+        <Image
           src="https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2069&auto=format&fit=crop"
-          alt="Luxury Bathroom"
-          className="w-full h-full object-cover object-center scale-105"
+          alt="Lüks banyo duşakabin"
+          fill
+          priority
+          fetchPriority="high"
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center scale-105"
         />
       </div>
 

@@ -2,6 +2,17 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // Public pages (home, koleksiyonlar, blog, etc.) must NOT call getUser().
+  // Calling auth.getUser() here would force every matched route into dynamic
+  // rendering and kill static/ISR caching (hurting TTFB and the Real
+  // Experience Score). Only admin/login paths need the session check.
+  const needsAuth = pathname.startsWith('/admin') || pathname.startsWith('/login')
+  if (!needsAuth) {
+    return NextResponse.next({ request })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -15,10 +26,8 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request,
-          })
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({ request })
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           )
@@ -27,14 +36,12 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // This will refresh session if expired - required for Server Components
-  // and Route Handlers to access the current user
+  // This refreshes the session if expired - required to access the current user
   const { data: { user } } = await supabase.auth.getUser()
 
   // Protect /admin routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/admin')) {
     if (!user) {
-      // no user, redirect to login
       const url = request.nextUrl.clone()
       url.pathname = '/login'
       return NextResponse.redirect(url)
@@ -42,7 +49,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // If user is logged in and tries to access /login, redirect to /admin
-  if (request.nextUrl.pathname.startsWith('/login')) {
+  if (pathname.startsWith('/login')) {
     if (user) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin'

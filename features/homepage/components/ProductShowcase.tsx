@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 
 import { FeaturedCategory } from '../services/homepage'
@@ -59,12 +60,15 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
               <Link href={`/koleksiyonlar?kategori=${model.slug}`} className="group block">
-                <div className="relative aspect-[3/4]  rounded-2xl mb-6 bg-surface">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-6 bg-surface">
                   {model.image_url ? (
-                    <img 
-                      src={model.image_url} 
-                      alt={model.name} 
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                    <Image
+                      src={model.image_url}
+                      alt={model.name}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-all duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full bg-surface flex items-center justify-center">

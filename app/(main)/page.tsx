@@ -12,6 +12,9 @@ import { Metadata } from 'next'
 import { pagesSeoData } from '@/lib/data/seo'
 import { getHomepageFaqs, getTestimonials, getFeaturedCategories } from '@/features/homepage/services/homepage'
 
+// Instant TTFB: statically prerender and refresh via ISR (data is all public).
+export const revalidate = 3600
+
 export async function generateMetadata(): Promise<Metadata> {
   const seoData = pagesSeoData.find(p => p.id === 'home')
   
