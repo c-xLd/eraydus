@@ -10,6 +10,9 @@ import {
   Maximize2, Layers, Droplets
 } from 'lucide-react'
 import { Product } from '@/lib/data/products'
+import { getApprovedReviews, submitProductReview } from '@/features/products/actions/reviews'
+import { toast } from 'sonner'
+import { useEffect } from 'react'
 
 /* ─── Animation Variants ─── */
 const fadeUp: Variants = {
@@ -39,7 +42,7 @@ function AnimatedSection({ children, className = '', delay = 0 }: { children: Re
 
 /* ─── Component ─── */
 interface ProductDetailClientProps {
-  product: Product
+  product: any // relaxed from strictly Product type in case it's fetched from DB and has an 'id'
 }
 
 export function ProductDetailClient({ product }: ProductDetailClientProps) {
@@ -49,28 +52,53 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [hoveredProfile, setHoveredProfile] = useState<string | null>(null)
   const [hoveredGlass, setHoveredGlass] = useState<string | null>(null)
 
-  const [reviews, setReviews] = useState([
-    { id: 1, name: 'Ahmet Yılmaz', rating: 5, date: '12 Temmuz 2026', comment: 'Banyomuzun tamamını yeniden tasarladık ve Erayduş duşakabinini merkeze koyduk. Sonuç inanılmazdı — misafirlerimiz her geldiğinde ilk fark ettikleri şey duşakabin oluyor. Montaj ekibi de son derece profesyoneldi.', image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80' },
-    { id: 2, name: 'Merve Kaya', rating: 5, date: '5 Haziran 2026', comment: 'Füme cam seçeneğiyle sipariş verdik. Profil kalitesi ve cam berraklığı piyasadaki hiçbir ürünle kıyaslanamaz. 10 yıl garanti de cabası. Kesinlikle tavsiye ederim.', image: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=600&q=80' },
-    { id: 3, name: 'Can Demir', rating: 4, date: '28 Mayıs 2026', comment: 'Mimari ofisimiz için 12 adet sipariş verdik. Özel ölçü üretim kapasiteleri ve profesyonel montaj hizmeti beklentilerimizin üzerindeydi.', image: null }
-  ])
-
-  const [newReview, setNewReview] = useState({ name: '', rating: 5, comment: '' })
+  const [reviews, setReviews] = useState<any[]>([])
+  const [isLoadingReviews, setIsLoadingReviews] = useState(true)
+  const [newReview, setNewReview] = useState({ name: '', rating: 5, comment: '', website_url: '', math_answer: '' })
   const [showReviewForm, setShowReviewForm] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleReviewSubmit = (e: React.FormEvent) => {
+  // Fetch approved reviews on mount
+  useEffect(() => {
+    const fetchReviews = async () => {
+      // product.id must exist if it's from DB. If it's a static mock product without ID, we can fallback to slug
+      const identifier = product.id || product.slug
+      if (!identifier) {
+        setIsLoadingReviews(false)
+        return
+      }
+      const res = await getApprovedReviews(identifier)
+      if (res.success && res.data) {
+        setReviews(res.data)
+      }
+      setIsLoadingReviews(false)
+    }
+    fetchReviews()
+  }, [product.id, product.slug])
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newReview.name.trim() || !newReview.comment.trim()) return
-    setReviews(prev => [{
-      id: Date.now(),
-      name: newReview.name,
-      rating: newReview.rating,
-      date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
-      comment: newReview.comment,
-      image: null
-    }, ...prev])
-    setNewReview({ name: '', rating: 5, comment: '' })
-    setShowReviewForm(false)
+    
+    setIsSubmitting(true)
+    const formData = new FormData()
+    formData.append('product_id', product.id || product.slug)
+    formData.append('author_name', newReview.name)
+    formData.append('content', newReview.comment)
+    formData.append('rating', newReview.rating.toString())
+    formData.append('website_url', newReview.website_url) // Honeypot
+    formData.append('math_answer', newReview.math_answer) // Math Captcha
+
+    const result = await submitProductReview(formData)
+    setIsSubmitting(false)
+
+    if (result.success) {
+      toast.success(result.message)
+      setNewReview({ name: '', rating: 5, comment: '', website_url: '', math_answer: '' })
+      setShowReviewForm(false)
+    } else {
+      toast.error(result.error || 'Gönderim başarısız.')
+    }
   }
 
   const allImages = [product.image, ...product.gallery]
@@ -606,13 +634,38 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                       />
                     </div>
 
+                    {/* Honeypot (Hidden) */}
+                    <div style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
+                      <label>Eğer insansanız bu alanı boş bırakın</label>
+                      <input 
+                        type="text" 
+                        tabIndex={-1} 
+                        autoComplete="off" 
+                        value={newReview.website_url} 
+                        onChange={e => setNewReview({...newReview, website_url: e.target.value})} 
+                      />
+                    </div>
+
+                    {/* Math Captcha */}
+                    <div>
+                      <label className="block text-[13px] font-medium mb-2 text-foreground">Bot Koruması: 5 + 3 kaçtır?</label>
+                      <input
+                        type="text"
+                        required
+                        value={newReview.math_answer}
+                        onChange={e => setNewReview({...newReview, math_answer: e.target.value})}
+                        className="w-full bg-background border border-border rounded-xl px-4 py-3.5 outline-none focus:border-champagne focus:ring-1 focus:ring-champagne/20 transition-all text-[15px]"
+                        placeholder="Sonucu rakamla yazın"
+                      />
+                    </div>
+
                     {/* Photo Upload */}
                     <button type="button" className="flex items-center gap-2.5 text-sm text-champagne hover:text-champagne/80 transition-colors font-medium">
                       <Camera className="size-4" /> Fotoğraf Ekle <span className="text-muted-foreground font-normal">(opsiyonel)</span>
                     </button>
 
-                    <button type="submit" className="bg-champagne text-black font-semibold px-8 py-3.5 rounded-xl hover:bg-champagne/90 transition-all hover:shadow-[0_4px_20px_rgba(201,168,106,0.3)]">
-                      Yorumu Gönder
+                    <button disabled={isSubmitting} type="submit" className="bg-champagne text-black font-semibold px-8 py-3.5 rounded-xl hover:bg-champagne/90 transition-all hover:shadow-[0_4px_20px_rgba(201,168,106,0.3)] disabled:opacity-70 flex items-center justify-center min-w-[160px]">
+                      {isSubmitting ? 'Gönderiliyor...' : 'Yorumu Gönder'}
                     </button>
                   </div>
                 </form>
@@ -621,24 +674,33 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           </AnimatePresence>
 
           {/* Reviews Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reviews.map((review, i) => (
-              <motion.div
-                key={review.id}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={i}
-                className="group bg-surface border border-border/50 rounded-2xl overflow-hidden flex flex-col hover:border-champagne/20 transition-colors duration-300"
-              >
-                {/* Review Photo */}
-                {review.image && (
-                  <div className="relative h-52 w-full overflow-hidden">
-                    <Image src={review.image} alt="Banyo kurulumu" fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 33vw" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                  </div>
-                )}
+          {isLoadingReviews ? (
+            <div className="flex justify-center items-center py-10 opacity-50">
+              Yorumlar yükleniyor...
+            </div>
+          ) : reviews.length === 0 ? (
+            <div className="text-center py-10 opacity-60">
+              <p>Henüz değerlendirme yapılmamış. İlk yorum yapan siz olun!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {reviews.map((review, i) => (
+                <motion.div
+                  key={review.id}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  custom={i}
+                  className="group bg-surface border border-border/50 rounded-2xl overflow-hidden flex flex-col hover:border-champagne/20 transition-colors duration-300"
+                >
+                  {/* Review Photo */}
+                  {review.images && review.images.length > 0 && (
+                    <div className="relative h-52 w-full overflow-hidden">
+                      <Image src={review.images[0]} alt="Banyo kurulumu" fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 33vw" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                    </div>
+                  )}
 
                 {/* Review Content */}
                 <div className="p-6 flex flex-col flex-1">
@@ -648,8 +710,8 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                         <User className="size-4 text-champagne" />
                       </div>
                       <div>
-                        <p className="font-semibold text-sm">{review.name}</p>
-                        <p className="text-[11px] text-muted-foreground">{review.date}</p>
+                        <p className="font-semibold text-sm">{review.author_name}</p>
+                        <p className="text-[11px] text-muted-foreground">{review.created_at ? new Date(review.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}</p>
                       </div>
                     </div>
                     <div className="flex gap-0.5">
@@ -661,12 +723,13 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
                   <div className="relative flex-1">
                     <Quote className="size-5 text-champagne/20 absolute -top-1 -left-1" />
-                    <p className="text-[13px] text-muted-foreground leading-relaxed pl-5">{review.comment}</p>
+                    <p className="text-[13px] text-muted-foreground leading-relaxed pl-5">{review.content}</p>
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
+          )}
         </div>
       </AnimatedSection>
 

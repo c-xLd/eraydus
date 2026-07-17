@@ -7,6 +7,7 @@ import { ArrowLeft, Save, Image as ImageIcon, Plus, Trash2, RefreshCw } from "lu
 import { createClient } from '@/services/supabase/client'
 import { toast } from 'sonner'
 import { generateSlug } from '@/lib/utils'
+import { X, UploadCloud } from "lucide-react"
 
 export default function ProductEditorClient({ 
   initialData, 
@@ -40,8 +41,10 @@ export default function ProductEditorClient({
     stock_quantity: initialData?.stock_quantity?.toString() || '0',
     category_id: initialData?.category_id || '', 
     status: initialData?.status || 'active',
-    image: (initialData?.images && initialData.images.length > 0) ? initialData.images[0] : ''
+    images: Array.isArray(initialData?.images) ? initialData.images : []
   })
+
+  const [isUploading, setIsUploading] = useState(false)
 
   // Reverse engineer active attributes and variations from initialData
   const { initialVariations, initialActiveAttributes } = useMemo(() => {
@@ -219,6 +222,7 @@ export default function ProductEditorClient({
       stock_quantity: Number(formData.stock_quantity),
       category_id: formData.category_id || null,
       status: status,
+      images: formData.images
     }
 
     try {
@@ -270,6 +274,54 @@ export default function ProductEditorClient({
       setIsSaving(false)
     }
   }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    setIsUploading(true);
+    const supabase = createClient();
+    const uploadedUrls: string[] = [];
+    
+    try {
+      for (let i = 0; i < e.target.files.length; i++) {
+        const file = e.target.files[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { data, error } = await supabase.storage
+          .from('products')
+          .upload(fileName, file);
+          
+        if (error) throw error;
+        
+        const { data: publicUrlData } = supabase.storage
+          .from('products')
+          .getPublicUrl(fileName);
+          
+        uploadedUrls.push(publicUrlData.publicUrl);
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...uploadedUrls]
+      }));
+      toast.success(`${uploadedUrls.length} görsel yüklendi.`);
+    } catch (error: any) {
+      toast.error('Görsel yüklenemedi: ' + error.message);
+    } finally {
+      setIsUploading(false);
+      // Reset input
+      e.target.value = '';
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => {
+      const newImages = [...prev.images];
+      newImages.splice(index, 1);
+      return { ...prev, images: newImages };
+    });
+  };
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-12">
@@ -616,32 +668,47 @@ export default function ProductEditorClient({
           </div>
 
           <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2">Ürün Görseli</h3>
+            <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2">Ürün Görselleri</h3>
             
-            {!formData.image ? (
-              <div className="w-full aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-gray-400 hover:bg-gray-50 transition-colors text-gray-500 cursor-pointer">
-                <ImageIcon className="size-8" />
-                <span className="text-sm font-medium">Ana Görsel Belirle</span>
-              </div>
-            ) : (
-              <div className="w-full aspect-square border border-gray-200 rounded-lg overflow-hidden relative group">
-                <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
-                <button 
-                  onClick={() => setFormData({...formData, image: ''})}
-                  className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-medium text-sm"
-                >
-                  Görseli Kaldır
-                </button>
-              </div>
-            )}
-            
-            <input 
-              type="text" 
-              value={formData.image}
-              onChange={e => setFormData({...formData, image: e.target.value})}
-              placeholder="Görsel URL giriniz..."
-              className="w-full px-3 py-2 border border-gray-200 rounded-md outline-none text-sm text-black"
-            />
+            <div className="grid grid-cols-2 gap-3">
+              {formData.images.map((img, idx) => (
+                <div key={idx} className={`relative aspect-square rounded-lg overflow-hidden border border-gray-200 group ${idx === 0 ? 'col-span-2' : ''}`}>
+                  <img src={img} alt={`Görsel ${idx + 1}`} className="w-full h-full object-cover" />
+                  {idx === 0 && (
+                    <div className="absolute top-2 left-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-medium tracking-wide">ANA GÖRSEL</div>
+                  )}
+                  <button 
+                    onClick={() => removeImage(idx)}
+                    className="absolute top-2 right-2 size-6 bg-red-500/90 text-white flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <label className={`w-full aspect-[2/1] border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 transition-colors cursor-pointer text-gray-500 ${isUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'}`}>
+              <input 
+                type="file" 
+                multiple 
+                accept="image/png, image/jpeg, image/webp" 
+                onChange={handleImageUpload}
+                disabled={isUploading}
+                className="hidden" 
+              />
+              {isUploading ? (
+                <>
+                  <RefreshCw className="size-6 animate-spin text-blue-500" />
+                  <span className="text-sm font-medium text-blue-600">Yükleniyor...</span>
+                </>
+              ) : (
+                <>
+                  <UploadCloud className="size-6" />
+                  <span className="text-sm font-medium">Görsel Yükle</span>
+                </>
+              )}
+            </label>
+            <p className="text-xs text-gray-400 text-center">PNG, JPG, WEBP (Maks. 10MB)</p>
           </div>
         </div>
       </div>

@@ -1,3 +1,13 @@
+export type ProductVariant = {
+  id: string
+  name: string
+  sku: string
+  price: number
+  salePrice?: number | null
+  stockQuantity: number
+  attributes: Record<string, string>
+}
+
 export type Product = {
   id: string
   slug: string
@@ -21,6 +31,7 @@ export type Product = {
   }
   compatibleGlass: { id: string; name: string; colorClass: string; desc: string }[]
   compatibleProfiles: { id: string; name: string; hex: string }[]
+  variants?: ProductVariant[]
 }
 
 export const glassOptions = [

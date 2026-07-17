@@ -22,7 +22,8 @@ import {
   Building2,
   Globe,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Star
 } from "lucide-react"
 
 type NavItem = {
@@ -53,6 +54,7 @@ const navGroups: { title: string; items: NavItem[] }[] = [
     title: "Operasyon",
     items: [
       { icon: MessageSquareQuote, label: "Teklif & Sipariş", href: "/admin/quotes" },
+      { icon: Star, label: "Yorumlar", href: "/admin/reviews" },
       { icon: Users, label: "Müşteri Ağı", href: "/admin/customers" },
       { icon: Bell, label: "Bildirimler", href: "/admin/notifications" },
     ],
