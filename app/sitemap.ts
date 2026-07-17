@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       supabase
         .from('categories') // Kategoriler tablosu (Örn: Minimal, Luxury vs.)
-        .select('slug, updated_at')
+        .select('slug')
         .eq('status', 'active')
     ])
 
@@ -72,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category) => ({
       url: `${baseUrl}/koleksiyonlar/${category.slug}`,
-      lastModified: new Date(category.updated_at || new Date()),
+      lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9, // Kategoriler SEO'da genellikle tekil ürünlerden daha yüksek önceliğe sahiptir
     }))

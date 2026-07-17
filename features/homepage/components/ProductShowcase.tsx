@@ -15,14 +15,14 @@ const ease = [0.16, 1, 0.3, 1] as const
 export function ProductShowcase({ categories }: ProductShowcaseProps) {
   return (
     <section className="py-24 md:py-32 bg-background text-foreground relative overflow-hidden border-b border-border/20">
-      
+
       {/* Blueprint coordinates background accent */}
       <div className="pointer-events-none absolute right-12 top-10 font-mono text-[9px] text-muted-foreground/30 tracking-widest hidden md:block select-none">
         INDEX // SEC-02 // COLLECTIONS
       </div>
 
       <div className="container mx-auto px-6 max-w-[1440px]">
-        
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 border-b border-border/40 pb-8 relative z-10">
           <div>
@@ -65,7 +65,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
           {categories.map((model, i) => (
             <motion.div
               key={model.id}
@@ -76,18 +76,18 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
             >
               <Link
                 href={`/koleksiyonlar?kategori=${model.slug}`}
-                className="group relative block aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-surface ring-1 ring-border/50 shadow-sm hover:shadow-2xl hover:shadow-champagne/5 transition-all duration-700"
+                className="group relative block aspect-[4/5] rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden bg-surface ring-1 ring-border/50 shadow-sm hover:shadow-2xl hover:shadow-champagne/5 transition-all duration-700"
               >
-                
+
                 {/* Tech specifications label overlay */}
-                <div className="absolute top-6 left-6 text-white/50 font-mono text-[9px] tracking-widest z-10 pointer-events-none uppercase">
+                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 text-white/50 font-mono text-[8px] sm:text-[9px] tracking-widest z-10 pointer-events-none uppercase">
                   [ COMP-0{i + 1} // ERD ]
                 </div>
 
                 {/* Badge Overlay */}
                 {model.badge && (
-                  <div className="absolute top-6 right-6 z-10">
-                    <span className="px-3 py-1.5 rounded-full bg-zinc-950/60 backdrop-blur-md border border-white/10 text-[9px] font-semibold text-white tracking-widest uppercase font-mono">
+                  <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10">
+                    <span className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-zinc-950/60 backdrop-blur-md border border-white/10 text-[8px] sm:text-[9px] font-semibold text-white tracking-widest uppercase font-mono">
                       {model.badge}
                     </span>
                   </div>
@@ -100,7 +100,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
                     alt={model.name}
                     fill
                     loading="lazy"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
                   />
                 ) : (
@@ -113,16 +113,16 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-700 opacity-80 group-hover:opacity-90" />
 
                 {/* Card Details Overlay */}
-                <div className="absolute bottom-8 left-8 right-8 text-left z-10">
-                  <span className="text-champagne/90 text-[10px] font-mono tracking-[0.2em] uppercase mb-1.5 block">
+                <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 text-left z-10">
+                  <span className="text-champagne/90 text-[8px] sm:text-[10px] font-mono tracking-[0.2em] uppercase mb-1 sm:mb-1.5 block">
                     {model.subtitle || 'MİMARİ KOLEKSİYON'}
                   </span>
-                  <h3 className="text-2xl font-light text-white tracking-tight group-hover:text-champagne transition-colors duration-500">
+                  <h3 className="text-base sm:text-2xl font-light text-white tracking-tight group-hover:text-champagne transition-colors duration-500">
                     {model.name}
                   </h3>
-                  
-                  {/* Grid expanding drawer for description & CTA */}
-                  <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 pt-2">
+
+                  {/* Grid expanding drawer for description & CTA - Desktop only */}
+                  <div className="hidden sm:grid sm:grid-rows-[0fr] sm:group-hover:grid-rows-[1fr] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:opacity-0 sm:group-hover:opacity-100 pt-2">
                     <div className="overflow-hidden">
                       <p className="text-zinc-300/90 text-xs font-light leading-relaxed mb-4 line-clamp-2">
                         {model.description || 'Kusursuz sızdırmazlık teknolojisi ve yalın hatlarla banyonuza uyum sağlayan özel seri.'}
