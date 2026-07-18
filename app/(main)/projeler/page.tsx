@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MapPin, X, ZoomIn, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { MapPin, X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -95,11 +95,11 @@ export default function ProjectsPage() {
 
   const currentIndex = selected ? projects.findIndex((p) => p.id === selected.id) : -1
 
-  const goTo = (dir: number) => {
+  const goTo = useCallback((dir: number) => {
     if (currentIndex === -1) return
     const next = (currentIndex + dir + projects.length) % projects.length
     setSelected(projects[next])
-  }
+  }, [currentIndex])
 
   useEffect(() => {
     if (!selected) return
@@ -110,7 +110,7 @@ export default function ProjectsPage() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [selected, currentIndex])
+  }, [selected, currentIndex, goTo])
 
   return (
     <div className="flex flex-col w-full">
@@ -140,7 +140,7 @@ export default function ProjectsPage() {
             transition={{ duration: 1, delay: 0.25, ease }}
             className="text-muted-foreground text-lg md:text-xl font-light mt-6 max-w-2xl"
           >
-            Türkiye'nin en prestijli projelerinde ERAYDUŞ imzası. Her biri
+            Türkiye&apos;nin en prestijli projelerinde ERAYDUŞ imzası. Her biri
             titizlikle tasarlanmış, özenle tamamlanmış referanslarımız.
           </motion.p>
         </div>

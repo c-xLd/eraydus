@@ -40,7 +40,7 @@ export default function CookiePolicyPage() {
               (örneğin Konfigüratör) düzgün çalışmayabileceğini lütfen unutmayın.
             </p>
             <p className="mt-4">
-              Çerezlerin yönetimi hakkında daha fazla bilgi almak için tarayıcınızın "Yardım" menüsünü inceleyebilirsiniz.
+              Çerezlerin yönetimi hakkında daha fazla bilgi almak için tarayıcınızın &quot;Yardım&quot; menüsünü inceleyebilirsiniz.
             </p>
           </section>
 

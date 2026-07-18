@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       { message: 'Abonelik başarılı' },
       { status: 200 }
     )
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Subscribe Error:', err)
     return NextResponse.json(
       { error: 'Sunucu hatası oluştu.' },

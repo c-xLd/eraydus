@@ -33,8 +33,8 @@ export default function KVKKPage() {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">2. İşleme Amaçları ve Hukuki Sebepler</h2>
             <p>
-              Kişisel verileriniz, "Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla" ve 
-              "Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması" hukuki sebeplerine dayanarak; 
+              Kişisel verileriniz, &quot;Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla&quot; ve
+              &quot;Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması&quot; hukuki sebeplerine dayanarak;
               ürün/hizmet satış süreçlerinin yürütülmesi, müşteri taleplerinin karşılanması ve yasal yükümlülüklerimizin 
               yerine getirilmesi amacıyla işlenmektedir.
             </p>

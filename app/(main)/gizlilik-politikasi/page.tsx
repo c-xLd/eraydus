@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">1. Giriş</h2>
             <p>
-              Erayduş ("Şirket", "biz", "bize" veya "bizim") olarak, gizliliğinize saygı duyuyor ve web sitemizi ("eraydus.com.tr") 
+              Erayduş (&quot;Şirket&quot;, &quot;biz&quot;, &quot;bize&quot; veya &quot;bizim&quot;) olarak, gizliliğinize saygı duyuyor ve web sitemizi (&quot;eraydus.com.tr&quot;)
               kullanırken sağladığınız kişisel bilgileri korumayı taahhüt ediyoruz. Bu Gizlilik Politikası, hakkınızda ne tür bilgiler 
               topladığımızı, bu bilgileri nasıl kullandığımızı ve koruduğumuzu açıklamaktadır.
             </p>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Plus, Search, Trash2, Edit, Image as ImageIcon, Loader2, X, Upload, Images } from 'lucide-react'
+import { Plus, Search, Trash2, Image as ImageIcon, Loader2, X, Upload, Images } from 'lucide-react'
 import { createClient } from '@/services/supabase/client'
 
 type Model = {
@@ -29,10 +29,6 @@ export default function AdminKumlamaPage() {
   const [saving, setSaving] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    fetchModels()
-  }, [])
-
   const fetchModels = async () => {
     const { data, error } = await supabase
       .from('sandblasted_models')
@@ -44,6 +40,12 @@ export default function AdminKumlamaPage() {
     }
     setLoading(false)
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchModels()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleDelete = async (id: string) => {
     if (!confirm('Bu modeli silmek istediğinize emin misiniz?')) return

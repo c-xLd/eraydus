@@ -176,6 +176,7 @@ const MOCK_PRODUCTS: UIProduct[] = [
 ]
 
 // Database row mapper helper
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapDatabaseProduct(dbRow: any): UIProduct {
   return {
     id: dbRow.id,

@@ -350,7 +350,7 @@ export function VanityDetailClient({ product }: VanityDetailClientProps) {
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'ozellikler' | 'teknik' | 'sss')}
                 className={`py-6 px-8 whitespace-nowrap text-sm font-medium uppercase tracking-wider relative transition-colors ${
                   activeTab === tab.id ? 'text-champagne' : 'text-[#888] hover:text-[#1A1A1A]'
                 }`}

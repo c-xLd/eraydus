@@ -29,6 +29,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
   useEffect(() => {
     const category = searchParams.get('kategori')
     if (category) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedLayouts(prev => prev.includes(category) ? prev : [...prev, category])
     }
   }, [searchParams])
@@ -97,7 +98,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
             <span className="text-sm text-muted-foreground">{filteredProducts.length} Ürün Listeleniyor (Toplam: {products.length})</span>
             <select 
               value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as any)}
+              onChange={(e) => setSortOrder(e.target.value as 'newest' | 'price-asc' | 'price-desc')}
               className="bg-surface border border-border text-foreground text-sm rounded-xl px-4 py-3 outline-none focus:border-champagne"
             >
               <option value="newest">En Yeniler</option>
@@ -271,7 +272,7 @@ export function CollectionsClient({ products }: CollectionsClientProps) {
                     <span className="text-xs text-muted-foreground mr-1">Aktif Filtreler:</span>
                     {searchQuery && (
                       <span className="bg-champagne/10 border border-champagne/20 text-champagne text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                        Arama: "{searchQuery}"
+                        Arama: &quot;{searchQuery}&quot;
                         <button onClick={() => setSearchQuery('')} className="hover:text-foreground font-semibold">×</button>
                       </span>
                     )}

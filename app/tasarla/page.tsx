@@ -145,7 +145,8 @@ export default function ConfiguratorPage() {
   }, [])
 
   const activeProduct = state.baseProducts.find(
-    p => p.category === state.layout && p.series === state.collection
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (p: any) => p.category === state.layout && p.series === state.collection
   )
 
   const generateWhatsAppMessage = () => {
@@ -379,7 +380,8 @@ export default function ConfiguratorPage() {
               {state.currentStep === 5 && (
                 <motion.div key="s5" {...stepVariants} className="grid grid-cols-2 gap-3">
                   {glassTypes.map(g => {
-                    const isAvailable = activeProduct?.features?.availableGlasses?.includes(g.id) ?? true // Eğer ürün yoksa hepsi açık (fallback)
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const isAvailable = ((activeProduct as any)?.features)?.availableGlasses?.includes(g.id) ?? true // Eğer ürün yoksa hepsi açık (fallback)
                     return (
                     <OptionCard 
                       key={g.id} 
@@ -419,7 +421,8 @@ export default function ConfiguratorPage() {
               {state.currentStep === 7 && (
                 <motion.div key="s7" {...stepVariants} className="grid grid-cols-2 gap-3">
                   {profileColors.map(p => {
-                    const isAvailable = activeProduct?.features?.availableProfiles?.includes(p.id) ?? true
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const isAvailable = ((activeProduct as any)?.features)?.availableProfiles?.includes(p.id) ?? true
                     return (
                     <OptionCard 
                       key={p.id} 

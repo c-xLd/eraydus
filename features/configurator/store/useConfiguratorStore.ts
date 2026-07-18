@@ -19,13 +19,13 @@ export type ConfiguratorState = {
   installation: string | null
   warranty: string | null
   
-  baseProducts: any[]
+  baseProducts: unknown[]
   isFetchingProducts: boolean
 
   setStep: (step: number) => void
   nextStep: () => void
   prevStep: () => void
-  updateField: (field: string, value: any) => void
+  updateField: (field: string, value: unknown) => void
   toggleAccessory: (id: string) => void
   calculatePrice: () => number
   getDeliveryEstimate: () => string
@@ -88,7 +88,8 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     let total = 0
 
     // Dinamik Ürün Fiyatlandırması (Admin'den gelir)
-    const product = s.baseProducts.find(p => p.category === s.layout && p.series === s.collection)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const product = s.baseProducts.find((p: any) => p.category === s.layout && p.series === s.collection) as any
     if (product && product.price) {
       total += product.price
     } else {

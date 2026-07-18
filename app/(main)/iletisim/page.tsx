@@ -397,7 +397,7 @@ export default function ContactPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-champagne text-sm font-medium mt-3 hover:gap-3 transition-all duration-300"
                 >
-                  Google Maps'te Aç
+                  Google Maps&apos;te Aç
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>

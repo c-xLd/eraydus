@@ -32,9 +32,9 @@ export function NewsletterForm() {
 
       setStatus('success')
       setEmail('')
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus('error')
-      setErrorMessage(err.message || 'Bilinmeyen bir hata oluştu.')
+      setErrorMessage((err as Error).message || 'Bilinmeyen bir hata oluştu.')
     }
   }
 

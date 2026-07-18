@@ -114,7 +114,7 @@ export default function AboutPage() {
                 <span className="font-semibold">Bir Devrim</span>
               </h2>
               <p className="text-muted-foreground text-lg md:text-xl font-light mt-8 leading-relaxed">
-                2010 yılında İstanbul'da kurulan ERAYDUŞ, Türkiye'nin önde
+                2010 yılında İstanbul&apos;da kurulan ERAYDUŞ, Türkiye&apos;nin önde
                 gelen lüks duşakabin üreticisi olma yolculuğuna küçük bir
                 atölyede başladı. Bugün, modern üretim tesislerimizde yüzlerce
                 mimari projeye imza atıyoruz.
@@ -333,7 +333,7 @@ export default function AboutPage() {
                 <span className="font-semibold">Şekillenen Üretim</span>
               </h2>
               <p className="text-white/60 text-lg md:text-xl font-light mt-8 leading-relaxed">
-                50'den fazla uzman mühendis ve teknisyenimiz, 3.000 m²'lik
+                50&apos;den fazla uzman mühendis ve teknisyenimiz, 3.000 m²&apos;lik
                 modern üretim tesisimizde her gün sınırları zorluyor. CNC
                 işleme merkezleri, temperleme fırınları ve kalite kontrol
                 laboratuvarlarımızla sektörün en donanımlı tesislerinden birini
