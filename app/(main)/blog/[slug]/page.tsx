@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowLeft, CalendarDays } from "lucide-react"
 import { notFound } from "next/navigation"
 
@@ -72,7 +73,18 @@ export default async function BlogPostPage({ params }: Props) {
             {post.description && <p className="mt-6 max-w-3xl text-lg font-light leading-relaxed text-muted-foreground md:text-xl">{post.description}</p>}
             {post.tags?.length ? <div className="mt-8 flex flex-wrap gap-2">{post.tags.map((tag) => <span key={tag} className="rounded-full bg-surface px-3 py-1 text-sm text-muted-foreground">{tag}</span>)}</div> : null}
           </header>
-          {post.featured_image && <img src={post.featured_image} alt={post.title} className="mt-12 aspect-[16/9] w-full rounded-2xl object-cover" />}
+          {post.featured_image && (
+            <div className="mt-12 relative aspect-[16/9] w-full rounded-2xl overflow-hidden">
+              <Image
+                src={post.featured_image}
+                alt={post.title}
+                fill
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                priority
+                className="object-cover"
+              />
+            </div>
+          )}
           <div className="mt-12 max-w-3xl space-y-6 text-lg font-light leading-8 text-foreground/80">{paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
         </div>
       </article>

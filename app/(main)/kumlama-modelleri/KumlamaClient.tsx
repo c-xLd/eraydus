@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { X, ZoomIn, Info } from 'lucide-react'
+import Image from 'next/image'
 
 type Model = {
   id: string
@@ -34,10 +35,12 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
               onClick={() => setSelectedModel(model)}
             >
               <div className="relative aspect-[3/4] overflow-hidden">
-                <img
+                <Image
                   src={model.image_url}
                   alt={model.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <div className="size-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
@@ -74,11 +77,15 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex-1 min-h-0 bg-black/5 relative flex items-center justify-center p-8">
-              <img
-                src={selectedModel.image_url}
-                alt={selectedModel.title}
-                className="max-w-full max-h-full object-contain drop-shadow-xl"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={selectedModel.image_url}
+                  alt={selectedModel.title}
+                  fill
+                  sizes="100vw"
+                  className="object-contain drop-shadow-xl"
+                />
+              </div>
             </div>
             <div className="p-6 md:p-8 bg-surface border-t border-border flex items-center justify-between">
               <div>
