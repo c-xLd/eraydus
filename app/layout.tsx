@@ -25,19 +25,14 @@ import { createClient } from "@/lib/server";
 import { ServerFAQSchema } from "@/components/seo/ServerFAQSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const supabase = await createClient();
-  const { data: globalSeo } = await supabase
-    .from('seo_metadata')
-    .select('*')
-    .eq('page_type', 'global')
-    .single();
+  const globalSeo = await getGlobalSeoData();
 
-  const titleSeparator = globalSeo?.title_separator || globalSeoData.titleSeparator;
-  const siteName = globalSeo?.title || globalSeoData.siteName;
-  const description = globalSeo?.description || globalSeoData.defaultDescription;
-  const ogImage = globalSeo?.og_image || globalSeoData.defaultOgImage;
-  const twitterHandle = globalSeo?.twitter_handle || globalSeoData.twitterHandle;
-  const geoData = globalSeo?.geo_data || {};
+  const titleSeparator = globalSeo.titleSeparator;
+  const siteName = globalSeo.siteName;
+  const description = globalSeo.defaultDescription;
+  const ogImage = globalSeo.defaultOgImage;
+  const twitterHandle = globalSeo.twitterHandle;
+  const geoData = globalSeo || {};
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'),

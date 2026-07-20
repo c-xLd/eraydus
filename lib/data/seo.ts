@@ -123,7 +123,12 @@ export async function getGlobalSeoData() {
     // during static generation. Global SEO data is public anyway.
     const supabase = createSupabaseClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      {
+        global: {
+          fetch: (url, options) => fetch(url, { ...options, cache: 'force-cache' })
+        }
+      }
     );
     const { data } = await supabase
       .from('seo_metadata')

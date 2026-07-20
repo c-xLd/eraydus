@@ -43,6 +43,9 @@ export function createPublicClient() {
         persistSession: false,
         autoRefreshToken: false,
       },
+      global: {
+        fetch: (url, options) => fetch(url, { ...options, cache: 'force-cache' })
+      }
     }
   )
 }
