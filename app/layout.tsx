@@ -68,67 +68,64 @@ export async function generateMetadata(): Promise<Metadata> {
       'geo.position': geoData?.geo?.position || globalSeoData.geo.position,
       'ICBM': geoData?.geo?.position || globalSeoData.geo.position,
     },
-    verification: {
-      google: "YgtPsUfGBfj8w2zoHlnRnvZ-cCrEz3p0okKJqSgjdaU",
-    },
   };
 }
 
 export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const { getGlobalSeoData } = await import('@/lib/data/seo');
-  const geoData = await getGlobalSeoData();
+    children,
+  }: Readonly<{
+    children: React.ReactNode;
+  }>) {
+    const { getGlobalSeoData } = await import('@/lib/data/seo');
+    const geoData = await getGlobalSeoData();
 
-  return (
-    <html
-      lang="tr"
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    >
-      <body className="min-h-screen flex flex-col font-sans">
-        {geoData?.analytics?.googleTagManagerId && (
-          <noscript>
-            <iframe src={`https://www.googletagmanager.com/ns.html?id=${geoData.analytics.googleTagManagerId}`}
-            height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe>
-          </noscript>
-        )}
-        <FramerMotionFix />
-        <AIGraphSchema />
-        
-        {/* Google Analytics (GA4) */}
-        {geoData?.analytics?.googleAnalyticsId && (
-          <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${geoData.analytics.googleAnalyticsId}`} strategy="afterInteractive" />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
+    return (
+      <html
+        lang="tr"
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <body className="min-h-screen flex flex-col font-sans">
+          {geoData?.analytics?.googleTagManagerId && (
+            <noscript>
+              <iframe src={`https://www.googletagmanager.com/ns.html?id=${geoData.analytics.googleTagManagerId}`}
+                height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe>
+            </noscript>
+          )}
+          <FramerMotionFix />
+          <AIGraphSchema />
+
+          {/* Google Analytics (GA4) */}
+          {geoData?.analytics?.googleAnalyticsId && (
+            <>
+              <Script src={`https://www.googletagmanager.com/gtag/js?id=${geoData.analytics.googleAnalyticsId}`} strategy="afterInteractive" />
+              <Script id="google-analytics" strategy="afterInteractive">
+                {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', '${geoData.analytics.googleAnalyticsId}');
               `}
-            </Script>
-          </>
-        )}
+              </Script>
+            </>
+          )}
 
-        {/* Google Tag Manager (GTM) */}
-        {geoData?.analytics?.googleTagManagerId && (
-          <Script id="google-tag-manager" strategy="afterInteractive">
-            {`
+          {/* Google Tag Manager (GTM) */}
+          {geoData?.analytics?.googleTagManagerId && (
+            <Script id="google-tag-manager" strategy="afterInteractive">
+              {`
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
               })(window,document,'script','dataLayer','${geoData.analytics.googleTagManagerId}');
             `}
-          </Script>
-        )}
+            </Script>
+          )}
 
-        {/* Meta Pixel */}
-        {geoData?.analytics?.metaPixelId && (
-          <Script id="meta-pixel" strategy="afterInteractive">
-            {`
+          {/* Meta Pixel */}
+          {geoData?.analytics?.metaPixelId && (
+            <Script id="meta-pixel" strategy="afterInteractive">
+              {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
               n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -140,13 +137,13 @@ export default async function RootLayout({
               fbq('init', '${geoData.analytics.metaPixelId}');
               fbq('track', 'PageView');
             `}
-          </Script>
-        )}
+            </Script>
+          )}
 
-        {children}
-        <SpeedInsights />
-        <Analytics />
-      </body>
-    </html>
-  );
-}
+          {children}
+          <SpeedInsights />
+          <Analytics />
+        </body>
+      </html>
+    );
+  }
