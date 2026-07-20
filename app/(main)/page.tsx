@@ -38,6 +38,7 @@ export default async function Home() {
     getHomepageFaqs(),
     getTestimonials(),
     getFeaturedCategories()
+    
   ])
 
   // Fallback to static if no faqs found
