@@ -80,6 +80,10 @@ export default async function RootLayout({
         lang="tr"
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <head>
+          <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />
+          <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+        </head>
         <body className="min-h-screen flex flex-col font-sans">
           {geoData?.analytics?.googleTagManagerId && (
             <noscript>

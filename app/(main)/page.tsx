@@ -1,15 +1,18 @@
+import dynamic from 'next/dynamic'
 import { HeroSection } from '@/features/homepage/components/HeroSection'
-import { StatementSection } from '@/features/homepage/components/StatementSection'
-import { CraftsmanshipSection } from '@/features/homepage/components/CraftsmanshipSection'
 import { ProductShowcase } from '@/features/homepage/components/ProductShowcase'
-import { WhyEraydusSection } from '@/features/homepage/components/WhyEraydusSection'
-import { ConfiguratorPreview } from '@/features/homepage/components/ConfiguratorPreview'
-import { TestimonialsSection } from '@/features/homepage/components/TestimonialsSection'
-import { FAQSection } from '@/features/homepage/components/FAQSection'
-import { FinalCTASection } from '@/features/homepage/components/FinalCTASection'
 import { Metadata } from 'next'
 import { pagesSeoData } from '@/lib/data/seo'
 import { getHomepageFaqs, getTestimonials, getFeaturedCategories } from '@/features/homepage/services/homepage'
+
+// Below-the-fold components dynamically imported for ultra-low TBT and instant initial load
+const StatementSection = dynamic(() => import('@/features/homepage/components/StatementSection').then(mod => mod.StatementSection))
+const CraftsmanshipSection = dynamic(() => import('@/features/homepage/components/CraftsmanshipSection').then(mod => mod.CraftsmanshipSection))
+const WhyEraydusSection = dynamic(() => import('@/features/homepage/components/WhyEraydusSection').then(mod => mod.WhyEraydusSection))
+const ConfiguratorPreview = dynamic(() => import('@/features/homepage/components/ConfiguratorPreview').then(mod => mod.ConfiguratorPreview))
+const TestimonialsSection = dynamic(() => import('@/features/homepage/components/TestimonialsSection').then(mod => mod.TestimonialsSection))
+const FAQSection = dynamic(() => import('@/features/homepage/components/FAQSection').then(mod => mod.FAQSection))
+const FinalCTASection = dynamic(() => import('@/features/homepage/components/FinalCTASection').then(mod => mod.FinalCTASection))
 
 // Instant TTFB: statically prerender and refresh via ISR (data is all public).
 export const revalidate = 3600
@@ -37,7 +40,7 @@ export default async function Home() {
     getFeaturedCategories()
   ])
 
-  // Fallback to static if no faqs found (before migration runs)
+  // Fallback to static if no faqs found
   const safeFaqs = faqs.length > 0 ? faqs : [
     {
       id: '1',
@@ -89,3 +92,4 @@ export default async function Home() {
     </div>
   )
 }
+

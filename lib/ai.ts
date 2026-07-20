@@ -17,12 +17,11 @@ export type AIResult = { success: true; content: string } | { error: string }
  * tek model için `OPENROUTER_MODEL` de desteklenir.
  */
 const DEFAULT_FREE_MODELS = [
+  "google/gemini-2.0-flash-lite-preview-02-05:free",
+  "google/gemini-2.0-pro-exp-02-05:free",
   "meta-llama/llama-3-8b-instruct:free",
-  "qwen/qwen-2.5-72b-instruct:free",
   "google/gemma-2-9b-it:free",
   "mistralai/mistral-7b-instruct:free",
-  "huggingfaceh4/zephyr-7b-beta:free",
-  "meta-llama/llama-3.2-3b-instruct:free",
 ]
 
 function resolveModels(): string[] {
@@ -70,7 +69,7 @@ export async function callOpenRouter(
           headers: {
             Authorization: `Bearer ${apiKey}`,
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://eraydus.com",
+            "HTTP-Referer": "https://eraydus.net",
             "X-Title": "Eraydus Admin",
           },
           body: JSON.stringify({

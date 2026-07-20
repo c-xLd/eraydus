@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
+import { GlobalFAQAccordion } from "@/components/seo/GlobalFAQAccordion"
 
 import { AdminEditProvider } from '@/features/content/components/AdminEditProvider'
 import { InlineEditToolbar } from '@/features/content/components/InlineEditToolbar'
@@ -21,6 +22,7 @@ export default function MainLayout({
       <main className="flex-1 flex flex-col">
         {children}
       </main>
+      <GlobalFAQAccordion />
       <Footer />
     </AdminEditProvider>
   )

@@ -176,6 +176,143 @@ export function BlockEditor({ initialBlocks, onChange }: BlockEditorProps) {
                               </div>
                             )}
 
+                            {block.type === 'image' && (
+                              <div className="space-y-4">
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Görsel URL</label>
+                                  <Input 
+                                    value={block.data?.url || ''} 
+                                    onChange={(e) => updateBlock(block.id, { url: e.target.value })}
+                                    placeholder="https://..."
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Alt Metin (SEO)</label>
+                                  <Input 
+                                    value={block.data?.alt || ''} 
+                                    onChange={(e) => updateBlock(block.id, { alt: e.target.value })}
+                                  />
+                                </div>
+                                <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                  <input 
+                                    type="checkbox" 
+                                    checked={block.data?.full_width || false}
+                                    onChange={(e) => updateBlock(block.id, { full_width: e.target.checked })}
+                                    className="rounded border-input text-primary focus:ring-primary"
+                                  />
+                                  Tam Genişlik (Full Width)
+                                </label>
+                              </div>
+                            )}
+
+                            {block.type === 'cta' && (
+                              <div className="space-y-4">
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Başlık</label>
+                                  <Input 
+                                    value={block.data?.title || ''} 
+                                    onChange={(e) => updateBlock(block.id, { title: e.target.value })}
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Açıklama</label>
+                                  <Input 
+                                    value={block.data?.description || ''} 
+                                    onChange={(e) => updateBlock(block.id, { description: e.target.value })}
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <label className="text-sm font-medium">Buton Metni</label>
+                                    <Input 
+                                      value={block.data?.button_label || ''} 
+                                      onChange={(e) => updateBlock(block.id, { button_label: e.target.value })}
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="text-sm font-medium">Buton Linki</label>
+                                    <Input 
+                                      value={block.data?.button_url || ''} 
+                                      onChange={(e) => updateBlock(block.id, { button_url: e.target.value })}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Varyant (Renk)</label>
+                                  <select
+                                    className="w-full flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    value={block.data?.variant || 'light'}
+                                    onChange={(e) => updateBlock(block.id, { variant: e.target.value })}
+                                  >
+                                    <option value="light">Açık (Light)</option>
+                                    <option value="dark">Koyu (Dark)</option>
+                                    <option value="champagne">Şampanya (Champagne)</option>
+                                  </select>
+                                </div>
+                              </div>
+                            )}
+
+                            {block.type === 'spacer' && (
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium">Boşluk Boyutu</label>
+                                <select
+                                  className="w-full flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                  value={block.data?.height || 'medium'}
+                                  onChange={(e) => updateBlock(block.id, { height: e.target.value })}
+                                >
+                                  <option value="small">Küçük (32px)</option>
+                                  <option value="medium">Orta (64px)</option>
+                                  <option value="large">Büyük (128px)</option>
+                                  <option value="xlarge">Çok Büyük (192px)</option>
+                                </select>
+                              </div>
+                            )}
+
+                            {block.type === 'divider' && (
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium">Çizgi Stili</label>
+                                <select
+                                  className="w-full flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                  value={block.data?.style || 'solid'}
+                                  onChange={(e) => updateBlock(block.id, { style: e.target.value })}
+                                >
+                                  <option value="solid">Düz (Solid)</option>
+                                  <option value="dashed">Kesik Kesik (Dashed)</option>
+                                  <option value="champagne">Şampanya Gradyan</option>
+                                </select>
+                              </div>
+                            )}
+
+                            {block.type === 'gallery' && (
+                              <div className="space-y-4">
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Yerleşim Düzeni (Layout)</label>
+                                  <select
+                                    className="w-full flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    value={block.data?.layout || 'grid'}
+                                    onChange={(e) => updateBlock(block.id, { layout: e.target.value })}
+                                  >
+                                    <option value="grid">Grid (Izgara)</option>
+                                    <option value="carousel">Carousel (Kaydırmalı)</option>
+                                  </select>
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium">Görseller (Virgülle ayrılmış URL'ler)</label>
+                                  <textarea 
+                                    className="w-full min-h-[100px] p-2 rounded-md border border-input bg-background text-sm"
+                                    placeholder="https://gorsel1.jpg, https://gorsel2.jpg"
+                                    value={(block.data?.images || []).map((img: any) => img.url).join(',\n')}
+                                    onChange={(e) => {
+                                      const urls = e.target.value.split(',').map(u => u.trim()).filter(Boolean)
+                                      const images = urls.map(url => ({ url, alt: 'Galeri Görseli' }))
+                                      updateBlock(block.id, { images })
+                                    }}
+                                  />
+                                  <p className="text-xs text-muted-foreground">Şimdilik URL'leri virgülle veya alt alta ayırarak girin.</p>
+                                </div>
+                              </div>
+                            )}
+
                             {block.type === 'two_column' && (
                               <div className="space-y-4">
                                 <p className="text-sm text-muted-foreground">İki sütunlu içerik. (Gelişmiş düzenleyici daha sonra eklenecektir)</p>
@@ -196,7 +333,7 @@ export function BlockEditor({ initialBlocks, onChange }: BlockEditorProps) {
                               </div>
                             )}
 
-                            {!['text', 'hero', 'two_column'].includes(block.type) && (
+                            {!['text', 'hero', 'two_column', 'image', 'gallery', 'cta', 'spacer', 'divider'].includes(block.type) && (
                               <div className="space-y-2">
                                 <label className="text-sm font-medium">JSON Verisi (Gelişmiş)</label>
                                 <textarea 

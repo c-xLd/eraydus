@@ -18,37 +18,7 @@ export default async function AboutPage() {
   const orgSchema = getOrganizationSchema()
   const localSchema = getLocalBusinessSchema()
 
-  const faqSchema = {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Erayduş markası ne zaman ve nerede kuruldu?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Erayduş, 1997 yılından beri Ankara Ostim Organize Sanayi Bölgesi’ndeki kendi fabrikasında yerli ve milli üretimiyle sektör lideridir."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Üretim tesisiniz ve kapasiteniz nedir?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Ankara Ostim OSB'de bulunan 5.000m² kapalı alan tesisimizde CNC cam rodajlama, temperleme fırınları ve elektrostatik boya hatlarımız ile yıllık 50.000+ kabin imalat kapasitesine sahibiz."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Kişiye ve projeye özel ölçü tasarım yapıyor musunuz?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Evet, uzman mimar ve teknik kadromuzla banyonuzun ölçülerine özel milimetrik üretim ve ücretsiz 3D tasarım danışmanlığı sunuyoruz."
-        }
-      }
-    ]
-  };
-
-  const graphSchema = getGraphSchema([orgSchema, localSchema, faqSchema])
+  const graphSchema = getGraphSchema([orgSchema, localSchema])
 
   return (
     <>

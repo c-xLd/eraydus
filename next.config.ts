@@ -2,11 +2,20 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: path.resolve(__dirname),
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'recharts', 'date-fns'],
   },
+  // @ts-ignore - To silence the workspace root warning in Turbopack
+  turbopack: {
+    root: path.join(process.cwd(), './'),
+  },
+  compress: true,
+  reactStrictMode: true,
   images: {
     formats: ['image/avif', 'image/webp'],
+    qualities: [50, 75, 90, 100],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: 'https',
