@@ -63,6 +63,7 @@ export async function updateSeoMetadata(id: string, data: any) {
       status: data.status,
       og_image: data.ogImage,
       faq_schema_enabled: data.faqSchemaEnabled,
+      faq_data: data.faqData || [],
       updated_at: new Date().toISOString()
     })
     .eq('id', id)

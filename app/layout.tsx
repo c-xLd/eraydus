@@ -22,6 +22,7 @@ const geistMono = Geist_Mono({
 
 import { getGlobalSeoData } from "@/lib/data/seo";
 import { createClient } from "@/lib/server";
+import { ServerFAQSchema } from "@/components/seo/ServerFAQSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
@@ -93,6 +94,7 @@ export default async function RootLayout({
           )}
           <FramerMotionFix />
           <AIGraphSchema />
+          <ServerFAQSchema />
 
           {/* Google Analytics (GA4) */}
           {geoData?.analytics?.googleAnalyticsId && (

@@ -115,11 +115,16 @@ export const pagesSeoData: PageSEO[] = [
   },
 ];
 
-import { createClient } from '@/lib/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 export async function getGlobalSeoData() {
   try {
-    const supabase = await createClient();
+    // We use a standard cookie-less client here to prevent Next.js from throwing DYNAMIC_SERVER_USAGE
+    // during static generation. Global SEO data is public anyway.
+    const supabase = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    );
     const { data } = await supabase
       .from('seo_metadata')
       .select('*')
@@ -132,8 +137,8 @@ export async function getGlobalSeoData() {
         siteName: data.title || globalSeoData.siteName,
         defaultDescription: data.description || globalSeoData.defaultDescription,
         analytics: {
-          googleAnalyticsId: 'G-XXXXXXXXXX', // Fallback or fetched if we add it to DB later
-          googleTagManagerId: 'GTM-XXXXXXX', 
+          googleAnalyticsId: '',
+          googleTagManagerId: 'GTM-WXPSP6B8', 
           ...data.geo_data?.analytics
         },
         ...data.geo_data
@@ -147,7 +152,7 @@ export async function getGlobalSeoData() {
     ...globalSeoData,
     analytics: {
       googleAnalyticsId: '',
-      googleTagManagerId: ''
+      googleTagManagerId: 'GTM-WXPSP6B8'
     }
   };
 }

@@ -3,6 +3,9 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+  
+  // Set x-pathname header so Server Components can read the current path
+  request.headers.set('x-pathname', pathname)
 
   // Public pages (home, koleksiyonlar, blog, etc.) must NOT call getUser().
   // Calling auth.getUser() here would force every matched route into dynamic
@@ -10,11 +13,13 @@ export async function updateSession(request: NextRequest) {
   // Experience Score). Only admin/login paths need the session check.
   const needsAuth = pathname.startsWith('/admin') || pathname.startsWith('/giris')
   if (!needsAuth) {
-    return NextResponse.next({ request })
+    return NextResponse.next({ 
+      request: { headers: request.headers } 
+    })
   }
 
   let supabaseResponse = NextResponse.next({
-    request,
+    request: { headers: request.headers },
   })
 
   const supabase = createServerClient(

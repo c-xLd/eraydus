@@ -1,9 +1,10 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from '@/services/supabase/middleware'
 
-// Fonksiyonun adını 'middleware' yerine 'proxy' olarak değiştiriyoruz
 export async function proxy(request: NextRequest) {
-  return await updateSession(request)
+  const response = await updateSession(request)
+  response.headers.set('x-pathname', request.nextUrl.pathname)
+  return response
 }
 
 export const config = {

@@ -27,7 +27,8 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
     keywords: '',
     status: 'optimized',
     ogImage: '',
-    faqSchemaEnabled: false
+    faqSchemaEnabled: false,
+    faqData: [] as { question: string; answer: string }[]
   })
 
   const form = useForm<GlobalSeoFormValues>({
@@ -100,7 +101,8 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
       keywords: page.keywords || '',
       status: page.status || 'optimized',
       ogImage: page.og_image || '',
-      faqSchemaEnabled: page.faq_schema_enabled || false
+      faqSchemaEnabled: page.faq_schema_enabled || false,
+      faqData: Array.isArray(page.faq_data) ? page.faq_data : []
     })
     setIsDialogOpen(true)
   }
@@ -519,6 +521,83 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
                   <span className="block text-xs text-purple-700 mt-1">Bu sayfa arama motorlarında sıkça sorulan sorular zengin sonucu olarak listelenebilir.</span>
                 </label>
               </div>
+
+              {pageFormData.faqSchemaEnabled && (
+                <div className="space-y-4 border-l-2 border-purple-200 pl-4 ml-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-medium text-gray-900">Sorular ve Cevaplar</h4>
+                    <button 
+                      type="button"
+                      onClick={() => setPageFormData({
+                        ...pageFormData, 
+                        faqData: [...pageFormData.faqData, { question: '', answer: '' }]
+                      })}
+                      className="text-xs font-medium text-purple-600 bg-purple-100 hover:bg-purple-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                    >
+                      <Plus className="size-3" />
+                      Soru Ekle
+                    </button>
+                  </div>
+                  
+                  {pageFormData.faqData.length === 0 && (
+                    <p className="text-xs text-gray-500 italic">Henüz soru eklenmemiş. Lütfen bir soru ekleyin.</p>
+                  )}
+
+                  <AnimatePresence>
+                    {pageFormData.faqData.map((faq, index) => (
+                      <motion.div 
+                        key={index}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="bg-white border border-gray-200 rounded-xl p-4 space-y-3 relative group"
+                      >
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            const newData = [...pageFormData.faqData];
+                            newData.splice(index, 1);
+                            setPageFormData({...pageFormData, faqData: newData});
+                          }}
+                          className="absolute -top-2 -right-2 bg-red-100 text-red-600 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </button>
+                        
+                        <div>
+                          <label className="text-xs font-medium text-gray-600 mb-1 block">Soru {index + 1}</label>
+                          <input 
+                            required 
+                            value={faq.question}
+                            onChange={(e) => {
+                              const newData = [...pageFormData.faqData];
+                              newData[index].question = e.target.value;
+                              setPageFormData({...pageFormData, faqData: newData});
+                            }}
+                            placeholder="Sıkça sorulan bir soru..."
+                            className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-purple-500/20 transition-all text-black" 
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-gray-600 mb-1 block">Cevap</label>
+                          <textarea 
+                            required 
+                            rows={2}
+                            value={faq.answer}
+                            onChange={(e) => {
+                              const newData = [...pageFormData.faqData];
+                              newData[index].answer = e.target.value;
+                              setPageFormData({...pageFormData, faqData: newData});
+                            }}
+                            placeholder="Bu soru için detaylı ve özgün cevap..."
+                            className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-purple-500/20 transition-all text-black resize-none" 
+                          />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
             </div>
 
             <div className="pt-4 flex items-center justify-end gap-3 border-t border-gray-100">
