@@ -44,15 +44,17 @@ const seoSettingsSchema = z.object({
 
 type SeoSettingsValues = z.infer<typeof seoSettingsSchema>
 
-export function SettingsClient({ initialData }: { initialData: Record<string, unknown> | null | undefined }) {
+export function SettingsClient({ initialData: rawData }: { initialData: Record<string, unknown> | null | undefined }) {
   const [activeTab, setActiveTab] = useState('general')
   const [isSaving, setIsSaving] = useState(false)
+
+  const initialData = rawData as any;
 
   // Parse areaServed from array to string for the form
   const defaultValues = {
     ...initialData,
     localBusiness: {
-      ...initialData?.localBusiness,
+      ...(initialData?.localBusiness || {}),
       areaServed: Array.isArray(initialData?.localBusiness?.areaServed) 
         ? initialData.localBusiness.areaServed.join(', ')
         : initialData?.localBusiness?.areaServed || ''
