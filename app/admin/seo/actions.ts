@@ -24,6 +24,9 @@ export async function saveGlobalSeo(data: any) {
     keywords: data.keywords,
     robots_index: data.robots?.includes('index') && !data.robots?.includes('noindex'),
     robots_follow: data.robots?.includes('follow') && !data.robots?.includes('nofollow'),
+    og_image: data.ogImage,
+    twitter_handle: data.twitterHandle,
+    title_separator: data.titleSeparator,
     updated_at: new Date().toISOString()
   };
 
@@ -57,6 +60,8 @@ export async function updateSeoMetadata(id: string, data: any) {
       description: data.description,
       keywords: data.keywords,
       status: data.status,
+      og_image: data.ogImage,
+      faq_schema_enabled: data.faqSchemaEnabled,
       updated_at: new Date().toISOString()
     })
     .eq('id', id)

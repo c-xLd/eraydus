@@ -21,7 +21,7 @@ export const globalSeoData = {
   siteName: 'Erayduş - Ankara Lüks Duşakabin Sistemleri',
   titleSeparator: '|',
   defaultDescription: 'Ankara merkezli Erayduş, Çankaya, Yenimahalle, Çayyolu ve İncek bölgelerine özel ölçü, modern, lüks duşakabin ve banyo dolabı çözümleri sunar.',
-  defaultOgImage: '/images/og-default.jpg',
+  defaultOgImage: '/images/og-default.svg',
   twitterHandle: '@eraydus',
   // GEO & Local Business Data
   contact: {

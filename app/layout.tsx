@@ -3,7 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+
+
 import { FramerMotionFix } from "./FramerMotionFix";
+import { AIGraphSchema } from "@/components/seo/AIGraphSchema";
+import { globalSeoData } from "@/lib/data/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,72 +19,60 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import { globalSeoData } from "@/lib/data/seo";
+import { createClient } from "@/lib/server";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: {
-    template: `%s ${globalSeoData.titleSeparator} ${globalSeoData.siteName}`,
-    default: `${globalSeoData.siteName} ${globalSeoData.titleSeparator} ${globalSeoData.defaultDescription}`,
-  },
-  description: globalSeoData.defaultDescription,
-  openGraph: {
-    type: "website",
-    siteName: globalSeoData.siteName,
+export async function generateMetadata(): Promise<Metadata> {
+  const supabase = await createClient();
+  const { data: globalSeo } = await supabase
+    .from('seo_metadata')
+    .select('*')
+    .eq('page_type', 'global')
+    .single();
+
+  const titleSeparator = globalSeo?.title_separator || globalSeoData.titleSeparator;
+  const siteName = globalSeo?.title || globalSeoData.siteName;
+  const description = globalSeo?.description || globalSeoData.defaultDescription;
+  const ogImage = globalSeo?.og_image || globalSeoData.defaultOgImage;
+  const twitterHandle = globalSeo?.twitter_handle || globalSeoData.twitterHandle;
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'),
     title: {
-      template: `%s ${globalSeoData.titleSeparator} ${globalSeoData.siteName}`,
-      default: globalSeoData.siteName,
+      template: `%s ${titleSeparator} ${siteName}`,
+      default: `${siteName} ${titleSeparator} ${description}`,
     },
-    description: globalSeoData.defaultDescription,
-    images: [{ url: globalSeoData.defaultOgImage }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    creator: globalSeoData.twitterHandle,
-  },
-  other: {
-    'geo.region': globalSeoData.geo.region,
-    'geo.placename': globalSeoData.geo.placename,
-    'geo.position': globalSeoData.geo.position,
-    'ICBM': globalSeoData.geo.position,
-  }
-};
+    description: description,
+    openGraph: {
+      type: "website",
+      siteName: siteName,
+      title: {
+        template: `%s ${titleSeparator} ${siteName}`,
+        default: siteName,
+      },
+      description: description,
+      images: [{ url: ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: twitterHandle,
+    },
+    other: {
+      'geo.region': globalSeoData.geo.region,
+      'geo.placename': globalSeoData.geo.placename,
+      'geo.position': globalSeoData.geo.position,
+      'ICBM': globalSeoData.geo.position,
+    },
+    verification: {
+      google: "YgtPsUfGBfj8w2zoHlnRnvZ-cCrEz3p0okKJqSgjdaU",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // LocalBusiness Schema for Google
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": globalSeoData.siteName,
-    "image": `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}${globalSeoData.defaultOgImage}`,
-    "@id": `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}`,
-    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}`,
-    "telephone": globalSeoData.contact.phone,
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": globalSeoData.contact.address.streetAddress,
-      "addressLocality": globalSeoData.contact.address.addressLocality,
-      "addressRegion": globalSeoData.contact.address.addressRegion,
-      "postalCode": globalSeoData.contact.address.postalCode,
-      "addressCountry": globalSeoData.contact.address.addressCountry
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": globalSeoData.geo.position.split(';')[0],
-      "longitude": globalSeoData.geo.position.split(';')[1]
-    },
-    "openingHours": globalSeoData.localBusiness.openingHours,
-    "priceRange": globalSeoData.localBusiness.priceRange,
-    "areaServed": globalSeoData.localBusiness.areaServed.map(area => ({
-      "@type": "City",
-      "name": area
-    }))
-  };
-
   return (
     <html
       lang="tr"
@@ -88,10 +80,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col font-sans">
         <FramerMotionFix />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-        />
+        <AIGraphSchema />
         {children}
         <SpeedInsights />
         <Analytics />

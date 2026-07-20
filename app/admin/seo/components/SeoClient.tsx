@@ -26,7 +26,10 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
     siteDesc: initialGlobal?.description || 'Premium duşakabin çözümleri ile banyo tasarımını değiştirin.',
     keywords: initialGlobal?.keywords || 'duşakabin, cam duşakabin, modern banyo',
     robots: (initialGlobal?.robots_index !== false ? 'index' : 'noindex') + ', ' + (initialGlobal?.robots_follow !== false ? 'follow' : 'nofollow'),
-    language: 'tr'
+    language: 'tr',
+    ogImage: initialGlobal?.og_image || '/images/og-default.svg',
+    twitterHandle: initialGlobal?.twitter_handle || '@eraydus',
+    titleSeparator: initialGlobal?.title_separator || '|'
   })
 
   // Dialog State
@@ -36,7 +39,9 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
     title: '',
     description: '',
     keywords: '',
-    status: 'optimized'
+    status: 'optimized',
+    ogImage: '',
+    faqSchemaEnabled: false
   })
 
   const handleGlobalChange = (key: string, value: string) => {
@@ -60,7 +65,9 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
       title: page.title || '',
       description: page.description || '',
       keywords: page.keywords || '',
-      status: page.status || 'optimized'
+      status: page.status || 'optimized',
+      ogImage: page.og_image || '',
+      faqSchemaEnabled: page.faq_schema_enabled || false
     })
     setIsDialogOpen(true)
   }
@@ -220,6 +227,44 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
                 </select>
               </div>
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Başlık Ayırıcı (Title Separator)</label>
+                <select
+                  value={globalData.titleSeparator}
+                  onChange={(e) => handleGlobalChange('titleSeparator', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5 text-black"
+                >
+                  <option value="|">| (Boru)</option>
+                  <option value="-">- (Tire)</option>
+                  <option value="~">~ (Tilda)</option>
+                  <option value="•">• (Nokta)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Twitter Handle</label>
+                <input
+                  type="text"
+                  value={globalData.twitterHandle}
+                  onChange={(e) => handleGlobalChange('twitterHandle', e.target.value)}
+                  placeholder="@eraydus"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5 text-black"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Varsayılan Paylaşım Görseli (OG Image)</label>
+              <input
+                type="text"
+                value={globalData.ogImage}
+                onChange={(e) => handleGlobalChange('ogImage', e.target.value)}
+                placeholder="/images/og-default.svg"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5 text-black"
+              />
+              <p className="text-xs text-gray-500 mt-1">Görsel URL'si (Sosyal medyada sayfa paylaşıldığında görünür)</p>
+            </div>
           </div>
         </div>
       )}
@@ -333,6 +378,23 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Anahtar Kelimeler</label>
               <input value={formData.keywords} onChange={e => setFormData({...formData, keywords: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" placeholder="Virgülle ayırarak yazın..." />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Sayfa Özel Görseli (OG Image)</label>
+              <input value={formData.ogImage} onChange={e => setFormData({...formData, ogImage: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" placeholder="Opsiyonel özel görsel URL'si" />
+            </div>
+
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={formData.faqSchemaEnabled} 
+                  onChange={e => setFormData({...formData, faqSchemaEnabled: e.target.checked})} 
+                  className="rounded text-black focus:ring-black"
+                />
+                <span className="text-sm font-medium text-gray-700">Soru-Cevap (FAQ) Şemasını Etkinleştir</span>
+              </label>
             </div>
 
             <div className="space-y-2">

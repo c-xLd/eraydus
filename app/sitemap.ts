@@ -1,20 +1,17 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
+import { PROGRAMMATIC_MATRIX } from '@/lib/seo/matrix'
 
-// Next.js 15: Bu dosyanın ne sıklıkla yeniden oluşturulacağını belirtir (Saniye cinsinden: 3600 = 1 saat)
-// Eğer verilerin çok sık değişiyorsa bu süreyi kısaltabilirsin.
 export const revalidate = 3600 
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Ortam değişkenlerinden base URL'i güvenli bir şekilde alma
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'
 
-  // Sunucu tarafında (Server-side) sadece okuma yapacak hafif Supabase istemcisi
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-  // 1. Statik Rotalar (Showroom'un ana hatları)
+  // 1. Statik Rotalar
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
@@ -29,6 +26,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/tasarla`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/projeler`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/hakkimizda`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -38,28 +53,50 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/iletisim`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/garanti-sartlari`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
       priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/montaj-kilavuzu`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
   ]
 
+  // 2. Programmatik SEO Rotaları
+  const programmaticRoutes: MetadataRoute.Sitemap = Object.keys(PROGRAMMATIC_MATRIX).map((slug) => ({
+    url: `${baseUrl}/dusakabin/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.95,
+  }))
+
   try {
-    // 2. Performans (Antigravity): Ürünleri ve Koleksiyonları PARALEL olarak çek
-    const [productsResponse, categoriesResponse] = await Promise.all([
+    // 3. Supabase'den Canlı Ürünler, Kategoriler ve Blog Yazılarını Paralel Çek
+    const [productsResponse, categoriesResponse, blogResponse] = await Promise.all([
       supabase
         .from('products')
         .select('slug, updated_at, categories(slug)')
-        .eq('status', 'active'), // Sadece yayındaki ürünler
+        .eq('status', 'active'),
 
       supabase
-        .from('categories') // Kategoriler tablosu (Örn: Minimal, Luxury vs.)
+        .from('categories')
         .select('slug')
-        .eq('status', 'active')
+        .eq('status', 'active'),
+
+      supabase
+        .from('content_calendar')
+        .select('slug, updated_at, published_at')
+        .eq('content_type', 'blog')
+        .eq('status', 'published'),
     ])
 
-    if (productsResponse.error) throw new Error(`Products Error: ${productsResponse.error.message}`)
-    if (categoriesResponse.error) throw new Error(`Categories Error: ${categoriesResponse.error.message}`)
-
-    // 3. Verileri Sitemap formatına dönüştür (Mapping)
     const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product: any) => {
       const catSlug = product.categories?.slug || 'genel'
       return {
@@ -70,20 +107,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     })
 
-    const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category) => ({
+    const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category: any) => ({
       url: `${baseUrl}/koleksiyonlar/${category.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.9, // Kategoriler SEO'da genellikle tekil ürünlerden daha yüksek önceliğe sahiptir
+      priority: 0.85,
     }))
 
-    // Tüm rotaları birleştir ve Next.js'e teslim et
-    return [...staticRoutes, ...categoryRoutes, ...productRoutes]
+    const blogRoutes: MetadataRoute.Sitemap = (blogResponse.data || []).map((blog: any) => ({
+      url: `${baseUrl}/blog/${blog.slug}`,
+      lastModified: new Date(blog.updated_at || blog.published_at || new Date()),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    }))
+
+    return [...staticRoutes, ...programmaticRoutes, ...categoryRoutes, ...productRoutes, ...blogRoutes]
 
   } catch (error) {
-    // Hata durumunda derlemenin (build) veya sitenin çökmesini engelle
-    // Sadece statik sayfaları döndür ve hatayı logla
-    console.error('Sitemap oluşturulurken kritik bir hata oluştu:', error)
-    return staticRoutes
+    console.error('Sitemap oluşturulurken hata oluştu:', error)
+    return [...staticRoutes, ...programmaticRoutes]
   }
 }

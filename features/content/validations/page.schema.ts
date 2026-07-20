@@ -11,7 +11,7 @@ export const baseBlockSchema = z.object({
 })
 
 export const pageSeoSchema = z.object({
-  title: z.string().optional(),
+  title: z.string().min(10, 'SEO başlığı çok kısa').max(60, 'SEO başlığı ideal olarak 60 karakteri geçmemelidir').optional().or(z.literal('')),
   description: z.string().optional(),
   ogImage: z.string().url().optional().or(z.literal('')),
   keywords: z.string().optional()
