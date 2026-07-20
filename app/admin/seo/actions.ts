@@ -27,6 +27,7 @@ export async function saveGlobalSeo(data: any) {
     og_image: data.ogImage,
     twitter_handle: data.twitterHandle,
     title_separator: data.titleSeparator,
+    geo_data: data.geoData || {},
     updated_at: new Date().toISOString()
   };
 

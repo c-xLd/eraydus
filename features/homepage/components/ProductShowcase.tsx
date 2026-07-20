@@ -79,11 +79,6 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
                 className="group relative block aspect-[4/5] rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden bg-surface ring-1 ring-border/50 shadow-sm hover:shadow-2xl hover:shadow-champagne/5 transition-all duration-700"
               >
 
-                {/* Tech specifications label overlay */}
-                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 text-white/50 font-mono text-[8px] sm:text-[9px] tracking-widest z-10 pointer-events-none uppercase">
-                  [ COMP-0{i + 1} // ERD ]
-                </div>
-
                 {/* Badge Overlay */}
                 {model.badge && (
                   <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10">
@@ -124,9 +119,6 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
                   {/* Grid expanding drawer for description & CTA - Desktop only */}
                   <div className="hidden sm:grid sm:grid-rows-[0fr] sm:group-hover:grid-rows-[1fr] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:opacity-0 sm:group-hover:opacity-100 pt-2">
                     <div className="overflow-hidden">
-                      <p className="text-zinc-300/90 text-xs font-light leading-relaxed mb-4 line-clamp-2">
-                        {model.description || 'Kusursuz sızdırmazlık teknolojisi ve yalın hatlarla banyonuza uyum sağlayan özel seri.'}
-                      </p>
                       <span className="inline-flex items-center gap-2 text-white text-xs font-medium uppercase tracking-wider group/btn">
                         Koleksiyonu Keşfet
                         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-champagne text-zinc-950 scale-90 group-hover/btn:scale-100 transition-transform duration-300">

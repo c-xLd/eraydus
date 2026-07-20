@@ -1,15 +1,20 @@
 import React from 'react';
 import { getOrganizationSchema, getLocalBusinessSchema, getGraphSchema } from '@/lib/seo/schemas';
+import { getGlobalSeoData } from '@/lib/data/seo';
 
-export function AIGraphSchema() {
+export async function AIGraphSchema() {
+  const dynamicSeo = await getGlobalSeoData();
+
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net';
+  const siteName = dynamicSeo.siteName;
+  const description = dynamicSeo.defaultDescription;
 
   const webSiteSchema = {
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
     'url': SITE_URL,
-    'name': 'ERAYDUŞ',
-    'description': 'Ankara Lüks ve Modern Özel Ölçü Duşakabin Sistemleri',
+    'name': siteName,
+    'description': description,
     'publisher': {
       '@id': `${SITE_URL}/#organization`,
     },
@@ -21,8 +26,10 @@ export function AIGraphSchema() {
     },
   };
 
-  const orgSchema = getOrganizationSchema();
-  const localSchema = getLocalBusinessSchema();
+  const geoData = dynamicSeo || {};
+
+  const orgSchema = getOrganizationSchema(siteName, description, geoData);
+  const localSchema = getLocalBusinessSchema(geoData);
 
   const aiKnowledgeGraph = getGraphSchema([webSiteSchema, orgSchema, localSchema]);
 

@@ -56,6 +56,8 @@ export const globalSeoData = {
   }
 };
 
+
+
 export const pagesSeoData: PageSEO[] = [
   {
     id: 'home',
@@ -112,3 +114,40 @@ export const pagesSeoData: PageSEO[] = [
     lastModified: '2023-10-20T14:20:00Z',
   },
 ];
+
+import { createClient } from '@/lib/server';
+
+export async function getGlobalSeoData() {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('seo_metadata')
+      .select('*')
+      .eq('page_type', 'global')
+      .single();
+
+    if (data) {
+      return {
+        ...globalSeoData,
+        siteName: data.title || globalSeoData.siteName,
+        defaultDescription: data.description || globalSeoData.defaultDescription,
+        analytics: {
+          googleAnalyticsId: 'G-XXXXXXXXXX', // Fallback or fetched if we add it to DB later
+          googleTagManagerId: 'GTM-XXXXXXX', 
+          ...data.geo_data?.analytics
+        },
+        ...data.geo_data
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching global SEO data:', error);
+  }
+  
+  return {
+    ...globalSeoData,
+    analytics: {
+      googleAnalyticsId: '',
+      googleTagManagerId: ''
+    }
+  };
+}

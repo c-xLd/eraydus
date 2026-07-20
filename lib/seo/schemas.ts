@@ -44,36 +44,34 @@ export interface ArticleSchemaInput {
 }
 
 // 1. Organization Schema (EEAT & Backlink Citation Engine)
-export function getOrganizationSchema() {
+export function getOrganizationSchema(siteName?: string, description?: string, geoData?: any) {
   return {
     '@type': 'Organization',
     '@id': `${SITE_URL}/#organization`,
-    'name': globalSeoData.siteName,
+    'name': siteName || globalSeoData.siteName,
     'url': SITE_URL,
     'logo': {
       '@type': 'ImageObject',
       'url': `${SITE_URL}/images/logo.png`,
       'caption': 'ERAYDUŞ Lüks Duşakabin Sistemleri Logo',
     },
-    'description': globalSeoData.defaultDescription,
-    'telephone': globalSeoData.contact.phone,
-    'email': globalSeoData.contact.email,
+    'description': description || globalSeoData.defaultDescription,
+    'telephone': geoData?.phone || globalSeoData.contact.phone,
+    'email': geoData?.email || globalSeoData.contact.email,
     'address': {
       '@type': 'PostalAddress',
-      'streetAddress': globalSeoData.contact.address.streetAddress,
-      'addressLocality': globalSeoData.contact.address.addressLocality,
-      'addressRegion': globalSeoData.contact.address.addressRegion,
-      'postalCode': globalSeoData.contact.address.postalCode,
-      'addressCountry': globalSeoData.contact.address.addressCountry,
+      'streetAddress': geoData?.address?.streetAddress || globalSeoData.contact.address.streetAddress,
+      'addressLocality': geoData?.address?.addressLocality || globalSeoData.contact.address.addressLocality,
+      'addressRegion': geoData?.address?.addressRegion || globalSeoData.contact.address.addressRegion,
+      'postalCode': geoData?.address?.postalCode || globalSeoData.contact.address.postalCode,
+      'addressCountry': geoData?.address?.addressCountry || globalSeoData.contact.address.addressCountry,
     },
     'sameAs': [
-      'https://www.instagram.com/eraydus',
-      'https://www.facebook.com/eraydus',
-      'https://www.youtube.com/@eraydus',
-      'https://www.pinterest.com/eraydus',
-      'https://www.houzz.com/pro/eraydus',
-      'https://maps.google.com/?cid=eraydus-ostim',
-    ],
+      geoData?.socialLinks?.instagram || 'https://www.instagram.com/eraydus',
+      geoData?.socialLinks?.facebook || 'https://www.facebook.com/eraydus',
+      geoData?.socialLinks?.youtube || 'https://www.youtube.com/@eraydus',
+      geoData?.socialLinks?.linkedin || 'https://www.linkedin.com/company/eraydus',
+    ].filter(Boolean),
     'knowsAbout': [
       'Duşakabin Üretimi',
       'Temperli Cam Teknolojisi',
@@ -86,33 +84,34 @@ export function getOrganizationSchema() {
 }
 
 // 2. LocalBusiness Schema
-export function getLocalBusinessSchema() {
+export function getLocalBusinessSchema(geoData?: any) {
+  const latitude = geoData?.geo?.position?.split(';')[0] || '';
+  const longitude = geoData?.geo?.position?.split(';')[1] || '';
   return {
     '@type': 'LocalBusiness',
     '@id': `${SITE_URL}/#localbusiness`,
     'name': 'ERAYDUŞ Ankara Lüks Duşakabin Fabrikası',
     'image': `${SITE_URL}/images/og-default.jpg`,
     'url': SITE_URL,
-    'telephone': globalSeoData.contact.phone,
-    'priceRange': globalSeoData.localBusiness.priceRange,
+    'telephone': geoData?.phone || '',
+    'priceRange': geoData?.localBusiness?.priceRange || '₺₺',
     'address': {
       '@type': 'PostalAddress',
-      'streetAddress': globalSeoData.contact.address.streetAddress,
-      'addressLocality': globalSeoData.contact.address.addressLocality,
-      'addressRegion': globalSeoData.contact.address.addressRegion,
-      'postalCode': globalSeoData.contact.address.postalCode,
-      'addressCountry': globalSeoData.contact.address.addressCountry,
+      'streetAddress': geoData?.address?.streetAddress || '',
+      'addressLocality': geoData?.address?.addressLocality || '',
+      'addressRegion': geoData?.address?.addressRegion || '',
+      'postalCode': geoData?.address?.postalCode || '',
+      'addressCountry': geoData?.address?.addressCountry || 'TR',
     },
-    'geo': {
+    'geo': latitude && longitude ? {
       '@type': 'GeoCoordinates',
-      'latitude': globalSeoData.geo.position.split(';')[0],
-      'longitude': globalSeoData.geo.position.split(';')[1],
-    },
-    'openingHours': globalSeoData.localBusiness.openingHours,
-    'areaServed': globalSeoData.localBusiness.areaServed.map((area) => ({
-      '@type': 'City',
-      'name': area,
-    })),
+      'latitude': latitude,
+      'longitude': longitude,
+    } : undefined,
+    'openingHours': geoData?.localBusiness?.openingHours || 'Mo,Tu,We,Th,Fr,Sa 09:00-19:00',
+    'areaServed': [
+      { '@type': 'City', 'name': 'Ankara' }
+    ],
   };
 }
 
