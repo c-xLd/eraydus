@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import { motion } from 'framer-motion'
 import { Target, Lightbulb, Leaf, ArrowRight } from 'lucide-react'
@@ -97,13 +98,13 @@ export default function AboutClient({ content }: AboutClientProps) {
               transition={{ duration: 1.2, ease }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface group">
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-surface group">
                 <InlineEditable path="story.image" value={story.image} type="image" className="w-full h-full block">
-                  <img
+                  <Image
                     src={story.image}
                     alt="Hikayemiz"
                     className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
-                  />
+                   fill />
                 </InlineEditable>
               </div>
               <div className="absolute -bottom-8 -left-8 bg-surface-dark text-white p-8 rounded-2xl max-w-[280px]">
@@ -200,7 +201,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               />
 
               <div className="grid grid-cols-6 gap-6">
-                {process.steps.map((step: any, index: number) => (
+                {(process?.steps || []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0.01, y: 30 }}
@@ -242,7 +243,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               />
 
               <div className="flex flex-col gap-12">
-                {process.steps.map((step: any, index: number) => (
+                {(process?.steps || []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0.01, x: -20 }}
@@ -330,13 +331,13 @@ export default function AboutClient({ content }: AboutClientProps) {
               transition={{ duration: 1.2, ease }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-white/5 group">
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-white/5 group">
                 <InlineEditable path="facility.image" value={facility.image} type="image" className="w-full h-full block">
-                  <img
+                  <Image
                     src={facility.image}
                     alt="Tesis"
                     className="w-full h-full object-cover opacity-80 transition-transform duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100"
-                  />
+                   fill />
                 </InlineEditable>
               </div>
             </motion.div>
