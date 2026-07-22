@@ -17,7 +17,14 @@ export default function AdminKumlamaPage() {
   const [models, setModels] = useState<Model[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const supabase = createClient()
+
+  // Initialize supabase only when environment variables are available.
+  const [supabase] = useState(() => {
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      return createClient();
+    }
+    return null;
+  })
 
   // Modal state
   const [isOpen, setIsOpen] = useState(false)
@@ -34,6 +41,11 @@ export default function AdminKumlamaPage() {
   }, [])
 
   const fetchModels = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from('sandblasted_models')
       .select('*')
@@ -46,6 +58,7 @@ export default function AdminKumlamaPage() {
   }
 
   const handleDelete = async (id: string) => {
+    if (!supabase) return;
     if (!confirm('Bu modeli silmek istediğinize emin misiniz?')) return
 
     setModels(models.filter(m => m.id !== id)) // Optimistic UI
@@ -85,6 +98,7 @@ export default function AdminKumlamaPage() {
   }
 
   const handleSave = async () => {
+    if (!supabase) return;
     if (!title.trim()) {
       alert('Lütfen bir başlık giriniz.')
       return
