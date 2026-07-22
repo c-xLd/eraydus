@@ -1,4 +1,5 @@
 "use client";
+import Image from 'next/image'
 
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
@@ -24,13 +25,13 @@ export function AnimatedImage({ src, alt, className = '' }: { src: string, alt: 
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-      className={`overflow-hidden group ${className}`}
+      className={`relative overflow-hidden group ${className}`}
     >
-      <img
+      <Image
         src={src}
         alt={alt}
         className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-      />
+      fill />
     </motion.div>
   );
 }
