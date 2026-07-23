@@ -200,7 +200,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               />
 
               <div className="grid grid-cols-6 gap-6">
-                {process.steps.map((step: any, index: number) => (
+                {(Array.isArray(process.steps) ? process.steps : []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0.01, y: 30 }}
@@ -242,7 +242,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               />
 
               <div className="flex flex-col gap-12">
-                {process.steps.map((step: any, index: number) => (
+                {(Array.isArray(process.steps) ? process.steps : []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0.01, x: -20 }}
