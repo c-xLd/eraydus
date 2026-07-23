@@ -140,7 +140,7 @@ export default function AboutClient({ content }: AboutClientProps) {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {values.items.map((value: any, index: number) => {
+            {(Array.isArray(values?.items) ? values.items : []).map((value: any, index: number) => {
               const Icon = iconMap[value.title] || Target
               return (
                 <motion.div
@@ -200,7 +200,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               />
 
               <div className="grid grid-cols-6 gap-6">
-                {process.steps.map((step: any, index: number) => (
+                {(Array.isArray(process?.steps) ? process.steps : []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0.01, y: 30 }}
@@ -242,7 +242,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               />
 
               <div className="flex flex-col gap-12">
-                {process.steps.map((step: any, index: number) => (
+                {(Array.isArray(process?.steps) ? process.steps : []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0.01, x: -20 }}
@@ -300,7 +300,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               </div>
 
               <div className="grid grid-cols-3 gap-8 mt-12">
-                {facility.stats.map((stat: any, index: number) => (
+                {(Array.isArray(facility?.stats) ? facility.stats : []).map((stat: any, index: number) => (
                   <div key={index}>
                     <span className="text-champagne text-2xl md:text-3xl font-semibold">
                       <InlineEditable path={`facility.stats.${index}.value`} value={stat.value}>{stat.value}</InlineEditable>

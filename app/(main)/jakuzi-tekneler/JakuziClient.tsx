@@ -43,7 +43,7 @@ export function JakuziClient({ content }: JakuziClientProps) {
   const isJakuzi = activeTab === 'jakuzi'
   const activeData = isJakuzi ? content.jakuzi : content.tekne
   
-  const features = activeData.features.map((f: any) => ({ ...f, icon: iconMap[f.title] || Sparkles }))
+  const features = (Array.isArray(activeData?.features) ? activeData.features : []).map((f: any) => ({ ...f, icon: iconMap[f.title] || Sparkles }))
   const models = activeData.models
   const stats = activeData.stats
 
