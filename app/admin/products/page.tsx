@@ -10,7 +10,7 @@ export default async function AdminProductsPage() {
 
   const { data: products, error } = await supabase
     .from('products')
-    .select('*, category:categories(slug)')
+    .select('*, category:categories(id, name, slug)')
     .order('created_at', { ascending: false })
 
   if (error) {

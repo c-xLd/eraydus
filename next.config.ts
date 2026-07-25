@@ -29,6 +29,18 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.eraydus.com',
+        port: '',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'eraydus.com',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
   // Baseline security headers applied to every response.

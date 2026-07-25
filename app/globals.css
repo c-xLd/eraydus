@@ -153,6 +153,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground;
@@ -164,6 +165,7 @@
     @apply font-sans;
     
     scroll-padding-top: 80px;
+    overscroll-behavior-y: none; /* Native app feel */
   }
 
   /* Selection */

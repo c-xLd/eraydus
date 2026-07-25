@@ -67,7 +67,7 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
       }
       return 0
     })(),
-    layoutType: dbRow.technical_specs?.layoutType || 'Standart',
+    layoutType: dbRow.technical_specs?.layoutType === 'Vanity Detail' ? 'Banyo Dolabı' : (dbRow.technical_specs?.layoutType || 'Standart'),
     cabinShape: dbRow.technical_specs?.cabinShape || '',
     isNew: dbRow.new_product || true,
     variants
@@ -135,13 +135,23 @@ export async function getProductById(id: string): Promise<UIProduct | null> {
 export async function getProductBySlug(slug: string): Promise<UIProduct | null> {
   try {
     const supabase = createPublicClient()
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('products')
       .select('*, categories(name, slug), variants:product_variants(*)')
       .eq('slug', slug)
-      .single()
+      .maybeSingle()
     
-    if (error || !data) return null
+    if (!data && slug.startsWith('eraydus-')) {
+      const cleanSlug = slug.replace(/^eraydus-/, '')
+      const { data: fallbackData } = await supabase
+        .from('products')
+        .select('*, categories(name, slug), variants:product_variants(*)')
+        .eq('slug', cleanSlug)
+        .maybeSingle()
+      data = fallbackData
+    }
+
+    if (!data) return null
     return mapDatabaseProduct(data)
   } catch {
     return null

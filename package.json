@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "node scripts/seed-products.js"
+    "seed": "node scripts/seed-products.js",
+    "import-csv": "node scripts/import-woocommerce-csv.js",
+    "fix-images": "node scripts/fix-csv-images.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

@@ -180,3 +180,374 @@ export async function revalidateProductPaths(categorySlug?: string, productSlug?
   return { success: true }
 }
 
+function parseCSV(text: string): string[][] {
+  const rows: string[][] = [];
+  let currentRow: string[] = [];
+  let currentCell = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        currentCell += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      currentRow.push(currentCell.trim());
+      currentCell = '';
+    } else if ((char === '\r' || char === '\n') && !inQuotes) {
+      if (char === '\r' && nextChar === '\n') {
+        i++;
+      }
+      currentRow.push(currentCell.trim());
+      if (currentRow.length > 0 && currentRow.some(c => c.length > 0)) {
+        rows.push(currentRow);
+      }
+      currentRow = [];
+      currentCell = '';
+    } else {
+      currentCell += char;
+    }
+  }
+
+  if (currentCell.length > 0 || currentRow.length > 0) {
+    currentRow.push(currentCell.trim());
+    if (currentRow.some(c => c.length > 0)) {
+      rows.push(currentRow);
+    }
+  }
+
+  return rows;
+}
+
+function slugify(text: string): string {
+  if (!text) return '';
+  const trMap: Record<string, string> = {
+    'ç': 'c', 'Ç': 'c', 'ğ': 'g', 'Ğ': 'g', 'ı': 'i', 'I': 'i', 'İ': 'i',
+    'ö': 'o', 'Ö': 'o', 'ş': 's', 'Ş': 's', 'ü': 'u', 'Ü': 'u'
+  };
+  return text
+    .toString()
+    .replace(/[çÇğĞıIİöÖşŞüÜ]/g, (match) => trMap[match] || match)
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export async function importWooCommerceCSVAction(csvText: string) {
+  try {
+    const supabase = await createClient()
+    const rows = parseCSV(csvText)
+
+    if (rows.length < 2) {
+      return { success: false, error: 'CSV dosyasında geçerli başlık ve ürün verisi bulunamadı.' }
+    }
+
+    const headers = rows[0].map(h => h.replace(/^"/, '').replace(/"$/, '').trim())
+    const getIndex = (name: string) => headers.findIndex(h => h.toLowerCase() === name.toLowerCase())
+
+    const idxId = getIndex('Kimlik')
+    const idxSku = getIndex('Stok kodu (SKU)')
+    const idxName = getIndex('İsim')
+    const idxPublished = getIndex('Yayımlanmış')
+    const idxFeatured = getIndex('Öne çıkan?')
+    const idxShortDesc = getIndex('Kısa açıklama')
+    const idxDesc = getIndex('Açıklama')
+    const idxRegularPrice = getIndex('Normal fiyat')
+    const idxSalePrice = getIndex('İndirimli satış fiyatı')
+    const idxCategories = getIndex('Kategoriler')
+    const idxImages = getIndex('Görseller')
+
+    if (idxName === -1) {
+      return { success: false, error: 'CSV içerisinde "İsim" sütunu bulunamadı. Lütfen geçerli bir WooCommerce CSV dışa aktarım dosyası seçin.' }
+    }
+
+    // Fetch existing categories
+    const { data: existingCategories } = await supabase.from('categories').select('*')
+    const categoryMap = new Map<string, string>()
+    if (existingCategories) {
+      existingCategories.forEach(c => categoryMap.set(c.name.toLowerCase(), c.id))
+    }
+
+    const productRows = rows.slice(1)
+    let importedCount = 0
+    let skippedCount = 0
+    const errors: string[] = []
+
+    for (let i = 0; i < productRows.length; i++) {
+      const row = productRows[i]
+      const name = row[idxName] || ''
+      if (!name) {
+        skippedCount++
+        continue
+      }
+
+      const rawSku = row[idxSku] || ''
+      const rawId = row[idxId] || ''
+      const sku = rawSku ? rawSku.trim() : `eray-${rawId || i + 1}`
+      const slug = slugify(name) || `urun-${rawId || i + 1}`
+
+      // Category handling
+      const categoryString = row[idxCategories] || 'Genel'
+      const mainCategoryName = categoryString.split('>')[0].split(',')[0].trim()
+      let categoryId = categoryMap.get(mainCategoryName.toLowerCase())
+
+      if (!categoryId && mainCategoryName) {
+        const catSlug = slugify(mainCategoryName)
+        const { data: newCat } = await supabase
+          .from('categories')
+          .insert([{ name: mainCategoryName, slug: catSlug, status: 'active' }])
+          .select()
+          .single()
+
+        if (newCat) {
+          categoryId = newCat.id
+          categoryMap.set(mainCategoryName.toLowerCase(), newCat.id)
+        }
+      }
+
+      // Prices
+      const regPriceStr = (row[idxRegularPrice] || '').replace(',', '.')
+      const salePriceStr = (row[idxSalePrice] || '').replace(',', '.')
+
+      const regularPrice = regPriceStr ? parseFloat(regPriceStr) : null
+      const salePrice = salePriceStr ? parseFloat(salePriceStr) : null
+      const basePrice = salePrice || regularPrice || 0
+      const startingPrice = regularPrice && salePrice ? regularPrice : basePrice
+
+      // Images: Auto-upload to Supabase Storage in [slug]/[seo-name] structure
+      const rawImages = row[idxImages] || ''
+      const rawImagesArray = rawImages
+        ? rawImages.split(',').map(u => u.trim()).filter(u => u.startsWith('http'))
+        : []
+
+      const finalImagesArray: string[] = []
+
+      for (let imgIdx = 0; imgIdx < rawImagesArray.length; imgIdx++) {
+        const imageUrl = rawImagesArray[imgIdx]
+        if (imageUrl.includes('.supabase.co/storage/')) {
+          finalImagesArray.push(imageUrl)
+        } else {
+          try {
+            const response = await fetch(imageUrl, {
+              headers: { 'User-Agent': 'Mozilla/5.0' }
+            })
+            if (response.ok) {
+              const arrayBuffer = await response.arrayBuffer()
+              const buffer = Buffer.from(arrayBuffer)
+              let ext = 'jpg'
+              const cleanUrl = imageUrl.split('?')[0]
+              if (cleanUrl.endsWith('.png')) ext = 'png'
+              else if (cleanUrl.endsWith('.webp')) ext = 'webp'
+
+              const seoFileName = `${slug}-eraydus-${imgIdx + 1}.${ext}`
+              const storagePath = `${slug}/${seoFileName}`
+
+              const { error: uploadErr } = await supabase.storage
+                .from('products')
+                .upload(storagePath, buffer, {
+                  contentType: response.headers.get('content-type') || `image/${ext === 'jpg' ? 'jpeg' : ext}`,
+                  upsert: true
+                })
+
+              if (!uploadErr) {
+                const { data: publicUrlData } = supabase.storage
+                  .from('products')
+                  .getPublicUrl(storagePath)
+                if (publicUrlData?.publicUrl) {
+                  finalImagesArray.push(publicUrlData.publicUrl)
+                  continue
+                }
+              }
+            }
+          } catch (e) {}
+          finalImagesArray.push(imageUrl)
+        }
+      }
+
+      const isPublished = row[idxPublished] === '1' || row[idxPublished] === 'true'
+      const isFeatured = row[idxFeatured] === '1' || row[idxFeatured] === 'true'
+
+      const productPayload = {
+        sku,
+        slug,
+        name,
+        short_description: row[idxShortDesc] || null,
+        description: row[idxDesc] || null,
+        category_id: categoryId || null,
+        base_price: basePrice,
+        starting_price: startingPrice,
+        sale_price: salePrice,
+        status: isPublished ? 'active' : 'draft',
+        featured: isFeatured,
+        images: finalImagesArray.length > 0 ? finalImagesArray : null,
+        updated_at: new Date().toISOString()
+      }
+
+      const { error: upsertErr } = await supabase
+        .from('products')
+        .upsert(productPayload, { onConflict: 'sku' })
+
+      if (upsertErr) {
+        const { error: slugUpsertErr } = await supabase
+          .from('products')
+          .upsert(productPayload, { onConflict: 'slug' })
+
+        if (slugUpsertErr) {
+          errors.push(`Ürün "${name}" aktarılamadı: ${upsertErr.message}`)
+          skippedCount++
+        } else {
+          importedCount++
+        }
+      } else {
+        importedCount++
+      }
+    }
+
+    revalidatePath('/admin/products')
+    revalidatePath('/admin/products/categories')
+    revalidatePath('/koleksiyonlar')
+    revalidatePath('/')
+
+    return {
+      success: true,
+      importedCount,
+      skippedCount,
+      errors: errors.slice(0, 5)
+    }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'CSV aktarılırken beklenmeyen bir hata oluştu.' }
+  }
+}
+
+export async function duplicateProduct(id: string) {
+  const supabase = await createClient()
+
+  // Fetch the product to duplicate
+  const { data: product, error: fetchError } = await supabase
+    .from('products')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (fetchError || !product) {
+    return { success: false, error: fetchError?.message || 'Ürün bulunamadı' }
+  }
+
+  const { id: _, created_at, updated_at, ...newProduct } = product
+
+  newProduct.name = `${newProduct.name} (Kopya)`
+  newProduct.slug = `${newProduct.slug}-kopya-${Math.floor(Math.random() * 1000)}`
+  if (newProduct.sku) {
+    newProduct.sku = `${newProduct.sku}-KOPYA`
+  }
+
+  const { error: insertError } = await supabase
+    .from('products')
+    .insert([newProduct])
+
+  if (insertError) {
+    return { success: false, error: insertError.message }
+  }
+
+  revalidatePath('/admin/products')
+  return { success: true }
+}
+
+export async function bulkDeleteProducts(ids: string[]) {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('products')
+    .delete()
+    .in('id', ids)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath('/admin/products')
+  revalidatePath('/koleksiyonlar')
+
+  return { success: true }
+}
+
+export async function updateProductStatus(id: string, status: string) {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('products')
+    .update({ status })
+    .eq('id', id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath('/admin/products')
+  revalidatePath('/koleksiyonlar')
+
+  return { success: true }
+}
+
+export async function updateProductPrice(id: string, base_price: number, sale_price: number | null) {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('products')
+    .update({ base_price, sale_price })
+    .eq('id', id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath('/admin/products')
+  revalidatePath('/koleksiyonlar')
+
+  return { success: true }
+}
+
+export async function updateProductSEO(id: string, description: string) {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('products')
+    .update({ description })
+    .eq('id', id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath('/admin/products')
+  revalidatePath('/koleksiyonlar')
+
+  return { success: true }
+}
+
+export async function updateProductBasicInfo(id: string, name: string, sku: string | null) {
+  const supabase = await createClient()
+
+  // Sadece isim ve SKU güncelliyoruz
+  const { error } = await supabase
+    .from('products')
+    .update({ name, sku })
+    .eq('id', id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath('/admin/products')
+  revalidatePath('/koleksiyonlar')
+
+  return { success: true }
+}

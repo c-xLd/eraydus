@@ -102,7 +102,9 @@ export default async function CollectionsPage() {
       "position": index + 1,
       "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.collectionSlug || 'genel'}/${product.slug}`,
       "name": product.name,
-      "image": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}${product.image}`
+      "image": product.image?.startsWith('http')
+        ? product.image
+        : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}${product.image || ''}`
     }))
   };
 

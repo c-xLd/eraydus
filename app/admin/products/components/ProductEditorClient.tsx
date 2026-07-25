@@ -449,22 +449,25 @@ export default function ProductEditorClient({
     setIsUploading(true);
     const supabase = createClient();
     const uploadedUrls: string[] = [];
+    const productSlug = generateSlug(formData.title || 'yeni-urun');
+    const existingCount = formData.images.length;
     
     try {
       for (let i = 0; i < e.target.files.length; i++) {
         const file = e.target.files[i];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const fileExt = file.name.split('.').pop() || 'jpg';
+        const seoFileName = `${productSlug}-eraydus-${existingCount + i + 1}.${fileExt}`;
+        const storagePath = `${productSlug}/${seoFileName}`;
         
-        const { data, error } = await supabase.storage
+        const { error } = await supabase.storage
           .from('products')
-          .upload(fileName, file);
+          .upload(storagePath, file, { upsert: true });
           
         if (error) throw error;
         
         const { data: publicUrlData } = supabase.storage
           .from('products')
-          .getPublicUrl(fileName);
+          .getPublicUrl(storagePath);
           
         uploadedUrls.push(publicUrlData.publicUrl);
       }
@@ -473,7 +476,7 @@ export default function ProductEditorClient({
         ...prev,
         images: [...prev.images, ...uploadedUrls]
       }));
-      toast.success(`${uploadedUrls.length} görsel yüklendi.`);
+      toast.success(`${uploadedUrls.length} SEO uyumlu görsel yüklendi.`);
     } catch (error: any) {
       toast.error('Görsel yüklenemedi: ' + error.message);
     } finally {
