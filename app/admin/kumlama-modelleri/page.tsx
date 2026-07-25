@@ -17,7 +17,17 @@ export default function AdminKumlamaPage() {
   const [models, setModels] = useState<Model[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const supabase = createClient()
+  const [supabase, setSupabase] = useState<any>(null)
+
+  useEffect(() => {
+    try {
+      const client = createClient()
+      setSupabase(client)
+    } catch (e) {
+      console.error("Failed to create Supabase client", e)
+      setLoading(false)
+    }
+  }, [])
 
   // Modal state
   const [isOpen, setIsOpen] = useState(false)
@@ -30,10 +40,13 @@ export default function AdminKumlamaPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    fetchModels()
-  }, [])
+    if (supabase) {
+      fetchModels()
+    }
+  }, [supabase])
 
   const fetchModels = async () => {
+    if (!supabase) return
     const { data, error } = await supabase
       .from('sandblasted_models')
       .select('*')
@@ -46,6 +59,7 @@ export default function AdminKumlamaPage() {
   }
 
   const handleDelete = async (id: string) => {
+    if (!supabase) return
     if (!confirm('Bu modeli silmek istediğinize emin misiniz?')) return
 
     setModels(models.filter(m => m.id !== id)) // Optimistic UI
@@ -85,6 +99,7 @@ export default function AdminKumlamaPage() {
   }
 
   const handleSave = async () => {
+    if (!supabase) return
     if (!title.trim()) {
       alert('Lütfen bir başlık giriniz.')
       return
