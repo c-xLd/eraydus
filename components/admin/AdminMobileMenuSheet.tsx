@@ -27,7 +27,7 @@ const navGroups = [
       { icon: Hexagon, label: "Kumlama Modelleri", href: "/admin/kumlama-modelleri" },
       { icon: Globe, label: "Sayfa Yönetimi", href: "/admin/pages" },
       { icon: Search, label: "SEO Ayarları", href: "/admin/seo" },
-      { icon: Calendar, label: "İçerik Takvimi", href: "/admin/content-calendar" },
+      { icon: FileText, label: "Blog Yönetimi", href: "/admin/blog" },
     ],
   },
   {

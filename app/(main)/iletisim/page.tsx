@@ -14,31 +14,30 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/services/supabase/client'
 
 const contactInfo = [
   {
     icon: MapPin,
     label: 'Adres',
-    value: 'Dudullu OSB, 1. Cadde No:12\nÜmraniye, İstanbul 34776',
-    href: 'https://maps.google.com',
+    value: 'Malazgirt Caddesi No:121/1B\nSiteler / Ankara',
+    href: 'https://www.google.com/maps?cid=4589464454099566581',
   },
   {
     icon: Phone,
     label: 'Telefon',
-    value: '+90 (216) 540 00 00',
-    href: 'tel:+902165400000',
+    value: '(0312) 350 79 39\n0554 883 00 71',
+    href: 'tel:+903123507939',
   },
   {
     icon: Mail,
     label: 'E-posta',
-    value: 'info@eraydus.com',
-    href: 'mailto:info@eraydus.com',
+    value: 'info@eraydus.net',
+    href: 'mailto:info@eraydus.net',
   },
   {
     icon: Clock,
     label: 'Çalışma Saatleri',
-    value: 'Pazartesi – Cuma: 08:30 – 18:00\nCumartesi: 09:00 – 14:00',
+    value: 'Pazartesi – Cumartesi: 09:00 – 18:00\nPazar: Kapalı',
   },
 ]
 
@@ -72,27 +71,23 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    const supabase = createClient()
-    const { error } = await supabase
-      .from('messages')
-      .insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
-        }
-      ])
 
-    setIsSubmitting(false)
-    if (!error) {
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (!res.ok) throw new Error('Sunucu hatası')
+
       setIsSubmitted(true)
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
-    } else {
-      console.error('Error submitting message:', error)
+    } catch (err) {
+      console.error('Submit error:', err)
       alert('Mesajınız gönderilirken bir hata oluştu. Lütfen tekrar deneyin.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -175,7 +170,7 @@ export default function ContactPage() {
                 className="mt-14"
               >
                 <a
-                  href="https://wa.me/902165400000?text=Merhaba%2C%20bilgi%20almak%20istiyorum."
+                  href="https://wa.me/905548830071?text=Merhaba%2C%20bilgi%20almak%20istiyorum."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-[#25D366] text-white px-8 h-14 rounded-full text-base font-medium hover:bg-[#20bd5a] transition-colors"
@@ -325,7 +320,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ───────────── Map Placeholder ───────────── */}
+      {/* ───────────── Map ───────────── */}
       <section className="bg-surface">
         <div className="container mx-auto px-6 max-w-[1440px] py-20">
           <div>
@@ -338,30 +333,27 @@ export default function ContactPage() {
                 Konum
               </span>
             </div>
-            <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden bg-surface-dark">
-              <img
-                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop"
-                alt="Harita konumu"
-                className="w-full h-full object-cover opacity-40"
+            <div className="w-full rounded-2xl overflow-hidden" style={{ height: '450px' }}>
+              <iframe
+                src="https://maps.google.com/maps?cid=4589464454099566581&output=embed&hl=tr"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Eraydus Duşakabin Konum"
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-champagne flex items-center justify-center mb-4">
-                  <MapPin className="w-6 h-6 text-white" strokeWidth={1.5} />
-                </div>
-                <p className="text-white text-lg font-light">
-                  Dudullu OSB, Ümraniye / İstanbul
-                </p>
-                <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-champagne text-sm font-medium mt-3 hover:gap-3 transition-all duration-300"
-                >
-                  Google Maps'te Aç
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
             </div>
+            <a
+              href="https://www.google.com/maps?cid=4589464454099566581"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-champagne text-sm font-medium mt-4 hover:gap-3 transition-all duration-300"
+            >
+              Google Maps'te Aç
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </section>

@@ -4,7 +4,7 @@ import Image from "next/image"
 import { ArrowLeft, CalendarDays, Share2, ShieldCheck, Tag } from "lucide-react"
 import { notFound } from "next/navigation"
 
-import { getPublishedPostBySlug, getPublishedPosts } from "@/lib/data/blog"
+import { getPublishedPostBySlug, getPublishedPosts, slugifyTag } from "@/lib/data/blog"
 import { getArticleSchema, getBreadcrumbSchema, getHowToSchema, getGraphSchema } from "@/lib/seo/schemas"
 
 type Props = { params: Promise<{ slug: string }> }
@@ -129,13 +129,14 @@ export default async function BlogPostPage({ params }: Props) {
             {post.tags?.length ? (
               <div className="mt-8 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <span
+                  <Link
                     key={tag}
-                    className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-3.5 py-1 text-xs font-medium text-muted-foreground border border-border/50"
+                    href={`/blog/tag/${slugifyTag(tag)}`}
+                    className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-3.5 py-1 text-xs font-medium text-muted-foreground border border-border/50 hover:border-champagne/40 hover:text-champagne transition-colors"
                   >
                     <Tag className="w-3 h-3 text-champagne" />
                     {tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
             ) : null}

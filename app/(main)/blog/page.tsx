@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { BlogIndex } from "@/components/blog/BlogIndex"
 import { getPublishedPosts } from "@/lib/data/blog"
 
@@ -41,8 +42,11 @@ export default async function BlogPage() {
             <p className="mt-6 max-w-2xl text-lg font-light leading-relaxed text-muted-foreground md:text-xl">Tasarım kararlarını kolaylaştıran uzman rehberleri, bakım önerileri ve mekanınıza ilham verecek hikâyeler.</p>
           </div>
         </section>
-        <BlogIndex posts={posts} />
+        <Suspense fallback={<div className="container mx-auto max-w-[1440px] px-6 py-20 text-center text-muted-foreground">Yazılar yükleniyor...</div>}>
+          <BlogIndex posts={posts} />
+        </Suspense>
       </div>
     </>
   )
 }
+

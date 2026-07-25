@@ -23,7 +23,9 @@ import {
   Globe,
   PanelLeftClose,
   PanelLeftOpen,
-  Star
+  Star,
+  Mail,
+  FileText
 } from "lucide-react"
 
 type NavItem = {
@@ -47,13 +49,14 @@ const navGroups: { title: string; items: NavItem[] }[] = [
       { icon: Hexagon, label: "Kumlama Modelleri", href: "/admin/kumlama-modelleri" },
       { icon: Globe, label: "Sayfa Yönetimi", href: "/admin/pages" },
       { icon: Search, label: "SEO Ayarları", href: "/admin/seo" },
-      { icon: Calendar, label: "İçerik Takvimi", href: "/admin/content-calendar" },
+      { icon: FileText, label: "Blog Yönetimi", href: "/admin/blog" },
     ],
   },
   {
     title: "Operasyon",
     items: [
       { icon: MessageSquareQuote, label: "Teklif & Sipariş", href: "/admin/quotes" },
+      { icon: Mail, label: "Mesajlar", href: "/admin/messages" },
       { icon: Star, label: "Yorumlar", href: "/admin/reviews" },
       { icon: Users, label: "Müşteri Ağı", href: "/admin/customers" },
       { icon: Bell, label: "Bildirimler", href: "/admin/notifications" },

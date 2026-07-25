@@ -10,7 +10,10 @@ export function cn(...inputs: ClassValue[]) {
  * Örn: storageUrl('uploads', 'homepage/hero.jpg')
  */
 export function storageUrl(bucket: string, path: string) {
+  if (!path) return '/placeholder.jpg'
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  if (!base) return '/placeholder.jpg'
   const clean = path.replace(/^\/+/, '')
   return `${base}/storage/v1/object/public/${bucket}/${clean}`
 }

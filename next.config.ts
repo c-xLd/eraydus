@@ -3,7 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'recharts', 'date-fns'],
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns'],
   },
   // @ts-ignore - To silence the workspace root warning in Turbopack
   turbopack: {

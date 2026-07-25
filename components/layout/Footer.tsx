@@ -33,14 +33,20 @@ export function Footer() {
               </div>
             </div>
             <p className="text-white/80 text-sm leading-relaxed max-w-sm font-light">
-              Özel ölçü mimari cam çözümleri, kararmaz PVD profiller ve nano-kaplama teknolojileri ile banyonuza zamansız bir zarafet katıyoruz.
+              Ankara merkezli duşakabin firması olarak modern tasarım ve kaliteli üretim anlayışıyla; pivot, livorno, katlanır, kare ve askılı sistem kategorilerinde estetik çözümler sunuyoruz. Ücretsiz montaj ve garanti dahil.
             </p>
             <div className="space-y-3 text-sm text-white/80 pt-2 font-light">
-              <a href="tel:+905551234567" className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
+              <a href="tel:+903123507939" className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
                 <div className="p-2 rounded-lg bg-white/10 group-hover:bg-white/20 transition-colors">
                   <Phone className="size-4 text-white" />
                 </div>
-                <span>+90 555 123 4567</span>
+                <span>(0312) 350 79 39</span>
+              </a>
+              <a href="tel:+905548830071" className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
+                <div className="p-2 rounded-lg bg-white/10 group-hover:bg-white/20 transition-colors">
+                  <Phone className="size-4 text-white" />
+                </div>
+                <span>0554 883 00 71</span>
               </a>
               <a href="mailto:info@eraydus.net" className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
                 <div className="p-2 rounded-lg bg-white/10 group-hover:bg-white/20 transition-colors">
@@ -52,7 +58,7 @@ export function Footer() {
                 <div className="p-2 rounded-lg bg-white/10">
                   <MapPin className="size-4 text-white" />
                 </div>
-                <span>Ostim OSB, 100. Yıl Bulvarı, Yenimahalle / Ankara</span>
+                <span>Malazgirt Caddesi No:121/1B, Siteler / Ankara</span>
               </div>
             </div>
           </div>
