@@ -10,13 +10,15 @@ import { cn } from '@/lib/utils'
 
 /* ── Navigation data ───────────────────────────────────────────── */
 const COLLECTIONS = [
-  { href: '/koleksiyonlar', label: 'Duşakabin Koleksiyonları', desc: 'Lüks ve modern duş sistemleri' },
+  { href: '/dusakabin-modelleri', label: 'Duşakabin Modelleri 2026', desc: 'Siyah profil, 8mm cam, oval ve mika modeller' },
+  { href: '/koleksiyonlar', label: 'Tüm Koleksiyonlar', desc: 'Lüks ve modern duş sistemleri' },
   { href: '/koleksiyonlar/banyo-dolaplari', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları' },
   { href: '/kumlama-modelleri', label: 'Kumlama Modelleri', desc: 'Özel tasarım cam desenleri' },
   { href: '/jakuzi-tekneler', label: 'Jakuzi ve Tekneler', desc: 'Konforlu ve şık banyo keyfi' },
 ]
 
 const NAV_LINKS = [
+  { href: '/dusakabin-modelleri', label: 'Modeller' },
   { href: '/tasarla', label: 'Tasarla' },
   { href: '/projeler', label: 'Projeler' },
   { href: '/blog', label: 'Blog' },

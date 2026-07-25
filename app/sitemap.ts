@@ -20,6 +20,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
+      url: `${baseUrl}/dusakabin-modelleri`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.98,
+    },
+    {
+      url: `${baseUrl}/ankara-cankaya-dusakabin`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/cayyolu-dusakabin`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/koleksiyonlar`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
@@ -30,6 +48,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/banyo-trendleri-2026`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.95,
     },
     {
       url: `${baseUrl}/tasarla`,

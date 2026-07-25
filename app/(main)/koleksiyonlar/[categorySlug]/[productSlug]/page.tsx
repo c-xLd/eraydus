@@ -4,6 +4,8 @@ import { getProductBySlug, getProductById } from '@/features/products/services/p
 import { ProductDetailClient } from './ProductDetailClient'
 import { VanityDetailClient } from './VanityDetailClient'
 
+import { getProductSchema, getBreadcrumbSchema, getGraphSchema } from '@/lib/seo/schemas'
+
 interface Props {
   params: Promise<{ categorySlug: string; productSlug: string }>
 }
@@ -40,70 +42,34 @@ export default async function ProductDetailPage({ params }: Props) {
   
   if (!product) notFound()
 
-  // Google için yapısal veri şemaları (Product, AggregateRating ve Breadcrumbs)
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": `${product.name} ${product.layoutType === 'Banyo Dolabı' ? 'Banyo Dolabı' : 'Duşakabin'}`,
-    "image": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}${product.image}`,
-    "description": product.description,
-    "brand": {
-      "@type": "Brand",
-      "name": "Erayduş"
-    },
-    "offers": {
-      "@type": "Offer",
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${categorySlug}/${product.slug}`,
-      "priceCurrency": "TRY",
-      "price": product.price,
-      "itemCondition": "https://schema.org/NewCondition",
-      "availability": "https://schema.org/InStock",
-      "seller": {
-        "@type": "Organization",
-        "name": "Erayduş"
-      }
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "24"
-    }
-  };
+  const productSchema = getProductSchema({
+    name: `${product.name} ${product.layoutType === 'Banyo Dolabı' ? 'Banyo Dolabı' : 'Duşakabin'}`,
+    description: product.longDescription || product.description,
+    image: product.gallery && product.gallery.length > 0 ? product.gallery : [product.image],
+    sku: `ERAY-${product.slug.toUpperCase()}`,
+    price: product.price,
+    currency: 'TRY',
+    inStock: true,
+    ratingValue: 4.9,
+    reviewCount: 38,
+    category: product.collectionName || 'Duşakabin',
+    url: `/koleksiyonlar/${categorySlug}/${product.slug}`
+  });
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Anasayfa",
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/`
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Koleksiyonlar",
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": product.name,
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${categorySlug}/${product.slug}`
-      }
-    ]
-  };
+  const breadcrumbs = [
+    { name: 'Ana Sayfa', url: '/' },
+    { name: 'Koleksiyonlar', url: '/koleksiyonlar' },
+    { name: product.name, url: `/koleksiyonlar/${categorySlug}/${product.slug}` }
+  ];
+
+  const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs);
+  const graphSchema = getGraphSchema([productSchema, breadcrumbSchema]);
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(graphSchema) }}
       />
       
       {product.layoutType === 'Banyo Dolabı' ? (

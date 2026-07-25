@@ -63,6 +63,7 @@ export function Footer() {
             <div>
               <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Keşfet</h4>
               <ul className="space-y-3 text-sm">
+                <li><Link href="/dusakabin-modelleri" className="text-champagne font-semibold hover:underline transition-colors">2026 Duşakabin Modelleri</Link></li>
                 <li><Link href="/koleksiyonlar" className="text-white/80 hover:text-white transition-colors">Tüm Koleksiyonlar</Link></li>
                 <li>
                   <Link href="/tasarla" className="text-white/80 hover:text-white transition-colors flex items-center gap-1.5 group">
@@ -70,20 +71,21 @@ export function Footer() {
                     <ArrowUpRight className="size-3 text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </Link>
                 </li>
+                <li><Link href="/banyo-trendleri-2026" className="text-white/80 hover:text-white transition-colors">2026 Trend Raporu</Link></li>
                 <li><Link href="/kumlama-modelleri" className="text-white/80 hover:text-white transition-colors">Kumlama Modelleri</Link></li>
                 <li><Link href="/projeler" className="text-white/80 hover:text-white transition-colors">Mimari Projeler</Link></li>
               </ul>
             </div>
 
-            {/* Popüler Modeller */}
+            {/* Popüler Modeller & Bölgesel */}
             <div>
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Kategoriler</h4>
+              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Ankara & Kategoriler</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/koleksiyonlar?tip=surgulu" className="text-white/80 hover:text-white transition-colors">Sürgülü Sistemler</Link></li>
-                <li><Link href="/koleksiyonlar?tip=menteseli" className="text-white/80 hover:text-white transition-colors">Menteşeli Kabinler</Link></li>
-                <li><Link href="/koleksiyonlar?renk=siyah" className="text-white/80 hover:text-white transition-colors">Mat Siyah Profil</Link></li>
-                <li><Link href="/koleksiyonlar?renk=altin" className="text-white/80 hover:text-white transition-colors">Gold & Rose PVD</Link></li>
-                <li><Link href="/koleksiyonlar?cam=6mm" className="text-white/80 hover:text-white transition-colors">6mm - 8mm Temperli Cam</Link></li>
+                <li><Link href="/ankara-cankaya-dusakabin" className="text-white/80 hover:text-white transition-colors">Ankara Çankaya Duşakabin</Link></li>
+                <li><Link href="/cayyolu-dusakabin" className="text-white/80 hover:text-white transition-colors">Çayyolu & İncek Kabin</Link></li>
+                <li><Link href="/dusakabin-modelleri?profil=black" className="text-white/80 hover:text-white transition-colors">Mat Siyah Profil</Link></li>
+                <li><Link href="/dusakabin-modelleri?profil=gold" className="text-white/80 hover:text-white transition-colors">Gold & Rose PVD</Link></li>
+                <li><Link href="/dusakabin-modelleri?kalinlik=8mm" className="text-white/80 hover:text-white transition-colors">8mm - 10mm Temperli Cam</Link></li>
               </ul>
             </div>
 

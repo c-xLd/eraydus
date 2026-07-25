@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useDragControls } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter, SlidersHorizontal, Box, Check, X, ChevronUp } from 'lucide-react'
 import { Product } from '@/lib/data/products'
 import { Category } from '@/features/products/services/categories'
@@ -17,16 +17,48 @@ interface CollectionsClientProps {
 }
 
 export function CollectionsClient({ products, categories = [], activeCategorySlug, title = 'Koleksiyonlar' }: CollectionsClientProps) {
+  const router = useRouter()
   const searchParams = useSearchParams()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedProfiles, setSelectedProfiles] = useState<string[]>([])
+
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '')
+  const [selectedProfiles, setSelectedProfiles] = useState<string[]>(() => {
+    const param = searchParams.get('profil')
+    return param ? param.split(',') : []
+  })
   const [priceRange, setPriceRange] = useState<number>(100000)
   const [sortOrder, setSortOrder] = useState<'newest' | 'price-asc' | 'price-desc'>('newest')
   const [imageError, setImageError] = useState<{ [key: string]: boolean }>({})
-  const [selectedLayouts, setSelectedLayouts] = useState<string[]>([])
-  const [selectedGlass, setSelectedGlass] = useState<string[]>([])
-  const [onlyNew, setOnlyNew] = useState<boolean>(false)
-  const [selectedThicknesses, setSelectedThicknesses] = useState<string[]>([])
+  const [selectedLayouts, setSelectedLayouts] = useState<string[]>(() => {
+    const param = searchParams.get('yerlesim')
+    return param ? param.split(',') : []
+  })
+  const [selectedGlass, setSelectedGlass] = useState<string[]>(() => {
+    const param = searchParams.get('cam')
+    return param ? param.split(',') : []
+  })
+  const [onlyNew, setOnlyNew] = useState<boolean>(() => searchParams.get('yeni') === 'true')
+  const [selectedThicknesses, setSelectedThicknesses] = useState<string[]>(() => {
+    const param = searchParams.get('kalinlik')
+    return param ? param.split(',') : []
+  })
+
+  // Sync state to URL search parameters without triggering hard refresh
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchQuery) params.set('q', searchQuery)
+    if (selectedProfiles.length > 0) params.set('profil', selectedProfiles.join(','))
+    if (selectedGlass.length > 0) params.set('cam', selectedGlass.join(','))
+    if (selectedThicknesses.length > 0) params.set('kalinlik', selectedThicknesses.join(','))
+    if (selectedLayouts.length > 0) params.set('yerlesim', selectedLayouts.join(','))
+    if (onlyNew) params.set('yeni', 'true')
+
+    const newQuery = params.toString()
+    const currentQuery = searchParams.toString()
+    if (newQuery !== currentQuery) {
+      const url = newQuery ? `?${newQuery}` : window.location.pathname
+      router.replace(url, { scroll: false })
+    }
+  }, [searchQuery, selectedProfiles, selectedGlass, selectedThicknesses, selectedLayouts, onlyNew, router, searchParams])
   
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
   const dragControls = useDragControls()

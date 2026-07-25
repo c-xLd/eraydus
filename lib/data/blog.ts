@@ -130,6 +130,60 @@ Bir su terazisi yardımıyla duvarlarınızın dikliğini kontrol edin. Duvarın
     tags: ["Ölçü Alma", "HowTo", "Rehber"],
   },
   {
+    id: "kucuk-banyolar-icin-dusakabin-modelleri",
+    title: "Küçük Banyolar İçin Duşakabin Modelleri ve Yer Tasarruf Rehberi",
+    slug: "kucuk-banyolar-icin-dusakabin-modelleri",
+    description: "Dar ve küçük banyoları daha geniş göstermek, hareket alanını maksimuma çıkarmak için en ideal duşakabin modelleri ve yerleşim tavsiyeleri.",
+    body: `Küçük banyolar için doğru duşakabin seçimi yapmak hem estetik hem de fonksiyonellik açısından hayati önem taşır. Yanlış seçilen dışa açılır kapılı bir duşakabin, lavabo veya klozet kullanımını engelleyerek banyonuzu daha da daraltabilir.
+
+### 1. Köşe L-Tipi ve Katlanır Duşakabinler
+Küçük banyolarda ölü alan olarak adlandırılan köşeleri değerlendirmek en akıllıca çözümdür. [Köşe duşakabin modelleri](/dusakabin/kucuk-banyo-dusakabinleri), kare veya oval hatlarıyla duş alanını köşeye hapseder ve banyonun merkezindeki dolaşım alanını tamamen serbest bırakır.
+
+- **İçeri Katlanır Akordeon Kapılar:** Kapı açıldığında banyonun içine taşmaz, kendi üzerine katlanarak %100 alan tasarrufu sağlar.
+- **Kayar Sürgülü Sistemler:** Ray üzerinde çalışan kapılar ekstra açılım mesafesi gerektirmez.
+
+### 2. Şeffaf ve Oluklu (Fluted) Cam Tercihi
+Opak veya çok koyu füme camlar küçük banyoları kutu gibi göstererek alan algısını daraltır. Bunun yerine [8mm temperli şeffaf camlar](/dusakabin/8mm-temperli-cam-dusakabin) veya gün ışığını kırmadan mahremiyet sağlayan oluklu (fluted) cam paneller tercih edilmelidir. Şeffaf cam, gözün duvarın sonuna kadar ilerlemesini sağlayarak banyonuzu olduğundan 2 kat daha büyük gösterir.
+
+### 3. Zeminle Hemzemin Walk-in Çözümleri
+Yüksek duş tekneleri banyo zeminini böler ve görsel bir engel yaratır. Zemine sıfır olarak monte edilen [Walk-in duş panelleri](/koleksiyonlar), seramik zeminle bütünleşerek kesintisiz bir görünüm sunar.
+
+Banyonuzun net ölçülerine göre en uygun modeli belirlemek için [Özel Ölçü Tasarla & Fiyat Al](/tasarla) konfigüratörümüzü kullanabilir veya [tüm duşakabin koleksiyonlarımızı](/koleksiyonlar) inceleyebilirsiniz.`,
+    featured_image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
+    published_at: "2026-07-20T10:00:00+03:00",
+    seo_title: "Küçük Banyolar İçin Duşakabin Modelleri | ERAYDUŞ Rehberi",
+    seo_description: "Dar ve küçük banyolar için en kullanışlı duşakabin modelleri. Katlanır kapılar, köşe kabinler ve şeffaf cam yerleşim ipuçları.",
+    tags: ["Küçük Banyo", "Yer Tasarrufu", "Duşakabin Modelleri", "Rehber"],
+  },
+  {
+    id: "siyah-profilli-dusakabin-temizligi-nasil-yapilir",
+    title: "Siyah Profilli Duşakabin Temizliği Nasıl Yapılır? (Lekesiz Bakım Rehberi)",
+    slug: "siyah-profilli-dusakabin-temizligi-nasil-yapilir",
+    description: "Mat siyah profilli duşakabinlerde beyaz kireç ve su lekesi oluşumunu engelleyen, profillerin boyasını koruyan püf noktaları.",
+    body: `Modern banyo mimarisinin vazgeçilmezi olan [mat siyah duşakabin modelleri](/dusakabin/siyah-duskabin-modelleri), banyonuza son derece lüks ve karakteristik bir hava katar. Ancak sert şebeke sularındaki kireç oranı, mat siyah profil ve siyah çerçevelerde beyaz lekeler halinde birikebilir.
+
+### Siyah Profilleri Korumak İçin 4 Temizlik Kuralı
+
+#### 1. Sert Kimyasallardan Kaçının
+Çamaşır suyu, tuz ruhu, amonyak içeren ağır çözücüler veya asidik kireç sökücüler mat siyah elektrostatik fırın boyanın koruyucu katmanına zarar verebilir. Bunun yerine nötr pH değerine sahip sıvı sabun veya elma sirkesi ile seyreltilmiş ılık su kullanılmalıdır.
+
+#### 2. Mikrofiber Bez ve Yumuşak Çekçek Kullanımı
+Profillerin yüzeyini çizebilecek bulaşık tellerinden veya sert sünger yüzeylerinden uzak durun. Her duş sonrasında profilleri ve camı [Nano kaplamalı cam yüzeyler](/koleksiyonlar) için özel mikrofiber bez ile kurulamak leke oluşumunu henüz başlamadan bitirir.
+
+#### 3. Nano-Shield Sıvı Cam Teknolojisi
+ERAYDUŞ üretim hattında cam yüzeyine uygulanan **Nano-Shield koruma**, su damlalarının bilye gibi kaymasını sağlar. Böylece kireç molekülleri cam yüzeyine tutunamaz.
+
+#### 4. Profil Boya Garantisi
+Elektrostatik toz boya ile fırınlanan ERAYDUŞ siyah profilleri, dökülmeye ve korozyona karşı 10 yıl üretici garantisi altındadır.
+
+Banyonuz için en şık ve uzun ömürlü [siyah profilli duşakabin seçeneklerini](/koleksiyonlar) hemen keşfedin.`,
+    featured_image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1600&auto=format&fit=crop",
+    published_at: "2026-07-18T10:00:00+03:00",
+    seo_title: "Siyah Profilli Duşakabin Temizliği Nasıl Yapılır? | ERAYDUŞ",
+    seo_description: "Siyah duşakabin profili kireç lekesi nasıl temizlenir? Mat siyah profillerin ömrünü uzatan lekesiz temizlik ve bakım ipuçları.",
+    tags: ["Siyah Profil", "Temizlik", "Bakım", "Mat Siyah"],
+  },
+  {
     id: "banyo-trendleri-2026",
     title: "2026 Banyo Dekorasyon ve Lüks Kabin Trendleri",
     slug: "banyo-trendleri-2026",
@@ -137,11 +191,13 @@ Bir su terazisi yardımıyla duvarlarınızın dikliğini kontrol edin. Duvarın
     body: `2026 banyo mimarisinde öne çıkan ana tema: **'Kişisel SPA ve Şeffaf Ferahlık'**. Artık banyolar sadece yıkanma alanı değil, günün yorgunluğunun atıldığı birer arınma mabedi olarak tasarlanıyor.
 
 ### 2026'nın En Popüler 5 Banyo Trendi:
-1. **Tavan Boyu Kesintisiz Camlar:** 240 cm ve üzeri yükseklikte tavana kadar uzanan şeffaf cam paneller alan derinliğini 2 katına çıkarıyor.
-2. **Gizli Su Tahliye & Eşiksiz Zeminler:** Zemin seramiği ile hemzemin duş alanları yaşsız erişilebilirlik ve kesintisiz estetik sağlıyor.
+1. **Tavan Boyu Kesintisiz Camlar:** 240 cm ve üzeri yükseklikte tavana kadar uzanan [tavan boyu cam duşakabinler](/koleksiyonlar) alan derinliğini 2 katına çıkarıyor.
+2. **Gizli Su Tahliye & Eşiksiz Zeminler:** Zemin seramiği ile hemzemin [Walk-in duş alanları](/dusakabin/walkin-dusakabin) yaşsız erişilebilirlik ve kesintisiz estetik sağlıyor.
 3. **Mat Antrasit ve Rose Gold Profiller:** Siyah ve krom klasikleşirken, bronz ve mat antrasit tonlar mimarların yeni gözdesi.
 4. **Kumlama Geometrik Desenler:** Çizgisel ve oluklu (fluted) kumlama camlar gizlilik ve ışık geçirgenliğini mükemmel dengeliyor.
-5. **Akıllı Cam (Smart Glass) Entegrasyonu:** Tek bir butonla şeffaf halden buzlu hale geçen opak cam sistemleri lüks villa projelerinde yerini alıyor.`,
+5. **Akıllı Cam (Smart Glass) Entegrasyonu:** Tek bir butonla şeffaf halden buzlu hale geçen opak cam sistemleri lüks villa projelerinde yerini alıyor.
+
+Banyonuzu 2026 trendlerine uygun yenilemek için [Özel Ölçü Tasarlama Robotumuzu](/tasarla) hemen deneyin.`,
     featured_image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     published_at: "2026-06-10T10:00:00+03:00",
     seo_title: "2026 Banyo Dekorasyon ve Kabin Trendleri | ERAYDUŞ",
