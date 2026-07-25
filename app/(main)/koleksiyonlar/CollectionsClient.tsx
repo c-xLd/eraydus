@@ -19,8 +19,19 @@ interface CollectionsClientProps {
 export function CollectionsClient({ products, categories = [], activeCategorySlug, title = 'Koleksiyonlar' }: CollectionsClientProps) {
   const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState('')
+  // Decouple search input's text value from filtering state to optimize INP (prevent typing lag)
+  const [localSearchQuery, setLocalSearchQuery] = useState('')
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([])
   const [priceRange, setPriceRange] = useState<number>(100000)
+
+  // Debounce filter updates to searchQuery with a 200ms timeout hook to prevent layout thrashing
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearchQuery)
+    }, 200)
+
+    return () => clearTimeout(handler)
+  }, [localSearchQuery])
   const [sortOrder, setSortOrder] = useState<'newest' | 'price-asc' | 'price-desc'>('newest')
   const [imageError, setImageError] = useState<{ [key: string]: boolean }>({})
   const [selectedLayouts, setSelectedLayouts] = useState<string[]>([])
@@ -182,6 +193,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const activeFiltersCount = (searchQuery ? 1 : 0) + selectedProfiles.length + selectedLayouts.length + selectedGlass.length + selectedThicknesses.length + (onlyNew ? 1 : 0) + (priceRange < maxProductPrice ? 1 : 0)
 
   const clearAllFilters = () => {
+    setLocalSearchQuery('')
     setSearchQuery('')
     setSelectedProfiles([])
     setSelectedLayouts([])
@@ -198,8 +210,8 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
         <input 
           type="text" 
           placeholder="Model ara..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={localSearchQuery}
+          onChange={(e) => setLocalSearchQuery(e.target.value)}
           className="w-full bg-transparent border-b border-border text-foreground text-sm pl-12 pr-4 py-3 outline-none focus:border-champagne transition-colors"
         />
       </div>
