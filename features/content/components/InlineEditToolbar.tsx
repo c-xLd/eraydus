@@ -78,7 +78,7 @@ export function InlineEditToolbar() {
         if (perfData) {
           const loadTime = perfData.loadEventEnd - perfData.startTime
           // Let's say < 500ms = 100 score, > 3000ms = 0 score
-          let score = 100 - ((Math.max(0, loadTime - 500) / 2500) * 100)
+          const score = 100 - ((Math.max(0, loadTime - 500) / 2500) * 100)
           setPerfScore(Math.max(10, Math.min(100, Math.round(score))))
         }
       }
