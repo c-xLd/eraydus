@@ -21,6 +21,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const searchParams = useSearchParams()
 
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '')
+  const [localSearchQuery, setLocalSearchQuery] = useState(() => searchParams.get('q') || '')
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>(() => {
     const param = searchParams.get('profil')
     return param ? param.split(',') : []
@@ -41,6 +42,17 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
     const param = searchParams.get('kalinlik')
     return param ? param.split(',') : []
   })
+
+  // Debounce search query to prevent layout thrashing and keep typing lag-free
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearchQuery)
+    }, 200)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [localSearchQuery])
 
   // Sync state to URL search parameters without triggering hard refresh
   useEffect(() => {
@@ -214,6 +226,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const activeFiltersCount = (searchQuery ? 1 : 0) + selectedProfiles.length + selectedLayouts.length + selectedGlass.length + selectedThicknesses.length + (onlyNew ? 1 : 0) + (priceRange < maxProductPrice ? 1 : 0)
 
   const clearAllFilters = () => {
+    setLocalSearchQuery('')
     setSearchQuery('')
     setSelectedProfiles([])
     setSelectedLayouts([])
@@ -230,8 +243,8 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
         <input 
           type="text" 
           placeholder="Model ara..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={localSearchQuery}
+          onChange={(e) => setLocalSearchQuery(e.target.value)}
           className="w-full bg-transparent border-b border-border text-foreground text-sm pl-12 pr-4 py-3 outline-none focus:border-champagne transition-colors"
         />
       </div>

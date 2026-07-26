@@ -15,6 +15,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
   
   // State
   const [searchQuery, setSearchQuery] = useState('')
+  const [localSearchQuery, setLocalSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterSeo, setFilterSeo] = useState('all')
@@ -57,6 +58,17 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
     })
     return Array.from(cats.values())
   }, [initialProducts])
+
+  // Debounce search query to prevent input lag and layout thrashing
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearchQuery)
+    }, 200)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [localSearchQuery])
 
   // Calculate SEO Score
   const calculateSeoScore = (product: any) => {
@@ -558,8 +570,8 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
             <input
               type="text"
               placeholder="Ürün adı, SKU veya kategori ara..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={localSearchQuery}
+              onChange={(e) => setLocalSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black font-medium transition-all"
             />
           </div>
