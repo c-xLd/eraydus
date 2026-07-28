@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import { useState, useEffect, useRef } from 'react'
 import { Plus, Search, Trash2, Edit, Image as ImageIcon, Loader2, X, Upload, Images } from 'lucide-react'
@@ -275,7 +276,7 @@ export default function AdminKumlamaPage() {
                   />
                   {preview ? (
                     <div className="relative rounded-xl overflow-hidden border border-gray-200">
-                      <img src={preview} alt="Önizleme" className="w-full h-56 object-cover" />
+                      <Image src={preview} alt="Önizleme" className="w-full h-56 object-cover" fill sizes="100vw" />
                       <button
                         onClick={() => { setFile(null); if (preview) URL.revokeObjectURL(preview); setPreview(null) }}
                         className="absolute top-2 right-2 p-1.5 bg-black/60 text-white rounded-lg hover:bg-black/80 transition-colors"
@@ -311,7 +312,7 @@ export default function AdminKumlamaPage() {
                             galleryUrl === url ? 'border-black ring-2 ring-black/20' : 'border-transparent hover:border-gray-300'
                           }`}
                         >
-                          <img src={url} alt="" className="w-full h-full object-cover" />
+                          <Image src={url} alt="" className="w-full h-full object-cover" fill sizes="100vw" />
                         </button>
                       ))}
                     </div>

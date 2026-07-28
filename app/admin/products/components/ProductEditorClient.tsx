@@ -1,4 +1,5 @@
 "use client"
+import Image from 'next/image'
 
 import { useState, useMemo } from "react"
 import Link from "next/link"
@@ -948,7 +949,7 @@ export default function ProductEditorClient({
             <div className="grid grid-cols-2 gap-3">
               {formData.images.map((img: string, idx: number) => (
                 <div key={idx} className={`relative aspect-square rounded-lg overflow-hidden border border-gray-200 group ${idx === 0 ? 'col-span-2' : ''}`}>
-                  <img src={img} alt={`Görsel ${idx + 1}`} className="w-full h-full object-cover" />
+                  <Image src={img} alt={`Görsel ${idx + 1}`} className="w-full h-full object-cover" fill sizes="100vw" />
                   {idx === 0 && (
                     <div className="absolute top-2 left-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-medium tracking-wide">ANA GÖRSEL</div>
                   )}

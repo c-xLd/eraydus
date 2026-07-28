@@ -1,4 +1,5 @@
 "use client"
+import Image from 'next/image'
 
 import { useState, useMemo, useEffect } from "react"
 import Link from "next/link"
@@ -353,7 +354,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
                 {/* Image */}
                 <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden relative shadow-inner">
                   {viewingProduct.images && viewingProduct.images.length > 0 ? (
-                    <img src={viewingProduct.images[0]} alt={viewingProduct.name} className="w-full h-full object-cover" />
+                    <Image src={viewingProduct.images[0]} alt={viewingProduct.name} className="w-full h-full object-cover" fill sizes="100vw" />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 gap-2">
                       <LayoutList className="size-8 opacity-20" />
@@ -686,7 +687,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
                   <td className={`px-6 ${cellPadding}`}>
                     <div className="flex items-center gap-4">
                       <div className="size-12 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200/60 shadow-sm relative group-hover:shadow-md transition-all">
-                        <img src={imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                        <Image src={imageUrl} alt={product.name} className="w-full h-full object-cover" fill sizes="100vw" />
                       </div>
                       <div className="flex-1" onClick={e => e.stopPropagation()}>
                         {isEditingBasic ? (

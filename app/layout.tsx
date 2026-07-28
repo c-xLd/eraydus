@@ -6,7 +6,6 @@ import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 
 
-import { FramerMotionFix } from "./FramerMotionFix";
 import { AIGraphSchema } from "@/components/seo/AIGraphSchema";
 import { globalSeoData } from "@/lib/data/seo";
 
@@ -91,7 +90,6 @@ export default async function RootLayout({
                 height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe>
             </noscript>
           )}
-          <FramerMotionFix />
           <AIGraphSchema />
           <ServerFAQSchema />
 
