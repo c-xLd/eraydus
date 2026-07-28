@@ -1,4 +1,5 @@
 "use client"
+import Image from 'next/image'
 
 import { useState, useMemo } from "react"
 import Link from "next/link"
@@ -204,7 +205,7 @@ export default function AdminProjectsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="size-10 rounded-md overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                          <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
+                          <Image src={project.image} alt={project.name} className="w-full h-full object-cover" fill sizes="100vw" />
                         </div>
                         <p className="font-medium text-gray-900">{project.name}</p>
                       </div>

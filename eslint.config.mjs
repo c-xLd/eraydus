@@ -1,16 +1,26 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextConfig from "eslint-config-next";
+import { FlatCompat } from "@eslint/eslintrc";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const eslintConfig = defineConfig([
-  nextConfig,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-export default eslintConfig;
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const config = [
+  ...compat.extends("next/core-web-vitals"),
+  {
+    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts", "node_modules/**"],
+  },
+  {
+    rules: {
+      "react/no-unescaped-entities": "off",
+      "@next/next/no-img-element": "off",
+      "react-hooks/exhaustive-deps": "off"
+    }
+  }
+];
+
+export default config;

@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import { useState, useRef, useCallback } from 'react'
 import { Upload, X, Image as ImageIcon, Loader2, Link as LinkIcon } from 'lucide-react'
@@ -169,7 +170,7 @@ export default function FeaturedImageUpload({ value, onChange }: FeaturedImageUp
       {value && (
         <div className="relative flex items-start gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
           <div className="size-20 shrink-0 rounded-lg overflow-hidden border border-gray-200 bg-white">
-            <img src={value} alt="Kapak görseli önizlemesi" className="w-full h-full object-cover" />
+            <Image src={value} alt="Kapak görseli önizlemesi" className="w-full h-full object-cover" fill sizes="100vw" />
           </div>
           <div className="flex-1 min-w-0 pt-0.5">
             <p className="text-xs font-semibold text-gray-700 mb-1">Kapak Görseli</p>

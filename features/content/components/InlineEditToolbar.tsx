@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useAdminEdit } from './AdminEditProvider'
@@ -453,8 +454,8 @@ export function InlineEditToolbar() {
                   </div>
                   {value && (
                     <div className="mt-4 border border-border rounded-xl overflow-hidden bg-muted/20 relative aspect-[16/9] flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={value} alt="Önizleme" className="max-w-full max-h-[300px] object-contain" />
+                      { }
+                      <Image src={value} alt="Önizleme" className="max-w-full max-h-[300px] object-contain" fill sizes="100vw" />
                     </div>
                   )}
                 </div>
