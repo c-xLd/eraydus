@@ -20,7 +20,17 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  const [localSearchQuery, setLocalSearchQuery] = useState(() => searchParams.get('q') || '')
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '')
+
+  // Debounce search query changes to prevent layout thrashing and preserve input responsiveness (optimizing INP)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearchQuery)
+    }, 200)
+    return () => clearTimeout(handler)
+  }, [localSearchQuery])
+
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>(() => {
     const param = searchParams.get('profil')
     return param ? param.split(',') : []
@@ -214,6 +224,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const activeFiltersCount = (searchQuery ? 1 : 0) + selectedProfiles.length + selectedLayouts.length + selectedGlass.length + selectedThicknesses.length + (onlyNew ? 1 : 0) + (priceRange < maxProductPrice ? 1 : 0)
 
   const clearAllFilters = () => {
+    setLocalSearchQuery('')
     setSearchQuery('')
     setSelectedProfiles([])
     setSelectedLayouts([])
@@ -223,6 +234,8 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
     setPriceRange(maxProductPrice)
   }
 
+  // Optimization: Defined as a plain function rather than a React component and called via `{FilterContent()}`
+  // to avoid unmounting and recreating DOM nodes on parent renders, which preserves input focus and enhances performance.
   const FilterContent = () => (
     <div className="space-y-10 pb-10">
       <div className="relative">
@@ -230,8 +243,8 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
         <input 
           type="text" 
           placeholder="Model ara..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={localSearchQuery}
+          onChange={(e) => setLocalSearchQuery(e.target.value)}
           className="w-full bg-transparent border-b border-border text-foreground text-sm pl-12 pr-4 py-3 outline-none focus:border-champagne transition-colors"
         />
       </div>
@@ -427,7 +440,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           {/* Desktop Sidebar (Minimal) */}
           <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-fit">
-            <FilterContent />
+            {FilterContent()}
           </aside>
 
           {/* Main Content Grid */}
@@ -614,7 +627,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
               </div>
 
               <div className="p-6 overflow-y-auto flex-1 overscroll-none pb-24">
-                <FilterContent />
+                {FilterContent()}
               </div>
 
               <div className="p-4 border-t border-border/40 bg-background shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))] flex gap-4">
