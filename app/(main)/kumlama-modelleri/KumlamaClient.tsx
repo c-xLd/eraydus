@@ -159,7 +159,7 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
         {filtered.length === 0 ? (
           <div className="py-24 text-center text-muted-foreground">
             <Search className="size-10 mx-auto mb-4 opacity-30" />
-            <p>"{search}" için sonuç bulunamadı.</p>
+            <p>&quot;{search}&quot; için sonuç bulunamadı.</p>
           </div>
         ) : (
           <motion.div
@@ -220,7 +220,7 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
             <p className="text-champagne text-sm tracking-[0.25em] uppercase font-medium mb-3">Sipariş & Bilgi</p>
             <h2 className="text-2xl md:text-3xl font-light text-white leading-snug">
               Beğendiğiniz deseni hemen<br className="hidden md:block" />{' '}
-              <span className="font-semibold">WhatsApp'tan sorun</span>
+              <span className="font-semibold">WhatsApp&apos;tan sorun</span>
             </h2>
             <p className="text-white/50 text-sm mt-3 font-light">Tüm sorularınızı yanıtlıyor, ücretsiz numune gönderiyoruz.</p>
           </div>
@@ -231,7 +231,7 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
             className="relative z-10 flex-shrink-0 inline-flex items-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-2xl text-base font-semibold hover:bg-[#128C7E] transition-all duration-300 shadow-[0_4px_30px_rgba(37,211,102,0.3)] hover:shadow-[0_8px_40px_rgba(37,211,102,0.45)] hover:-translate-y-0.5"
           >
             <MessageCircle className="size-5" />
-            WhatsApp'tan Yaz
+            WhatsApp&apos;tan Yaz
           </a>
         </div>
       </AnimatedSection>

@@ -89,7 +89,7 @@ export default function EditBlogClient({ post }: { post: BlogPost }) {
             <FileText className="size-6 text-amber-600" /> Blog Yazısını Düzenle
           </h1>
           <p className="text-sm text-gray-500 mt-1 line-clamp-1">
-            "{post.title}" başlıklı makale içeriğini güncelleyin.
+            &quot;{post.title}&quot; başlıklı makale içeriğini güncelleyin.
           </p>
         </div>
 

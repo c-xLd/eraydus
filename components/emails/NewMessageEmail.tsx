@@ -79,7 +79,7 @@ export const NewMessageEmail = ({ name, email, phone, subject, message }: NewMes
               href={`https://wa.me/${phone.replace(/\D/g, '')}?text=Merhaba ${name}, mesajınız için teşekkürler.`}
               style={btnWhatsapp}
             >
-              WhatsApp'tan Yaz
+              WhatsApp&apos;tan Yaz
             </Link>
           )}
         </Section>

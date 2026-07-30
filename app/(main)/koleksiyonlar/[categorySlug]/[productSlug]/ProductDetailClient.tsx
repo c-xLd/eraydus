@@ -308,7 +308,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                     </svg>
                   </a>
                   <p className="text-[11px] text-center text-muted-foreground leading-relaxed">
-                    Ölçü, cam, profil ve aksesuar seçerek size özel net fiyat alın veya doğrudan WhatsApp'tan bize yazın.
+                    Ölçü, cam, profil ve aksesuar seçerek size özel net fiyat alın veya doğrudan WhatsApp&apos;tan bize yazın.
                   </p>
                 </div>
 

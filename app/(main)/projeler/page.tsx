@@ -140,7 +140,7 @@ export default function ProjectsPage() {
             transition={{ duration: 1, delay: 0.25, ease }}
             className="text-muted-foreground text-lg md:text-xl font-light mt-6 max-w-2xl"
           >
-            Türkiye'nin en prestijli projelerinde ERAYDUŞ imzası. Her biri
+            Türkiye&apos;nin en prestijli projelerinde ERAYDUŞ imzası. Her biri
             titizlikle tasarlanmış, özenle tamamlanmış referanslarımız.
           </motion.p>
         </div>

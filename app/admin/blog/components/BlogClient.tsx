@@ -304,7 +304,7 @@ export default function BlogClient({ initialPosts }: { initialPosts: BlogPost[] 
               <h3 className="text-lg font-bold text-gray-900">Yazıyı Sil</h3>
             </div>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">"{deletePost.title}"</span> başlıklı makaleyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+              <span className="font-semibold text-gray-900">&quot;{deletePost.title}&quot;</span> başlıklı makaleyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
             </p>
             <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
               <button

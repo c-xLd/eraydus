@@ -645,7 +645,7 @@ export default function ProductEditorClient({
                 <div className="space-y-6">
                   {globalAttributes.length === 0 && (
                     <div className="p-4 bg-orange-50 text-orange-800 text-sm rounded-lg border border-orange-100">
-                      Sistemde henüz kayıtlı Global Nitelik yok. Önce "Nitelikler" menüsünden Nitelik eklemelisiniz.
+                      Sistemde henüz kayıtlı Global Nitelik yok. Önce &quot;Nitelikler&quot; menüsünden Nitelik eklemelisiniz.
                     </div>
                   )}
                   <div className="flex gap-2">
@@ -707,7 +707,7 @@ export default function ProductEditorClient({
                                 )
                               })}
                               {(!attr.terms || attr.terms.length === 0) && (
-                                <span className="text-xs text-red-500">Bu niteliğe ait hiç değer bulunamadı. Önce "Nitelikler" menüsünden değer ekleyin.</span>
+                                <span className="text-xs text-red-500">Bu niteliğe ait hiç değer bulunamadı. Önce &quot;Nitelikler&quot; menüsünden değer ekleyin.</span>
                               )}
                             </div>
                           </div>
@@ -756,7 +756,7 @@ export default function ProductEditorClient({
 
                   <div className="space-y-4">
                     {variations.length === 0 && (
-                      <p className="text-sm text-gray-500 text-center py-4 border border-dashed rounded-lg">Varyasyon bulunmuyor. Nitelikleri ekleyip "Üret" butonuna basın.</p>
+                      <p className="text-sm text-gray-500 text-center py-4 border border-dashed rounded-lg">Varyasyon bulunmuyor. Nitelikleri ekleyip &quot;Üret&quot; butonuna basın.</p>
                     )}
                     {variations.map((v, i) => (
                       <div key={v.id} className="border border-gray-200 rounded-lg bg-white overflow-hidden">
