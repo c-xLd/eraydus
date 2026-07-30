@@ -1,0 +1,5 @@
+# Bolt's Performance Journal - Critical Learnings Only
+
+## 2026-07-25 - React Inner Component Tag Re-render Anti-Pattern & State Throttling
+**Learning:** Defining helper render functions (like `const FilterContent = () => (...)`) inside a parent React component and rendering them as a JSX tag (e.g., `<FilterContent />`) is a major performance bottleneck. React treats the tag as a completely new component type on every parent render, forcing a complete unmount, destruction of state/input focus, and recreation of the entire DOM subtree. Furthermore, tying raw keystroke input changes directly to heavy filtering list calculations severely degrades Interaction to Next Paint (INP) metrics due to synchronous main-thread rendering of hundreds of elements.
+**Action:** Always call inline helper rendering functions directly using function execution syntax `{FilterContent()}` rather than JSX component syntax `<FilterContent />`. Additionally, decouple interactive text inputs from list filtering using a decoupled local text state and debounced updates (e.g., 200ms) to the heavy filtering query state.
