@@ -102,7 +102,7 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">WooCommerce CSV İçe Aktar</h2>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              WooCommerce'den dışa aktardığınız ürün CSV dosyasını seçerek Supabase'e yükleyin.
+              WooCommerce&apos;den dışa aktardığınız ürün CSV dosyasını seçerek Supabase&apos;e yükleyin.
             </p>
           </div>
           <button

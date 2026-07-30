@@ -297,7 +297,7 @@ export function BlockEditor({ initialBlocks, onChange }: BlockEditorProps) {
                                   </select>
                                 </div>
                                 <div className="space-y-2">
-                                  <label className="text-sm font-medium">Görseller (Virgülle ayrılmış URL'ler)</label>
+                                  <label className="text-sm font-medium">Görseller (Virgülle ayrılmış URL&apos;ler)</label>
                                   <textarea 
                                     className="w-full min-h-[100px] p-2 rounded-md border border-input bg-background text-sm"
                                     placeholder="https://gorsel1.jpg, https://gorsel2.jpg"
@@ -308,7 +308,7 @@ export function BlockEditor({ initialBlocks, onChange }: BlockEditorProps) {
                                       updateBlock(block.id, { images })
                                     }}
                                   />
-                                  <p className="text-xs text-muted-foreground">Şimdilik URL'leri virgülle veya alt alta ayırarak girin.</p>
+                                  <p className="text-xs text-muted-foreground">Şimdilik URL&apos;leri virgülle veya alt alta ayırarak girin.</p>
                                 </div>
                               </div>
                             )}
