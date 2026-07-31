@@ -20,6 +20,8 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // Decouple input's text value from search filtering query for lag-free typing (optimizing INP)
+  const [localSearchQuery, setLocalSearchQuery] = useState(() => searchParams.get('q') || '')
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '')
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>(() => {
     const param = searchParams.get('profil')
@@ -41,6 +43,17 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
     const param = searchParams.get('kalinlik')
     return param ? param.split(',') : []
   })
+
+  // Debounce the local search input update to prevent frequent re-renders and URL state transitions during typing
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearchQuery)
+    }, 200)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [localSearchQuery])
 
   // Sync state to URL search parameters without triggering hard refresh
   useEffect(() => {
@@ -214,6 +227,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
   const activeFiltersCount = (searchQuery ? 1 : 0) + selectedProfiles.length + selectedLayouts.length + selectedGlass.length + selectedThicknesses.length + (onlyNew ? 1 : 0) + (priceRange < maxProductPrice ? 1 : 0)
 
   const clearAllFilters = () => {
+    setLocalSearchQuery('')
     setSearchQuery('')
     setSelectedProfiles([])
     setSelectedLayouts([])
@@ -223,15 +237,16 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
     setPriceRange(maxProductPrice)
   }
 
-  const FilterContent = () => (
+  // Defined as a function rather than a component to prevent entire DOM unmounting/remounting on state changes (retains cursor focus/position and boosts rendering performance)
+  const renderFilterContent = () => (
     <div className="space-y-10 pb-10">
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <input 
           type="text" 
           placeholder="Model ara..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={localSearchQuery}
+          onChange={(e) => setLocalSearchQuery(e.target.value)}
           className="w-full bg-transparent border-b border-border text-foreground text-sm pl-12 pr-4 py-3 outline-none focus:border-champagne transition-colors"
         />
       </div>
@@ -427,7 +442,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           {/* Desktop Sidebar (Minimal) */}
           <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-fit">
-            <FilterContent />
+            {renderFilterContent()}
           </aside>
 
           {/* Main Content Grid */}
@@ -614,7 +629,7 @@ export function CollectionsClient({ products, categories = [], activeCategorySlu
               </div>
 
               <div className="p-6 overflow-y-auto flex-1 overscroll-none pb-24">
-                <FilterContent />
+                {renderFilterContent()}
               </div>
 
               <div className="p-4 border-t border-border/40 bg-background shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))] flex gap-4">
