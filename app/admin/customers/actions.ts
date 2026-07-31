@@ -4,7 +4,7 @@ import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
 export async function createCustomer(data: any) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data: newCustomer, error } = await supabase
     .from('customers')
@@ -33,7 +33,7 @@ export async function createCustomer(data: any) {
 }
 
 export async function updateCustomer(id: string, data: any) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data: updatedCustomer, error } = await supabase
     .from('customers')
@@ -62,7 +62,7 @@ export async function updateCustomer(id: string, data: any) {
 }
 
 export async function deleteCustomer(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('customers')
