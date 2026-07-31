@@ -52,7 +52,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
             transition={{ duration: 0.8, delay: 0.2, ease }}
           >
             <Link
-              href="/koleksiyonlar"
+              href="/urunler"
               className="group relative inline-flex items-center gap-3 text-foreground/75 hover:text-foreground text-sm font-medium tracking-wide transition-colors pb-1.5"
             >
               <span>Tüm Koleksiyonu İncele</span>
@@ -75,7 +75,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               transition={{ duration: 0.8, delay: i * 0.12, ease }}
             >
               <Link
-                href={`/koleksiyonlar?kategori=${model.slug}`}
+                href={`/urunler/${model.slug}`}
                 className="group relative block aspect-[4/5] rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden bg-surface ring-1 ring-border/50 shadow-sm hover:shadow-2xl hover:shadow-champagne/5 transition-all duration-700"
               >
 

@@ -25,7 +25,8 @@ import {
   PanelLeftOpen,
   Star,
   Mail,
-  FileText
+  FileText,
+  Image as ImageIcon
 } from "lucide-react"
 
 type NavItem = {
@@ -46,6 +47,7 @@ const navGroups: { title: string; items: NavItem[] }[] = [
     title: "Vitrin",
     items: [
       { icon: Package, label: "Ürün Yönetimi", href: "/admin/products" },
+      { icon: ImageIcon, label: "Ortam Kütüphanesi", href: "/admin/media" },
       { icon: Hexagon, label: "Kumlama Modelleri", href: "/admin/kumlama-modelleri" },
       { icon: Globe, label: "Sayfa Yönetimi", href: "/admin/pages" },
       { icon: Search, label: "SEO Ayarları", href: "/admin/seo" },
@@ -98,54 +100,51 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
 
   return (
     <aside 
-      className={`fixed inset-y-0 left-0 bg-[#0A0A0A] border-r border-white/5 flex flex-col z-50 font-sans transition-all duration-500 ease-in-out ${isCollapsed ? 'w-16 overflow-visible' : 'w-64 overflow-hidden'}`}
+      className={`fixed inset-y-0 left-0 bg-[#09090b] border-r border-white/10 flex flex-col z-50 font-sans transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${isCollapsed ? 'w-16 overflow-visible' : 'w-[260px] overflow-hidden'}`}
     >
-      {/* Ambient Glow */}
-      <div className="absolute top-0 left-0 w-full h-48 bg-gradient-to-b from-champagne/5 to-transparent pointer-events-none" />
-
       {/* Logo Area */}
-      <div className={`h-16 flex items-center px-4 border-b border-white/5 shrink-0 relative z-10 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+      <div className={`h-16 flex items-center px-4 shrink-0 relative z-10 transition-all ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
         <Link href="/admin" className={`flex items-center gap-3 group ${isCollapsed ? 'justify-center' : ''}`}>
-          <div className="size-7 rounded-md bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-champagne/10 group-hover:border-champagne/30 transition-all duration-500 shrink-0">
-            <Hexagon className="size-3.5 text-champagne" />
+          <div className="size-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors shrink-0 shadow-sm">
+            <Hexagon className="size-4 text-white" />
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="text-white font-medium tracking-wider text-[13px] whitespace-nowrap">ERAYDUŞ</span>
-              <span className="text-[8px] font-medium tracking-[0.2em] text-white/40 uppercase whitespace-nowrap">Architecture</span>
+              <span className="text-white font-semibold tracking-wide text-sm whitespace-nowrap">ERAYDUŞ</span>
+              <span className="text-[9px] font-medium tracking-[0.15em] text-white/50 uppercase whitespace-nowrap">Architecture</span>
             </div>
           )}
         </Link>
       </div>
 
       {/* Toggle Button */}
-      <div className="absolute top-5 right-[-12px] z-50 hidden sm:block">
+      <div className="absolute top-5 right-[-14px] z-50 hidden sm:block">
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="bg-[#0A0A0A] border border-white/10 rounded-full p-1 text-white/50 hover:text-white hover:border-champagne/50 transition-all hover:scale-110 shadow-xl"
+          className="bg-[#09090b] border border-white/10 rounded-full p-1.5 text-white/50 hover:text-white transition-all shadow-md hover:scale-105 active:scale-95"
         >
-          {isCollapsed ? <PanelLeftOpen className="size-3.5" /> : <PanelLeftClose className="size-3.5" />}
+          {isCollapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
         </button>
       </div>
 
       {/* Search Bar */}
       {!isCollapsed && (
-        <div className="px-4 pt-4 pb-2 shrink-0 relative z-10">
+        <div className="px-4 py-3 shrink-0 relative z-10">
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-white/30 group-focus-within:text-champagne transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-white/30 group-focus-within:text-white transition-colors" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ara..."
-              className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/5 hover:border-white/10 rounded-lg text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-champagne/50 focus:bg-white/10 transition-all"
+              className="w-full pl-9 pr-3 py-2 bg-white/5 border border-transparent rounded-lg text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:bg-white/10 focus:border-white/20 transition-all font-medium shadow-inner"
             />
           </div>
         </div>
       )}
 
       {/* Navigation */}
-      <nav className={`flex-1 overflow-y-auto py-3 space-y-5 relative z-10 px-2 
+      <nav className={`flex-1 overflow-y-auto py-2 space-y-6 relative z-10 px-3 
         [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20
       `}>
         <AnimatePresence>
@@ -153,23 +152,24 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
             <motion.p 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
-              className="text-[13px] text-white/30 text-center py-6 font-light"
+              className="text-[13px] text-white/40 text-center py-6 font-medium"
             >
               Sonuç bulunamadı.
             </motion.p>
           )}
 
-          {filteredGroups.map((group, groupIdx) => (
+          {filteredGroups.map((group) => (
             <motion.div 
               key={group.title}
               initial={false}
+              className="space-y-1"
             >
               {!isCollapsed ? (
-                <p className="px-3 mb-2 text-[9px] font-semibold uppercase tracking-widest text-white/30 whitespace-nowrap">
+                <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-white/40 whitespace-nowrap">
                   {group.title}
                 </p>
               ) : (
-                <div className="h-3" /> 
+                <div className="h-4" /> 
               )}
               
               <div className="space-y-0.5">
@@ -180,61 +180,62 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                     <Link
                       key={item.href}
                       href={item.href}
-                          className={`relative flex items-center gap-3 rounded-lg text-[13px] transition-all duration-300 group ${
-                            isCollapsed ? 'justify-center p-2.5 mx-1' : 'px-3 py-2 overflow-hidden'
-                          } ${
-                            active
-                              ? "text-champagne font-medium"
-                              : "text-white/60 hover:text-white hover:bg-white/5 font-light"
-                          }`}
-                        >
-                          {active && (
-                            <motion.div 
-                              layoutId="activeTab"
-                              className="absolute inset-0 bg-champagne/10 rounded-lg border border-champagne/20" 
-                              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            />
-                          )}
-                          
-                          <Icon className={`size-4 shrink-0 transition-transform duration-300 relative z-10 ${active ? 'scale-110' : 'group-hover:scale-110'}`} />
-                          
-                          {!isCollapsed && (
-                            <span className="relative z-10 tracking-wide whitespace-nowrap">{item.label}</span>
-                          )}
-                        </Link>
-                      )
+                      className={`relative flex items-center gap-3 rounded-xl text-[13px] transition-colors group ${
+                        isCollapsed ? 'justify-center p-2.5 mx-auto w-10 h-10' : 'px-3 py-2'
+                      } ${
+                        active
+                          ? "text-white font-medium"
+                          : "text-white/60 hover:text-white hover:bg-white/5 font-medium"
+                      }`}
+                    >
+                      {active && (
+                        <motion.div 
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-white/10 rounded-xl" 
+                          transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                        />
+                      )}
+                      
+                      <Icon className={`size-4 shrink-0 transition-transform relative z-10 ${active ? 'scale-105' : 'group-hover:scale-105'} ${active ? 'text-white' : 'text-white/60 group-hover:text-white'}`} strokeWidth={active ? 2.5 : 2} />
+                      
+                      {!isCollapsed && (
+                        <span className="relative z-10 tracking-tight whitespace-nowrap">{item.label}</span>
+                      )}
+                    </Link>
+                  )
 
-                      if (isCollapsed) {
-                        return (
-                          <TooltipProvider key={item.href} delay={0}>
-                            <Tooltip>
-                              <TooltipTrigger render={linkContent} />
-                              <TooltipContent side="right" sideOffset={16} className="bg-[#1A1A1A] border-white/10 text-white text-[12px] font-medium shadow-xl">
-                                {item.label}
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )
-                      }
-                      return <div key={item.href}>{linkContent}</div>;
-                    })}
-                  </div>
-                </motion.div>
-              ))}
+                  if (isCollapsed) {
+                    return (
+                      <TooltipProvider key={item.href} delay={0}>
+                        <Tooltip>
+                          <TooltipTrigger render={linkContent} />
+                          <TooltipContent side="right" sideOffset={16} className="bg-[#09090b] border-white/10 text-white text-[12px] font-semibold px-3 py-1.5 shadow-xl rounded-lg">
+                            {item.label}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )
+                  }
+                  return <div key={item.href}>{linkContent}</div>;
+                })}
+              </div>
+            </motion.div>
+          ))}
         </AnimatePresence>
       </nav>
 
       {/* Footer Return */}
-      <div className="p-4 border-t border-white/5 shrink-0 relative z-10 bg-[#0A0A0A]">
+      <div className="p-4 border-t border-white/10 shrink-0 relative z-10 bg-[#09090b]">
         <Link
           href="/"
           title={isCollapsed ? "Siteye Dön" : undefined}
-          className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-xs font-medium text-white/50 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all ${isCollapsed ? 'px-0' : ''}`}
+          className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-semibold text-white/60 hover:text-white hover:bg-white/5 transition-all ${isCollapsed ? 'px-0' : ''}`}
         >
-          <LogOut className="size-3.5 shrink-0" />
-          {!isCollapsed && <span className="whitespace-nowrap">Vitrin</span>}
+          <LogOut className="size-4 shrink-0" strokeWidth={2.5} />
+          {!isCollapsed && <span className="whitespace-nowrap tracking-wide">Vitrin'e Dön</span>}
         </Link>
       </div>
     </aside>
   )
 }
+

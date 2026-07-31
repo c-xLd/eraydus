@@ -317,8 +317,8 @@ export function JakuziClient({ content }: JakuziClientProps) {
               <Link href="/tasarla" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition-all">
                 Tasarımına Başla
               </Link>
-              <Link href="/koleksiyonlar" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border text-foreground text-sm font-medium hover:bg-surface transition-all">
-                Koleksiyonları İncele
+              <Link href="/urunler" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border text-foreground text-sm font-medium hover:bg-surface transition-all">
+                Ürünleri İncele
               </Link>
             </div>
           </motion.div>

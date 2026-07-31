@@ -3,28 +3,28 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { AnimatePresence, motion, useDragControls, useReducedMotion } from 'framer-motion'
-import { Menu, X, ArrowUpRight, MessageCircle, ChevronDown } from 'lucide-react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { Menu, X, ArrowUpRight, MessageCircle, ChevronDown, Sparkles, Layers, Compass, Phone, ChevronRight } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
 /* ── Navigation data ───────────────────────────────────────────── */
 const COLLECTIONS = [
-  { href: '/koleksiyonlar', label: 'Tüm Ürünler', desc: 'Lüks ve modern duş sistemleri' },
-  { href: '/koleksiyonlar/banyo-dolabi', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları' },
-  { href: '/kumlama-modelleri', label: 'Kumlama Modelleri', desc: 'Özel tasarım cam desenleri' },
-  { href: '/jakuzi-tekneler', label: 'Jakuzi ve Tekneler', desc: 'Konforlu ve şık banyo keyfi' },
+  { href: '/urunler', label: 'Tüm Ürünler', desc: 'Lüks ve modern duş sistemleri', badge: 'Yeni' },
+  { href: '/urunler/banyo-dolabi', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları', badge: '' },
+  { href: '/kumlama-modelleri', label: 'Kumlama Modelleri', desc: 'Özel tasarım cam desenleri', badge: '' },
+  { href: '/jakuzi-tekneler', label: 'Jakuzi ve Tekneler', desc: 'Konforlu ve şık banyo keyfi', badge: '' },
 ]
 
 const NAV_LINKS = [
-  { href: '/tasarla', label: 'Tasarla' },
-  { href: '/projeler', label: 'Projeler' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/hakkimizda', label: 'Hakkımızda' },
-  { href: '/iletisim', label: 'İletişim' },
+  { href: '/projeler', label: 'Projeler', desc: 'Tamamlanan mimari referanslar' },
+  { href: '/blog', label: 'Blog & İlham', desc: 'Banyo tasarım fikirleri ve tavsiyeler' },
+  { href: '/hakkimizda', label: 'Hakkımızda', desc: '15 yıllık Erayduş kalitesi' },
+  { href: '/iletisim', label: 'İletişim', desc: 'Konum, telefon ve teklif al' },
 ]
 
-const WHATSAPP_URL = 'https://wa.me/905550000000'
+const WHATSAPP_URL = 'https://wa.me/905548830071'
+const PHONE_NUMBER = '0554 883 00 71'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -78,7 +78,6 @@ export function Header() {
   const [megaOpen, setMegaOpen] = useState(false)
   const pathname = usePathname()
   const reduceMotion = useReducedMotion()
-  const dragControls = useDragControls()
 
   // Pages with a dark, full-bleed hero where the bar sits transparent.
   const isDarkHeroPage = !pathname || pathname === '/' || pathname === '' || pathname === '/jakuzi-tekneler' || pathname.includes('/jakuzi-tekneler')
@@ -235,10 +234,11 @@ export function Header() {
         </div>
       </motion.header>
 
-      {/* ── Mobile bottom sheet ─────────────────────────────────── */}
+      {/* ── Ultra-Luxury Mobile Side Navigation Drawer ───────────────── */}
       <AnimatePresence>
         {menuOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               key="backdrop"
               initial={{ opacity: 0 }}
@@ -246,92 +246,157 @@ export function Header() {
               exit={{ opacity: 0 }}
               transition={{ duration: reduceMotion ? 0 : 0.25 }}
               onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-md lg:hidden"
             />
 
+            {/* Slide-in Drawer */}
             <motion.div
-              key="sheet"
+              key="side-drawer"
               role="dialog"
               aria-modal="true"
-              aria-label="Gezinme menüsü"
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={sheetTransition}
-              drag="y"
-              dragControls={dragControls}
-              dragListener={false}
-              dragConstraints={{ top: 0, bottom: 0 }}
-              dragElastic={{ top: 0, bottom: 0.4 }}
-              onDragEnd={(_, info) => {
-                if (info.offset.y > 120 || info.velocity.y > 600) setMenuOpen(false)
-              }}
-              className="fixed inset-x-0 bottom-0 z-[70] flex max-h-[90dvh] flex-col rounded-t-3xl bg-background pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-2xl shadow-black/20 lg:hidden"
+              aria-label="Mobil Gezinme Menüsü"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: 'spring' as const, stiffness: 360, damping: 36 }
+              }
+              className="fixed inset-y-0 right-0 z-[100] flex w-[88vw] max-w-[400px] flex-col bg-[#09090b] text-white shadow-2xl border-l border-white/10 lg:hidden overflow-hidden"
             >
-              {/* Drag handle */}
-              <div
-                onPointerDown={(e) => dragControls.start(e)}
-                className="flex shrink-0 cursor-grab touch-none justify-center pb-2 pt-3 active:cursor-grabbing"
-              >
-                <span className="h-1.5 w-10 rounded-full bg-foreground/15" />
-              </div>
+              {/* Drawer Top Header Bar */}
+              <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex size-7 items-center justify-center rounded-[9px] bg-white text-black font-black tracking-tighter text-sm shadow-md">
+                    E
+                  </span>
+                  <span className="text-base font-bold tracking-tight text-white">
+                    ERAYDUŞ
+                  </span>
+                  <span className="flex h-2 w-2 relative ml-1">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C9A86A] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C9A86A]"></span>
+                  </span>
+                </div>
 
-              <div className="flex items-center justify-between px-6 pb-2">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/40">
-                  Menü
-                </span>
                 <button
                   onClick={() => setMenuOpen(false)}
                   aria-label="Menüyü kapat"
-                  className="flex size-11 items-center justify-center rounded-full text-foreground/70 outline-none transition-colors hover:bg-black/5 focus-visible:ring-2 focus-visible:ring-ring/60 dark:hover:bg-white/10"
+                  className="flex size-10 items-center justify-center rounded-full bg-white/10 text-white/80 hover:bg-white/20 hover:text-white outline-none transition-all active:scale-90"
                 >
-                  <X className="size-6" />
+                  <X className="size-5" />
                 </button>
               </div>
 
-              <nav aria-label="Mobil menü" className="flex-1 overflow-y-auto overscroll-contain px-6 py-2">
-                {COLLECTIONS.map((c, i) => (
-                  <Link
-                    key={c.href}
-                    href={c.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center justify-between border-b border-border/50 py-4 outline-none transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
-                  >
-                    <span className="text-xl font-light text-foreground/90">{c.label}</span>
-                    <ArrowUpRight className="size-5 shrink-0 text-foreground/30" />
-                  </Link>
-                ))}
-                {NAV_LINKS.map((l) => (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center justify-between border-b border-border/50 py-4 outline-none transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
-                  >
-                    <span className="text-xl font-light text-foreground/90">{l.label}</span>
-                    <ArrowUpRight className="size-5 shrink-0 text-foreground/30" />
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="flex shrink-0 flex-col gap-3 px-6 pt-4">
+              {/* Scrollable Navigation Body */}
+              <div className="flex-1 overflow-y-auto no-scrollbar px-6 py-6 space-y-6">
+                {/* 3D Configurator Featured Banner */}
                 <Link
                   href="/tasarla"
                   onClick={() => setMenuOpen(false)}
-                  className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-foreground text-base font-semibold text-background outline-none transition-transform active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring/60"
+                  className="group relative block rounded-2xl bg-gradient-to-r from-[#C9A86A] via-[#E5C88B] to-[#C9A86A] p-4 text-black shadow-lg shadow-[#C9A86A]/20 active:scale-[0.98] transition-all"
                 >
-                  Tasarla
-                  <ArrowUpRight className="size-5" />
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-black/70">
+                        <Sparkles className="size-3.5 text-black animate-pulse" />
+                        <span>3D Konfigüratör</span>
+                      </div>
+                      <h4 className="text-base font-bold tracking-tight">Kendi Banyonu Tasarla</h4>
+                    </div>
+                    <div className="flex size-9 items-center justify-center rounded-full bg-black text-white group-hover:scale-105 transition-transform">
+                      <ArrowUpRight className="size-4" />
+                    </div>
+                  </div>
                 </Link>
+
+                {/* Collections Section */}
+                <div className="space-y-2">
+                  <span className="text-[9px] font-bold tracking-[0.25em] uppercase text-white/40 font-mono block mb-3">
+                    KOLEKSİYONLAR
+                  </span>
+                  <div className="space-y-1">
+                    {COLLECTIONS.map((c) => (
+                      <Link
+                        key={c.href}
+                        href={c.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="group flex items-center justify-between p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 transition-all active:scale-[0.98]"
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-white group-hover:text-[#C9A86A] transition-colors">
+                              {c.label}
+                            </span>
+                            {c.badge && (
+                              <span className="text-[8px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-[#C9A86A] text-black">
+                                {c.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-white/40 font-light truncate max-w-[220px]">
+                            {c.desc}
+                          </p>
+                        </div>
+                        <ChevronRight className="size-4 text-white/30 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Pages Section */}
+                <div className="space-y-2 pt-2">
+                  <span className="text-[9px] font-bold tracking-[0.25em] uppercase text-white/40 font-mono block mb-3">
+                    MİMARİ & SAYFALAR
+                  </span>
+                  <div className="space-y-1">
+                    {NAV_LINKS.map((l) => (
+                      <Link
+                        key={l.href}
+                        href={l.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="group flex items-center justify-between p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 transition-all active:scale-[0.98]"
+                      >
+                        <div className="space-y-0.5">
+                          <span className="text-sm font-medium text-white group-hover:text-[#C9A86A] transition-colors">
+                            {l.label}
+                          </span>
+                          <p className="text-[11px] text-white/40 font-light truncate max-w-[220px]">
+                            {l.desc}
+                          </p>
+                        </div>
+                        <ChevronRight className="size-4 text-white/30 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Drawer Bottom Contact Footer */}
+              <div className="p-6 border-t border-white/10 bg-[#09090b] space-y-3 shrink-0">
                 <a
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setMenuOpen(false)}
-                  className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-border bg-surface/50 text-base font-semibold text-foreground outline-none transition-transform active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring/60"
+                  className="flex items-center justify-center gap-2.5 h-12 w-full rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider transition-transform active:scale-[0.98] shadow-lg shadow-emerald-900/30"
                 >
-                  <MessageCircle className="size-5" />
-                  WhatsApp ile Ara
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  </span>
+                  <MessageCircle className="size-4" />
+                  <span>WhatsApp Canlı Destek</span>
+                </a>
+
+                <a
+                  href={`tel:${PHONE_NUMBER.replace(/\s/g, '')}`}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 h-11 w-full rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-medium transition-colors"
+                >
+                  <Phone className="size-3.5 text-white/70" />
+                  <span>{PHONE_NUMBER}</span>
                 </a>
               </div>
             </motion.div>

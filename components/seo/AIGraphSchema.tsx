@@ -21,7 +21,7 @@ export async function AIGraphSchema() {
     'inLanguage': 'tr-TR',
     'potentialAction': {
       '@type': 'SearchAction',
-      'target': `${SITE_URL}/koleksiyonlar?q={search_term_string}`,
+      'target': `${SITE_URL}/urunler?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   };

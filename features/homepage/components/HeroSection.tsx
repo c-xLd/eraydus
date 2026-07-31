@@ -120,7 +120,7 @@ export function HeroSection() {
               </svg>
             </Link>
             <Link
-              href="/koleksiyonlar"
+              href="/urunler"
               className="inline-flex items-center justify-center rounded-2xl border border-white/20 text-white w-full sm:w-auto px-8 md:px-10 h-14 text-sm md:text-base font-medium hover:bg-white/10 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:-translate-y-0.5"
             >
               Koleksiyonu Keşfet

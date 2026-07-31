@@ -57,6 +57,7 @@ export interface ProductDetail {
   layout_type: string | null
   cabin_shape: string | null
   main_image_url: string | null
+  images?: string[] | null
   features: string[]
   technical_specs: TechnicalSpecs
   compatible_glass: string[]

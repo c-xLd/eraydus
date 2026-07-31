@@ -24,7 +24,7 @@ export default async function KumlamaModelleriPage() {
   const { data: models } = await supabase
     .from('sandblasted_models')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('order_index', { ascending: true })
 
   return <KumlamaClient initialModels={models || []} />
 }

@@ -114,7 +114,7 @@ export default function BanyoTrendleriReportPage() {
           <h2 className="text-2xl md:text-3xl font-light mt-10">2. Cam Kalınlığı ve Şeffaf Mimari</h2>
           <p>
             Minimalist tasarımlarda profiller küçülürken cam paneller masifleşmektedir. 
-            <Link href="/koleksiyonlar" className="text-champagne font-medium mx-1 hover:underline">
+            <Link href="/urunler" className="text-champagne font-medium mx-1 hover:underline">
               Özel ölçü duşakabin
             </Link> 
             tasarımlarında 8mm ve 10mm rodajlı Şişecam temperli emniyet camları, sallantı yapmayan rijit duruşları ve yüksek darbe dirençleriyle öne çıkmaktadır.
@@ -184,7 +184,7 @@ export default function BanyoTrendleriReportPage() {
               Özel Ölçü Tasarla
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
-            <Link href="/koleksiyonlar" className="inline-flex items-center px-6 py-3 bg-muted text-foreground font-medium text-sm rounded-lg hover:bg-muted/80 transition-colors border border-border">
+            <Link href="/urunler" className="inline-flex items-center px-6 py-3 bg-muted text-foreground font-medium text-sm rounded-lg hover:bg-muted/80 transition-colors border border-border">
               Modelleri İncele
             </Link>
           </div>

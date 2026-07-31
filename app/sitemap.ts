@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/koleksiyonlar`,
+      url: `${baseUrl}/urunler`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
@@ -124,7 +124,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product: any) => {
       const catSlug = product.categories?.slug || 'genel'
       return {
-        url: `${baseUrl}/koleksiyonlar/${catSlug}/${product.slug}`,
+        url: `${baseUrl}/urunler/${catSlug}/${product.slug}`,
         lastModified: new Date(product.updated_at || new Date()),
         changeFrequency: 'weekly',
         priority: 0.8,
@@ -132,7 +132,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
 
     const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category: any) => ({
-      url: `${baseUrl}/koleksiyonlar/${category.slug}`,
+      url: `${baseUrl}/urunler/${category.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.85,

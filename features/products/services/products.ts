@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/services/supabase/server'
-import { Product as UIProduct, glassOptions, profileOptions } from '@/lib/data/products'
+import { type Product as UIProduct, glassOptions, profileOptions } from '@/lib/data/products'
 
 // Database row mapper helper
 function mapDatabaseProduct(dbRow: any): UIProduct {
@@ -55,8 +55,8 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
     collectionSlug: dbRow.categories?.slug || 'genel',
     description: dbRow.short_description || dbRow.description || 'Lüks ve modern tasarımıyla banyonuza değer katar.',
     longDescription: dbRow.description || 'Erayduş kalitesiyle üretilmiş, milimetrik hassasiyete sahip özel tasarım. Uzun ömürlü kullanım ve estetik görünüm sunar.',
-    image: Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images[0] : 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80',
-    gallery: Array.isArray(dbRow.images) ? dbRow.images : [],
+    image: dbRow.main_image_url || (Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images[0] : 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80'),
+    gallery: Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images : (dbRow.main_image_url ? [dbRow.main_image_url] : []),
     features: Array.isArray(dbRow.features) && dbRow.features.length > 0 ? dbRow.features : ['2 Yıl Üretici Garantisi', 'Ücretsiz Profesyonel Montaj', 'Kişiye Özel Üretim', 'Paslanmaz Malzeme'],
     technicalSpecs: {
       glassThickness: dbRow.technical_specs?.glassThickness || ['6mm Temperli Şişecam'],
@@ -74,6 +74,12 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
         if (prices.length > 0) return Math.min(...prices)
       }
       return 0
+    })(),
+    originalPrice: (() => {
+      const curPrice = Number(dbRow.sale_price || dbRow.base_price || dbRow.price || 0)
+      const rawOriginal = Number(dbRow.compare_at_price || dbRow.original_price || dbRow.regular_price || (dbRow.sale_price && dbRow.base_price ? dbRow.base_price : 0))
+      if (rawOriginal > curPrice && curPrice > 0) return rawOriginal
+      return null
     })(),
     layoutType: isBanyoDolabi ? 'Banyo Dolabı' : (dbRow.technical_specs?.layoutType || 'Standart'),
     cabinShape: dbRow.technical_specs?.cabinShape || '',

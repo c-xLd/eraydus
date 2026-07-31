@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { Plus, Search, Trash2, Edit, ImageIcon, Loader2, X, Upload, Images, GripVertical, Check, Eye, EyeOff } from 'lucide-react'
+import { Plus, Search, Trash2, Edit, ImageIcon, Loader2, X, Upload, Images, GripVertical, Check, Eye, EyeOff, ChevronUp, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { createClient } from '@/services/supabase/client'
@@ -13,6 +13,7 @@ import {
   updateOrderAction
 } from './actions'
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
+import { cn } from '@/lib/utils'
 
 type Model = {
   id: string
@@ -74,11 +75,37 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     updateOrderAction(orderedIds).then((res) => {
       if (!res.success) {
         toast.error('Sıralama güncellenirken hata oluştu')
-        // Revert the optimistic update
         setModels(previousModels)
       }
     })
-  }, [models, searchQuery, updateOrderAction, toast])
+  }, [models, searchQuery])
+
+  const handleMoveOrder = useCallback((index: number, direction: 'up' | 'down') => {
+    if (searchQuery !== '') {
+      toast.error('Filtre uygulandığı sırada sıralama değiştirilemez. Lütfen aramayı temizleyin.')
+      return
+    }
+
+    const targetIndex = direction === 'up' ? index - 1 : index + 1
+    if (targetIndex < 0 || targetIndex >= models.length) return
+
+    const newModels = Array.from(models)
+    const [movedItem] = newModels.splice(index, 1)
+    newModels.splice(targetIndex, 0, movedItem)
+
+    const previousModels = models
+    setModels(newModels)
+
+    const orderedIds = newModels.map((model) => model.id)
+    updateOrderAction(orderedIds).then((res) => {
+      if (!res.success) {
+        toast.error('Sıralama güncellenirken hata oluştu')
+        setModels(previousModels)
+      } else {
+        toast.success('Sıra güncellendi')
+      }
+    })
+  }, [models, searchQuery])
 
   const openModal = (model?: Model) => {
     if (model) {
@@ -148,7 +175,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     }
 
     if (editingId) {
-      const res = await updateModelAction(editingId, { title, imageUrl: finalImageUrl })
+      const res: any = await updateModelAction(editingId, { title, imageUrl: finalImageUrl })
       if (res.success && res.data) {
         setModels(models.map(m => m.id === editingId ? { ...m, ...res.data } : m))
         toast.success('Model güncellendi')
@@ -157,7 +184,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
         toast.error(res.error || 'Güncellenirken hata oluştu')
       }
     } else {
-      const res = await createModelAction({ title, imageUrl: finalImageUrl })
+      const res: any = await createModelAction({ title, imageUrl: finalImageUrl })
       if (res.success && res.data) {
         setModels([res.data, ...models])
         toast.success('Yeni model eklendi')
@@ -238,69 +265,127 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="model-grid">
           {(provided, snapshot) => (
-            <motion.div
+            <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 ${snapshot.isDraggingOver ? 'border-dashed border-blue-500' : ''}`}
+              className={cn(
+                "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 transition-all",
+                snapshot.isDraggingOver && "bg-black/[0.01] rounded-2xl p-2"
+              )}
             >
-              <AnimatePresence mode="popLayout">
-                {filteredModels.map((model, index) => {
-                  const isActive = model.is_active ?? true
+              {filteredModels.map((model, index) => {
+                const isActive = model.is_active ?? true
 
-                  return (
-                    <Draggable key={model.id} draggableId={model.id} index={index}>
-                      {(provided, snapshot) => (
-                        <motion.div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`bg-card rounded-2xl border border-border/50 overflow-hidden flex flex-col group relative shadow-sm hover:shadow-md transition-all ${!isActive ? 'opacity-60 grayscale-[0.5]' : ''} ${snapshot.isDragging ? 'scale-105 shadow-lg' : ''}`}
-                          style={{
-                            ...provided.draggableProps.style,
-                            userSelect: 'none'
-                          }}
-                        >
-                          <div
-                            {...(provided.dragHandleProps ?? {})}
-                            className="absolute top-3 right-3 z-10 rounded-full bg-white/95 p-2 text-muted-foreground shadow-sm cursor-grab active:cursor-grabbing"
-                            aria-label="Sürükle"
-                          >
-                            <GripVertical className="size-4" />
-                          </div>
-                          <div className="relative aspect-square bg-muted/30 overflow-hidden">
-                            <img
-                              src={model.image_url}
-                              alt={model.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
-                            {/* Hover Actions */}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
-                              <button onClick={() => openModal(model)} className="p-2.5 bg-white text-black rounded-full hover:scale-110 transition-transform shadow-lg" title="Düzenle">
-                                <Edit className="size-4" />
-                              </button>
-                              <button onClick={() => handleToggleActive(model.id, isActive)} disabled={togglingId === model.id} className="p-2.5 bg-white text-black rounded-full hover:scale-110 transition-transform shadow-lg" title={isActive ? 'Gizle' : 'Göster'}>
-                                {isActive ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                              </button>
-                              <button onClick={() => handleDelete(model.id)} disabled={deletingId === model.id} className="p-2.5 bg-red-500 text-white rounded-full hover:scale-110 transition-transform shadow-lg" title="Sil">
-                                {deletingId === model.id ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
-                              </button>
-                            </div>
+                return (
+                  <Draggable key={model.id} draggableId={model.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={cn(
+                          "bg-white rounded-2xl border border-black/10 overflow-hidden flex flex-col group relative transition-shadow duration-200",
+                          !isActive && "opacity-60 grayscale-[0.3]",
+                          snapshot.isDragging ? "shadow-2xl ring-2 ring-black bg-white scale-[1.02] z-50" : "shadow-2xs hover:shadow-lg"
+                        )}
+                        style={{
+                          ...provided.draggableProps.style,
+                          userSelect: 'none'
+                        }}
+                      >
+                        {/* Drag Handle & Order Badge */}
+                        <div className="flex items-center justify-between p-2.5 bg-black/[0.02] border-b border-black/5">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-black text-white shadow-2xs">
+                              #{index + 1}
+                            </span>
                             {!model.is_active && (
-                              <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold uppercase rounded-md tracking-wider">
+                              <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-black/50 bg-black/5 px-1.5 py-0.5 rounded">
                                 Gizli
-                              </div>
+                              </span>
                             )}
                           </div>
-                          <div className="p-4 flex items-center justify-between border-t border-border/30">
-                            <h3 className="font-semibold text-sm text-foreground truncate">{model.title}</h3>
+
+                          <div className="flex items-center gap-1">
+                            {/* Quick 1-Click Order Shifting */}
+                            {searchQuery === '' && (
+                              <div className="flex items-center gap-0.5 mr-1">
+                                <button
+                                  type="button"
+                                  disabled={index === 0}
+                                  onClick={() => handleMoveOrder(index, 'up')}
+                                  className="p-1 rounded-md hover:bg-black/10 disabled:opacity-30 disabled:hover:bg-transparent text-black transition-colors"
+                                  title="Bir Yukarı Taşı"
+                                >
+                                  <ChevronUp className="size-3.5" />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={index === models.length - 1}
+                                  onClick={() => handleMoveOrder(index, 'down')}
+                                  className="p-1 rounded-md hover:bg-black/10 disabled:opacity-30 disabled:hover:bg-transparent text-black transition-colors"
+                                  title="Bir Aşağı Taşı"
+                                >
+                                  <ChevronDown className="size-3.5" />
+                                </button>
+                              </div>
+                            )}
+
+                            {/* Drag Grip Handle */}
+                            <div
+                              {...(provided.dragHandleProps ?? {})}
+                              className="p-1.5 rounded-lg bg-black/5 hover:bg-black hover:text-white text-black/70 cursor-grab active:cursor-grabbing transition-colors"
+                              title="Sürükleyip Sırayı Değiştir"
+                            >
+                              <GripVertical className="size-4" />
+                            </div>
                           </div>
-                        </motion.div>
-                      )}
-                    </Draggable>
-                  )
-                })}
-              </AnimatePresence>
+                        </div>
+
+                        {/* Image Container */}
+                        <div className="relative aspect-square bg-black/[0.02] overflow-hidden">
+                          <img
+                            src={model.image_url}
+                            alt={model.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                          {/* Hover Actions Overlay */}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-xs">
+                            <button
+                              onClick={() => openModal(model)}
+                              className="p-2.5 bg-white text-black rounded-full hover:scale-110 transition-transform shadow-md"
+                              title="Düzenle"
+                            >
+                              <Edit className="size-4" />
+                            </button>
+                            <button
+                              onClick={() => handleToggleActive(model.id, isActive)}
+                              disabled={togglingId === model.id}
+                              className="p-2.5 bg-white text-black rounded-full hover:scale-110 transition-transform shadow-md"
+                              title={isActive ? 'Gizle' : 'Göster'}
+                            >
+                              {isActive ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                            </button>
+                            <button
+                              onClick={() => handleDelete(model.id)}
+                              disabled={deletingId === model.id}
+                              className="p-2.5 bg-red-600 text-white rounded-full hover:scale-110 transition-transform shadow-md"
+                              title="Sil"
+                            >
+                              {deletingId === model.id ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 border-t border-black/5 bg-white">
+                          <h3 className="font-semibold text-xs sm:text-sm text-black truncate">{model.title}</h3>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                )
+              })}
               {provided.placeholder}
-            </motion.div>
+            </div>
           )}
         </Droppable>
       </DragDropContext>

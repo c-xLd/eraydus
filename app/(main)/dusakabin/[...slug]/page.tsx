@@ -94,7 +94,7 @@ export default async function ProgrammaticSEOPage({ params }: PageProps) {
 
   const breadcrumbs = [
     { name: 'Ana Sayfa', url: '/' },
-    { name: 'Duşakabinler', url: '/koleksiyonlar' },
+    { name: 'Duşakabinler', url: '/urunler' },
     { name: config.h1, url: `/dusakabin/${resolvedParams.slug.join('/')}` },
   ];
 
@@ -173,10 +173,10 @@ export default async function ProgrammaticSEOPage({ params }: PageProps) {
               </p>
             </div>
             <Link
-              href="/koleksiyonlar"
+              href="/urunler"
               className="inline-flex items-center text-sm font-medium text-champagne hover:underline mt-4 md:mt-0"
             >
-              Tüm Koleksiyonları İncele
+              Tüm Ürünleri İncele
               <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
@@ -224,7 +224,7 @@ export default async function ProgrammaticSEOPage({ params }: PageProps) {
                           </span>
                         </div>
                         <Link
-                          href={`/koleksiyonlar/${categorySlug}/${product.slug}`}
+                          href={`/urunler/${categorySlug}/${product.slug}`}
                           className="inline-flex items-center text-xs font-medium bg-foreground text-background px-4 py-2 rounded-md hover:bg-foreground/90 transition-colors"
                         >
                           İncele

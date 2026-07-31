@@ -69,8 +69,8 @@ export const pagesSeoData: PageSEO[] = [
     lastModified: '2023-10-24T10:00:00Z',
   },
   {
-    id: 'koleksiyonlar',
-    path: '/koleksiyonlar',
+    id: 'urunler',
+    path: '/urunler',
     title: 'Koleksiyonlar',
     description: 'Edge, Pure ve Neo serilerimizle banyonuza değer katacak modern duşakabin modellerini inceleyin.',
     keywords: 'sürgülü duşakabin, pivot kapı, walk-in kabin, siyah profil',

@@ -32,7 +32,7 @@ export async function createBlogPost(data: {
       updated_at: new Date().toISOString()
     }
 
-    const { data: post, error } = await supabase
+    const { data: post, error } = await (supabase as any)
       .from('blog')
       .insert(payload)
       .select()
@@ -83,7 +83,7 @@ export async function updateBlogPost(id: string, data: {
 
 
 
-    const { error, count } = await supabase
+    const { error, count } = await (supabase as any)
       .from('blog')
       .update(patch)
       .eq('id', id)
@@ -109,7 +109,7 @@ export async function deleteBlogPost(id: string) {
   try {
     const supabase = await createClient()
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('blog')
       .delete()
       .eq('id', id)
@@ -128,7 +128,7 @@ export async function deleteBlogPost(id: string) {
 export async function getBlogPostById(id: string) {
   try {
     const supabase = await createClient()
-    const { data: post, error } = await supabase
+    const { data: post, error } = await (supabase as any)
       .from('blog')
       .select('*')
       .eq('id', id)

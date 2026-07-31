@@ -23,6 +23,7 @@
   ],
   "geminicodeassist.outlines.automaticOutlineGeneration": true,
   "claudeCode.disableLoginPrompt": true,
+  "css.lint.unknownAtRules": "ignore",
   "claudeCode.environmentVariables": [
     {
       "name": "ANTHROPIC_BASE_URL",

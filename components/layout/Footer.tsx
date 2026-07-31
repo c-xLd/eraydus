@@ -10,7 +10,7 @@ export function Footer() {
         <div className="container mx-auto px-6 max-w-[1440px] py-10 lg:py-16 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8">
           <div>
             <h3 className="text-xl lg:text-2xl font-light tracking-wide mb-2">Banyo Mimarisine Dair İlham Alın</h3>
-            <p className="text-white/75 text-sm">Yeni koleksiyonlar, özel üretim PVD kaplamalar ve mimari çözümlerimizden haberdar olun.</p>
+            <p className="text-white/75 text-sm">Yeni ürünler, özel üretim PVD kaplamalar ve mimari çözümlerimizden haberdar olun.</p>
           </div>
           <div className="w-full lg:w-auto">
             <NewsletterForm />
@@ -70,7 +70,7 @@ export function Footer() {
               <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Keşfet</h4>
               <ul className="space-y-3 text-sm">
                 <li><Link href="/dusakabin-modelleri" className="text-champagne font-semibold hover:underline transition-colors">2026 Duşakabin Modelleri</Link></li>
-                <li><Link href="/koleksiyonlar" className="text-white/80 hover:text-white transition-colors">Tüm Koleksiyonlar</Link></li>
+                <li><Link href="/urunler" className="text-white/80 hover:text-white transition-colors">Tüm Ürünler</Link></li>
                 <li>
                   <Link href="/tasarla" className="text-white/80 hover:text-white transition-colors flex items-center gap-1.5 group">
                     <span>3D Konfigüratör</span>

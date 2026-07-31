@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import {
   X, Settings, FileText, BarChart, Bell, Target, Star, LogOut,
   LayoutDashboard, Building2, Package, Hexagon, Globe, Search,
-  Calendar, MessageSquareQuote, Users, BarChart3, TrendingUp, Users2
+  Calendar, MessageSquareQuote, Users, BarChart3, TrendingUp, Users2, Image as ImageIcon
 } from "lucide-react"
 
 interface AdminMobileMenuSheetProps {
@@ -24,6 +24,8 @@ const navGroups = [
   {
     title: "Vitrin",
     items: [
+      { icon: Package, label: "Ürün Yönetimi", href: "/admin/products" },
+      { icon: ImageIcon, label: "Ortam Kütüphanesi", href: "/admin/media" },
       { icon: Hexagon, label: "Kumlama Modelleri", href: "/admin/kumlama-modelleri" },
       { icon: Globe, label: "Sayfa Yönetimi", href: "/admin/pages" },
       { icon: Search, label: "SEO Ayarları", href: "/admin/seo" },

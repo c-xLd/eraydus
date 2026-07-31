@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/server'
-import type { ProductWithOptions, GlassOption, ProfileOption } from '@/features/products/types/product'
+import type { ProductWithOptions, GlassOption, ProfileOption, ProductDetail } from '@/features/products/types/product'
 import { cache } from 'react'
 
 /**
@@ -37,6 +37,9 @@ export const getProductBySlug = cache(async (slug: string): Promise<{ success: b
       return { success: false, error: 'Ürün bulunamadı' }
     }
 
+    // Ensure product is typed correctly for downstream usage
+    const productTyped = product as ProductDetail
+
     // Fetch glass and profile options in parallel
     const [glassResult, profileResult] = await Promise.all([
       supabase.from('glass_options').select('*').eq('status', 'active').order('sort_order'),
@@ -49,8 +52,8 @@ export const getProductBySlug = cache(async (slug: string): Promise<{ success: b
     }
 
     // Filter glass and profile options based on product compatibility
-    const compatibleGlassIds = product.compatible_glass || []
-    const compatibleProfileIds = product.compatible_profiles || []
+    const compatibleGlassIds = productTyped.compatible_glass || []
+    const compatibleProfileIds = productTyped.compatible_profiles || []
 
     const filteredGlassOptions = (glassResult.data || []).filter((opt: GlassOption) =>
       compatibleGlassIds.length === 0 || compatibleGlassIds.includes(opt.id)
@@ -60,12 +63,27 @@ export const getProductBySlug = cache(async (slug: string): Promise<{ success: b
       compatibleProfileIds.length === 0 || compatibleProfileIds.includes(opt.id)
     )
 
+    const rawImages = Array.isArray(productTyped.images) ? productTyped.images : []
+    const mainImageUrl = productTyped.main_image_url || (rawImages.length > 0 ? String(rawImages[0]) : null)
+
+    const existingGallery = productTyped.gallery || []
+    const gallery = existingGallery.length > 0
+      ? existingGallery
+      : rawImages.map((imgUrl: string, idx: number) => ({
+          id: `${productTyped.id}-img-${idx}`,
+          product_id: productTyped.id,
+          image_url: String(imgUrl),
+          alt_text: productTyped.name,
+          sort_order: idx
+        }))
+
     const productWithOptions: ProductWithOptions = {
-      ...product,
+      ...productTyped,
+      main_image_url: mainImageUrl,
       glass_options: filteredGlassOptions,
       profile_options: filteredProfileOptions,
-      gallery: product.gallery || [],
-      variants: (product.variants || []).filter((v: { status: string }) => v.status === 'active')
+      gallery,
+      variants: (productTyped.variants || []).filter((v: { status: string }) => v.status === 'active')
     }
 
     return { success: true, data: productWithOptions }

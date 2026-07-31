@@ -25,11 +25,11 @@ export function AdminLayoutShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Mobilde native bir top bar (Logo veya sayfa adı için) */}
-        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-grid/50 sticky top-0 z-40">
-          <span className="font-bold text-xl tracking-tight text-blueprint-900 font-mono">
+        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-black/5 sticky top-0 z-40">
+          <span className="font-bold text-[15px] tracking-wide text-black font-sans">
             ERAYDUŞ
           </span>
-          <div className="size-8 bg-blueprint-600/20 rounded-full flex items-center justify-center text-blueprint-600 text-xs font-bold">
+          <div className="size-8 bg-black/5 rounded-full flex items-center justify-center text-black text-xs font-bold border border-black/5">
             A
           </div>
         </div>

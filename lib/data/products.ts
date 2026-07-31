@@ -17,6 +17,7 @@ export type Product = {
   collectionSlug?: string
   layoutType: string
   price: number
+  originalPrice?: number | null
   isNew: boolean
   description: string
   longDescription: string

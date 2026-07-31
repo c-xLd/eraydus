@@ -83,7 +83,7 @@ export async function deleteProduct(id: string) {
   }
 
   revalidatePath('/admin/products')
-  revalidatePath('/koleksiyonlar')
+  revalidatePath('/urunler')
 
   return { success: true }
 }
@@ -101,7 +101,7 @@ export async function createCategory(data: { name: string, slug: string, parent_
   const { error } = await supabase.from('categories').insert(data)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/categories')
-  revalidatePath('/koleksiyonlar', 'layout')
+  revalidatePath('/urunler', 'layout')
   revalidatePath('/', 'layout')
   return { success: true }
 }
@@ -111,7 +111,7 @@ export async function deleteCategory(id: string) {
   const { error } = await supabase.from('categories').delete().eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/categories')
-  revalidatePath('/koleksiyonlar', 'layout')
+  revalidatePath('/urunler', 'layout')
   revalidatePath('/', 'layout')
   return { success: true }
 }
@@ -121,7 +121,7 @@ export async function updateCategory(id: string, data: any) {
   const { error } = await supabase.from('categories').update(data).eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/categories')
-  revalidatePath('/koleksiyonlar', 'layout')
+  revalidatePath('/urunler', 'layout')
   revalidatePath('/', 'layout')
   return { success: true }
 }
@@ -167,13 +167,13 @@ export async function updateAttributeTerm(id: string, attribute_id: string, data
 }
 
 export async function revalidateProductPaths(categorySlug?: string, productSlug?: string) {
-  revalidatePath('/koleksiyonlar')
-  revalidatePath('/koleksiyonlar', 'layout')
+  revalidatePath('/urunler')
+  revalidatePath('/urunler', 'layout')
   if (categorySlug) {
-    revalidatePath(`/koleksiyonlar/${categorySlug}`)
-    revalidatePath(`/koleksiyonlar/${categorySlug}`, 'layout')
+    revalidatePath(`/urunler/${categorySlug}`)
+    revalidatePath(`/urunler/${categorySlug}`, 'layout')
     if (productSlug) {
-      revalidatePath(`/koleksiyonlar/${categorySlug}/${productSlug}`)
+      revalidatePath(`/urunler/${categorySlug}/${productSlug}`)
     }
   }
   revalidatePath('/')
@@ -413,7 +413,7 @@ export async function importWooCommerceCSVAction(csvText: string) {
 
     revalidatePath('/admin/products')
     revalidatePath('/admin/products/categories')
-    revalidatePath('/koleksiyonlar')
+    revalidatePath('/urunler')
     revalidatePath('/')
 
     return {
@@ -474,7 +474,7 @@ export async function bulkDeleteProducts(ids: string[]) {
   }
 
   revalidatePath('/admin/products')
-  revalidatePath('/koleksiyonlar')
+  revalidatePath('/urunler')
 
   return { success: true }
 }
@@ -492,7 +492,7 @@ export async function updateProductStatus(id: string, status: string) {
   }
 
   revalidatePath('/admin/products')
-  revalidatePath('/koleksiyonlar')
+  revalidatePath('/urunler')
 
   return { success: true }
 }
@@ -510,7 +510,7 @@ export async function updateProductPrice(id: string, base_price: number, sale_pr
   }
 
   revalidatePath('/admin/products')
-  revalidatePath('/koleksiyonlar')
+  revalidatePath('/urunler')
 
   return { success: true }
 }
@@ -528,7 +528,7 @@ export async function updateProductSEO(id: string, description: string) {
   }
 
   revalidatePath('/admin/products')
-  revalidatePath('/koleksiyonlar')
+  revalidatePath('/urunler')
 
   return { success: true }
 }
@@ -547,7 +547,7 @@ export async function updateProductBasicInfo(id: string, name: string, sku: stri
   }
 
   revalidatePath('/admin/products')
-  revalidatePath('/koleksiyonlar')
+  revalidatePath('/urunler')
 
   return { success: true }
 }

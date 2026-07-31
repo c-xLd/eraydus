@@ -446,7 +446,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
                 <Link href={`/admin/products/new?id=${viewingProduct.id}`} className="flex-1 bg-black text-white text-center py-3 rounded-xl text-sm font-bold hover:bg-black/90 transition-colors shadow-md">
                   Tam Düzenle
                 </Link>
-                <Link href={`/koleksiyonlar/${viewingProduct.category?.slug || 'genel'}/${viewingProduct.slug}`} target="_blank" className="flex-1 bg-white border border-gray-200 text-gray-700 text-center py-3 rounded-xl text-sm font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                <Link href={`/urunler/${viewingProduct.category?.slug || 'genel'}/${viewingProduct.slug}`} target="_blank" className="flex-1 bg-white border border-gray-200 text-gray-700 text-center py-3 rounded-xl text-sm font-bold hover:bg-gray-50 transition-colors shadow-sm">
                   Sitede Gör
                 </Link>
               </div>
@@ -855,7 +855,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
 
                   <td className={`px-6 ${cellPadding}`} onClick={e => e.stopPropagation()}>
                     <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Link href={`/koleksiyonlar/${product.category?.slug || 'genel'}/${product.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all" title="Sitede Gör">
+                      <Link href={`/urunler/${product.category?.slug || 'genel'}/${product.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all" title="Sitede Gör">
                         <Eye className="size-4" />
                       </Link>
                       <Link href={`/admin/products/new?id=${product.id}`} className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all" title="Düzenle">

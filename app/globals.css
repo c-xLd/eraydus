@@ -93,6 +93,11 @@
   --animation-draft-line: draft-line 2s linear infinite;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 :root {
   /* Eraydus Neutral Tokens */
   --background: #FFFFFF;
@@ -351,4 +356,17 @@
   .container {
     max-width: 1440px;
   }
+}
+
+/* Mobile App Utility & Native Mechanics */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
