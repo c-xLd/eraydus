@@ -9,7 +9,7 @@ export default async function AdminBlogPage() {
   const supabase = await createClient()
 
   const { data: posts, error } = await supabase
-    .from('content_calendar')
+    .from('blog')
     .select('*')
     .eq('content_type', 'blog')
     .order('published_at', { ascending: false })

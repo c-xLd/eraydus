@@ -42,7 +42,7 @@ export function InlineEditToolbar() {
 
   // Performance URL - only computed on client to avoid hydration mismatch
   const [performanceUrl, setPerformanceUrl] = useState(
-    'https://pagespeed.web.dev/analysis?url=https%3A%2F%2Feraydus.com.tr'
+    'https://pagespeed.web.dev/analysis?url=https%3A%2F%2Feraydus.net'
   )
   useEffect(() => {
     setPerformanceUrl(

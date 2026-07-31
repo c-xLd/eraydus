@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Target, Lightbulb, Leaf, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { InlineEditable } from '@/features/content/components/InlineEditable'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -98,11 +99,13 @@ export default function AboutClient({ content }: AboutClientProps) {
               className="relative"
             >
               <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface group">
-                <InlineEditable path="story.image" value={story.image} type="image" className="w-full h-full block">
-                  <img
-                    src={story.image}
+                <InlineEditable path="story.image" value={story.image} type="image" className="w-full h-full block relative">
+                  <Image
+                    src={story.image || ''}
                     alt="Hikayemiz"
-                    className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                   />
                 </InlineEditable>
               </div>
@@ -331,11 +334,13 @@ export default function AboutClient({ content }: AboutClientProps) {
               className="relative"
             >
               <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-white/5 group">
-                <InlineEditable path="facility.image" value={facility.image} type="image" className="w-full h-full block">
-                  <img
-                    src={facility.image}
+                <InlineEditable path="facility.image" value={facility.image} type="image" className="w-full h-full block relative">
+                  <Image
+                    src={facility.image || ''}
                     alt="Tesis"
-                    className="w-full h-full object-cover opacity-80 transition-transform duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover opacity-80 transition-transform duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100"
                   />
                 </InlineEditable>
               </div>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'Ankara jakuzi modelleri, lüks hidromasajlı küvetler, akrilik tekneler. Banyonuzda spaya dönüşen rahatlatıcı ve şık tasarımlar, güncel jakuzi fiyatları.',
   keywords: 'jakuzi, jakuzi modelleri, ankara jakuzi, hidromasajlı küvet, banyo küveti, akrilik tekne',
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/jakuzi-tekneler`,
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/jakuzi-tekneler`,
   }
 }
 

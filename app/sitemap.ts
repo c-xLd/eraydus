@@ -115,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .eq('status', 'active'),
 
       supabase
-        .from('content_calendar')
+        .from('blog')
         .select('slug, updated_at, published_at')
         .eq('content_type', 'blog')
         .eq('status', 'published'),

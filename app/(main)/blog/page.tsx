@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Banyo dekorasyon trendleri, şık duşakabin seçimi, nano teknoloji cam özellikleri ve uzun ömürlü kullanım için pratik temizlik rehberleri.",
   keywords: "banyo dekorasyonu, duşakabin trendleri, duşakabin seçimi, nano cam nedir, ankara duşakabin, banyo yenileme",
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/blog`,
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/blog`,
   }
 }
 
@@ -19,14 +19,14 @@ export default async function BlogPage() {
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "Erayduş Blog - Banyo Dekorasyonu ve Duşakabin",
-    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/blog`,
+    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/blog`,
     "description": "Tasarım kararlarını kolaylaştıran uzman rehberleri, bakım önerileri ve mekanınıza ilham verecek hikâyeler.",
     "publisher": {
       "@type": "Organization",
       "name": "Erayduş",
       "logo": {
         "@type": "ImageObject",
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/images/logo.png`
+        "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/images/logo.png`
       }
     }
   };

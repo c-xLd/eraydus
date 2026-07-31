@@ -33,7 +33,7 @@ export function AdminBottomNav({ onOpenMenu }: AdminBottomNavProps) {
   ]
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-t border-gray-200/50 pb-[env(safe-area-inset-bottom)] shadow-[0_-5px_20px_-10px_rgba(0,0,0,0.05)]">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-blueprint-950/80 backdrop-blur-xl border-t border-blueprint-800/50 pb-[env(safe-area-inset-bottom)] shadow-[0_-5px_20px_-10px_rgba(0,0,0,0.25)]">
       <div className="flex items-center justify-around h-16 px-2">
         {tabs.map((tab) => {
           const Icon = tab.icon
@@ -42,23 +42,24 @@ export function AdminBottomNav({ onOpenMenu }: AdminBottomNavProps) {
               key={tab.name}
               href={tab.href}
               className={`flex flex-col items-center justify-center w-full h-full gap-1 p-2 touch-manipulation transition-colors ${
-                tab.active ? "text-black" : "text-gray-400 hover:text-gray-600"
+                tab.active ? "text-white" : "text-blueprint-400/60 hover:text-white"
               }`}
             >
-              <Icon className={`size-6 ${tab.active ? "fill-black/10" : ""}`} strokeWidth={tab.active ? 2.5 : 2} />
-              <span className={`text-[10px] font-semibold ${tab.active ? "text-black" : "text-gray-500"}`}>
+              <Icon className={`size-6 ${tab.active ? "text-white" : "text-blueprint-400/60 hover:text-white"}`}
+                    strokeWidth={tab.active ? 2.5 : 2} />
+              <span className={`text-[10px] font-semibold ${tab.active ? "text-white" : "text-blueprint-500/60 hover:text-white"}`}>
                 {tab.name}
               </span>
             </Link>
           )
         })}
-        
+
         <button
           onClick={onOpenMenu}
-          className="flex flex-col items-center justify-center w-full h-full gap-1 p-2 touch-manipulation text-gray-400 hover:text-gray-600 transition-colors"
+          className="flex flex-col items-center justify-center w-full h-full gap-1 p-2 touch-manipulation text-blueprint-400/60 hover:text-white transition-colors"
         >
           <Menu className="size-6" strokeWidth={2} />
-          <span className="text-[10px] font-semibold text-gray-500">
+          <span className="text-[10px] font-semibold text-blueprint-500/60 hover:text-white">
             Daha Fazla
           </span>
         </button>

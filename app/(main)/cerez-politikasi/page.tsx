@@ -33,7 +33,7 @@ export default function CookiePolicyPage() {
           <div className="relative z-10 prose prose-lg prose-invert max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-champagne hover:prose-a:text-champagne/80 prose-li:text-muted-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:font-medium prose-strong:text-foreground">
             
             <p className="lead text-xl text-foreground/80 mb-10">
-              Bu politika, eraydus.com.tr ziyaretçilerinin sitemizi daha verimli kullanabilmesi ve deneyimlerinin iyileştirilmesi amacıyla kullanılan çerezlerin türleri ve kullanım şekilleri hakkında bilgi vermeyi amaçlamaktadır.
+              Bu politika, eraydus.net ziyaretçilerinin sitemizi daha verimli kullanabilmesi ve deneyimlerinin iyileştirilmesi amacıyla kullanılan çerezlerin türleri ve kullanım şekilleri hakkında bilgi vermeyi amaçlamaktadır.
             </p>
 
             <div className="space-y-12">
@@ -89,7 +89,7 @@ export default function CookiePolicyPage() {
                   Bize Ulaşın
                 </h2>
                 <p>
-                  Çerez Politikamız ile ilgili sorularınız için bizimle her zaman <a href="mailto:info@eraydus.com.tr">info@eraydus.com.tr</a> 
+                  Çerez Politikamız ile ilgili sorularınız için bizimle her zaman <a href="mailto:info@eraydus.net">info@eraydus.net</a> 
                   adresi üzerinden iletişime geçebilirsiniz.
                 </p>
               </section>

@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
                   Giriş
                 </h2>
                 <p>
-                  Erayduş ("Şirket", "biz", "bize" veya "bizim") olarak, gizliliğinize saygı duyuyor ve web sitemizi ("eraydus.com.tr") 
+                  Erayduş ("Şirket", "biz", "bize" veya "bizim") olarak, gizliliğinize saygı duyuyor ve web sitemizi ("eraydus.net") 
                   kullanırken sağladığınız kişisel bilgileri korumayı taahhüt ediyoruz. Bu Gizlilik Politikası, hakkınızda ne tür bilgiler 
                   topladığımızı, bu bilgileri nasıl kullandığımızı ve koruduğumuzu açıklamaktadır.
                 </p>
@@ -105,7 +105,7 @@ export default function PrivacyPolicyPage() {
                 <p className="mt-4 not-prose text-base leading-relaxed text-muted-foreground bg-background p-6 rounded-2xl border border-border/50">
                   <strong className="text-foreground font-semibold block mb-2">Erayduş Genel Merkez</strong>
                   Ankara, Türkiye<br />
-                  <span className="inline-flex items-center gap-2 mt-2"><strong className="text-foreground">E-posta:</strong> <a href="mailto:info@eraydus.com.tr" className="text-champagne hover:underline">info@eraydus.com.tr</a></span><br />
+                  <span className="inline-flex items-center gap-2 mt-2"><strong className="text-foreground">E-posta:</strong> <a href="mailto:info@eraydus.net" className="text-champagne hover:underline">info@eraydus.net</a></span><br />
                   <span className="inline-flex items-center gap-2"><strong className="text-foreground">Telefon:</strong> <a href="tel:+905551234567" className="text-champagne hover:underline">+90 555 123 4567</a></span>
                 </p>
               </section>

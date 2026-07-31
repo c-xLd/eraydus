@@ -10,8 +10,8 @@ import { cn } from '@/lib/utils'
 
 /* ── Navigation data ───────────────────────────────────────────── */
 const COLLECTIONS = [
-  { href: '/koleksiyonlar', label: 'Tüm Koleksiyonlar', desc: 'Lüks ve modern duş sistemleri' },
-  { href: '/koleksiyonlar/banyo-dolaplari', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları' },
+  { href: '/koleksiyonlar', label: 'Tüm Ürünler', desc: 'Lüks ve modern duş sistemleri' },
+  { href: '/koleksiyonlar/banyo-dolabi', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları' },
   { href: '/kumlama-modelleri', label: 'Kumlama Modelleri', desc: 'Özel tasarım cam desenleri' },
   { href: '/jakuzi-tekneler', label: 'Jakuzi ve Tekneler', desc: 'Konforlu ve şık banyo keyfi' },
 ]
@@ -81,11 +81,11 @@ export function Header() {
   const dragControls = useDragControls()
 
   // Pages with a dark, full-bleed hero where the bar sits transparent.
-  const isDarkHeroPage = pathname === '/' || pathname === '/jakuzi-tekneler'
+  const isDarkHeroPage = !pathname || pathname === '/' || pathname === '' || pathname === '/jakuzi-tekneler' || pathname.includes('/jakuzi-tekneler')
   const solid = isScrolled || !isDarkHeroPage || menuOpen
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 12)
+    const onScroll = () => setIsScrolled(window.scrollY > 50)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -145,7 +145,7 @@ export function Header() {
                   solid ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'
                 )}
               >
-                Koleksiyonlar
+                Ürünler
                 <ChevronDown
                   className={cn(
                     'size-4 opacity-60 transition-transform duration-300',

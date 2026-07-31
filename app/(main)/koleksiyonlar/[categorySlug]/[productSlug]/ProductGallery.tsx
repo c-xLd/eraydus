@@ -68,6 +68,7 @@ export default function ProductGallery({ images, productName, collectionName, is
               src={images[activeImage]}
               alt=""
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover blur-3xl opacity-35 scale-110 pointer-events-none"
             />
 
@@ -76,13 +77,13 @@ export default function ProductGallery({ images, productName, collectionName, is
               src={images[activeImage]}
               alt={productName}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-contain transition-transform duration-100 ease-out pointer-events-none"
               style={{
                 transformOrigin: isZoomed ? `${zoomPos.x}% ${zoomPos.y}%` : 'center',
                 transform: isZoomed ? 'scale(1.4)' : 'scale(1)',
               }}
               priority
-              sizes="(max-width: 1024px) 100vw, 46vw"
             />
           </motion.div>
         </AnimatePresence>

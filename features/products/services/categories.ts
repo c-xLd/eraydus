@@ -1,4 +1,6 @@
-import { createClient } from '@/services/supabase/server'
+import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
+import { createPublicClient } from '@/services/supabase/server'
 
 export interface Category {
   id: string
@@ -8,34 +10,46 @@ export interface Category {
   status: string
 }
 
-export async function getCategoryBySlug(slug: string): Promise<Category | null> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('slug', slug)
-      .single()
-    
-    if (error || !data) return null
-    return data as Category
-  } catch {
-    return null
-  }
-}
+export const getCategoryBySlug = cache(
+  unstable_cache(
+    async (slug: string): Promise<Category | null> => {
+      try {
+        const supabase = await createPublicClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('*')
+          .eq('slug', slug)
+          .single()
+        
+        if (error || !data) return null
+        return data as Category
+      } catch {
+        return null
+      }
+    },
+    ['get-category-by-slug'],
+    { tags: ['categories'], revalidate: 3600 }
+  )
+)
 
-export async function getCategories(): Promise<Category[]> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('status', 'active')
-      .order('name', { ascending: true })
-    
-    if (error || !data) return []
-    return data as Category[]
-  } catch {
-    return []
-  }
-}
+export const getCategories = cache(
+  unstable_cache(
+    async (): Promise<Category[]> => {
+      try {
+        const supabase = await createPublicClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('*')
+          .eq('status', 'active')
+          .order('name', { ascending: true })
+        
+        if (error || !data) return []
+        return data as Category[]
+      } catch {
+        return []
+      }
+    },
+    ['get-categories-v2'],
+    { tags: ['categories'], revalidate: 3600 }
+  )
+)

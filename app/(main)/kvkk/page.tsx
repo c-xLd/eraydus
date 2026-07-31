@@ -89,7 +89,7 @@ export default function KVKKPage() {
                 <p>
                   KVKK’nın 11. maddesi uyarınca, kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, 
                   işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, verilerinizin silinmesini veya yok edilmesini talep etme 
-                  haklarına sahipsiniz. Başvurularınızı <strong>info@eraydus.com.tr</strong> adresine iletebilirsiniz.
+                  haklarına sahipsiniz. Başvurularınızı <strong>info@eraydus.net</strong> adresine iletebilirsiniz.
                 </p>
               </section>
             </div>

@@ -11,7 +11,7 @@ export function AdminLayoutShell({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] font-sans text-black flex">
+    <div className="min-h-screen bg-paper text-text flex">
       {/* Sidebar - Sadece Desktop'ta görünür */}
       <div className="hidden md:block">
         <AdminSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
@@ -23,11 +23,13 @@ export function AdminLayoutShell({ children }: { children: React.ReactNode }) {
         <div className="hidden md:block">
           <AdminHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         </div>
-        
+
         {/* Mobilde native bir top bar (Logo veya sayfa adı için) */}
-        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-40">
-          <span className="font-bold text-xl tracking-tight">ERAYDUŞ</span>
-          <div className="size-8 bg-black rounded-full flex items-center justify-center text-white text-xs font-bold">
+        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-grid/50 sticky top-0 z-40">
+          <span className="font-bold text-xl tracking-tight text-blueprint-900 font-mono">
+            ERAYDUŞ
+          </span>
+          <div className="size-8 bg-blueprint-600/20 rounded-full flex items-center justify-center text-blueprint-600 text-xs font-bold">
             A
           </div>
         </div>

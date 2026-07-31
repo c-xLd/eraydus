@@ -435,7 +435,7 @@ export default function ProductEditorClient({
       }
 
       toast.success("WhatsApp mesajı AI tarafından üretildi!")
-      console.log("WhatsApp text:", result.content)
+
     } catch (err: any) {
       toast.error('WhatsApp mesajı üretilirken hata: ' + err.message)
     } finally {

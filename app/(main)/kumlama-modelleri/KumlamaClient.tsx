@@ -281,7 +281,7 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
               }}
             >
               {/* Left — Image */}
-              <div className="relative flex-1 bg-zinc-900 min-h-[55vw] md:min-h-0 select-none touch-none">
+              <div className="relative w-full h-[60vh] md:h-auto md:flex-1 bg-zinc-950 select-none touch-none">
                 <Image
                   src={selectedModel.image_url}
                   alt={selectedModel.title}
@@ -295,14 +295,14 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
                 {filtered.length > 1 && (
                   <>
                     <button
-                      className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+                      className="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 p-2 md:p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
                       aria-label="Önceki"
                       onClick={(e) => { e.stopPropagation(); navigate(-1) }}
                     >
                       <ChevronLeft className="size-5" />
                     </button>
                     <button
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+                      className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 p-2 md:p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
                       aria-label="Sonraki"
                       onClick={(e) => { e.stopPropagation(); navigate(1) }}
                     >
@@ -313,29 +313,29 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
               </div>
 
               {/* Right — Info panel */}
-              <div className="flex flex-col justify-between gap-8 bg-[#111] md:w-80 p-8 md:p-10">
-                <div className="flex flex-col gap-6">
+              <div className="flex w-full h-[40vh] md:h-auto flex-col justify-between gap-6 md:gap-8 bg-[#0F0F0F] md:w-80 p-6 md:p-10 overflow-y-auto">
+                <div className="flex flex-col gap-4 md:gap-6 mt-2 md:mt-0">
                   {/* Label */}
-                  <p className="text-[11px] tracking-[0.3em] uppercase text-champagne font-medium">
+                  <p className="text-[10px] md:text-[11px] tracking-[0.25em] md:tracking-[0.3em] uppercase text-champagne font-medium">
                     Kumlama Deseni
                   </p>
 
                   {/* Title */}
                   <div>
-                    <h3 id="modal-title" className="text-2xl md:text-3xl font-semibold text-white leading-tight">
+                    <h3 id="modal-title" className="text-xl md:text-3xl font-light md:font-semibold text-white leading-tight">
                       {selectedModel.title}
                     </h3>
-                    <div className="h-px bg-gradient-to-r from-champagne/40 to-transparent mt-5" />
+                    <div className="h-px bg-gradient-to-r from-champagne/40 to-transparent mt-4 md:mt-5" />
                   </div>
 
                   {/* Details */}
-                  <ul className="flex flex-col gap-3">
+                  <ul className="flex flex-col gap-2 md:gap-3">
                     {[
                       'Standart ve özel ölçü camlara uygulanır',
                       'UV dayanımlı, solmaz boya',
                       '2 yıl üretici garantisi',
                     ].map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-sm text-white/60 font-light">
+                      <li key={item} className="flex items-start gap-2.5 text-xs md:text-sm text-white/60 font-light">
                         <span className="mt-1.5 size-1.5 rounded-full bg-champagne shrink-0" />
                         {item}
                       </li>
@@ -344,13 +344,13 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
                 </div>
 
                 {/* CTA */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2 md:gap-3 mt-4 md:mt-0">
                   <a
                     href={`https://wa.me/905548830071?text=${whatsappText}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center gap-2.5 bg-[#25D366] text-white px-6 py-3.5 rounded-2xl text-sm font-semibold hover:bg-[#128C7E] transition-colors shadow-[0_4px_20px_rgba(37,211,102,0.3)]"
+                    className="flex items-center justify-center gap-2.5 bg-[#25D366] text-white px-5 md:px-6 py-3 md:py-3.5 rounded-xl md:rounded-2xl text-xs md:text-sm font-semibold hover:bg-[#128C7E] transition-colors shadow-[0_4px_20px_rgba(37,211,102,0.3)]"
                   >
                     <MessageCircle className="size-4" />
                     Bu Deseni İstiyorum

@@ -66,10 +66,7 @@ export function JakuziClient({ content }: JakuziClientProps) {
               className="absolute inset-0"
             >
               <Image
-                src={isJakuzi
-                  ? content.hero?.jakuzi_bg || 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80'
-                  : content.hero?.tekne_bg || 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80'
-                }
+                src={isJakuzi ? content.hero?.jakuzi_bg : content.hero?.tekne_bg}
                 alt={isJakuzi ? 'Jakuzi' : 'Duş Teknesi'}
                 fill
                 className="object-cover"
@@ -273,7 +270,7 @@ export function JakuziClient({ content }: JakuziClientProps) {
                       className="group bg-background rounded-3xl overflow-hidden border border-border hover:border-champagne/30 transition-all duration-500 hover:shadow-2xl hover:shadow-champagne/5 flex flex-col"
                     >
                       <div className="relative aspect-[4/3] overflow-hidden">
-                        <Image src={m.image} alt={m.name} fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" />
+                        <Image src={m.image} alt={m.name} fill priority={i < 4} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       </div>
                       <div className="p-8 flex flex-col flex-1">

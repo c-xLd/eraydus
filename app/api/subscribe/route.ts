@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     // 2. Send Welcome Email via Resend
     if (resend) {
       const { error: emailError } = await resend.emails.send({
-        from: 'Erayduş <info@eraydus.com>',
+        from: 'Erayduş <info@eraydus.net>',
         to: email,
         subject: 'Erayduş Dünyasına Hoş Geldiniz! 🥂',
         react: WelcomeEmail({ email }),

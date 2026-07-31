@@ -57,7 +57,7 @@ SET
   starting_price = EXCLUDED.starting_price;
 
 -- Public blog posts shown on /blog after the admin features schema is applied.
-INSERT INTO public.content_calendar (
+INSERT INTO public.blog (
   title, slug, content_type, description, body, language, status,
   featured_image, published_at, seo_title, seo_description, tags
 ) VALUES
@@ -98,3 +98,20 @@ SET
   seo_description = EXCLUDED.seo_description,
   tags = EXCLUDED.tags,
   updated_at = now();
+
+
+-- Insert projects (Karma Galeri and existing static data)
+INSERT INTO public.projects (id, name, location, category, description, image_url)
+VALUES 
+  -- Existing static projects from page.tsx
+  (gen_random_uuid(), 'The Bosphorus Palace Hotel', 'İstanbul, Beşiktaş', 'Otel', 'Boğaz manzaralı süitlerde çerçevesiz PURE serisi cam kabinler; tarihi dokuyla modern şeffaflığın buluştuğu bir renovasyon.', 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop'),
+  (gen_random_uuid(), 'Alaçatı Beyaz Rezidans', 'İzmir, Çeşme', 'Rezidans', 'Ege mimarisine uyum sağlayan mat beyaz ve fırçalı altın profilli EDGE serisi; ferah ve sıcak bir banyo atmosferi.', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop'),
+  (gen_random_uuid(), 'Bodrum Kıyı Villa', 'Muğla, Bodrum', 'Villa', 'Denize sıfır villada doğal taş ve füme cam uyumu; mat antrasit profillerle kurgulanan iç mekan spa alanı.', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop'),
+  (gen_random_uuid(), 'Zorlu Center Premium Spa', 'İstanbul, Beşiktaş', 'Ticari', 'Yüksek neme dayanıklı donanım ve nano kaplamalı camlarla donatılan premium spa ve buhar odası bölmeleri.', 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2070&auto=format&fit=crop'),
+  (gen_random_uuid(), 'Cappadocia Cave Suites', 'Nevşehir, Göreme', 'Otel', 'Mağara odalarının kıvrımlarına özel üretilen pivot kapılı duş sistemleri; her odaya özel şablonlu montaj.', 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop'),
+  (gen_random_uuid(), 'Nişantaşı Terrace Rezidans', 'İstanbul, Şişli', 'Rezidans', 'Fluted dikey dokulu camlar ve mat siyah profillerle kurgulanan retro-modern ve göz alıcı banyo tasarımları.', 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=2070&auto=format&fit=crop'),
+  -- Scraped projects from Karma Galeri
+  (gen_random_uuid(), 'Ankara Karma Galeri Projesi 1', 'Ankara', 'Tümü', 'Erayduş Karma Galeri referans projesi. Modern cam ve profil tasarımı.', 'https://www.eraydus.com/wp-content/uploads/2020/12/IMG-20201123-WA0004.jpg'),
+  (gen_random_uuid(), 'Ankara Karma Galeri Projesi 2', 'Ankara', 'Tümü', 'Erayduş Karma Galeri referans projesi. Modern cam ve profil tasarımı.', 'https://www.eraydus.com/wp-content/uploads/2020/12/IMG-20201008-WA0031.jpg'),
+  (gen_random_uuid(), 'Ankara Karma Galeri Projesi 3', 'Ankara', 'Tümü', 'Erayduş Karma Galeri referans projesi. Modern cam ve profil tasarımı.', 'https://www.eraydus.com/wp-content/uploads/2020/12/IMG-20201212-WA0001.jpg')
+ON CONFLICT DO NOTHING;

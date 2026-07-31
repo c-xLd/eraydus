@@ -22,10 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${category.name} Modelleri | Erayduş`,
       description: `Banyonuzun mimarisine uyum sağlayan üstün İtalyan tasarımı ${category.name} serisi.`,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/kategori/${category.slug}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/kategori/${category.slug}`,
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/kategori/${category.slug}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/kategori/${category.slug}`,
     }
   }
 }
@@ -47,11 +47,11 @@ export default async function CategoryPage({ params }: Props) {
     "@type": "CollectionPage",
     "name": `${category.name} Modelleri`,
     "description": `Erayduş ${category.name} serisi ürünleri.`,
-    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/kategori/${category.slug}`,
+    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/kategori/${category.slug}`,
     "hasPart": products.map((product) => ({
       "@type": "Product",
       "name": product.name,
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.slug}`
+      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${product.slug}`
     }))
   };
 
@@ -64,19 +64,19 @@ export default async function CategoryPage({ params }: Props) {
         "@type": "ListItem",
         "position": 1,
         "name": "Anasayfa",
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/`
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Kategoriler",
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar`
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": category.name,
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/kategori/${category.slug}`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/kategori/${category.slug}`
       }
     ]
   };

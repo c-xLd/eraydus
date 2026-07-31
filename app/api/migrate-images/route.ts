@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    // Fetch products that still have external images (containing eraydus.com or not containing supabase.co)
+    // Fetch products that still have external images (containing eraydus.net or not containing supabase.co)
     const { data: products, error } = await supabase
       .from('products')
       .select('id, name, sku, images')

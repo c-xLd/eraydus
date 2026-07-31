@@ -3,7 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
   // @ts-ignore - To silence the workspace root warning in Turbopack
   turbopack: {
@@ -31,13 +31,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'www.eraydus.com',
+        hostname: 'eraydus.net',
         port: '',
         pathname: '**',
       },
       {
         protocol: 'https',
-        hostname: 'eraydus.com',
+        hostname: 'eraydus.net',
         port: '',
         pathname: '**',
       },

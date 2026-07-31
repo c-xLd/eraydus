@@ -3,10 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { 
-  X, Settings, FileText, BarChart, Bell, Target, Star, LogOut, 
-  LayoutDashboard, Building2, Package, Hexagon, Globe, Search, 
-  Calendar, MessageSquareQuote, Users, BarChart3, TrendingUp, Users2 
+import {
+  X, Settings, FileText, BarChart, Bell, Target, Star, LogOut,
+  LayoutDashboard, Building2, Package, Hexagon, Globe, Search,
+  Calendar, MessageSquareQuote, Users, BarChart3, TrendingUp, Users2
 } from "lucide-react"
 
 interface AdminMobileMenuSheetProps {
@@ -64,31 +64,31 @@ export function AdminMobileMenuSheet({ isOpen, onClose }: AdminMobileMenuSheetPr
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="md:hidden fixed inset-0 bg-black/40 z-[60] backdrop-blur-sm"
+            className="md:hidden fixed inset-0 bg-blueprint-950/40 z-[60] backdrop-blur-sm"
           />
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-[#0A0A0A] rounded-t-3xl shadow-2xl flex flex-col pb-[env(safe-area-inset-bottom)] max-h-[85vh] overflow-hidden"
+            className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-blueprint-950 rounded-t-3xl shadow-2xl flex flex-col pb-[env(safe-area-inset-bottom)] max-h-[85vh] overflow-hidden"
           >
             {/* Handle Bar */}
             <div className="w-full flex justify-center pt-3 pb-2 touch-none cursor-pointer" onClick={onClose}>
-              <div className="w-12 h-1.5 bg-white/20 rounded-full" />
+              <div className="w-12 h-1.5 bg-blueprint-600/20 rounded-full" />
             </div>
 
-            <div className="px-6 pb-4 flex items-center justify-between border-b border-white/5">
-              <h2 className="text-xl font-bold text-white">Tüm Menüler</h2>
-              <button onClick={onClose} className="p-2 -mr-2 text-white/50 hover:text-white bg-white/5 rounded-full transition-colors">
-                <X className="size-5" />
+            <div className="px-6 pb-4 flex items-center justify-between border-b border-blueprint-800/50">
+              <h2 className="text-xl font-bold text-blueprint-500 font-mono">Tüm Menüler</h2>
+              <button onClick={onClose} className="p-2 -mr-2 text-blueprint-400/60 hover:text-white bg-blueprint-600/20 rounded-full transition-colors">
+                <X className="size-5" strokeWidth={2} />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-6">
               {navGroups.map((group, idx) => (
                 <div key={idx} className="space-y-2">
-                  <h3 className="text-[10px] font-bold text-white/40 uppercase tracking-wider px-4">
+                  <h3 className="text-[10px] font-bold text-blueprint-400/50 uppercase tracking-wider px-4">
                     {group.title}
                   </h3>
                   <div className="space-y-1">
@@ -101,13 +101,15 @@ export function AdminMobileMenuSheet({ isOpen, onClose }: AdminMobileMenuSheetPr
                           href={link.href}
                           onClick={onClose}
                           className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all ${
-                            active 
-                              ? "bg-white/10 text-white font-bold" 
-                              : "text-white/60 hover:bg-white/5 hover:text-white font-medium"
+                            active
+                              ? "bg-blueprint-600/20 text-blueprint-500 font-bold"
+                              : "text-blueprint-400/60 hover:bg-blueprint-600/10 hover:text-white font-medium"
                           }`}
                         >
-                          <Icon className="size-5" strokeWidth={active ? 2.5 : 2} />
-                          <span className="text-sm">{link.label}</span>
+                          <Icon className={`size-5 ${active ? "text-blueprint-500" : "text-blueprint-400/60 hover:text-white"}`} strokeWidth={active ? 2.5 : 2} />
+                          <span className={`text-sm ${active ? "font-semibold" : ""}`}>
+                            {link.label}
+                          </span>
                         </Link>
                       )
                     })}
@@ -115,8 +117,8 @@ export function AdminMobileMenuSheet({ isOpen, onClose }: AdminMobileMenuSheetPr
                 </div>
               ))}
 
-              <div className="mt-8 pt-6 border-t border-white/5 pb-4">
-                <button className="flex items-center gap-4 px-4 py-4 w-full text-red-500 font-bold hover:bg-red-500/10 rounded-2xl transition-colors">
+              <div className="mt-8 pt-6 border-t border-blueprint-800/50 pb-4">
+                <button className="flex items-center gap-4 px-4 py-4 w-full text-red-500 font-hover:bg-red-500/10 rounded-2xl transition-colors">
                   <LogOut className="size-5" strokeWidth={2.5} />
                   <span className="text-sm">Çıkış Yap</span>
                 </button>

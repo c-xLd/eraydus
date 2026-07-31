@@ -33,7 +33,7 @@ export async function createBlogPost(data: {
     }
 
     const { data: post, error } = await supabase
-      .from('content_calendar')
+      .from('blog')
       .insert(payload)
       .select()
       .single()
@@ -81,15 +81,14 @@ export async function updateBlogPost(id: string, data: {
       patch.published_at = new Date().toISOString()
     }
 
-    console.log('[updateBlogPost] attempting update for id:', id)
-    console.log('[updateBlogPost] patch keys:', Object.keys(patch))
+
 
     const { error, count } = await supabase
-      .from('content_calendar')
+      .from('blog')
       .update(patch)
       .eq('id', id)
 
-    console.log('[updateBlogPost] result — error:', error, 'count:', count)
+
 
     if (error) {
       console.error('[updateBlogPost] Supabase error:', JSON.stringify(error, null, 2))
@@ -111,7 +110,7 @@ export async function deleteBlogPost(id: string) {
     const supabase = await createClient()
 
     const { error } = await supabase
-      .from('content_calendar')
+      .from('blog')
       .delete()
       .eq('id', id)
 
@@ -130,7 +129,7 @@ export async function getBlogPostById(id: string) {
   try {
     const supabase = await createClient()
     const { data: post, error } = await supabase
-      .from('content_calendar')
+      .from('blog')
       .select('*')
       .eq('id', id)
       .maybeSingle()

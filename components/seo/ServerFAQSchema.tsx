@@ -20,7 +20,7 @@ export function ServerFAQSchema() {
           .from('seo_metadata')
           .select('faq_data, faq_schema_enabled')
           .eq('page_slug', pathname)
-          .single();
+          .maybeSingle();
 
         if (pageSeo && pageSeo.faq_schema_enabled && Array.isArray(pageSeo.faq_data) && pageSeo.faq_data.length > 0) {
           setFaqs(pageSeo.faq_data);

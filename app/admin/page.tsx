@@ -88,18 +88,19 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pb-4 border-b border-black/[0.04]">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-sans">Dashboard</h1>
+          <p className="text-[13px] text-gray-500 mt-1.5 font-medium">
             {now.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/admin/products/new" className="px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-black/85 transition-colors">
-            + Ürün Ekle
+        <div className="flex gap-3">
+          <Link href="/admin/products/new" className="px-5 py-2.5 bg-[#0A0A0A] text-white text-[13px] font-medium rounded-xl hover:bg-black transition-all duration-300 shadow-md shadow-black/10 hover:shadow-lg hover:shadow-black/20 active:scale-95 flex items-center gap-2">
+            <Package className="size-4 opacity-70" />
+            Ürün Ekle
           </Link>
         </div>
       </div>
@@ -146,23 +147,24 @@ export default async function AdminDashboardPage() {
         ].map((card) => {
           const Icon = card.icon
           const inner = (
-            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3 hover:shadow-md transition-shadow h-full">
-              <div className="flex items-center justify-between">
-                <div className={`p-2 rounded-xl ${card.color}`}>
+            <div className="bg-white p-6 rounded-3xl border border-black/[0.03] shadow-[0_2px_20px_rgb(0,0,0,0.02)] flex flex-col gap-4 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500 h-full relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="flex items-center justify-between relative z-10">
+                <div className={`p-3 rounded-2xl ${card.color} transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}>
                   <Icon className="size-5" />
                 </div>
                 {card.trend && (
-                  <span className={`flex items-center gap-0.5 text-xs font-semibold px-2 py-1 rounded-full ${card.trend.up ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                  <span className={`flex items-center gap-0.5 text-[11px] font-bold px-2.5 py-1 rounded-full ${card.trend.up ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
                     {card.trend.up ? <ArrowUpRight className="size-3" /> : <ArrowDownRight className="size-3" />}
                     {card.trend.label}
                   </span>
                 )}
               </div>
-              <div>
-                <p className="text-3xl font-bold text-gray-900">{card.value}</p>
-                <p className="text-sm font-medium text-gray-500 mt-0.5">{card.title}</p>
+              <div className="relative z-10">
+                <p className="text-[32px] font-extrabold text-gray-900 tracking-tight leading-none">{card.value}</p>
+                <p className="text-[13px] font-medium text-gray-500 mt-2">{card.title}</p>
               </div>
-              <p className="text-xs text-gray-400">{card.sub}</p>
+              <p className="text-[11px] text-gray-400 font-medium relative z-10">{card.sub}</p>
             </div>
           )
           return card.href
@@ -179,14 +181,14 @@ export default async function AdminDashboardPage() {
         ].map((item) => {
           const Icon = item.icon
           return (
-            <Link key={item.label} href={item.href} className="col-span-1 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
-              <div className={`p-2.5 rounded-xl ${item.warn ? 'bg-amber-50 text-amber-600' : 'bg-gray-50 text-gray-600'}`}>
+            <Link key={item.label} href={item.href} className="col-span-1 bg-white p-5 rounded-3xl border border-black/[0.03] shadow-[0_2px_20px_rgb(0,0,0,0.02)] flex items-center gap-5 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500 group">
+              <div className={`p-3 rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3 ${item.warn ? 'bg-amber-50 text-amber-600' : 'bg-gray-50 text-gray-600'}`}>
                 <Icon className="size-5" />
               </div>
               <div>
-                <p className="text-xl font-bold text-gray-900">{item.value}</p>
-                <p className="text-xs font-medium text-gray-500">{item.label}</p>
-                <p className="text-[11px] text-gray-400">{item.sub}</p>
+                <p className="text-2xl font-extrabold text-gray-900 tracking-tight leading-none">{item.value}</p>
+                <p className="text-[13px] font-medium text-gray-500 mt-1.5">{item.label}</p>
+                <p className="text-[11px] text-gray-400 font-medium mt-0.5">{item.sub}</p>
               </div>
             </Link>
           )
@@ -195,35 +197,35 @@ export default async function AdminDashboardPage() {
 
       {/* Grafik + Son Mesajlar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
+        <div className="lg:col-span-2 bg-white p-7 rounded-3xl border border-black/[0.03] shadow-[0_2px_20px_rgb(0,0,0,0.02)] transition-shadow duration-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Aylık Mesaj Trendi</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Son 6 ay, iletişim formundan gelen mesajlar</p>
+              <h2 className="text-lg font-bold text-gray-900 tracking-tight">Aylık Mesaj Trendi</h2>
+              <p className="text-[13px] font-medium text-gray-400 mt-1">Son 6 ay, iletişim formundan gelen mesajlar</p>
             </div>
           </div>
           <DashboardCharts revenueData={chartData} />
         </div>
 
         {/* Son Mesajlar */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-semibold text-gray-900">Son Mesajlar</h2>
-            <Link href="/admin/messages" className="text-xs font-medium text-blue-600 hover:text-blue-800">
-              Tümü →
+        <div className="bg-white p-7 rounded-3xl border border-black/[0.03] shadow-[0_2px_20px_rgb(0,0,0,0.02)] flex flex-col transition-shadow duration-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-bold text-gray-900 tracking-tight">Son Mesajlar</h2>
+            <Link href="/admin/messages" className="text-[13px] font-semibold text-blue-600 hover:text-blue-700 transition-colors bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100">
+              Tümü
             </Link>
           </div>
-          <div className="flex flex-col gap-3 flex-1">
+          <div className="flex flex-col gap-4 flex-1">
             {(recentMessages ?? []).length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-6">Henüz mesaj yok.</p>
+              <p className="text-sm text-gray-400 text-center py-6 font-medium">Henüz mesaj yok.</p>
             ) : (recentMessages ?? []).map((msg: any) => (
-              <div key={msg.id} className="flex items-start gap-3">
-                <div className={`mt-1 size-2 rounded-full shrink-0 ${msg.is_read ? 'bg-gray-200' : 'bg-blue-500'}`} />
+              <div key={msg.id} className="flex items-start gap-4 p-3 rounded-2xl hover:bg-gray-50 transition-colors group cursor-pointer border border-transparent hover:border-black/[0.02]">
+                <div className={`mt-1.5 size-2.5 rounded-full shrink-0 shadow-sm ${msg.is_read ? 'bg-gray-200' : 'bg-blue-500 shadow-blue-500/30'}`} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-800 truncate">{msg.name}</p>
-                  <p className="text-xs text-gray-400 truncate">{subjectLabels[msg.subject] ?? msg.subject}</p>
+                  <p className="text-sm font-bold text-gray-900 truncate group-hover:text-blue-600 transition-colors">{msg.name}</p>
+                  <p className="text-xs font-medium text-gray-500 truncate mt-0.5">{subjectLabels[msg.subject] ?? msg.subject}</p>
                 </div>
-                <span className="text-[10px] text-gray-400 shrink-0 flex items-center gap-1 mt-0.5">
+                <span className="text-[10px] font-semibold text-gray-400 shrink-0 flex items-center gap-1 mt-1 bg-gray-50 px-2 py-1 rounded-md">
                   <Clock className="size-3" />
                   {new Date(msg.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                 </span>
@@ -235,24 +237,30 @@ export default async function AdminDashboardPage() {
 
       {/* Son Teklifler */}
       {(recentQuotes ?? []).length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900">Son Teklifler</h2>
-            <Link href="/admin/quotes" className="text-xs font-medium text-blue-600 hover:text-blue-800">Tümü →</Link>
+        <div className="bg-white rounded-3xl border border-black/[0.03] shadow-[0_2px_20px_rgb(0,0,0,0.02)] overflow-hidden transition-shadow duration-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <div className="flex items-center justify-between px-7 py-5 border-b border-black/[0.03] bg-gray-50/50">
+            <h2 className="text-lg font-bold text-gray-900 tracking-tight">Son Teklifler</h2>
+            <Link href="/admin/quotes" className="text-[13px] font-semibold text-blue-600 hover:text-blue-700 transition-colors bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100">
+              Tümü
+            </Link>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-black/[0.02]">
             {(recentQuotes ?? []).map((q: any) => (
-              <div key={q.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 transition-colors">
+              <div key={q.id} className="flex items-center justify-between px-7 py-4 hover:bg-gray-50/80 transition-colors cursor-pointer group">
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{q.customer_name}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    {q.quote_number ?? `#${q.id.slice(0, 6)}`} · {new Date(q.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                  <p className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{q.customer_name}</p>
+                  <p className="text-[13px] font-medium text-gray-500 mt-1 flex items-center gap-2">
+                    <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px] font-semibold tracking-wider">
+                      {q.quote_number ?? `#${q.id.slice(0, 6)}`}
+                    </span>
+                    <span>·</span>
+                    <span className="flex items-center gap-1"><Clock className="size-3" />{new Date(q.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
                   </p>
                 </div>
-                <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${
-                  q.status === 'accepted' ? 'bg-green-50 text-green-700 border-green-200' :
-                  q.status === 'pending'  ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                            'bg-blue-50 text-blue-700 border-blue-200'
+                <span className={`text-[11px] font-bold px-3 py-1.5 rounded-full border shadow-sm ${
+                  q.status === 'accepted' ? 'bg-green-50 text-green-700 border-green-100' :
+                  q.status === 'pending'  ? 'bg-amber-50 text-amber-700 border-amber-100' :
+                                            'bg-blue-50 text-blue-700 border-blue-100'
                 }`}>
                   {q.status === 'accepted' ? 'Tamamlandı' : q.status === 'pending' ? 'Bekliyor' : 'Yanıtlandı'}
                 </span>

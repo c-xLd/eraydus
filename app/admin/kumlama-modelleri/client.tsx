@@ -1,0 +1,442 @@
+'use client'
+
+import { useState, useRef, useCallback } from 'react'
+import { Plus, Search, Trash2, Edit, ImageIcon, Loader2, X, Upload, Images, GripVertical, Check, Eye, EyeOff } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'sonner'
+import { createClient } from '@/services/supabase/client'
+import {
+  createModelAction,
+  updateModelAction,
+  deleteModelAction,
+  toggleModelStatusAction,
+  updateOrderAction
+} from './actions'
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
+
+type Model = {
+  id: string
+  title: string
+  image_url: string
+  created_at: string
+  is_active?: boolean
+  order_index?: number
+}
+
+const BUCKET = 'kumlama-models'
+
+export default function KumlamaModelleriClient({ initialModels }: { initialModels: Model[] }) {
+  const [models, setModels] = useState<Model[]>(initialModels)
+  const [searchQuery, setSearchQuery] = useState('')
+  const supabase = createClient()
+
+  // Modal state
+  const [isOpen, setIsOpen] = useState(false)
+  const [mode, setMode] = useState<'upload' | 'gallery'>('upload')
+  const [editingId, setEditingId] = useState<string | null>(null)
+
+  const [title, setTitle] = useState('')
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [galleryUrl, setGalleryUrl] = useState<string | null>(null)
+
+  const [saving, setSaving] = useState(false)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [togglingId, setTogglingId] = useState<string | null>(null)
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleDragEnd = useCallback((result: DropResult) => {
+    // Disable drag-and-drop when filtering is active
+    if (searchQuery !== '') {
+      toast.error('Filtre uygulandığı öğeleri yeniden sırayalamazsınız. Lütfen filtreyi temizleyin.')
+      return
+    }
+
+    if (!result.destination) return
+
+    const sourceIndex = result.source.index
+    const destinationIndex = result.destination.index
+
+    if (sourceIndex === destinationIndex) return
+
+    // Work with the full models list (since filtering is disabled when this runs)
+    const newModels = Array.from(models)
+    const [movedItem] = newModels.splice(sourceIndex, 1)
+    newModels.splice(destinationIndex, 0, movedItem)
+
+    // Store previous state for potential rollback
+    const previousModels = models
+
+    setModels(newModels)
+
+    const orderedIds = newModels.map(model => model.id)
+    updateOrderAction(orderedIds).then((res) => {
+      if (!res.success) {
+        toast.error('Sıralama güncellenirken hata oluştu')
+        // Revert the optimistic update
+        setModels(previousModels)
+      }
+    })
+  }, [models, searchQuery, updateOrderAction, toast])
+
+  const openModal = (model?: Model) => {
+    if (model) {
+      setEditingId(model.id)
+      setTitle(model.title)
+      setMode('gallery')
+      setGalleryUrl(model.image_url)
+      setPreview(model.image_url)
+    } else {
+      setEditingId(null)
+      setTitle('')
+      setMode('upload')
+      setFile(null)
+      setPreview(null)
+      setGalleryUrl(null)
+    }
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview)
+    setIsOpen(false)
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0]
+    if (!f) return
+    setFile(f)
+    setGalleryUrl(null)
+    if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview)
+    setPreview(URL.createObjectURL(f))
+  }
+
+  const handleSave = async () => {
+    if (!title.trim()) {
+      toast.error('Lütfen bir başlık giriniz.')
+      return
+    }
+
+    let finalImageUrl = galleryUrl
+
+    setSaving(true)
+
+    if (mode === 'upload' && file) {
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const seoSlug = title.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase()
+      const path = `${seoSlug}-${Date.now()}.${extension}`
+
+      const { error: upErr } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, { cacheControl: '3600', upsert: false })
+
+      if (upErr) {
+        toast.error('Görsel yüklenirken hata: ' + upErr.message)
+        setSaving(false)
+        return
+      }
+
+      const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path)
+      finalImageUrl = urlData.publicUrl
+    }
+
+    if (!finalImageUrl) {
+      toast.error('Lütfen görsel seçin veya yükleyin.')
+      setSaving(false)
+      return
+    }
+
+    if (editingId) {
+      const res = await updateModelAction(editingId, { title, imageUrl: finalImageUrl })
+      if (res.success && res.data) {
+        setModels(models.map(m => m.id === editingId ? { ...m, ...res.data } : m))
+        toast.success('Model güncellendi')
+        closeModal()
+      } else {
+        toast.error(res.error || 'Güncellenirken hata oluştu')
+      }
+    } else {
+      const res = await createModelAction({ title, imageUrl: finalImageUrl })
+      if (res.success && res.data) {
+        setModels([res.data, ...models])
+        toast.success('Yeni model eklendi')
+        closeModal()
+      } else {
+        toast.error(res.error || 'Eklenirken hata oluştu')
+      }
+    }
+
+    setSaving(false)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bu modeli kalıcı olarak silmek istediğinize emin misiniz?')) return
+
+    setDeletingId(id)
+    const res = await deleteModelAction(id)
+    if (res.success) {
+      setModels(models.filter(m => m.id !== id))
+      toast.success('Model silindi')
+    } else {
+      toast.error(res.error || 'Silinirken hata oluştu')
+    }
+    setDeletingId(null)
+  }
+
+  const handleToggleActive = async (id: string, currentStatus: boolean = true) => {
+    setTogglingId(id)
+    // Optimistic
+    setModels(models.map(m => m.id === id ? { ...m, is_active: !currentStatus } : m))
+
+    const res = await toggleModelStatusAction(id, currentStatus)
+    if (!res.success) {
+      // Revert on error
+      setModels(models.map(m => m.id === id ? { ...m, is_active: currentStatus } : m))
+      toast.error('Durum değiştirilemedi. Veritabanı şemasını güncellediğinizden emin olun.')
+    } else {
+      toast.success(currentStatus ? 'Model gizlendi' : 'Model aktifleştirildi')
+    }
+    setTogglingId(null)
+  }
+
+  const galleryImages = Array.from(new Set(models.map(m => m.image_url)))
+  const filteredModels = models.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase()))
+
+  return (
+    <div className="space-y-6 pb-20">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">Kumlama Modelleri</h1>
+          <p className="text-muted-foreground mt-1 text-sm">Sitede sergilenen özel cam desenlerini yönetin.</p>
+        </div>
+        <button
+          onClick={() => openModal()}
+          className="bg-foreground hover:bg-foreground/90 text-background px-5 py-2.5 rounded-full text-sm font-semibold transition-all flex items-center gap-2 shadow-lg shadow-black/5 active:scale-95"
+        >
+          <Plus className="size-4" />
+          Yeni Model Ekle
+        </button>
+      </div>
+
+      {/* Filter */}
+      <div className="bg-card p-2 rounded-2xl border border-border/50 shadow-sm flex items-center gap-4 max-w-md">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Model adı ara..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-transparent border-none focus:outline-none text-sm placeholder:text-muted-foreground/70"
+          />
+        </div>
+      </div>
+
+      {/* Grid */}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="model-grid">
+          {(provided, snapshot) => (
+            <motion.div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 ${snapshot.isDraggingOver ? 'border-dashed border-blue-500' : ''}`}
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredModels.map((model, index) => {
+                  const isActive = model.is_active ?? true
+
+                  return (
+                    <Draggable key={model.id} draggableId={model.id} index={index}>
+                      {(provided, snapshot) => (
+                        <motion.div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          className={`bg-card rounded-2xl border border-border/50 overflow-hidden flex flex-col group relative shadow-sm hover:shadow-md transition-all ${!isActive ? 'opacity-60 grayscale-[0.5]' : ''} ${snapshot.isDragging ? 'scale-105 shadow-lg' : ''}`}
+                          style={{
+                            ...provided.draggableProps.style,
+                            userSelect: 'none'
+                          }}
+                        >
+                          <div
+                            {...(provided.dragHandleProps ?? {})}
+                            className="absolute top-3 right-3 z-10 rounded-full bg-white/95 p-2 text-muted-foreground shadow-sm cursor-grab active:cursor-grabbing"
+                            aria-label="Sürükle"
+                          >
+                            <GripVertical className="size-4" />
+                          </div>
+                          <div className="relative aspect-square bg-muted/30 overflow-hidden">
+                            <img
+                              src={model.image_url}
+                              alt={model.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                            {/* Hover Actions */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
+                              <button onClick={() => openModal(model)} className="p-2.5 bg-white text-black rounded-full hover:scale-110 transition-transform shadow-lg" title="Düzenle">
+                                <Edit className="size-4" />
+                              </button>
+                              <button onClick={() => handleToggleActive(model.id, isActive)} disabled={togglingId === model.id} className="p-2.5 bg-white text-black rounded-full hover:scale-110 transition-transform shadow-lg" title={isActive ? 'Gizle' : 'Göster'}>
+                                {isActive ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                              </button>
+                              <button onClick={() => handleDelete(model.id)} disabled={deletingId === model.id} className="p-2.5 bg-red-500 text-white rounded-full hover:scale-110 transition-transform shadow-lg" title="Sil">
+                                {deletingId === model.id ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+                              </button>
+                            </div>
+                            {!model.is_active && (
+                              <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold uppercase rounded-md tracking-wider">
+                                Gizli
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-4 flex items-center justify-between border-t border-border/30">
+                            <h3 className="font-semibold text-sm text-foreground truncate">{model.title}</h3>
+                          </div>
+                        </motion.div>
+                      )}
+                    </Draggable>
+                  )
+                })}
+              </AnimatePresence>
+              {provided.placeholder}
+            </motion.div>
+          )}
+        </Droppable>
+      </DragDropContext>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={closeModal}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              className="bg-card w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative z-10 border border-border/50"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-5 border-b border-border/50">
+                <h2 className="text-lg font-semibold text-foreground tracking-tight">{editingId ? 'Modeli Düzenle' : 'Yeni Model Ekle'}</h2>
+                <button onClick={closeModal} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors">
+                  <X className="size-4" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">Başlık</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Örn: Geometrik Çizgiler"
+                    className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground transition-all"
+                  />
+                </div>
+
+                <div className="flex gap-2 p-1 bg-muted rounded-xl">
+                  <button
+                    onClick={() => setMode('upload')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                      mode === 'upload' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Upload className="size-4" />
+                    Görsel Yükle
+                  </button>
+                  <button
+                    onClick={() => setMode('gallery')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                      mode === 'gallery' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Images className="size-4" />
+                    Galeriden Seç
+                  </button>
+                </div>
+
+                {mode === 'upload' && (
+                  <div>
+                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                    {preview ? (
+                      <div className="relative rounded-2xl overflow-hidden border border-border group">
+                        <img src={preview} alt="Önizleme" className="w-full h-48 object-cover" />
+                        <button
+                          onClick={() => { setFile(null); if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview); setPreview(null) }}
+                          className="absolute top-3 right-3 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
+                        >
+                          <X className="size-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full h-48 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-3 text-muted-foreground hover:border-foreground/50 hover:bg-muted/50 transition-all"
+                      >
+                        <Upload className="size-8 opacity-50" />
+                        <div className="flex flex-col items-center">
+                          <span className="text-sm font-medium text-foreground">Görsel Seç veya Sürükle</span>
+                          <span className="text-xs mt-1">PNG, JPG, WEBP • Max 10MB</span>
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {mode === 'gallery' && (
+                  <div>
+                    {galleryImages.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-12">Galeride görsel yok.</p>
+                    ) : (
+                      <div className="grid grid-cols-3 gap-3 max-h-56 overflow-y-auto pr-2 custom-scrollbar">
+                        {galleryImages.map((url) => (
+                          <button
+                            key={url}
+                            onClick={() => { setGalleryUrl(url); setFile(null); if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview); setPreview(url) }}
+                            className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                              galleryUrl === url ? 'border-foreground ring-4 ring-foreground/10' : 'border-transparent hover:border-border'
+                            }`}
+                          >
+                            <img src={url} alt="" className="w-full h-full object-cover" />
+                            {galleryUrl === url && (
+                              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                <div className="bg-foreground text-background rounded-full p-1 shadow-md">
+                                  <Check className="size-4" />
+                                </div>
+                              </div>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex justify-end gap-3 px-6 py-5 border-t border-border/50 bg-muted/20">
+                  <button
+                    onClick={closeModal}
+                    className="px-5 py-2.5 text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-all"
+                  >
+                    İptal
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="px-6 py-2.5 text-sm font-semibold bg-foreground text-background rounded-full hover:bg-foreground/90 transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-black/5 active:scale-95"
+                  >
+                    Kaydet
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}

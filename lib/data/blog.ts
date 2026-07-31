@@ -735,7 +735,7 @@ const postFields = "id, title, slug, description, body, featured_image, publishe
 export const getPublishedPosts = cache(async (): Promise<BlogPost[]> => {
   try {
     const supabase = createPublicClient()
-    const { data, error } = await supabase.from("content_calendar").select(postFields).eq("content_type", "blog").eq("status", "published").not("slug", "is", null).order("published_at", { ascending: false })
+    const { data, error } = await supabase.from("blog").select(postFields).eq("content_type", "blog").eq("status", "published").not("slug", "is", null).order("published_at", { ascending: false })
     if (error) throw error
     return data?.length ? (data as BlogPost[]) : fallbackBlogPosts
   } catch (error) {
@@ -779,7 +779,7 @@ export const getPostsByTag = cache(async (tagParam: string): Promise<BlogPost[]>
 export const getPublishedPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   try {
     const supabase = createPublicClient()
-    const { data, error } = await supabase.from("content_calendar").select(postFields).eq("content_type", "blog").eq("status", "published").eq("slug", slug).maybeSingle()
+    const { data, error } = await supabase.from("blog").select(postFields).eq("content_type", "blog").eq("status", "published").eq("slug", slug).maybeSingle()
     if (error) throw error
     return (data as BlogPost | null) || fallbackBlogPosts.find((post) => post.slug === slug) || null
   } catch (error) {

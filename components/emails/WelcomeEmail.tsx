@@ -45,7 +45,7 @@ export const WelcomeEmail = ({ email }: WelcomeEmailProps) => {
             <Text style={offerText}>
               Aramıza katılmanızı kutlamak adına, ilk siparişinizde veya ücretsiz ölçü/keşif hizmetimizde kullanabileceğiniz <strong>%5 İndirim</strong> fırsatını yakalayın.
             </Text>
-            <Link href="https://eraydus.com/iletisim" style={button}>
+            <Link href="https://eraydus.net/iletisim" style={button}>
               Ücretsiz Keşif Randevusu Alın
             </Link>
           </Section>
@@ -56,8 +56,8 @@ export const WelcomeEmail = ({ email }: WelcomeEmailProps) => {
             <Text style={footerText}>
               Bu e-postayı, Erayduş bültenine ({email}) abone olduğunuz için aldınız.
             </Text>
-            <Link href="https://eraydus.com" style={footerLink}>
-              eraydus.com
+            <Link href="https://eraydus.net" style={footerLink}>
+              eraydus.net
             </Link>
           </Section>
         </Container>

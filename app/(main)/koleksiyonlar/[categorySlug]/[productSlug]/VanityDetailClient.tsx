@@ -142,6 +142,7 @@ export function VanityDetailClient({ product }: VanityDetailClientProps) {
                 src={allImages[activeImage] || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a'}
                 alt={product.name}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 priority
               />

@@ -116,48 +116,56 @@ export const pagesSeoData: PageSEO[] = [
 ];
 
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 
-export async function getGlobalSeoData() {
-  try {
-    // We use a standard cookie-less client here to prevent Next.js from throwing DYNAMIC_SERVER_USAGE
-    // during static generation. Global SEO data is public anyway.
-    const supabase = createSupabaseClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY',
-      {
-        global: {
-          fetch: (url, options) => fetch(url, { ...options, cache: 'force-cache' })
+export const getGlobalSeoData = cache(
+  unstable_cache(
+    async () => {
+      try {
+        // We use a standard cookie-less client here to prevent Next.js from throwing DYNAMIC_SERVER_USAGE
+        // during static generation. Global SEO data is public anyway.
+        const supabase = createSupabaseClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co',
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY',
+          {
+            global: {
+              fetch: (url, options) => fetch(url, { ...options, cache: 'force-cache' })
+            }
+          }
+        );
+        const { data } = await supabase
+          .from('seo_metadata')
+          .select('*')
+          .eq('page_type', 'global')
+          .single();
+
+        if (data) {
+          return {
+            ...globalSeoData,
+            siteName: data.title || globalSeoData.siteName,
+            defaultDescription: data.description || globalSeoData.defaultDescription,
+            analytics: {
+              googleAnalyticsId: '',
+              googleTagManagerId: 'GTM-WXPSP6B8', 
+              ...data.geo_data?.analytics
+            },
+            ...data.geo_data
+          };
         }
+      } catch (error) {
+        console.error('Error fetching global SEO data:', error);
       }
-    );
-    const { data } = await supabase
-      .from('seo_metadata')
-      .select('*')
-      .eq('page_type', 'global')
-      .single();
-
-    if (data) {
+      
       return {
         ...globalSeoData,
-        siteName: data.title || globalSeoData.siteName,
-        defaultDescription: data.description || globalSeoData.defaultDescription,
         analytics: {
           googleAnalyticsId: '',
-          googleTagManagerId: 'GTM-WXPSP6B8', 
-          ...data.geo_data?.analytics
-        },
-        ...data.geo_data
+          googleTagManagerId: 'GTM-WXPSP6B8'
+        }
       };
-    }
-  } catch (error) {
-    console.error('Error fetching global SEO data:', error);
-  }
-  
-  return {
-    ...globalSeoData,
-    analytics: {
-      googleAnalyticsId: '',
-      googleTagManagerId: 'GTM-WXPSP6B8'
-    }
-  };
-}
+    },
+    ['global-seo-data'],
+    { tags: ['seo'], revalidate: 3600 }
+  )
+);

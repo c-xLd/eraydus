@@ -107,7 +107,7 @@ export function DusakabinModelleriClient({ products, faqs }: ClientProps) {
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {displayProducts.map((product) => (
+            {displayProducts.map((product, index) => (
               <motion.div 
                 key={product.id}
                 variants={fadeUp}
@@ -119,6 +119,7 @@ export function DusakabinModelleriClient({ products, faqs }: ClientProps) {
                     src={product.image}
                     alt={product.name}
                     fill
+                    priority={index < 4}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />

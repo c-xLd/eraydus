@@ -37,7 +37,7 @@ Branch:
 develop
 
 URL:
-staging.eraydus.com
+staging.eraydus.net
 
 Mirror production as closely as possible.
 
@@ -52,7 +52,7 @@ Branch:
 main
 
 URL:
-www.eraydus.com
+eraydus.net
 
 ---
 
@@ -462,11 +462,11 @@ Monitor vulnerabilities automatically.
 
 Primary
 
-www.eraydus.com
+eraydus.net
 
 Redirect
 
-eraydus.com → www.eraydus.com
+eraydus.net → eraydus.net
 
 HTTPS mandatory.
 

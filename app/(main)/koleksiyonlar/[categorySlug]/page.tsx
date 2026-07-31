@@ -5,6 +5,13 @@ import { getProductsByCollection } from '@/features/products/services/products'
 import { getCategoryBySlug, getCategories } from '@/features/products/services/categories'
 import { CollectionsClient } from '../CollectionsClient'
 
+export async function generateStaticParams() {
+  const categories = await getCategories()
+  return categories.map((category) => ({
+    categorySlug: category.slug,
+  }))
+}
+
 interface Props {
   params: Promise<{ categorySlug: string }>
 }
@@ -22,10 +29,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${category.name} Modelleri | Erayduş`,
       description: `Banyonuzun mimarisine uyum sağlayan üstün İtalyan tasarımı ${category.name} serisi.`,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${category.slug}`,
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${category.slug}`,
     }
   }
 }
@@ -38,8 +45,10 @@ export default async function CategoryPage({ params }: Props) {
   const category = await getCategoryBySlug(categorySlug)
   if (!category) notFound()
 
-  const products = await getProductsByCollection(category.id)
-  const allCategories = await getCategories()
+  const [products, allCategories] = await Promise.all([
+    getProductsByCollection(category.id),
+    getCategories()
+  ])
 
   // Google SEO Schema (CollectionPage)
   const collectionSchema = {
@@ -47,11 +56,11 @@ export default async function CategoryPage({ params }: Props) {
     "@type": "CollectionPage",
     "name": `${category.name} Modelleri`,
     "description": `Erayduş ${category.name} serisi ürünleri.`,
-    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`,
+    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${category.slug}`,
     "hasPart": products.map((product) => ({
       "@type": "Product",
       "name": product.name,
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}/${product.slug}`
+      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${category.slug}/${product.slug}`
     }))
   };
 
@@ -64,19 +73,19 @@ export default async function CategoryPage({ params }: Props) {
         "@type": "ListItem",
         "position": 1,
         "name": "Anasayfa",
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/`
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Kategoriler",
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar`
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": category.name,
-        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${category.slug}`
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${category.slug}`
       }
     ]
   };
@@ -97,12 +106,14 @@ export default async function CategoryPage({ params }: Props) {
         We pass the filtered products. We also tell it what the active category is 
         so it can maybe highlight it or just not rely on its internal selectedLayouts state.
       */}
-      <CollectionsClient 
-        products={products} 
-        categories={allCategories}
-        activeCategorySlug={category.slug} 
-        title={category.name}
-      />
+      <Suspense fallback={<div className="min-h-screen w-full flex items-center justify-center text-muted-foreground">Koleksiyonlar yükleniyor...</div>}>
+        <CollectionsClient 
+          products={products} 
+          categories={allCategories}
+          activeCategorySlug={category.slug} 
+          title={category.name}
+        />
+      </Suspense>
     </>
   )
 }

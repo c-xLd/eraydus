@@ -4,6 +4,10 @@ import { getProducts } from '@/features/products/services/products'
 import { getCategories } from '@/features/products/services/categories'
 import { CollectionsClient } from './CollectionsClient'
 import { globalSeoData } from '@/lib/data/seo'
+import { Playfair_Display, Inter } from 'next/font/google'
+
+const playfairDisplay = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
+const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] })
 
 export const metadata: Metadata = {
   title: 'Özel Ölçü Lüks Duşakabin Modelleri ve Fiyatları | Erayduş',
@@ -12,12 +16,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Özel Ölçü Lüks Duşakabin Modelleri',
     description: 'Banyonuzun mimarisine uyum sağlayan üstün İtalyan tasarımı.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar`,
     images: [{ url: '/og-collections.jpg', width: 1200, height: 630 }],
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar`,
-  }
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar`,
+  },
 }
 
 // Performans: Instant TTFB için ISR (Incremental Static Regeneration) kullanıyoruz.
@@ -65,7 +69,7 @@ function CollectionsSkeleton() {
                   <div className="relative aspect-[4/5] bg-surface rounded-sm mb-6 overflow-hidden">
                     <div className="absolute inset-0 bg-muted/50 animate-pulse"></div>
                   </div>
-                  
+
                   {/* Card Content Skeleton */}
                   <div className="flex flex-col gap-3">
                     <div className="flex justify-between items-start gap-4">
@@ -100,13 +104,13 @@ export default async function CollectionsPage() {
     "itemListElement": products.map((product, index) => ({
       "@type": "ListItem",
       "position": index + 1,
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}/koleksiyonlar/${product.collectionSlug || 'genel'}/${product.slug}`,
+      "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}/koleksiyonlar/${product.collectionSlug || 'genel'}/${product.slug}`,
       "name": product.name,
       "image": product.image?.startsWith('http')
         ? product.image
-        : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.com.tr'}${product.image || ''}`
+        : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://eraydus.net'}${product.image || ''}`
     }))
-  };
+  }
 
   return (
     <>
@@ -115,7 +119,12 @@ export default async function CollectionsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
       <Suspense fallback={<CollectionsSkeleton />}>
-        <CollectionsClient products={products} categories={categories} />
+        <CollectionsClient
+          products={products}
+          categories={categories}
+          playfairDisplayClassName={playfairDisplay.className}
+          interClassName={inter.className}
+        />
       </Suspense>
     </>
   )

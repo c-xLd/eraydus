@@ -1,3 +1,5 @@
+import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/services/supabase/server'
 import { Product as UIProduct, glassOptions, profileOptions } from '@/lib/data/products'
 
@@ -38,13 +40,19 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
   if (compatibleProfiles.length === 0) compatibleProfiles = [profileOptions[0], profileOptions[1], profileOptions[2]]
   if (compatibleGlass.length === 0) compatibleGlass = [glassOptions[0], glassOptions[1]]
 
+  const isBanyoDolabi = 
+    dbRow.technical_specs?.layoutType === 'Vanity Detail' || 
+    dbRow.technical_specs?.layoutType === 'Banyo Dolabı' ||
+    dbRow.categories?.slug === 'banyo-dolabi' ||
+    dbRow.categories?.name?.toLowerCase().includes('dolap');
+
   return {
     id: dbRow.id,
     slug: dbRow.slug || dbRow.id,
     name: dbRow.name || dbRow.title || 'İsimsiz Ürün',
     collectionId: dbRow.category_id || '',
     collectionName: dbRow.categories?.name || 'Özel Seri',
-    collectionSlug: dbRow.categories?.slug || 'ozel-seri',
+    collectionSlug: dbRow.categories?.slug || 'genel',
     description: dbRow.short_description || dbRow.description || 'Lüks ve modern tasarımıyla banyonuza değer katar.',
     longDescription: dbRow.description || 'Erayduş kalitesiyle üretilmiş, milimetrik hassasiyete sahip özel tasarım. Uzun ömürlü kullanım ve estetik görünüm sunar.',
     image: Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images[0] : 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80',
@@ -67,93 +75,117 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
       }
       return 0
     })(),
-    layoutType: dbRow.technical_specs?.layoutType === 'Vanity Detail' ? 'Banyo Dolabı' : (dbRow.technical_specs?.layoutType || 'Standart'),
+    layoutType: isBanyoDolabi ? 'Banyo Dolabı' : (dbRow.technical_specs?.layoutType || 'Standart'),
     cabinShape: dbRow.technical_specs?.cabinShape || '',
     isNew: dbRow.new_product || true,
     variants
   }
 }
 
-export async function getProducts(): Promise<UIProduct[]> {
-  try {
-    const supabase = createPublicClient()
-    const { data, error } = await supabase
-      .from('products')
-      .select('*, categories(name, slug), variants:product_variants(*)')
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
-    
-    if (error) {
-      console.error("Get products error:", error)
-      return []
-    }
-    
-    return data ? data.map(mapDatabaseProduct) : []
-  } catch (error) {
-    console.error("Get products exception:", error)
-    return []
-  }
-}
+export const getProducts = cache(
+  unstable_cache(
+    async (): Promise<UIProduct[]> => {
+      try {
+        const supabase = await createPublicClient()
+        const { data, error } = await supabase
+          .from('products')
+          .select('*, categories(name, slug), variants:product_variants(*)')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false })
+        
+        if (error) {
+          console.error("Get products error:", error)
+          return []
+        }
+        
+        return data ? data.map(mapDatabaseProduct) : []
+      } catch (error) {
+        console.error("Get products exception:", error)
+        return []
+      }
+    },
+    ['get-all-products'],
+    { tags: ['products'], revalidate: 3600 }
+  )
+)
 
-export async function getProductsByCollection(categoryId: string): Promise<UIProduct[]> {
-  try {
-    const supabase = createPublicClient()
-    const { data, error } = await supabase
-      .from('products')
-      .select('*, categories(name, slug), variants:product_variants(*)')
-      .eq('category_id', categoryId)
-      .eq('status', 'active')
-    
-    if (error) {
-      console.error("Get products by category error:", error)
-      return []
-    }
-    
-    return data ? data.map(mapDatabaseProduct) : []
-  } catch (error) {
-    console.error("Get products by category exception:", error)
-    return []
-  }
-}
+export const getProductsByCollection = cache(
+  unstable_cache(
+    async (categoryId: string): Promise<UIProduct[]> => {
+      try {
+        const supabase = await createPublicClient()
+        const { data, error } = await supabase
+          .from('products')
+          .select('*, categories(name, slug), variants:product_variants(*)')
+          .eq('category_id', categoryId)
+          .eq('status', 'active')
+        
+        if (error) {
+          console.error("Get products by category error:", error)
+          return []
+        }
+        
+        return data ? data.map(mapDatabaseProduct) : []
+      } catch (error) {
+        console.error("Get products by category exception:", error)
+        return []
+      }
+    },
+    ['get-products-by-collection'],
+    { tags: ['products'], revalidate: 3600 }
+  )
+)
 
-export async function getProductById(id: string): Promise<UIProduct | null> {
-  try {
-    const supabase = createPublicClient()
-    const { data, error } = await supabase
-      .from('products')
-      .select('*, categories(name, slug), variants:product_variants(*)')
-      .eq('id', id)
-      .single()
-    
-    if (error || !data) return null
-    return mapDatabaseProduct(data)
-  } catch {
-    return null
-  }
-}
+export const getProductById = cache(
+  unstable_cache(
+    async (id: string): Promise<UIProduct | null> => {
+      try {
+        const supabase = await createPublicClient()
+        const { data, error } = await supabase
+          .from('products')
+          .select('*, categories(name, slug), variants:product_variants(*)')
+          .eq('id', id)
+          .single()
+        
+        if (error || !data) return null
+        return mapDatabaseProduct(data)
+      } catch {
+        return null
+      }
+    },
+    ['get-product-by-id'],
+    { tags: ['products'], revalidate: 3600 }
+  )
+)
 
-export async function getProductBySlug(slug: string): Promise<UIProduct | null> {
-  try {
-    const supabase = createPublicClient()
-    let { data, error } = await supabase
-      .from('products')
-      .select('*, categories(name, slug), variants:product_variants(*)')
-      .eq('slug', slug)
-      .maybeSingle()
-    
-    if (!data && slug.startsWith('eraydus-')) {
-      const cleanSlug = slug.replace(/^eraydus-/, '')
-      const { data: fallbackData } = await supabase
-        .from('products')
-        .select('*, categories(name, slug), variants:product_variants(*)')
-        .eq('slug', cleanSlug)
-        .maybeSingle()
-      data = fallbackData
-    }
+export const getProductBySlug = cache(
+  unstable_cache(
+    async (slug: string): Promise<UIProduct | null> => {
+      try {
+        const supabase = await createPublicClient()
+        let { data, error } = await supabase
+          .from('products')
+          .select('*, categories(name, slug), variants:product_variants(*)')
+          .eq('slug', slug)
+          .maybeSingle()
+        
+        if (!data && slug.startsWith('eraydus-')) {
+          const cleanSlug = slug.replace(/^eraydus-/, '')
+          const { data: fallbackData } = await supabase
+            .from('products')
+            .select('*, categories(name, slug), variants:product_variants(*)')
+            .eq('slug', cleanSlug)
+            .maybeSingle()
+          data = fallbackData
+        }
 
-    if (!data) return null
-    return mapDatabaseProduct(data)
-  } catch {
-    return null
-  }
-}
+        if (!data) return null
+        return mapDatabaseProduct(data)
+      } catch {
+        return null
+      }
+    },
+    ['get-product-by-slug'],
+    { tags: ['products'], revalidate: 3600 }
+  )
+)
