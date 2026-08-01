@@ -273,7 +273,7 @@ export async function importWooCommerceCSVAction(csvText: string) {
     const { data: existingCategories } = await supabase.from('categories').select('*')
     const categoryMap = new Map<string, string>()
     if (existingCategories) {
-      existingCategories.forEach(c => categoryMap.set(c.name.toLowerCase(), c.id))
+      existingCategories.forEach((c: { name: string; id: string }) => categoryMap.set(c.name.toLowerCase(), c.id))
     }
 
     const productRows = rows.slice(1)
