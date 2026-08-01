@@ -85,7 +85,11 @@ export default async function UrunlerPage() {
         />
       )}
       
-      <InspirationSection />
+      <InspirationSection 
+        productCount={products.length}
+        mainImage={products[0]?.image || undefined}
+        secondaryImage={products[1]?.image || undefined}
+      />
       
       <ProductGridSection 
         title="Çok Satan Ürünler" 

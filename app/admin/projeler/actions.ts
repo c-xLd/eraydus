@@ -10,7 +10,7 @@ export async function createProjectAction(data: {
   description: string, 
   imageUrl: string 
 }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data: inserted, error } = await supabase
     .from('projects')
@@ -42,7 +42,7 @@ export async function updateProjectAction(id: string, data: {
   description: string, 
   imageUrl?: string 
 }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const updates: any = { 
     name: data.name,
@@ -70,7 +70,7 @@ export async function updateProjectAction(id: string, data: {
 }
 
 export async function deleteProjectAction(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data, error } = await supabase
     .from('projects')

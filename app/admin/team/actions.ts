@@ -4,7 +4,7 @@ import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
 export async function deleteTeamMember(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   // Note: in a real application, you might also need to delete the user from auth.users using the admin API
   const { error } = await supabase
@@ -21,7 +21,7 @@ export async function deleteTeamMember(id: string) {
 }
 
 export async function updateTeamMemberStatus(id: string, status: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('profiles')

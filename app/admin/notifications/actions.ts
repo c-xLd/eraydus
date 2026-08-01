@@ -4,7 +4,7 @@ import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
 export async function markNotificationAsRead(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('notifications')
@@ -20,7 +20,7 @@ export async function markNotificationAsRead(id: string) {
 }
 
 export async function deleteNotification(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('notifications')

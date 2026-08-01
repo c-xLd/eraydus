@@ -29,8 +29,8 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  const averageRating = reviews.length > 0 
-    ? reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length 
+  const averageRating = reviews.length > 0
+    ? reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length
     : 0
 
   const distribution = [5, 4, 3, 2, 1].map(stars => ({
@@ -43,11 +43,11 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
     e.preventDefault()
     setIsSubmitting(true)
     setErrorMsg('')
-    
+
     const formData = new FormData(e.currentTarget)
     formData.append('rating', rating.toString())
     formData.append('productId', productId)
-    
+
     // Simple math captcha validation
     const mathAnswer = formData.get('math_answer')?.toString()
     if (mathAnswer !== '8') {
@@ -99,7 +99,7 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
               {errorMsg && (
                 <div className="p-4 bg-red-500/10 text-red-500 rounded-lg text-sm">{errorMsg}</div>
               )}
-              
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Puanınız</label>
                 <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>
@@ -111,13 +111,13 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
                       onMouseEnter={() => setHoverRating(star)}
                       className="p-1"
                     >
-                      <Star 
+                      <Star
                         className={cn(
                           "w-8 h-8 transition-colors",
-                          (hoverRating || rating) >= star 
-                            ? "fill-champagne text-champagne" 
+                          (hoverRating || rating) >= star
+                            ? "fill-champagne text-champagne"
                             : "text-muted-foreground/30"
-                        )} 
+                        )}
                       />
                     </button>
                   ))}
@@ -127,20 +127,20 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="author_name" className="text-sm font-medium">İsim Soyisim</label>
-                  <input 
-                    id="author_name" 
-                    name="author_name" 
-                    required 
+                  <input
+                    id="author_name"
+                    name="author_name"
+                    required
                     className="flex h-12 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     placeholder="Adınız"
                   />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="author_email" className="text-sm font-medium">E-posta (İsteğe bağlı)</label>
-                  <input 
-                    id="author_email" 
-                    name="author_email" 
-                    type="email" 
+                  <input
+                    id="author_email"
+                    name="author_email"
+                    type="email"
                     className="flex h-12 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     placeholder="ornek@email.com"
                   />
@@ -149,10 +149,10 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
 
               <div className="space-y-2">
                 <label htmlFor="content" className="text-sm font-medium">Yorumunuz</label>
-                <textarea 
-                  id="content" 
-                  name="content" 
-                  required 
+                <textarea
+                  id="content"
+                  name="content"
+                  required
                   rows={4}
                   className="flex w-full rounded-xl border border-input bg-background px-4 py-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
                   placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..."
@@ -164,10 +164,10 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
 
               <div className="space-y-2">
                 <label htmlFor="math_answer" className="text-sm font-medium">Doğrulama: 3 + 5 = ?</label>
-                <input 
-                  id="math_answer" 
-                  name="math_answer" 
-                  required 
+                <input
+                  id="math_answer"
+                  name="math_answer"
+                  required
                   className="flex h-12 w-full md:w-1/3 rounded-xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   placeholder="Sonucu yazın"
                 />
@@ -190,9 +190,9 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
               <div className="space-y-1">
                 <div className="flex text-champagne">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star 
-                      key={star} 
-                      className={`w-5 h-5 ${star <= Math.round(averageRating) ? 'fill-current' : 'fill-transparent'}`} 
+                    <Star
+                      key={star}
+                      className={`w-5 h-5 ${star <= Math.round(averageRating) ? 'fill-current' : 'fill-transparent'}`}
                     />
                   ))}
                 </div>
@@ -207,9 +207,9 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
                     {stars} <Star className="w-3 h-3 fill-current" />
                   </div>
                   <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-champagne rounded-full" 
-                      style={{ width: `${percentage}%` }} 
+                    <div
+                      className="h-full bg-champagne rounded-full"
+                      style={{ width: `${percentage}%` }}
                     />
                   </div>
                   <div className="w-8 text-right text-muted-foreground">{count}</div>
@@ -231,9 +231,9 @@ export function ProductReviews({ productId, productName, reviews }: ProductRevie
                   </div>
                   <div className="flex text-champagne">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Star 
-                        key={star} 
-                        className={`w-4 h-4 ${star <= review.rating ? 'fill-current' : 'text-muted-foreground/30'}`} 
+                      <Star
+                        key={star}
+                        className={`w-4 h-4 ${star <= review.rating ? 'fill-current' : 'text-muted-foreground/30'}`}
                       />
                     ))}
                   </div>

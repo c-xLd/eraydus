@@ -4,7 +4,7 @@ import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
 export async function updateQuoteStatus(quoteId: string, newStatus: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('quotes')
@@ -22,7 +22,7 @@ export async function updateQuoteStatus(quoteId: string, newStatus: string) {
 }
 
 export async function deleteQuote(quoteId: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('quotes')

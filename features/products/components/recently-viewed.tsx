@@ -10,7 +10,7 @@ export function RecentlyViewed({ currentProduct }: { currentProduct: any }) {
     try {
       const stored = localStorage.getItem('eraydus-recently-viewed')
       let parsed = stored ? JSON.parse(stored) : []
-      
+
       // Filter out the current product from display
       const displayHistory = parsed.filter((p: any) => p.id !== currentProduct.id).slice(0, 4)
       setHistory(displayHistory)
@@ -26,14 +26,14 @@ export function RecentlyViewed({ currentProduct }: { currentProduct: any }) {
         isNew: currentProduct.new_product || false,
         image: currentProduct.main_image_url
       }
-      
+
       // Remove it if it already exists, then add to front
       parsed = parsed.filter((p: any) => p.id !== currentProduct.id)
       parsed.unshift(currentMinimal)
-      
+
       // Keep only last 10
       parsed = parsed.slice(0, 10)
-      
+
       localStorage.setItem('eraydus-recently-viewed', JSON.stringify(parsed))
     } catch (e) {
       console.error('Failed to parse recently viewed', e)

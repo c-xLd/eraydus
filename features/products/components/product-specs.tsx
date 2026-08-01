@@ -23,7 +23,7 @@ export function ProductSpecs({ specs, features }: { specs?: TechnicalSpecs; feat
   return (
     <div className="space-y-12">
       <h2 className="text-3xl font-medium tracking-tight">Teknik Özellikler</h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Specs Table */}
         <div className="space-y-4">

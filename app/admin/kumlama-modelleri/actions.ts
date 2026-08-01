@@ -4,7 +4,7 @@ import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
 export async function createModelAction(data: { title: string, imageUrl: string }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data: inserted, error } = await supabase
     .from('sandblasted_models')
@@ -28,7 +28,7 @@ export async function createModelAction(data: { title: string, imageUrl: string 
 }
 
 export async function updateModelAction(id: string, data: { title: string, imageUrl?: string, isActive?: boolean }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const updates: any = { title: data.title }
   if (data.imageUrl) updates.image_url = data.imageUrl
@@ -51,7 +51,7 @@ export async function updateModelAction(id: string, data: { title: string, image
 }
 
 export async function deleteModelAction(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data, error } = await supabase
     .from('sandblasted_models')
@@ -73,7 +73,7 @@ export async function deleteModelAction(id: string) {
 }
 
 export async function toggleModelStatusAction(id: string, currentStatus: boolean) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('sandblasted_models')
@@ -90,7 +90,7 @@ export async function toggleModelStatusAction(id: string, currentStatus: boolean
 }
 
 export async function updateOrderAction(orderedIds: string[]) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   
   // Update each item's order_index
   const promises = orderedIds.map((id, index) => 

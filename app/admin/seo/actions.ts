@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 
 export async function saveGlobalSeo(data: any) {
   // In a real app, global SEO might be saved to a specific row in settings or seo_metadata with page_slug='global'
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data: existing } = await supabase
     .from('seo_metadata')
@@ -52,7 +52,7 @@ export async function saveGlobalSeo(data: any) {
 }
 
 export async function updateSeoMetadata(id: string, data: any) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { data: updated, error } = await supabase
     .from('seo_metadata')
@@ -80,7 +80,7 @@ export async function updateSeoMetadata(id: string, data: any) {
 }
 
 export async function deleteSeoMetadata(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('seo_metadata')

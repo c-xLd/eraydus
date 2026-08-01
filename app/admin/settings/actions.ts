@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache"
 
 export async function getSiteSettings() {
   try {
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     const { data, error } = await supabase
       .from('site_settings')
       .select('value')
@@ -25,7 +25,7 @@ export async function getSiteSettings() {
 
 export async function updateSiteSettings(settings: Record<string, unknown>) {
   try {
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     
     // Check if exists
     const { data: existing } = await supabase

@@ -69,7 +69,7 @@ export async function generateWhatsAppText(req: {
 }
 
 export async function deleteProduct(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   // Müşterinin (product) varyasyonları vb. silinmesi gerekebilir ancak 
   // schema'da product_id foreign key'leri ON DELETE CASCADE olabilir.
@@ -89,7 +89,7 @@ export async function deleteProduct(id: string) {
 }
 
 export async function createAttribute(data: { name: string, slug: string, type: string }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('product_attributes').insert(data)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/attributes')
@@ -97,7 +97,7 @@ export async function createAttribute(data: { name: string, slug: string, type: 
 }
 
 export async function createCategory(data: { name: string, slug: string, parent_category?: string }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('categories').insert(data)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/categories')
@@ -107,7 +107,7 @@ export async function createCategory(data: { name: string, slug: string, parent_
 }
 
 export async function deleteCategory(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('categories').delete().eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/categories')
@@ -117,7 +117,7 @@ export async function deleteCategory(id: string) {
 }
 
 export async function updateCategory(id: string, data: any) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('categories').update(data).eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/categories')
@@ -127,7 +127,7 @@ export async function updateCategory(id: string, data: any) {
 }
 
 export async function deleteAttribute(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('product_attributes').delete().eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/attributes')
@@ -135,7 +135,7 @@ export async function deleteAttribute(id: string) {
 }
 
 export async function updateAttribute(id: string, data: any) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('product_attributes').update(data).eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath('/admin/products/attributes')
@@ -143,7 +143,7 @@ export async function updateAttribute(id: string, data: any) {
 }
 
 export async function createAttributeTerm(data: { attribute_id: string, name: string, slug: string, color_code?: string }) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('product_attribute_terms').insert(data)
   if (error) return { success: false, error: error.message }
   revalidatePath(`/admin/products/attributes/${data.attribute_id}`)
@@ -151,7 +151,7 @@ export async function createAttributeTerm(data: { attribute_id: string, name: st
 }
 
 export async function deleteAttributeTerm(id: string, attribute_id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('product_attribute_terms').delete().eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath(`/admin/products/attributes/${attribute_id}`)
@@ -159,7 +159,7 @@ export async function deleteAttributeTerm(id: string, attribute_id: string) {
 }
 
 export async function updateAttributeTerm(id: string, attribute_id: string, data: any) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
   const { error } = await supabase.from('product_attribute_terms').update(data).eq('id', id)
   if (error) return { success: false, error: error.message }
   revalidatePath(`/admin/products/attributes/${attribute_id}`)
@@ -243,7 +243,7 @@ function slugify(text: string): string {
 
 export async function importWooCommerceCSVAction(csvText: string) {
   try {
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     const rows = parseCSV(csvText)
 
     if (rows.length < 2) {
@@ -428,7 +428,7 @@ export async function importWooCommerceCSVAction(csvText: string) {
 }
 
 export async function duplicateProduct(id: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   // Fetch the product to duplicate
   const { data: product, error: fetchError } = await supabase
@@ -462,7 +462,7 @@ export async function duplicateProduct(id: string) {
 }
 
 export async function bulkDeleteProducts(ids: string[]) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('products')
@@ -480,7 +480,7 @@ export async function bulkDeleteProducts(ids: string[]) {
 }
 
 export async function updateProductStatus(id: string, status: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('products')
@@ -498,7 +498,7 @@ export async function updateProductStatus(id: string, status: string) {
 }
 
 export async function updateProductPrice(id: string, base_price: number, sale_price: number | null) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('products')
@@ -516,7 +516,7 @@ export async function updateProductPrice(id: string, base_price: number, sale_pr
 }
 
 export async function updateProductSEO(id: string, description: string) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   const { error } = await supabase
     .from('products')
@@ -534,7 +534,7 @@ export async function updateProductSEO(id: string, description: string) {
 }
 
 export async function updateProductBasicInfo(id: string, name: string, sku: string | null) {
-  const supabase = await createClient()
+  const supabase = (await createClient()) as any
 
   // Sadece isim ve SKU güncelliyoruz
   const { error } = await supabase

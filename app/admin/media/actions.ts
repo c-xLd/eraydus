@@ -70,7 +70,7 @@ async function listBucketFilesRecursively(supabase: any, bucket: string, folderP
 
 export async function getMediaFiles(selectedBucket?: string): Promise<{ success: boolean; data?: MediaItem[]; error?: string }> {
   try {
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     const targetBuckets = selectedBucket && selectedBucket !== 'all' ? [selectedBucket] : BUCKETS
     const itemMap = new Map<string, MediaItem>()
 
@@ -97,7 +97,7 @@ export async function uploadMediaFiles(formData: FormData, bucketName: string = 
       return { success: false, error: 'Yüklenecek dosya seçilmedi.' }
     }
 
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
     const uploadedItems: MediaItem[] = []
 
     for (const file of files) {
@@ -153,7 +153,7 @@ export async function uploadMediaFiles(formData: FormData, bucketName: string = 
 
 export async function deleteMediaFile(bucket: string, path: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
 
     const { error } = await supabase.storage
       .from(bucket)
@@ -174,7 +174,7 @@ export async function deleteMediaFile(bucket: string, path: string): Promise<{ s
 
 export async function uploadFromUrl(imageUrl: string, bucketName: string = 'products'): Promise<{ success: boolean; data?: MediaItem; error?: string }> {
   try {
-    const supabase = await createClient()
+    const supabase = (await createClient()) as any
 
     const response = await fetch(imageUrl)
     if (!response.ok) {

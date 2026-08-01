@@ -54,6 +54,7 @@ export interface ProductDetail {
   category_id: string | null
   base_price: number | null
   starting_price: number | null
+  sale_price: number | null
   layout_type: string | null
   cabin_shape: string | null
   main_image_url: string | null

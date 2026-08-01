@@ -1,79 +1,104 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
+import { Droplets, Ruler, Shield, Wind } from 'lucide-react'
 
-export function InspirationSection() {
-  const stats = [
-    { label: 'Proje', value: '2000+' },
-    { label: 'Yıl Deneyim', value: '15+' },
-    { label: 'Yerli Üretim', value: '%100' },
+interface InspirationSectionProps {
+  productCount?: number
+  mainImage?: string
+  secondaryImage?: string
+}
+
+export function InspirationSection({
+  productCount = 0,
+  mainImage = 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/kumlama-models/cam-models/fume.jpeg',
+}: InspirationSectionProps) {
+
+  const features = [
+    {
+      icon: <Droplets className="w-5 h-5" />,
+      title: 'Nano Teknolojili Camlar',
+      desc: 'Su ve kireç tutmayan özel yüzey işlemi ile duşakabininiz her zaman ilk günkü gibi temiz ve parlak kalır.',
+    },
+    {
+      icon: <Wind className="w-5 h-5" />,
+      title: 'Sessiz Rulman Sistemi',
+      desc: 'Geliştirilmiş amortisörlü ve teflon kaplamalı tekerlekler sayesinde pürüzsüz ve sıfır ses ile açılıp kapanma.',
+    },
+    {
+      icon: <Shield className="w-5 h-5" />,
+      title: '%100 Paslanmaz Profil',
+      desc: 'Banyo nemine karşı ekstra dirençli, yüksek kaliteli alüminyum ve paslanmaz çelik alaşımlı iskelet yapısı.',
+    },
+    {
+      icon: <Ruler className="w-5 h-5" />,
+      title: 'Milimetrik Özel Üretim',
+      desc: 'Banyonuzun mimari yapısı ve ölçülerine birebir uyum sağlayan, tamamen kişiselleştirilebilir kesimler.',
+    },
   ]
 
   return (
-    <section className="py-12 md:py-16 bg-[#0a0a0a] text-white overflow-hidden">
-      <div className="container max-w-6xl px-4 mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+    <section className="py-16 md:py-24 bg-white text-black relative overflow-hidden border-y border-black/5">
+      <div className="container max-w-7xl px-4 mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           
+          {/* Left: Cinematic Image */}
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
+            viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="space-y-8 sm:space-y-10"
+            className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden bg-black/5"
           >
-            <div className="space-y-4 sm:space-y-6">
-              <div className="w-12 h-1 bg-[#C9A86A]" />
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-tight">
-                Her Detay <br className="hidden md:block" />
-                Bir Sanat Eseri
+            <Image 
+              src={mainImage}
+              alt="Erayduş Kalite Standartları"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6 text-white">
+              <div className="text-xs uppercase tracking-[0.2em] font-bold mb-2 opacity-80">Kalite Standartlarımız</div>
+              <div className="text-2xl font-light">Üstün Donanım.</div>
+            </div>
+          </motion.div>
+
+          {/* Right: Feature List */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="flex flex-col justify-center"
+          >
+            <div className="mb-10 md:mb-14">
+              <h2 className="text-3xl md:text-5xl font-light tracking-tight mb-4 leading-tight">
+                Güzelliğin Ardındaki <br/> <span className="font-medium">Mühendislik.</span>
               </h2>
-              <p className="text-white/60 text-base sm:text-lg md:text-xl max-w-lg font-light leading-relaxed">
-                Modern mimarinin estetik çizgilerini, üstün mühendislik ile birleştiriyoruz. 
-                Her bir ürünümüz, banyonuzu özel bir yaşam alanına dönüştürmek için tasarlandı.
+              <p className="text-black/50 text-base md:text-lg max-w-md leading-relaxed">
+                Koleksiyonumuzdaki her bir ürün, kusursuz bir duş deneyimi yaşamanız için en ileri teknolojilerle donatılmıştır.
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 sm:gap-8 pt-6 sm:pt-8 border-t border-white/10">
-              {stats.map((stat, i) => (
-                <div key={i}>
-                  <div className="text-2xl sm:text-4xl font-medium text-[#C9A86A] mb-1 sm:mb-2">
-                    {stat.value}
+            <div className="flex flex-col gap-6 md:gap-8">
+              {features.map((feature, i) => (
+                <div key={i} className="flex gap-5 group">
+                  <div className="w-12 h-12 shrink-0 rounded-full bg-black/5 flex items-center justify-center text-black group-hover:bg-black group-hover:text-white transition-colors duration-300">
+                    {feature.icon}
                   </div>
-                  <div className="text-[10px] sm:text-sm text-white/50 uppercase tracking-wider font-mono">
-                    {stat.label}
+                  <div>
+                    <h4 className="text-lg font-medium mb-1.5">{feature.title}</h4>
+                    <p className="text-black/60 text-sm leading-relaxed max-w-sm">
+                      {feature.desc}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
+            
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7 }}
-            className="relative aspect-square md:aspect-[4/3] lg:aspect-square bg-white/5 rounded-3xl overflow-hidden border border-white/10 flex items-center justify-center p-8"
-          >
-            {/* Abstract decorative element representing architecture/precision */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#C9A86A]/20 via-transparent to-transparent opacity-50" />
-            
-            <div className="relative w-full h-full border border-white/10 rounded-2xl flex flex-col justify-between p-8">
-              <div className="w-full flex justify-between">
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-              </div>
-              <div className="flex-1 flex items-center justify-center">
-                <div className="w-32 h-32 md:w-48 md:h-48 border border-[#C9A86A]/30 rounded-full flex items-center justify-center rotate-45 transition-transform duration-1000 hover:rotate-90">
-                  <div className="w-full h-px bg-[#C9A86A]/30" />
-                  <div className="absolute h-full w-px bg-[#C9A86A]/30" />
-                </div>
-              </div>
-              <div className="w-full flex justify-between">
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-              </div>
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>
