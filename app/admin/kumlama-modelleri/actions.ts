@@ -92,11 +92,11 @@ export async function toggleModelStatusAction(id: string, currentStatus: boolean
 export async function updateOrderAction(orderedIds: string[]) {
   const supabase = (await createClient()) as any
   
-  // Update each item's order_index
+  // Update each item's sort_order
   const promises = orderedIds.map((id, index) => 
     supabase
       .from('sandblasted_models')
-      .update({ order_index: index })
+      .update({ sort_order: index })
       .eq('id', id)
   )
 

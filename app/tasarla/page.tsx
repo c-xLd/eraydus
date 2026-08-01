@@ -34,7 +34,7 @@ export default async function TasarlaPage() {
     .from('sandblasted_models')
     .select('*')
     .eq('is_active', true)
-    .order('order_index', { ascending: true })
+    .order('sort_order', { ascending: true })
 
   // Structured Data for WebApplication
   const webAppLd = {

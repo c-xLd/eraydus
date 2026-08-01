@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { createClient } from '@/services/supabase/client'
 import { createProjectAction, updateProjectAction, deleteProjectAction } from './actions'
+import type { ProjectResult } from './actions'
 import Link from 'next/link'
 
-type Project = {
+export type Project = {
   id: string
   name: string
   location: string
@@ -134,7 +135,7 @@ export default function AdminProjectsClient({ initialProjects }: { initialProjec
     if (editingId) {
       const res = await updateProjectAction(editingId, { ...formData, imageUrl: finalImageUrl !== preview ? finalImageUrl : undefined })
       if (res.success && res.data) {
-        setProjects(projects.map(p => p.id === editingId ? { ...p, ...res.data } : p))
+        setProjects(projects.map(p => p.id === editingId ? { ...p, ...(res.data as Project) } : p))
         toast.success('Proje güncellendi')
         closeModal()
       } else {
@@ -143,7 +144,7 @@ export default function AdminProjectsClient({ initialProjects }: { initialProjec
     } else {
       const res = await createProjectAction({ ...formData, imageUrl: finalImageUrl })
       if (res.success && res.data) {
-        setProjects([res.data, ...projects])
+        setProjects([res.data as Project, ...projects])
         toast.success('Yeni proje eklendi')
         closeModal()
       } else {

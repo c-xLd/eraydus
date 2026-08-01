@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/server'
+import type { Database } from '@/lib/database.types'
 import KumlamaModelleriClient from './client'
 
 export const metadata = {
@@ -21,13 +22,26 @@ export default async function AdminKumlamaPage() {
     console.error('Error fetching models:', error)
   }
 
-  // To support order_index gracefully if it exists:
-  const models = (data || []).sort((a: any, b: any) => {
-    if (a.order_index !== undefined && b.order_index !== undefined) {
-      return a.order_index - b.order_index
-    }
-    return 0
-  })
+  type SandblastedModelRow = Database['public']['Tables']['sandblasted_models']['Row']
+  type AdminModel = {
+    id: string
+    title: string
+    image_url: string
+    created_at: string
+    is_active?: boolean
+    order_index?: number
+  }
+
+  const models: AdminModel[] = ((data as SandblastedModelRow[]) || [])
+    .map((row) => ({
+      id: row.id,
+      title: row.name,
+      image_url: row.image_url ?? '',
+      created_at: row.created_at,
+      is_active: row.is_active ?? undefined,
+      order_index: row.sort_order ?? undefined,
+    }))
+    .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
 
   return <KumlamaModelleriClient initialModels={models} />
 }

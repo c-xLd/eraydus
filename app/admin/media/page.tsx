@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: 'WordPress tarzı medya ve ortam dosyası kütüphanesi.',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminMediaPage() {
   const result = await getMediaFiles('all')
   const initialItems = result.success && result.data ? result.data : []

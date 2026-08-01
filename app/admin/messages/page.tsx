@@ -16,7 +16,7 @@ export default async function AdminMessagesPage() {
         <h1 className="text-3xl font-bold tracking-tight">Mesajlar</h1>
         <p className="text-muted-foreground mt-2">İletişim formundan gelen müşteri mesajlarını yönetin.</p>
       </div>
-      <MessagesClient initialMessages={messages} />
+      <MessagesClient initialMessages={messages ?? []} />
     </div>
   )
 }

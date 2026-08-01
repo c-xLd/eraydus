@@ -19,6 +19,6 @@ export default async function AdminBlogPage() {
   }
 
   return (
-    <BlogClient initialPosts={posts || []} />
+    <BlogClient initialPosts={(posts as any[]) || []} />
   )
 }

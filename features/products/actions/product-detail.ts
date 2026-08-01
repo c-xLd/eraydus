@@ -55,11 +55,11 @@ export const getProductBySlug = cache(async (slug: string): Promise<{ success: b
     const compatibleGlassIds = productTyped.compatible_glass || []
     const compatibleProfileIds = productTyped.compatible_profiles || []
 
-    const filteredGlassOptions = (glassResult.data || []).filter((opt: GlassOption) =>
+    const filteredGlassOptions = ((glassResult.data as unknown as GlassOption[]) || []).filter((opt: GlassOption) =>
       compatibleGlassIds.length === 0 || compatibleGlassIds.includes(opt.id)
     )
 
-    const filteredProfileOptions = (profileResult.data || []).filter((opt: ProfileOption) =>
+    const filteredProfileOptions = ((profileResult.data as unknown as ProfileOption[]) || []).filter((opt: ProfileOption) =>
       compatibleProfileIds.length === 0 || compatibleProfileIds.includes(opt.id)
     )
 
@@ -110,7 +110,7 @@ export const getAllGlassOptions = cache(async (): Promise<{ success: boolean; da
       return { success: false, error: 'Cam seçenekleri yüklenemedi' }
     }
 
-    return { success: true, data: data || [] }
+    return { success: true, data: (data as unknown as GlassOption[]) || [] }
   } catch (error) {
     console.error('Unexpected error in getAllGlassOptions:', error)
     return { success: false, error: 'Beklenmeyen bir hata oluştu' }
@@ -134,7 +134,7 @@ export const getAllProfileOptions = cache(async (): Promise<{ success: boolean; 
       return { success: false, error: 'Profil seçenekleri yüklenemedi' }
     }
 
-    return { success: true, data: data || [] }
+    return { success: true, data: (data as unknown as ProfileOption[]) || [] }
   } catch (error) {
     console.error('Unexpected error in getAllProfileOptions:', error)
     return { success: false, error: 'Beklenmeyen bir hata oluştu' }
