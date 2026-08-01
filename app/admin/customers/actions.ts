@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 export async function createCustomer(data: any) {
   const supabase = (await createClient()) as any
 
-  const { data: newCustomer, error } = await supabase
+  const { data: newCustomer, error } = await (supabase as any)
     .from('customers')
     .insert([
       {
@@ -35,7 +35,7 @@ export async function createCustomer(data: any) {
 export async function updateCustomer(id: string, data: any) {
   const supabase = (await createClient()) as any
 
-  const { data: updatedCustomer, error } = await supabase
+  const { data: updatedCustomer, error } = await (supabase as any)
     .from('customers')
     .update({
       first_name: data.first_name,
@@ -64,7 +64,7 @@ export async function updateCustomer(id: string, data: any) {
 export async function deleteCustomer(id: string) {
   const supabase = (await createClient()) as any
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('customers')
     .delete()
     .eq('id', id)

@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 export async function createModelAction(data: { title: string, imageUrl: string }) {
   const supabase = (await createClient()) as any
 
-  const { data: inserted, error } = await supabase
+  const { data: inserted, error } = await (supabase as any)
     .from('sandblasted_models')
     .insert([
       { 
@@ -34,7 +34,7 @@ export async function updateModelAction(id: string, data: { title: string, image
   if (data.imageUrl) updates.image_url = data.imageUrl
   if (data.isActive !== undefined) updates.is_active = data.isActive
 
-  const { data: updated, error } = await supabase
+  const { data: updated, error } = await (supabase as any)
     .from('sandblasted_models')
     .update(updates)
     .eq('id', id)
@@ -53,7 +53,7 @@ export async function updateModelAction(id: string, data: { title: string, image
 export async function deleteModelAction(id: string) {
   const supabase = (await createClient()) as any
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('sandblasted_models')
     .delete()
     .eq('id', id)
@@ -75,7 +75,7 @@ export async function deleteModelAction(id: string) {
 export async function toggleModelStatusAction(id: string, currentStatus: boolean) {
   const supabase = (await createClient()) as any
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('sandblasted_models')
     .update({ is_active: !currentStatus })
     .eq('id', id)
@@ -94,7 +94,7 @@ export async function updateOrderAction(orderedIds: string[]) {
   
   // Update each item's sort_order
   const promises = orderedIds.map((id, index) => 
-    supabase
+    (supabase as any)
       .from('sandblasted_models')
       .update({ sort_order: index })
       .eq('id', id)
