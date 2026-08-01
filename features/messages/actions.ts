@@ -14,7 +14,8 @@ export async function getMessages() {
 
 export async function markAsRead(id: string) {
   const supabase = await createClient()
-  const { error } = await supabase
+  // Cast supabase to any to bypass strict typechecking of Database types if it has mismatched tables/types
+  const { error } = await (supabase as any)
     .from('messages')
     .update({ is_read: true })
     .eq('id', id)

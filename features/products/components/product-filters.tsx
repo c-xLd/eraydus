@@ -49,7 +49,11 @@ export function ProductFilters({
     }
   }
 
-  const FilterContent = () => (
+  // Refactored: Return JSX directly instead of defining and rendering an inner component.
+  // Defining helper components inline and rendering them via JSX tags (e.g. <FilterContent />)
+  // causes React to treat them as new types on every render, triggering full unmounting/remounting,
+  // destroying focus, causing layout shifts, and degrading Interaction to Next Paint (INP).
+  return (
     <div className="space-y-6">
       <Accordion multiple defaultValue={['categories', 'price', 'profiles', 'glass', 'layouts']} className="w-full">
         {/* Categories */}
@@ -250,6 +254,4 @@ export function ProductFilters({
       </Button>
     </div>
   )
-
-  return <FilterContent />
 }
