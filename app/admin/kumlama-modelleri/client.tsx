@@ -227,8 +227,8 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     setTogglingId(null)
   }
 
-  const galleryImages = Array.from(new Set(models.map(m => m.image_url)))
-  const filteredModels = models.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  const galleryImages = Array.from(new Set((models || []).map(m => m?.image_url).filter(Boolean)))
+  const filteredModels = (models || []).filter(m => (m?.title || '').toLowerCase().includes(searchQuery.toLowerCase()))
 
   return (
     <div className="space-y-6 pb-20">
