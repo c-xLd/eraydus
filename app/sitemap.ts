@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import { PROGRAMMATIC_MATRIX } from '@/lib/seo/matrix'
+import { getAllTags, slugifyTag } from '@/lib/data/blog'
 
 export const revalidate = 3600 
 
@@ -11,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-  // 1. Statik Rotalar
+  // 1. Statik Rotalar (Tüm Önemli Sayfalar)
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
@@ -24,6 +25,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.98,
+    },
+    {
+      url: `${baseUrl}/banyo-trendleri-2026`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/tasarla`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/kumlama-modelleri`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/ankara-cankaya-dusakabin`,
@@ -50,25 +69,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/banyo-trendleri-2026`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/tasarla`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
       url: `${baseUrl}/projeler`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/jakuzi-tekneler`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/hakkimizda`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/bayi-basvurusu`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/sss`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
@@ -91,9 +116,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${baseUrl}/kvkk`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/cerez-politikasi`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/gizlilik-politikasi`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
   ]
 
-  // 2. Programmatik SEO Rotaları
+  // 2. Programmatik SEO Rotaları (Çapraz Matris Filtreleri)
   const programmaticRoutes: MetadataRoute.Sitemap = Object.keys(PROGRAMMATIC_MATRIX).map((slug) => ({
     url: `${baseUrl}/dusakabin/${slug}`,
     lastModified: new Date(),
@@ -116,7 +159,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       supabase
         .from('blog')
-        .select('slug, updated_at, published_at')
+        .select('slug, tags, updated_at, published_at')
         .eq('content_type', 'blog')
         .eq('status', 'published'),
     ])
@@ -127,7 +170,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseUrl}/urunler/${catSlug}/${product.slug}`,
         lastModified: new Date(product.updated_at || new Date()),
         changeFrequency: 'weekly',
-        priority: 0.8,
+        priority: 0.85,
       }
     })
 
@@ -135,20 +178,62 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/urunler/${category.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.85,
+      priority: 0.88,
     }))
 
-    const blogRoutes: MetadataRoute.Sitemap = (blogResponse.data || []).map((blog: any) => ({
+    const blogPosts = blogResponse.data || []
+
+    const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((blog: any) => ({
       url: `${baseUrl}/blog/${blog.slug}`,
       lastModified: new Date(blog.updated_at || blog.published_at || new Date()),
       changeFrequency: 'weekly',
       priority: 0.85,
     }))
 
-    return [...staticRoutes, ...programmaticRoutes, ...categoryRoutes, ...productRoutes, ...blogRoutes]
+    // 4. Blog Etiket (Tag) Dinamik Rotaları
+    const dbTags: string[] = blogPosts.flatMap((post: any) => post.tags || [])
+    const fallbackTags: string[] = await getAllTags()
+    const allUniqueTags = Array.from(new Set([...dbTags, ...fallbackTags]))
+
+    const tagRoutes: MetadataRoute.Sitemap = allUniqueTags
+      .map((tag) => slugifyTag(tag))
+      .filter(Boolean)
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .map((tagSlug) => ({
+        url: `${baseUrl}/blog/tag/${tagSlug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.70,
+      }))
+
+    return [
+      ...staticRoutes,
+      ...programmaticRoutes,
+      ...categoryRoutes,
+      ...productRoutes,
+      ...blogRoutes,
+      ...tagRoutes,
+    ]
 
   } catch (error) {
     console.error('Sitemap oluşturulurken hata oluştu:', error)
-    return [...staticRoutes, ...programmaticRoutes]
+    
+    // Güvenlik Ağı (Fallback): DB erişimi zaman aşımına uğrarsa statik + tag rotalarını döndür
+    try {
+      const fallbackTags = await getAllTags()
+      const tagRoutes: MetadataRoute.Sitemap = fallbackTags
+        .map((tag) => slugifyTag(tag))
+        .filter(Boolean)
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .map((tagSlug) => ({
+          url: `${baseUrl}/blog/tag/${tagSlug}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.70,
+        }))
+      return [...staticRoutes, ...programmaticRoutes, ...tagRoutes]
+    } catch {
+      return [...staticRoutes, ...programmaticRoutes]
+    }
   }
 }
