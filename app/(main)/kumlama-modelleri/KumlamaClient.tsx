@@ -40,8 +40,8 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const [search, setSearch] = useState('')
 
-  const filtered = initialModels.filter(m =>
-    m.title.toLowerCase().includes(search.toLowerCase())
+  const filtered = (initialModels || []).filter(m =>
+    (m.title || '').toLowerCase().includes(search.toLowerCase())
   )
 
   // Scroll lock
