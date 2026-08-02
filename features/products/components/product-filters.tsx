@@ -49,7 +49,14 @@ export function ProductFilters({
     }
   }
 
-  const FilterContent = () => (
+  // ⚡ PERFORMANCE OPTIMIZATION (Bolt):
+  // Directly inline and render the JSX structure. Previously, a nested functional component `FilterContent`
+  // was defined inside the render path and rendered as `<FilterContent />`. This React anti-pattern caused
+  // the entire DOM subtree under the filters to completely unmount and remount on every state change (e.g.,
+  // selecting a checkbox, dragging the price slider), resulting in severe input focus loss, layout thrashing,
+  // and redundant calculations. Direct rendering guarantees persistent focus, preserved accordion state,
+  // and instant UI updates.
+  return (
     <div className="space-y-6">
       <Accordion multiple defaultValue={['categories', 'price', 'profiles', 'glass', 'layouts']} className="w-full">
         {/* Categories */}
@@ -250,6 +257,4 @@ export function ProductFilters({
       </Button>
     </div>
   )
-
-  return <FilterContent />
 }
