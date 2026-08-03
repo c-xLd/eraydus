@@ -15,13 +15,14 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { productSlug } = await params
+  const { categorySlug, productSlug } = await params
   const result = await getProductBySlug(productSlug)
   if (!result.success || !result.data) return { title: 'Bulunamadı' }
   const product = result.data
   return {
     title: product.meta_title || `${product.name} | ERAYDUŞ`,
     description: product.meta_description || product.short_description || `${product.name} - ERAYDUŞ mimari cam çözümleri`,
+    alternates: { canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'}/urunler/${categorySlug}/${productSlug}` },
     openGraph: {
       title: product.meta_title || `${product.name} | ERAYDUŞ`,
       description: product.meta_description || product.short_description || '',
