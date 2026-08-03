@@ -64,18 +64,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 async function getProductsForFilter(tags: string[]) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
   try {
-    const { data: products } = await supabase
-      .from('products')
-      .select('id, name, slug, price, images, description, categories(name, slug)')
-      .eq('status', 'active')
-      .limit(12);
+    if (supabase) {
+      const { data: products } = await supabase
+        .from('products')
+        .select('id, name, slug, price, images, description, categories(name, slug)')
+        .eq('status', 'active')
+        .limit(12);
 
-    return products || [];
+      return products || [];
+    }
+    return [];
   } catch (error) {
     console.error('Supabase fetch error:', error);
     return [];

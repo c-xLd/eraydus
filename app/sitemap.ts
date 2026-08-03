@@ -8,9 +8,9 @@ export const revalidate = 3600
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
 
   // 1. Statik Rotalar (Tüm Önemli Sayfalar)
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -146,52 +146,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // 3. Supabase'den Canlı Ürünler, Kategoriler ve Blog Yazılarını Paralel Çek
-    const [productsResponse, categoriesResponse, blogResponse] = await Promise.all([
-      supabase
-        .from('products')
-        .select('slug, updated_at, categories(slug)')
-        .eq('status', 'active'),
+    let productRoutes: MetadataRoute.Sitemap = []
+    let categoryRoutes: MetadataRoute.Sitemap = []
+    let blogRoutes: MetadataRoute.Sitemap = []
+    let dbTags: string[] = []
+    let blogPosts: any[] = []
 
-      supabase
-        .from('categories')
-        .select('slug')
-        .eq('status', 'active'),
+    if (supabase) {
+      const [productsResponse, categoriesResponse, blogResponse] = await Promise.all([
+        supabase
+          .from('products')
+          .select('slug, updated_at, categories(slug)')
+          .eq('status', 'active'),
 
-      supabase
-        .from('blog')
-        .select('slug, tags, updated_at, published_at')
-        .eq('content_type', 'blog')
-        .eq('status', 'published'),
-    ])
+        supabase
+          .from('categories')
+          .select('slug')
+          .eq('status', 'active'),
 
-    const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product: any) => {
-      const catSlug = product.categories?.slug || 'genel'
-      return {
-        url: `${baseUrl}/urunler/${catSlug}/${product.slug}`,
-        lastModified: new Date(product.updated_at || new Date()),
+        supabase
+          .from('blog')
+          .select('slug, tags, updated_at, published_at')
+          .eq('content_type', 'blog')
+          .eq('status', 'published'),
+      ])
+
+      productRoutes = (productsResponse.data || []).map((product: any) => {
+        const catSlug = product.categories?.slug || 'genel'
+        return {
+          url: `${baseUrl}/urunler/${catSlug}/${product.slug}`,
+          lastModified: new Date(product.updated_at || new Date()),
+          changeFrequency: 'weekly',
+          priority: 0.85,
+        }
+      })
+
+      categoryRoutes = (categoriesResponse.data || []).map((category: any) => ({
+        url: `${baseUrl}/urunler/${category.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.88,
+      }))
+
+      blogPosts = blogResponse.data || []
+
+      blogRoutes = blogPosts.map((blog: any) => ({
+        url: `${baseUrl}/blog/${blog.slug}`,
+        lastModified: new Date(blog.updated_at || blog.published_at || new Date()),
         changeFrequency: 'weekly',
         priority: 0.85,
-      }
-    })
+      }))
 
-    const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category: any) => ({
-      url: `${baseUrl}/urunler/${category.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.88,
-    }))
-
-    const blogPosts = blogResponse.data || []
-
-    const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((blog: any) => ({
-      url: `${baseUrl}/blog/${blog.slug}`,
-      lastModified: new Date(blog.updated_at || blog.published_at || new Date()),
-      changeFrequency: 'weekly',
-      priority: 0.85,
-    }))
+      dbTags = blogPosts.flatMap((post: any) => post.tags || [])
+    }
 
     // 4. Blog Etiket (Tag) Dinamik Rotaları
-    const dbTags: string[] = blogPosts.flatMap((post: any) => post.tags || [])
     const fallbackTags: string[] = await getAllTags()
     const allUniqueTags = Array.from(new Set([...dbTags, ...fallbackTags]))
 
