@@ -49,7 +49,7 @@ export function ProductFilters({
     }
   }
 
-  const FilterContent = () => (
+  return (
     <div className="space-y-6">
       <Accordion multiple defaultValue={['categories', 'price', 'profiles', 'glass', 'layouts']} className="w-full">
         {/* Categories */}
@@ -250,6 +250,4 @@ export function ProductFilters({
       </Button>
     </div>
   )
-
-  return <FilterContent />
 }
