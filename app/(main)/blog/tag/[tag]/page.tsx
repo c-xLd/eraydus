@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, ArrowRight, CalendarDays, Tag } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getAllTags, getPostsByTag, slugifyTag } from '@/lib/data/blog'
@@ -71,9 +72,9 @@ export default async function BlogTagPage({ params }: Props) {
               {posts.map(post => (
                 <article key={post.id} className="group flex flex-col">
                   <Link href={`/blog/${post.slug}`} className="block overflow-hidden rounded-2xl bg-surface">
-                    <div className="aspect-[4/3] overflow-hidden">
+                    <div className="relative aspect-[4/3] overflow-hidden">
                       {post.featured_image
-                        ? <img src={post.featured_image} alt={post.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                        ? <Image src={post.featured_image} alt={post.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                         : <div className="h-full w-full bg-surface flex items-center justify-center"><span className="text-xs text-muted-foreground uppercase tracking-widest opacity-50">Görsel Yok</span></div>
                       }
                     </div>

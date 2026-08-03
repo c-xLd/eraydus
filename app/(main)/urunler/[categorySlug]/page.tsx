@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${category.name} Modelleri ve Fiyatları | ERAYDUŞ`,
     description: `ERAYDUŞ ${category.name} serisi ile banyonuza modern mimari dokunuş. Lüks duşakabin fiyatları ve özel tasarım seçenekleri.`,
+    alternates: { canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'}/urunler/${categorySlug}` },
     openGraph: {
       title: `${category.name} Modelleri | ERAYDUŞ`,
       description: `Mimari tasarım ${category.name.toLowerCase()} duşakabin modelleri.`,

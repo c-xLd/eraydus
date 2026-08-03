@@ -5,8 +5,10 @@ import { ProductCard } from '@/features/products/components/product-card'
 
 export function RecentlyViewed({ currentProduct }: { currentProduct: any }) {
   const [history, setHistory] = useState<any[]>([])
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
     try {
       const stored = localStorage.getItem('eraydus-recently-viewed')
       let parsed = stored ? JSON.parse(stored) : []
@@ -40,7 +42,7 @@ export function RecentlyViewed({ currentProduct }: { currentProduct: any }) {
     }
   }, [currentProduct])
 
-  if (history.length === 0) return null
+  if (!isMounted || history.length === 0) return null
 
   return (
     <div className="space-y-10 pt-12 lg:pt-24 border-t border-border mt-12">
