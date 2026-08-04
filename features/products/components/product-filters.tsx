@@ -49,7 +49,10 @@ export function ProductFilters({
     }
   }
 
-  const FilterContent = () => (
+  // Optimization: Instead of returning <FilterContent /> (which causes React to treat it as a new component type
+  // on every render, leading to full unmounting/remounting of standard elements/inputs/checkboxes and
+  // introducing layout thrashing and severe INP/focus loss issues), we return the element tree directly.
+  return (
     <div className="space-y-6">
       <Accordion multiple defaultValue={['categories', 'price', 'profiles', 'glass', 'layouts']} className="w-full">
         {/* Categories */}
@@ -250,6 +253,4 @@ export function ProductFilters({
       </Button>
     </div>
   )
-
-  return <FilterContent />
 }
