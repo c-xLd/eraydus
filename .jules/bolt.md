@@ -1,0 +1,3 @@
+## 2025-02-23 - [Nested Helpers In Parent Render scope Anti-pattern]
+**Learning:** Defining helper render functions as JSX components (e.g., `<FilterContent />`) inside parent component render loops causes React to treat them as brand new component types on every render. This results in complete DOM unmounting and remounting on every state update, losing user input focus, destroying active state, and causing layout thrashing (degrading INP and CLS).
+**Action:** Return the element tree directly, invoke them as direct functions (e.g., `{FilterContent()}`), or define them completely outside of the parent component's body.
