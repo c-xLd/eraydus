@@ -37,3 +37,4 @@ pnpm-debug.log*
 # Gemini API key protection
 GeminiAPI*  # Ignore any file containing Gemini API key
 *.GeminiAPI  # Additional pattern for safety
+.vercel

@@ -1,16 +1,40 @@
+import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { getProducts } from '@/features/products/services/products'
 import { getCategories } from '@/features/products/services/categories'
 import { ShowroomHero } from '@/features/products/components/showroom-hero'
 import { CategoryShowcase } from '@/features/products/components/category-showcase'
-import { InspirationSection } from '@/features/products/components/inspiration-section'
-import { MaterialShowcase } from '@/features/products/components/material-showcase'
-import { ConfiguratorBanner } from '@/features/products/components/configurator-banner'
-import { NewsletterSection } from '@/features/products/components/newsletter-section'
-import { ReviewCarousel } from '@/features/products/components/review-carousel'
 import { ProductGrid } from '@/features/products/components/product-grid'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { pagesSeoData } from '@/lib/data/seo'
+
+const InspirationSection = dynamic(() => import('@/features/products/components/inspiration-section').then(mod => mod.InspirationSection))
+const MaterialShowcase = dynamic(() => import('@/features/products/components/material-showcase').then(mod => mod.MaterialShowcase))
+const ConfiguratorBanner = dynamic(() => import('@/features/products/components/configurator-banner').then(mod => mod.ConfiguratorBanner))
+const ReviewCarousel = dynamic(() => import('@/features/products/components/review-carousel').then(mod => mod.ReviewCarousel))
+const NewsletterSection = dynamic(() => import('@/features/products/components/newsletter-section').then(mod => mod.NewsletterSection))
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = pagesSeoData.find(p => p.id === 'urunler')
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'
+
+  return {
+    title: seo?.title || 'Duşakabin Modelleri ve Banyo Koleksiyonları',
+    description: seo?.description || 'Özel ölçü imalat sürgülü, pivot, katlanır ve askılı duşakabin modellerini inceleyin. Ankara içi ücretsiz keşif ve montaj imkanı.',
+    keywords: seo?.keywords || 'duşakabin modelleri, cam duşakabin, ankara duşakabin, lüks banyo kabinleri',
+    alternates: {
+      canonical: `${baseUrl}/urunler`,
+    },
+    openGraph: {
+      title: seo?.title || 'Duşakabin Modelleri - ERAYDUŞ',
+      description: seo?.description || 'Özel ölçü imalat duşakabin modelleri.',
+      url: `${baseUrl}/urunler`,
+      type: 'website',
+    },
+  }
+}
 
 // Generic grid section component for the page
 function ProductGridSection({ title, products, linkUrl, linkText }: { title: string, products: any[], linkUrl?: string, linkText?: string }) {
@@ -65,8 +89,22 @@ export default async function UrunlerPage() {
   // Best sellers - mock logic using some other slice
   const bestSellerProducts = products.length > 8 ? products.slice(8, 16) : products.slice(0, 8)
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: baseUrl },
+      { '@type': 'ListItem', position: 2, name: 'Koleksiyonlar', item: `${baseUrl}/urunler` },
+    ],
+  }
+
   return (
     <main className="flex min-h-screen flex-col w-full">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <ShowroomHero />
       
       {categories && categories.length > 0 && (

@@ -26,6 +26,15 @@ export async function savePageContent(slug: string, data: Partial<SitePageFormDa
     if (slug === 'hakkimizda') revalidatePath('/hakkimizda')
     if (slug === 'jakuzi-tekneler') revalidatePath('/jakuzi-tekneler')
 
+    // Audit log
+    const { logActivity } = await import('@/features/admin/actions/audit')
+    await logActivity({
+      actionType: 'update',
+      resourceType: 'content',
+      resourceId: slug,
+      newValues: payload
+    })
+
     return { success: true }
   } catch (error) {
     console.error('Error saving page content:', error)

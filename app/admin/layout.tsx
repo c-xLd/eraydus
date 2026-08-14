@@ -1,4 +1,5 @@
 import { AdminLayoutShell } from "@/components/admin/AdminLayoutShell"
+import { SessionTimeout } from "@/components/admin/SessionTimeout"
 import { Toaster } from 'sonner'
 
 export default function AdminLayout({
@@ -8,6 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <>
+      <SessionTimeout timeoutMinutes={30} />
       <AdminLayoutShell>
         {children}
       </AdminLayoutShell>

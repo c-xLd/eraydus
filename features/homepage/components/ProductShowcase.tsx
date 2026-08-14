@@ -16,11 +16,6 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
   return (
     <section className="py-24 md:py-32 bg-background text-foreground relative overflow-hidden border-b border-border/20">
 
-      {/* Blueprint coordinates background accent */}
-      <div className="pointer-events-none absolute right-12 top-10 font-mono text-[9px] text-muted-foreground/30 tracking-widest hidden md:block select-none">
-        INDEX // SEC-02 // COLLECTIONS
-      </div>
-
       <div className="container mx-auto px-6 max-w-[1440px]">
 
         {/* Header Section */}
@@ -31,9 +26,9 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.6, ease }}
-              className="text-champagne text-xs font-semibold tracking-[0.25em] font-mono uppercase block mb-3"
+              className="text-champagne text-xs font-semibold tracking-[0.2em] font-mono uppercase block mb-3"
             >
-              [ SEÇKİN SERİLER ]
+              [ ÜRÜNLERİMİZ ]
             </motion.span>
             <motion.h2
               initial={{ opacity: 0.01, y: 25 }}
@@ -42,7 +37,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               transition={{ duration: 0.8, delay: 0.1, ease }}
               className="text-3xl md:text-4xl font-light tracking-tight text-foreground leading-none"
             >
-              Mimari <span className="font-semibold text-champagne">Koleksiyonlar</span>
+              Öne Çıkan <span className="font-semibold text-champagne">Duşakabin Modellerimiz</span>
             </motion.h2>
           </div>
           <motion.div
@@ -55,7 +50,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               href="/urunler"
               className="group relative inline-flex items-center gap-3 text-foreground/75 hover:text-foreground text-sm font-medium tracking-wide transition-colors pb-1.5"
             >
-              <span>Tüm Koleksiyonu İncele</span>
+              <span>Tüm Modelleri İncele</span>
               <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
               {/* Underline animation */}
               <span className="absolute bottom-0 left-0 w-full h-[1px] bg-border transition-colors group-hover:bg-champagne/30" />
@@ -120,7 +115,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
                   <div className="hidden sm:grid sm:grid-rows-[0fr] sm:group-hover:grid-rows-[1fr] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:opacity-0 sm:group-hover:opacity-100 pt-2">
                     <div className="overflow-hidden">
                       <span className="inline-flex items-center gap-2 text-white text-xs font-medium uppercase tracking-wider group/btn">
-                        Koleksiyonu Keşfet
+                        Modelleri Keşfet
                         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-champagne text-zinc-950 scale-90 group-hover/btn:scale-100 transition-transform duration-300">
                           <ArrowRight className="size-3" />
                         </span>

@@ -55,7 +55,7 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
     collectionSlug: dbRow.categories?.slug || 'genel',
     description: dbRow.short_description || dbRow.description || 'Lüks ve modern tasarımıyla banyonuza değer katar.',
     longDescription: dbRow.description || 'Erayduş kalitesiyle üretilmiş, milimetrik hassasiyete sahip özel tasarım. Uzun ömürlü kullanım ve estetik görünüm sunar.',
-    image: dbRow.main_image_url || (Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images[0] : 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80'),
+    image: dbRow.main_image_url || (Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images[0] : ''),
     gallery: Array.isArray(dbRow.images) && dbRow.images.length > 0 ? dbRow.images : (dbRow.main_image_url ? [dbRow.main_image_url] : []),
     features: Array.isArray(dbRow.features) && dbRow.features.length > 0 ? dbRow.features : ['2 Yıl Üretici Garantisi', 'Ücretsiz Profesyonel Montaj', 'Kişiye Özel Üretim', 'Paslanmaz Malzeme'],
     technicalSpecs: {

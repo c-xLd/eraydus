@@ -7,40 +7,40 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 const reasons = [
   {
-    icon: Shield,
-    title: 'Hassas Üretim',
+    icon: Ruler,
+    title: 'Banyonuza Özel Ölçü',
     description:
-      'CNC teknolojisi ve lazer kesim ile milimetrik hassasiyette, kusursuz ürünler üretiyoruz.',
+      'Standart ölçülere sıkışmadan banyonuzun girinti, eğim ve yüksekliğine %100 tam uyan özel imalat yapıyoruz.',
   },
   {
     icon: Gem,
-    title: 'Premium Cam',
+    title: 'Kırılmaya Dayanıklı Cam',
     description:
-      'Yüksek dayanıklılığa sahip 6mm temperli güvenlik camı, yıllar boyu güvenli ve kusursuz bir görünüm sağlar.',
+      '6mm darbelere dayanıklı temperli güvenlik camları kullanıyor, aileniz için yüksek emniyet sağlıyoruz.',
   },
   {
-    icon: Ruler,
-    title: 'Özel Ölçü',
+    icon: Shield,
+    title: 'Paslanmaz Çelik & Profil',
     description:
-      'Her banyo farklıdır. Ölçülerinize özel üretim ile mükemmel uyum sağlıyoruz.',
-  },
-  {
-    icon: Wrench,
-    title: 'Profesyonel Montaj',
-    description:
-      'Uzman montaj ekibimiz, duşakabininizi titizlikle yerine monte eder ve test eder.',
-  },
-  {
-    icon: Award,
-    title: '2 Yıl Garanti',
-    description:
-      'Ürünlerimize olan güvenimizin kanıtı: 2 yıl üretici garantisi sunuyoruz.',
+      'Nem ve sudan etkilenmeyen paslanmaz çelik aksam ve dayanıklı alüminyum profiller ile uzun ömürlü kullanım.',
   },
   {
     icon: Zap,
-    title: 'Hızlı Üretim',
+    title: 'Ücretsiz Keşif & Ölçü',
     description:
-      'Sipariş onayından sonra 5-7 iş günü içinde üretim ve teslimat gerçekleştiriyoruz.',
+      'Ankara genelinde adresinize ücretsiz gelerek milimetrik ölçü alıyor ve banyonuza en uygun modeli belirliyoruz.',
+  },
+  {
+    icon: Wrench,
+    title: 'Uzman Ekiple Montaj',
+    description:
+      'Kendi bünyemizdeki deneyimli ustalarımızla banyonuzda temiz, hızlı ve sağlam şekilde kurulum gerçekleştiriyoruz.',
+  },
+  {
+    icon: Award,
+    title: '2 Yıl Tam Garanti',
+    description:
+      'Tüm duşakabin modellerimizde imalat ve montaj hatalarına karşı 2 yıl koşulsuz üretici garantisi sunuyoruz.',
   },
 ]
 
@@ -64,16 +64,16 @@ const cardVariants = {
 
 export function WhyEraydusSection() {
   return (
-    <section className="py-20 md:py-24 bg-surface ">
+    <section className="py-16 sm:py-20 md:py-24 bg-surface relative overflow-hidden">
       <div className="container mx-auto px-6 max-w-[1440px]">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 sm:mb-14 lg:mb-16">
           <motion.span
             initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease }}
-            className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
+            className="text-champagne text-xs font-semibold tracking-widest uppercase mb-3 sm:mb-4 block"
           >
             Neden Erayduş?
           </motion.span>
@@ -82,9 +82,9 @@ export function WhyEraydusSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease }}
-            className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight"
+            className="text-2xl sm:text-3xl lg:text-4xl font-light tracking-tight text-foreground"
           >
-            Farkımız, <span className="font-semibold">Detaylarda</span>
+            Banyonuz İçin <span className="font-semibold">Doğru Seçim</span>
           </motion.h2>
         </div>
 
@@ -93,8 +93,8 @@ export function WhyEraydusSection() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          viewport={{ once: true, margin: '200px' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8"
         >
           {reasons.map((reason) => {
             const Icon = reason.icon
@@ -104,23 +104,25 @@ export function WhyEraydusSection() {
                 variants={cardVariants}
                 whileHover={{ y: -6 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="group relative bg-background rounded-3xl p-10 border border-border/50 hover:border-champagne/30 hover:shadow-xl hover:shadow-champagne/5 transition-all duration-500"
+                className="group relative bg-background rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-border/50 hover:border-champagne/30 hover:shadow-xl hover:shadow-champagne/5 transition-all duration-500 flex flex-col justify-between overflow-hidden"
               >
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center mb-8 group-hover:bg-champagne/10 transition-colors duration-500">
-                  <Icon className="size-6 text-champagne" strokeWidth={1.5} />
+                <div>
+                  {/* Icon */}
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface flex items-center justify-center mb-5 sm:mb-6 lg:mb-8 group-hover:bg-champagne/10 transition-colors duration-500">
+                    <Icon className="size-5 sm:size-6 text-champagne" strokeWidth={1.5} />
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-lg sm:text-xl font-medium mb-2.5 sm:mb-3 tracking-tight text-foreground">
+                    {reason.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                    {reason.description}
+                  </p>
                 </div>
 
-                {/* Content */}
-                <h3 className="text-xl font-medium mb-3 tracking-tight">
-                  {reason.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {reason.description}
-                </p>
-
                 {/* Subtle corner accent */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-champagne/5 to-transparent rounded-tr-3xl rounded-bl-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-champagne/5 to-transparent rounded-tr-2xl sm:rounded-tr-3xl rounded-bl-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </motion.div>
             )
           })}

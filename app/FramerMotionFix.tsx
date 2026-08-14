@@ -3,14 +3,15 @@ import { useEffect } from 'react'
 
 export function FramerMotionFix() {
   useEffect(() => {
-    const trigger = () => {
-      window.dispatchEvent(new Event('scroll'))
-      window.dispatchEvent(new Event('resize'))
+    if (typeof window === 'undefined') return
+    
+    // Non-blocking idle update to prevent main thread reflow thrashing during page load
+    if ('requestIdleCallback' in window) {
+      const handle = window.requestIdleCallback(() => {
+        window.dispatchEvent(new Event('resize'))
+      }, { timeout: 2000 })
+      return () => window.cancelIdleCallback(handle)
     }
-    setTimeout(trigger, 100)
-    setTimeout(trigger, 500)
-    setTimeout(trigger, 1000)
-    setTimeout(trigger, 2000)
   }, [])
   return null
 }

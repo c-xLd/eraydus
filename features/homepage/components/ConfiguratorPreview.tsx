@@ -24,7 +24,7 @@ export function ConfiguratorPreview() {
             viewport={{ once: true, margin: "200px" }}
             className="text-champagne text-xs font-semibold tracking-[0.2em] uppercase block mb-3"
           >
-            Erayduş Studio
+            Banyonu Tasarla
           </motion.span>
 
           <motion.h2
@@ -34,8 +34,8 @@ export function ConfiguratorPreview() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight max-w-2xl mx-auto"
           >
-            Hayalinizdeki Tasarımı{' '}
-            <span className="font-semibold">Yapılandırın</span>
+            Banyonuz İçin Anında{' '}
+            <span className="font-semibold text-champagne">Fiyat Hesaplayın</span>
           </motion.h2>
 
           <motion.p
@@ -43,9 +43,9 @@ export function ConfiguratorPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-white/50 text-sm md:text-base max-w-xl mx-auto mt-4"
+            className="text-white/70 text-sm md:text-base max-w-xl mx-auto mt-4 leading-relaxed"
           >
-            Ölçüleri girin, cam rengini seçin, donanım özelliklerini belirleyin. Anında görüntüleyip fiyat alın.
+            Banyonuzun ölçülerini girin, cam modelini ve profil rengini seçin; banyonuza özel duşakabin fiyatını anında görün.
           </motion.p>
         </div>
 
@@ -55,7 +55,7 @@ export function ConfiguratorPreview() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="w-full max-w-5xl mx-auto aspect-[16/9] overflow-hidden bg-white/[0.03] border border-white/[0.06] rounded-3xl  relative group shadow-2xl shadow-black/40"
+          className="w-full max-w-5xl mx-auto aspect-[16/9] overflow-hidden bg-white/[0.03] border border-white/[0.06] rounded-3xl relative group shadow-2xl shadow-black/40"
         >
           <Image
             src={storageUrl('uploads', 'homepage/configurator.jpg')}
@@ -68,26 +68,26 @@ export function ConfiguratorPreview() {
 
           {/* Floating Config Bar */}
           <div className="absolute bottom-6 left-6 right-6 z-20">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-5 bg-black/60 backdrop-blur-2xl border border-white/[0.08] rounded-2xl">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-5 bg-black/75 backdrop-blur-2xl border border-white/[0.1] rounded-2xl">
               <div className="flex flex-wrap items-center gap-6">
                 <div>
-                  <p className="text-white/40 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Model</p>
-                  <p className="font-medium text-sm">Boy Menteşe BM-002</p>
+                  <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Model Türü</p>
+                  <p className="font-medium text-sm">Sürgülü Kabin Sistem</p>
                 </div>
                 <div className="w-[1px] h-8 bg-white/10 hidden md:block" />
                 <div>
-                  <p className="text-white/40 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Cam</p>
-                  <p className="font-medium text-sm">Şefaf</p>
+                  <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Cam Seçimi</p>
+                  <p className="font-medium text-sm">Şeffaf Temperli Cam (6mm)</p>
                 </div>
                 <div className="w-[1px] h-8 bg-white/10 hidden md:block" />
                 <div className="hidden md:block">
-                  <p className="text-white/40 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Profil</p>
-                  <p className="font-medium text-sm">Altın Sarısı</p>
+                  <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Profil Rengi</p>
+                  <p className="font-medium text-sm">Siyah Mat Paslanmaz</p>
                 </div>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Tahmini</p>
-                <p className="text-2xl font-light tracking-tight">₺15.900</p>
+                <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Örnek Tahmini Fiyat</p>
+                <p className="text-2xl font-light tracking-tight text-champagne">₺15.900</p>
               </div>
             </div>
           </div>
@@ -112,19 +112,19 @@ export function ConfiguratorPreview() {
         >
           <Link
             href="/tasarla"
-            className="group inline-flex items-center justify-center rounded-full bg-white text-black px-10 h-14 text-base font-semibold hover:bg-white/95 transition-all duration-300 shadow-xl shadow-white/10"
+            className="group inline-flex items-center justify-center rounded-full bg-champagne text-black px-10 h-14 text-base font-semibold hover:bg-champagne/90 transition-all duration-300 shadow-xl shadow-champagne/20"
           >
-            Stüdyoyu Başlat
+            Modelini Tasarla & Fiyat Al
             <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <a
             href="https://wa.me/905550000000"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 text-white px-8 h-14 text-base font-medium hover:bg-white/5 hover:border-white/25 transition-all duration-300"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 text-white px-8 h-14 text-base font-medium hover:bg-white/10 hover:border-white/30 transition-all duration-300"
           >
             <MessageCircle className="size-4" />
-            Uzmanla Konuş
+            WhatsApp'tan Ölçü Gönder
           </a>
         </motion.div>
       </div>

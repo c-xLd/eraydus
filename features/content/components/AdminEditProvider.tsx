@@ -12,7 +12,13 @@ interface AdminEditContextType {
 
 const AdminEditContext = createContext<AdminEditContextType | undefined>(undefined)
 
+import dynamic from 'next/dynamic'
 import { createClient } from '@/services/supabase/client'
+
+const InlineEditToolbar = dynamic(
+  () => import('./InlineEditToolbar').then(mod => mod.InlineEditToolbar),
+  { ssr: false }
+)
 
 export function AdminEditProvider({ children, isAdmin: initialIsAdmin = false }: { children: ReactNode; isAdmin?: boolean }) {
   const [isAdmin, setIsAdmin] = useState(initialIsAdmin)
@@ -34,6 +40,7 @@ export function AdminEditProvider({ children, isAdmin: initialIsAdmin = false }:
 
   return (
     <AdminEditContext.Provider value={{ isAdmin, isEditMode, toggleEditMode, activeEditField, setActiveEditField }}>
+      {isAdmin && <InlineEditToolbar />}
       {children}
     </AdminEditContext.Provider>
   )

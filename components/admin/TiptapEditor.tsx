@@ -5,11 +5,12 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from '@tiptap/extension-character-count'
+import Youtube from '@tiptap/extension-youtube'
 import { useEffect, useCallback } from 'react'
 import {
   Bold, Italic, Strikethrough, Code, Link as LinkIcon, Unlink,
   Heading1, Heading2, Heading3, List, ListOrdered,
-  Quote, Minus, Undo, Redo, Code2
+  Quote, Minus, Undo, Redo, Code2, Video as YoutubeIcon
 } from 'lucide-react'
 
 interface TiptapEditorProps {
@@ -60,6 +61,7 @@ export default function TiptapEditor({
   minHeight = 380,
 }: TiptapEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
@@ -72,6 +74,10 @@ export default function TiptapEditor({
           rel: 'noopener noreferrer',
           target: '_blank',
         },
+      }),
+      Youtube.configure({
+        controls: false,
+        nocookie: true,
       }),
       Placeholder.configure({ placeholder }),
       CharacterCount,
@@ -105,6 +111,18 @@ export default function TiptapEditor({
       editor.chain().focus().extendMarkRange('link').unsetLink().run()
     } else {
       editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+    }
+  }, [editor])
+
+  const handleAddYoutube = useCallback(() => {
+    if (!editor) return
+    const url = window.prompt('YouTube Video URL:')
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url,
+        width: Math.max(320, parseInt('640', 10)) || 640,
+        height: Math.max(180, parseInt('480', 10)) || 480,
+      })
     }
   }, [editor])
 
@@ -179,7 +197,7 @@ export default function TiptapEditor({
 
         <Divider />
 
-        {/* Link */}
+        {/* Link & Media */}
         <ToolbarButton title="Link Ekle" active={editor.isActive('link')} onClick={handleSetLink}>
           <LinkIcon className="size-4" />
         </ToolbarButton>
@@ -188,6 +206,9 @@ export default function TiptapEditor({
             <Unlink className="size-4" />
           </ToolbarButton>
         )}
+        <ToolbarButton title="YouTube Video Ekle" onClick={handleAddYoutube}>
+          <YoutubeIcon className="size-4 text-red-500" />
+        </ToolbarButton>
       </div>
 
       {/* Content area */}

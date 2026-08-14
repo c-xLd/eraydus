@@ -148,8 +148,17 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
               placeholder="Model ara…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full h-11 pl-10 pr-4 rounded-xl bg-surface border border-border/60 text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:border-champagne/60 transition-colors"
+              className="w-full h-11 pl-10 pr-10 rounded-xl bg-surface border border-border/60 text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:border-champagne/60 transition-colors"
             />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 transition-colors"
+                aria-label="Aramayı temizle"
+              >
+                <X className="size-4" />
+              </button>
+            )}
           </div>
         </div>
       </AnimatedSection>
@@ -157,9 +166,28 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
       {/* ── Gallery Grid ── */}
       <section className="container mx-auto px-6 max-w-[1440px]" aria-label="Kumlama Modelleri Galerisi">
         {filtered.length === 0 ? (
-          <div className="py-24 text-center text-muted-foreground">
+          <div className="py-24 text-center text-muted-foreground flex flex-col items-center justify-center">
             <Search className="size-10 mx-auto mb-4 opacity-30" />
-            <p>"{search}" için sonuç bulunamadı.</p>
+            {search.trim() ? (
+              <>
+                <p className="text-base font-medium text-foreground mb-1">
+                  "{search}" ile eşleşen model bulunamadı
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Farklı bir arama kelimesi deneyebilir veya filtreyi temizleyebilirsiniz.
+                </p>
+                <button
+                  onClick={() => setSearch('')}
+                  className="px-4 py-2 text-xs font-semibold bg-surface border border-border/80 rounded-xl hover:bg-surface-hover text-foreground transition-colors"
+                >
+                  Aramayı Temizle
+                </button>
+              </>
+            ) : (
+              <p className="text-base text-muted-foreground">
+                Henüz kayıtlı kumlama cam modeli bulunmuyor.
+              </p>
+            )}
           </div>
         ) : (
           <motion.div

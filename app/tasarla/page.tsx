@@ -29,12 +29,33 @@ export const revalidate = 3600 // 1 hour ISR caching
 export default async function TasarlaPage() {
   const supabase = await createClient()
 
-  // Mümkünse public data için daha hızlı bir yöntem veya standart kullanım
-  const { data: models } = await supabase
-    .from('sandblasted_models')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true })
+  let modelsData: any[] | null = null
+  try {
+    const { data } = await supabase
+      .from('sandblasted_models')
+      .select('*')
+    if (data && data.length > 0) {
+      modelsData = data
+    }
+  } catch (err) {
+    console.error('Error fetching sandblasted_models for tasarla:', err)
+  }
+
+  const DEFAULT_PATTERNS = [
+    { id: 'p1', title: 'Çizgili Modern Desen', image_url: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&auto=format&fit=crop' },
+    { id: 'p2', title: 'Dalgalı Klasik', image_url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop' },
+    { id: 'p3', title: 'Buzlu Geometrik', image_url: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=800&auto=format&fit=crop' },
+    { id: 'p4', title: 'Minimalist Mat', image_url: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=800&auto=format&fit=crop' },
+    { id: 'p5', title: 'Puslu Çizgi Desen', image_url: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=800&auto=format&fit=crop' },
+  ]
+
+  const mappedPatterns = (modelsData || []).map((m: any) => ({
+    id: String(m.id),
+    title: m.title || m.name || 'Kumlama Deseni',
+    image_url: m.image_url || DEFAULT_PATTERNS[0].image_url,
+  }))
+
+  const finalModels = mappedPatterns.length > 0 ? mappedPatterns : DEFAULT_PATTERNS
 
   // Structured Data for WebApplication
   const webAppLd = {
@@ -42,7 +63,7 @@ export default async function TasarlaPage() {
     "@type": "WebApplication",
     "name": "Erayduş Özel Ölçü Duşakabin Tasarım ve Fiyat Hesaplama Aracı",
     "url": "https://eraydus.net/tasarla",
-    "description": "Türkiye'nin en gelişmiş 2D duşakabin tasarım aracı. İki duvar arası, köşe veya walk-in duşakabin modellerini özel ölçülerinize göre tasarlayarak cam ve profil özelliklerini belirleyin.",
+    "description": "Türkiye'nin en gelişmiş 2D duşakabin tasarım aracı. İki duvar arası, köşe veya tek cam duşakabin modellerini özel ölçülerinize göre tasarlayarak cam ve profil özelliklerini belirleyin.",
     "applicationCategory": "DesignApplication",
     "operatingSystem": "All",
     "browserRequirements": "Requires JavaScript. Requires HTML5.",
@@ -111,7 +132,7 @@ export default async function TasarlaPage() {
       />
       
       {/* Visualizer takes exactly 100dvh */}
-      <TasarlaClient sandblastedModels={models || []} />
+      <TasarlaClient sandblastedModels={finalModels} />
 
       {/* Semantic SEO Content Below Fold */}
       <article className="w-full bg-white text-[#333] pt-24 pb-32">
@@ -119,7 +140,7 @@ export default async function TasarlaPage() {
           <header className="mb-16 text-center max-w-3xl mx-auto">
              <h2 className="text-3xl md:text-4xl font-bold text-black mb-6 tracking-tight">Kusursuz Banyo Deneyimi İçin<br/>Özel Ölçü Duşakabin Tasarımı</h2>
              <p className="text-[16px] leading-relaxed text-[#666]">
-               Banyonuzun mimarisine tam uyum sağlayan lüks duşakabin modellerini, Türkiye'nin en gelişmiş online 2D tasarım aracıyla kendiniz oluşturun. İstediğiniz ölçüleri milimetrik olarak belirleyin, tarzınıza uygun cam ve profil seçenekleriyle hayalinizdeki duşakabini tasarlayın.
+               Banyonuzun alanına ve ölçülerine tam uyum sağlayan lüks duşakabin modellerini, Türkiye'nin en gelişmiş online 2D tasarım aracıyla kendiniz oluşturun. İstediğiniz ölçüleri milimetrik olarak belirleyin, tarzınıza uygun cam ve profil seçenekleriyle hayalinizdeki duşakabini tasarlayın.
              </p>
           </header>
 

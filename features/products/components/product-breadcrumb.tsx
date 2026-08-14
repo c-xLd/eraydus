@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface BreadcrumbItem {
@@ -9,20 +8,29 @@ interface BreadcrumbItem {
 
 export function ProductBreadcrumb({ items, className }: { items: BreadcrumbItem[], className?: string }) {
   return (
-    <nav className={cn("flex text-sm text-muted-foreground", className)} aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-2 flex-wrap">
+    <nav className={cn("flex items-center", className)} aria-label="Breadcrumb">
+      <ol className="flex items-center gap-1.5 flex-wrap text-[11px] font-mono tracking-wide">
         {items.map((item, index) => {
           const isLast = index === items.length - 1
           return (
-            <li key={index} className="flex items-center">
-              {item.url ? (
-                <Link href={item.url} className="hover:text-foreground transition-colors">
+            <li key={index} className="flex items-center gap-1.5">
+              {item.url && !isLast ? (
+                <Link
+                  href={item.url}
+                  className="text-black/40 hover:text-black transition-colors duration-200"
+                >
                   {item.name}
                 </Link>
               ) : (
-                <span className="text-foreground font-medium">{item.name}</span>
+                <span className={cn(
+                  isLast ? "text-black font-medium" : "text-black/40"
+                )}>
+                  {item.name}
+                </span>
               )}
-              {!isLast && <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground/50" />}
+              {!isLast && (
+                <span className="text-black/20 select-none" aria-hidden="true">/</span>
+              )}
             </li>
           )
         })}

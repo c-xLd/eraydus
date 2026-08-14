@@ -59,7 +59,8 @@ const navGroups: { title: string; items: NavItem[] }[] = [
     items: [
       { icon: MessageSquareQuote, label: "Teklif & Sipariş", href: "/admin/quotes" },
       { icon: Mail, label: "Mesajlar", href: "/admin/messages" },
-      { icon: Star, label: "Yorumlar", href: "/admin/reviews" },
+      { icon: Star, label: "Google Yorumları", href: "/admin/testimonials" },
+      { icon: Star, label: "Ürün Yorumları", href: "/admin/reviews" },
       { icon: Users, label: "Müşteri Ağı", href: "/admin/customers" },
       { icon: Bell, label: "Bildirimler", href: "/admin/notifications" },
     ],

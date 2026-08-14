@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Check, Layers, Box, MessageCircle, ChevronRight, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { toast } from 'sonner'
 import { AnimatedSchematic } from './AnimatedSchematic'
 
 interface Model {
@@ -20,7 +21,7 @@ interface TasarlaClientProps {
 const LAYOUTS = [
   { id: 'wall-to-wall', label: 'İki Duvar Arası', icon: Box },
   { id: 'corner', label: 'Köşe Kabin', icon: LayoutGridIcon },
-  { id: 'walk-in', label: 'Walk-in (Açık)', icon: Layers },
+  { id: 'walk-in', label: 'Tek Cam Duşakabin', icon: Layers },
 ]
 
 const DOOR_SYSTEMS = {
@@ -619,7 +620,8 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               href={getWhatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-champagne text-black px-4 py-2.5 md:px-6 md:py-3.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)]"
+              onClick={() => toast.success('Tasarım detaylarınız WhatsApp sipariş hattımıza aktarılıyor...')}
+              className="w-full flex items-center justify-center gap-2 bg-champagne text-black px-4 py-2.5 md:px-6 md:py-3.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)] cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
               Siparişi İlet

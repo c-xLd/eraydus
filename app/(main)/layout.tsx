@@ -3,7 +3,6 @@ import { Footer } from "@/components/layout/Footer"
 import { GlobalFAQAccordion } from "@/components/seo/GlobalFAQAccordion"
 
 import { AdminEditProvider } from '@/features/content/components/AdminEditProvider'
-import { InlineEditToolbar } from '@/features/content/components/InlineEditToolbar'
 
 // No server-side auth check here: admin status is resolved client-side inside
 // AdminEditProvider (supabase.auth.getUser in a useEffect). Keeping cookies()
@@ -17,8 +16,6 @@ export default function MainLayout({
   return (
     <AdminEditProvider>
       <Header />
-      {/* Self-hides for non-admins via context (returns null when !isAdmin) */}
-      <InlineEditToolbar />
       <main className="flex-1 flex flex-col">
         {children}
       </main>

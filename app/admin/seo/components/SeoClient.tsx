@@ -283,12 +283,12 @@ export default function SeoClient({ initialPages, initialGlobal }: { initialPage
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium text-gray-700">Açık Adres (Sokak/Cadde)</label>
-                          <input {...form.register('geoData.address.streetAddress')} placeholder="Ostim OSB, 100. Yıl Bulvarı" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-black/5 transition-all text-black" />
+                          <input {...form.register('geoData.address.streetAddress')} placeholder="Siteler Mah. Taşdelen Cad." className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-black/5 transition-all text-black" />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">İlçe</label>
-                            <input {...form.register('geoData.address.addressLocality')} placeholder="Yenimahalle" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-black/5 transition-all text-black" />
+                            <input {...form.register('geoData.address.addressLocality')} placeholder="Altındağ" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-black/5 transition-all text-black" />
                           </div>
                           <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">İl</label>

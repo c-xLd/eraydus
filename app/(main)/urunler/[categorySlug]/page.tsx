@@ -18,10 +18,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   return {
     title: `${category.name} Modelleri ve Fiyatları | ERAYDUŞ`,
-    description: `ERAYDUŞ ${category.name} serisi ile banyonuza modern mimari dokunuş. Lüks duşakabin fiyatları ve özel tasarım seçenekleri.`,
+    description: `ERAYDUŞ ${category.name} serisi ile banyonuza modern bir dokunuş. Lüks duşakabin fiyatları ve özel tasarım seçenekleri.`,
     openGraph: {
       title: `${category.name} Modelleri | ERAYDUŞ`,
-      description: `Mimari tasarım ${category.name.toLowerCase()} duşakabin modelleri.`,
+      description: `Özel tasarım ${category.name.toLowerCase()} duşakabin modelleri.`,
     }
   }
 }

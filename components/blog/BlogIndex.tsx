@@ -5,7 +5,8 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight, CalendarDays, Search, Sparkles, Tag } from "lucide-react"
 
-import { slugifyTag, type BlogPost } from "@/lib/data/blog"
+import type { BlogPost } from "@/lib/data/blog"
+import { generateSlug as slugifyTag } from "@/lib/utils"
 
 const formatDate = (date: string | null) =>
   date

@@ -15,7 +15,7 @@ export function ConfiguratorBanner() {
               Duşakabininizi <br className="hidden sm:block" /> Tasarlayın
             </h2>
             <p className="text-white/70 text-lg mb-10 max-w-md">
-              3D konfigüratör ile banyonuza en uygun ölçü, cam ve profil seçeneklerini belirleyerek hayalinizdeki duşakabini oluşturun.
+              2D konfigüratör ile banyonuza en uygun ölçü, cam ve profil seçeneklerini belirleyerek hayalinizdeki duşakabini oluşturun.
             </p>
             
             <Link href="/tasarla" className="inline-flex items-center justify-center rounded-full bg-[#C9A86A] text-white hover:bg-[#C9A86A]/90 h-14 px-8 text-lg font-medium transition-colors group">

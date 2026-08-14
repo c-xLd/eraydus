@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Check, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 export function NewsletterForm() {
   const [email, setEmail] = useState('')
@@ -24,17 +25,26 @@ export function NewsletterForm() {
         body: JSON.stringify({ email }),
       })
 
-      const data = await response.json()
+      let data: any = {}
+      const text = await response.text()
+      try {
+        data = JSON.parse(text)
+      } catch {
+        // If response is not valid JSON
+      }
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Bir hata oluştu, lütfen daha sonra tekrar deneyin.')
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || data.error || 'Bir hata oluştu, lütfen daha sonra tekrar deneyin.')
       }
 
       setStatus('success')
+      toast.success('Bültenimize başarıyla abone oldunuz!')
       setEmail('')
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus('error')
-      setErrorMessage(err.message || 'Bilinmeyen bir hata oluştu.')
+      const msg = err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.'
+      setErrorMessage(msg)
+      toast.error(msg)
     }
   }
 

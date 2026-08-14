@@ -33,7 +33,7 @@ export function MaterialShowcase() {
             Malzeme & Renk Seçenekleri
           </h2>
           <p className="text-black/60 text-base max-w-2xl font-light">
-            8mm Şişecam temperli camlar ve elektrostatik fırınlanmış dayanıklı alüminyum profil renklerimizle banyonuza özel kombinasyonu oluşturun.
+            6mm temperli camlar ve elektrostatik fırınlanmış dayanıklı alüminyum profil renklerimizle banyonuza özel kombinasyonu oluşturun.
           </p>
         </div>
 

@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
-import { PROGRAMMATIC_MATRIX } from '@/lib/seo/matrix'
 import { getAllTags, slugifyTag } from '@/lib/data/blog'
 
 export const revalidate = 3600 
@@ -52,6 +51,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/cayyolu-dusakabin`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/batikent-dusakabin`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/kecioren-dusakabin`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
@@ -136,14 +147,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // 2. Programmatik SEO Rotaları (Çapraz Matris Filtreleri)
-  const programmaticRoutes: MetadataRoute.Sitemap = Object.keys(PROGRAMMATIC_MATRIX).map((slug) => ({
-    url: `${baseUrl}/dusakabin/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.95,
-  }))
-
   try {
     // 3. Supabase'den Canlı Ürünler, Kategoriler ve Blog Yazılarını Paralel Çek
     const [productsResponse, categoriesResponse, blogResponse] = await Promise.all([
@@ -208,7 +211,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [
       ...staticRoutes,
-      ...programmaticRoutes,
       ...categoryRoutes,
       ...productRoutes,
       ...blogRoutes,
@@ -231,9 +233,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           changeFrequency: 'weekly',
           priority: 0.70,
         }))
-      return [...staticRoutes, ...programmaticRoutes, ...tagRoutes]
+      return [...staticRoutes, ...tagRoutes]
     } catch {
-      return [...staticRoutes, ...programmaticRoutes]
+      return [...staticRoutes]
     }
   }
 }

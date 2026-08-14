@@ -35,10 +35,10 @@ VALUES (
       "phone": "+90 555 123 4567",
       "email": "info@eraydus.net",
       "address": {
-        "streetAddress": "Ostim OSB, 100. Yıl Bulvarı",
-        "addressLocality": "Yenimahalle",
+        "streetAddress": "Siteler, Ankara",
+        "addressLocality": "Altındağ",
         "addressRegion": "Ankara",
-        "postalCode": "06374",
+        "postalCode": "06160",
         "addressCountry": "TR"
       }
     },

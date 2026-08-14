@@ -137,7 +137,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (s.collection === 'luxury') days += 5
     if (s.glassType === 'fluted') days += 3
     if (s.installation === 'premium') days -= 2
-    return `${days}-${days + 5} iş günü`
+    return '3-5 iş günü (istisnai modellerde değişkenlik gösterebilir)'
   },
 
   getCompletedSteps: () => {

@@ -23,24 +23,24 @@ const hotspots: Hotspot[] = [
     id: 1,
     x: '55%',
     y: '38%',
-    title: 'Kristal Cam',
-    description: '6mm temperli güvenlik camları, banyonuza berraklık ve maksimum darbe dayanımı kazandırır.',
+    title: 'Temperli Güvenlik Camı',
+    description: '6mm darbelere dayanıklı temperli camlar. İsteğe bağlı kolay temizlenen leke tutmaz kaplama seçeneği.',
     align: 'left',
   },
   {
     id: 2,
     x: '28%',
     y: '68%',
-    title: 'Saf Çelik',
-    description: '304 sınıfı paslanmaz çelik menteşe ve aksesuarlar, korozyona karşı ömür boyu direnç sağlar.',
+    title: 'Paslanmaz Çelik Aksam',
+    description: 'Paslanmayan özel metal menteşe ve profiller, su ve nemden etkilenmeden yıllarca ilk günkü gibi kalır.',
     align: 'right',
   },
   {
     id: 3,
     x: '72%',
     y: '18%',
-    title: 'Mikro Tolerans',
-    description: '±0.5mm montaj hassasiyeti ile sıfır hata payında birleşen profiller ve kusursuz yalıtım.',
+    title: '%100 Su Sızdırmazlık',
+    description: 'Mıknatıslı fitil sistemi ve hassas silikon çekimi ile banyonuzda su kaçırma sorununa kesin çözüm.',
     align: 'left',
   },
 ]
@@ -66,14 +66,6 @@ export function CraftsmanshipSection() {
       {/* Decorative Technical Axis Lines */}
       <div className="pointer-events-none absolute left-8 top-0 bottom-0 w-[1px] bg-zinc-900/50 hidden md:block" />
       <div className="pointer-events-none absolute right-8 top-0 bottom-0 w-[1px] bg-zinc-900/50 hidden md:block" />
-      
-      {/* Monospace Reference Markers */}
-      <div className="pointer-events-none absolute left-12 top-6 font-mono text-[9px] text-zinc-700 tracking-wider hidden md:block select-none">
-        REF-GRID // SEC-09
-      </div>
-      <div className="pointer-events-none absolute right-12 top-6 font-mono text-[9px] text-zinc-700 tracking-wider hidden md:block select-none">
-        [SYS-DRAFT // v1.15]
-      </div>
 
       {/* Ambient Champagne Glows */}
       <div
@@ -104,11 +96,8 @@ export function CraftsmanshipSection() {
               <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-zinc-800 pointer-events-none group-hover:border-zinc-700 transition-colors" />
 
               {/* Technical Data Labels */}
-              <div className="absolute top-5 left-5 text-zinc-600 font-mono text-[8px] tracking-widest select-none z-10 pointer-events-none">
-                [ SPEC-09 // CAD-VIEW ]
-              </div>
-              <div className="absolute bottom-5 right-5 text-zinc-600 font-mono text-[8px] tracking-widest select-none z-10 pointer-events-none">
-                SCALE 1:1
+              <div className="absolute top-5 left-5 text-champagne/80 font-mono text-[9px] tracking-widest select-none z-10 pointer-events-none uppercase">
+                DETAYLI ÜRÜN İNCELEMESİ
               </div>
 
               {/* Image Container */}
@@ -191,7 +180,7 @@ export function CraftsmanshipSection() {
               transition={{ duration: 0.8, ease }}
               className="text-champagne text-xs font-semibold tracking-[0.2em] font-mono uppercase mb-3 block"
             >
-              [ SESSİZ LÜKS // 09 ]
+              [ KALİTE VE MALZEME ]
             </motion.span>
 
             <motion.h2
@@ -201,7 +190,7 @@ export function CraftsmanshipSection() {
               transition={{ duration: 1, delay: 0.1, ease }}
               className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-white mb-4 leading-tight"
             >
-              Işık ve <span className="font-semibold text-champagne">Suyun Uyumu</span>
+              Kaliteli Malzeme ve <span className="font-semibold text-champagne">Uzman İşçilik</span>
             </motion.h2>
 
             <motion.div
@@ -212,18 +201,14 @@ export function CraftsmanshipSection() {
               className="space-y-4 mb-8 text-zinc-400 font-light text-sm md:text-base leading-relaxed"
             >
               <p>
-                Erayduş, banyo alanınızı sadece bir duş kabini olmaktan çıkarıp günlük bir arınma
-                ritüeline dönüştürür. Her bir çizgimiz, ışığın ve suyun mekandaki akışını en estetik
-                şekilde yönlendirmek amacıyla yalın ve zamansız bir dille tasarlanmıştır.
+                Erayduş olarak banyonuzda yıllarca sorunsuz kullanabileceğiniz duşakabinler üretiyoruz.
+                Standart ölçülere bağlı kalmadan banyonuzun girinti, çıkıntı ve yükseklik ölçülerine %100 uyumlu özel imalat yapıyoruz.
               </p>
               <p>
-                En saf bileşenlerden üretilen 6mm temperli cam panellerimiz, su damlalarının iz
-                bırakmadan süzüldüğü pürüzsüz yapısıyla her zaman berraktır. 304 sınıfı paslanmaz
-                çelik donanımlarla birleşerek banyonuzda ömür boyu sürecek bir görsel dinginlik sunar.
+                Kırılmaya karşı 5 kat daha dirençli 6mm temperli cam panellerimiz, pürüzsüz yapısı sayesinde su damlalarını leke bırakmadan kaydırır. Paslanmayan çelik ve alüminyum aksamlarımız ile banyonuzda uzun yıllar güvenle kullanırsınız.
               </p>
               <p>
-                Karmaşadan uzak, mimari detaylarla şekillenen bu yapı; banyonuzda sadece bir duş
-                alanı değil, ruhunuzu dinlendireceğiniz rafine ve minimalist bir sığınak yaratır.
+                Kendi bünyemizdeki uzman montaj ekibimiz, banyonuzda temiz ve titiz bir kurulum gerçekleştirerek duşakabininizi kullanıma hazır teslim eder.
               </p>
             </motion.div>
 
@@ -236,24 +221,24 @@ export function CraftsmanshipSection() {
               className="grid grid-cols-3 border border-zinc-800/80 rounded-2xl overflow-hidden divide-x divide-zinc-800/80 bg-zinc-900/10 backdrop-blur-sm mb-8"
             >
               <div className="p-4 flex flex-col justify-between">
-                <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-3">SPEC_01</span>
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">GÜVENLİK</span>
                 <div>
-                  <p className="text-2xl md:text-3xl font-light tracking-tight text-white">6 <span className="text-xs text-zinc-500 font-mono">mm</span></p>
-                  <p className="text-zinc-400 text-xs mt-1.5 font-medium">Kristal Cam</p>
+                  <p className="text-xl md:text-2xl font-light tracking-tight text-white">6 <span className="text-xs text-zinc-400 font-mono">mm</span></p>
+                  <p className="text-zinc-400 text-xs mt-1 font-medium">Temperli Cam</p>
                 </div>
               </div>
               <div className="p-4 flex flex-col justify-between">
-                <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-3">SPEC_02</span>
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">DAYANIKLILIK</span>
                 <div>
-                  <p className="text-2xl md:text-3xl font-light tracking-tight text-white">304</p>
-                  <p className="text-zinc-400 text-xs mt-1.5 font-medium">Saf Çelik</p>
+                  <p className="text-xl md:text-2xl font-light tracking-tight text-white">%100</p>
+                  <p className="text-zinc-400 text-xs mt-1 font-medium">Paslanmaz Metal</p>
                 </div>
               </div>
               <div className="p-4 flex flex-col justify-between">
-                <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-3">SPEC_03</span>
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">YALITIM</span>
                 <div>
-                  <p className="text-2xl md:text-3xl font-light tracking-tight text-white">±0.5</p>
-                  <p className="text-zinc-400 text-xs mt-1.5 font-medium">mm Hassasiyet</p>
+                  <p className="text-xl md:text-2xl font-light tracking-tight text-white">%100</p>
+                  <p className="text-zinc-400 text-xs mt-1 font-medium">Su Sızdırmazlık</p>
                 </div>
               </div>
             </motion.div>
@@ -268,7 +253,7 @@ export function CraftsmanshipSection() {
                 href="/hakkimizda"
                 className="group relative inline-flex items-center justify-between gap-5 border border-zinc-800 bg-zinc-900/20 backdrop-blur-sm hover:bg-zinc-900/60 transition-all duration-300 rounded-full pl-5 pr-2 py-2 hover:border-champagne/30 text-zinc-100 text-xs font-medium tracking-wide"
               >
-                <span>Ustalık ve Mühendislik</span>
+                <span>Hakkımızda ve Hizmet Detayları</span>
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-champagne text-zinc-950 group-hover:scale-105 transition-transform duration-300">
                   <ArrowRight className="size-3.5" />
                 </span>

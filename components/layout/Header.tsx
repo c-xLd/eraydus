@@ -4,20 +4,21 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Menu, X, ArrowUpRight, MessageCircle, ChevronDown, Sparkles, Layers, Compass, Phone, ChevronRight } from 'lucide-react'
+import { Menu, X, ArrowUpRight, MessageCircle, ChevronDown, Sparkles, Layers, Compass, Phone, ChevronRight, Search } from 'lucide-react'
+import { SearchModal } from '@/components/search/SearchModal'
 
 import { cn } from '@/lib/utils'
 
 /* ── Navigation data ───────────────────────────────────────────── */
 const COLLECTIONS = [
-  { href: '/urunler', label: 'Tüm Ürünler', desc: 'Lüks ve modern duş sistemleri', badge: 'Yeni' },
-  { href: '/urunler/banyo-dolabi', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları', badge: '' },
-  { href: '/kumlama-modelleri', label: 'Kumlama Modelleri', desc: 'Özel tasarım cam desenleri', badge: '' },
-  { href: '/jakuzi-tekneler', label: 'Jakuzi ve Tekneler', desc: 'Konforlu ve şık banyo keyfi', badge: '' },
+  { href: '/urunler', label: 'Tüm Ürünler', desc: 'Lüks ve modern duş sistemleri' },
+  { href: '/urunler/banyo-dolabi', label: 'Banyo Dolapları', desc: 'Premium banyo mobilyaları' },
+  { href: '/kumlama-modelleri', label: 'Kumlama Modelleri', desc: 'Özel tasarım cam desenleri' },
+  { href: '/jakuzi-tekneler', label: 'Jakuzi ve Tekneler', desc: 'Konforlu ve şık banyo keyfi' },
 ]
 
 const NAV_LINKS = [
-  { href: '/projeler', label: 'Projeler', desc: 'Tamamlanan mimari referanslar' },
+  { href: '/projeler', label: 'Projeler', desc: 'Tamamlanan referans projelerimiz' },
   { href: '/blog', label: 'Blog & İlham', desc: 'Banyo tasarım fikirleri ve tavsiyeler' },
   { href: '/hakkimizda', label: 'Hakkımızda', desc: '15 yıllık Erayduş kalitesi' },
   { href: '/iletisim', label: 'İletişim', desc: 'Konum, telefon ve teklif al' },
@@ -29,7 +30,7 @@ const PHONE_NUMBER = '0554 883 00 71'
 const EASE = [0.16, 1, 0.3, 1] as const
 
 /* ── Logo ──────────────────────────────────────────────────────── */
-function Logo({ solid }: { solid: boolean }) {
+function Logo({ lightText }: { lightText: boolean }) {
   return (
     <Link
       href="/"
@@ -39,7 +40,7 @@ function Logo({ solid }: { solid: boolean }) {
       <span
         className={cn(
           'flex size-8 items-center justify-center rounded-[10px] font-black tracking-tighter transition-colors duration-500',
-          solid ? 'bg-foreground text-background' : 'bg-white text-black'
+          lightText ? 'bg-white text-black' : 'bg-foreground text-background'
         )}
       >
         E
@@ -47,7 +48,7 @@ function Logo({ solid }: { solid: boolean }) {
       <span
         className={cn(
           'text-lg font-bold tracking-tight transition-colors duration-500',
-          solid ? 'text-foreground' : 'text-white'
+          lightText ? 'text-white' : 'text-foreground'
         )}
       >
         ERAYDUŞ
@@ -57,13 +58,13 @@ function Logo({ solid }: { solid: boolean }) {
 }
 
 /* ── Desktop nav link with underline reveal ───────────────────── */
-function NavLink({ href, label, solid }: { href: string; label: string; solid: boolean }) {
+function NavLink({ href, label, lightText }: { href: string; label: string; lightText: boolean }) {
   return (
     <Link
       href={href}
       className={cn(
         'group/link relative rounded-full px-3.5 py-2 text-sm font-medium outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-ring/60',
-        solid ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'
+        lightText ? 'text-white/70 hover:text-white' : 'text-foreground/70 hover:text-foreground'
       )}
     >
       {label}
@@ -79,12 +80,20 @@ export function Header() {
   const pathname = usePathname()
   const reduceMotion = useReducedMotion()
 
-  // Pages with a dark, full-bleed hero where the bar sits transparent.
-  const isDarkHeroPage = !pathname || pathname === '/' || pathname === '' || pathname === '/jakuzi-tekneler' || pathname.includes('/jakuzi-tekneler')
-  const solid = isScrolled || !isDarkHeroPage || menuOpen
+  // Pages with a dark, full-bleed hero where the bar sits transparent with white text when at top.
+  const isDarkHeroPage = !pathname || pathname === '/' || pathname === '' || pathname === '/jakuzi-tekneler' || pathname.startsWith('/jakuzi-tekneler')
+
+  // Header background is frosted glass only when scrolled or mobile menu is open.
+  const hasBackdrop = isScrolled || menuOpen
+
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  // Text color is white only at the top of dark hero pages.
+  // Everywhere else (when scrolled, or on light background pages), theme foreground colors are used.
+  const lightText = isDarkHeroPage && !hasBackdrop
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50)
+    const onScroll = () => setIsScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -110,19 +119,16 @@ export function Header() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: reduceMotion ? 0 : 0.5, ease: EASE }}
+      <header
         className={cn(
           'fixed inset-x-0 top-[var(--admin-bar-height,0px)] z-50 transition-colors duration-500',
-          solid
+          hasBackdrop
             ? 'border-b border-black/[0.06] bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/70 dark:border-white/[0.06] dark:bg-black/70 dark:supports-[backdrop-filter]:bg-black/60'
             : 'border-b border-transparent bg-transparent'
         )}
       >
         <div className="container mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:h-[72px] md:px-6">
-          <Logo solid={solid} />
+          <Logo lightText={lightText} />
 
           {/* Desktop navigation */}
           <nav aria-label="Ana menü" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
@@ -141,7 +147,7 @@ export function Header() {
                 onClick={() => setMegaOpen((v) => !v)}
                 className={cn(
                   'flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-ring/60',
-                  solid ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'
+                  lightText ? 'text-white/70 hover:text-white' : 'text-foreground/70 hover:text-foreground'
                 )}
               >
                 Ürünler
@@ -159,14 +165,15 @@ export function Header() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: reduceMotion ? 0 : 0.22, ease: EASE }}
+                    transition={{ duration: reduceMotion ? 0 : 0.22, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute left-1/2 top-full w-[520px] -translate-x-1/2 pt-3"
                   >
-                    <div className="grid grid-cols-2 gap-1 rounded-3xl border border-black/[0.06] bg-popover p-3 shadow-2xl shadow-black/10 dark:border-white/[0.08]">
+                    <div className="grid grid-cols-2 gap-1 rounded-[28px] border border-black/[0.06] bg-popover p-3 shadow-2xl shadow-black/10 dark:border-white/[0.08]">
                       {COLLECTIONS.map((c) => (
                         <Link
                           key={c.href}
                           href={c.href}
+                          onClick={() => setMegaOpen(false)}
                           className="group/item rounded-2xl p-4 outline-none transition-colors hover:bg-black/[0.03] focus-visible:ring-2 focus-visible:ring-ring/60 dark:hover:bg-white/[0.04]"
                         >
                           <div className="flex items-center justify-between">
@@ -183,7 +190,7 @@ export function Header() {
             </div>
 
             {NAV_LINKS.map((l) => (
-              <NavLink key={l.href} {...l} solid={solid} />
+              <NavLink key={l.href} {...l} lightText={lightText} />
             ))}
           </nav>
 
@@ -196,9 +203,9 @@ export function Header() {
               aria-label="WhatsApp ile iletişim"
               className={cn(
                 'flex size-11 items-center justify-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/60',
-                solid
-                  ? 'text-foreground/60 hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10'
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                lightText
+                  ? 'text-white/70 hover:bg-white/10 hover:text-white'
+                  : 'text-foreground/60 hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10'
               )}
             >
               <MessageCircle className="size-5" />
@@ -207,9 +214,9 @@ export function Header() {
               href="/tasarla"
               className={cn(
                 'group/cta inline-flex h-11 items-center gap-1.5 rounded-full px-5 text-sm font-semibold outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-ring/60 active:scale-[0.98]',
-                solid
-                  ? 'bg-foreground text-background hover:bg-foreground/90'
-                  : 'bg-white text-black hover:bg-white/90'
+                lightText
+                  ? 'bg-white text-black hover:bg-white/90'
+                  : 'bg-foreground text-background hover:bg-foreground/90'
               )}
             >
               Tasarla
@@ -224,15 +231,18 @@ export function Header() {
             aria-expanded={menuOpen}
             className={cn(
               'flex size-11 items-center justify-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/60 lg:hidden',
-              solid
-                ? 'text-foreground hover:bg-black/5 dark:hover:bg-white/10'
-                : 'text-white hover:bg-white/10'
+              lightText
+                ? 'text-white hover:bg-white/10'
+                : 'text-foreground hover:bg-black/5 dark:hover:bg-white/10'
             )}
           >
             <Menu className="size-6" />
           </button>
         </div>
-      </motion.header>
+      </header>
+
+      {/* Instant Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* ── Ultra-Luxury Mobile Side Navigation Drawer ───────────────── */}
       <AnimatePresence>
@@ -325,16 +335,9 @@ export function Header() {
                         className="group flex items-center justify-between p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 transition-all active:scale-[0.98]"
                       >
                         <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-white group-hover:text-[#C9A86A] transition-colors">
-                              {c.label}
-                            </span>
-                            {c.badge && (
-                              <span className="text-[8px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-[#C9A86A] text-black">
-                                {c.badge}
-                              </span>
-                            )}
-                          </div>
+                          <span className="text-sm font-medium text-white group-hover:text-[#C9A86A] transition-colors">
+                            {c.label}
+                          </span>
                           <p className="text-[11px] text-white/40 font-light truncate max-w-[220px]">
                             {c.desc}
                           </p>

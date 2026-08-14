@@ -85,11 +85,12 @@ CREATE POLICY "Allow public read access to profile_options"
 
 -- Seed glass options
 INSERT INTO public.glass_options (id, name, description, color_class, sort_order) VALUES
-  ('clear', 'Şeffaf Extra Clear', 'Maksimum ışık geçirgenliği', 'bg-white/20 backdrop-blur-sm', 1),
-  ('smoke', 'Füme (Siyah) Cam', 'Gizlilik ve lüks görünüm', 'bg-black/60 backdrop-blur-md', 2),
-  ('bronze', 'Bronz Cam', 'Sıcak tonlar ve zarif yansıma', 'bg-amber-900/40 backdrop-blur-md', 3),
-  ('fluted', 'Oluklu (Fluted) Cam', 'Retro-modern yarı saydam yapı', 'bg-white/30 backdrop-blur-[2px]', 4),
-  ('frosted', 'Buzlu (Kumlama) Cam', 'Tam mahremiyet', 'bg-white/40 backdrop-blur-xl', 5)
+  ('seffaf', 'Şeffaf Extra Clear', 'Maksimum ışık geçirgenliği', 'bg-white/20 backdrop-blur-sm', 1),
+  ('fume', 'Füme (Siyah) Cam', 'Gizlilik ve lüks görünüm', 'bg-black/60 backdrop-blur-md', 2),
+  ('bronz', 'Bronz Cam', 'Sıcak tonlar ve zarif yansıma', 'bg-amber-900/40 backdrop-blur-md', 3),
+  ('aynali', 'Aynalı Cam', 'Genişlik hissi ve tam mahremiyet', 'bg-slate-300/60 backdrop-blur-lg', 4),
+  ('kumlama', 'Kumlama (Buzlu) Cam', 'Özel desenler ve modern doku', 'bg-white/40 backdrop-blur-xl', 5),
+  ('buz-mat', 'Buz Mat Cam', 'Pürüzsüz mat yüzey ve tam gizlilik', 'bg-white/60 backdrop-blur-2xl', 6)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description,
@@ -98,11 +99,10 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- Seed profile options
 INSERT INTO public.profile_options (id, name, hex_color, sort_order) VALUES
-  ('black', 'Mat Siyah', '#1A1A1A', 1),
-  ('chrome', 'Parlak Krom', '#E8E9EB', 2),
+  ('siyah', 'Mat Siyah', '#1A1A1A', 1),
+  ('firca-parlak', 'Parlak Krom', '#E8E9EB', 2),
   ('gold', 'Fırçalanmış Altın', '#D4AF37', 3),
-  ('bronze', 'Antik Bronz', '#CD7F32', 4),
-  ('white', 'Mat Beyaz', '#F9FAFB', 5)
+  ('beyaz', 'Mat Beyaz', '#F9FAFB', 4)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   hex_color = EXCLUDED.hex_color,

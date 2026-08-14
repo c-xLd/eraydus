@@ -33,7 +33,7 @@ CREATE POLICY "Allow public read access to testimonials" ON public.testimonials 
 
 -- 4. Seed Data: FAQs
 INSERT INTO public.homepage_faqs (question, answer, sort_order) VALUES
-('Ölçü alma işlemi nasıl gerçekleştiriliyor?', 'Profesyonel ölçüm ekibimiz, randevu oluşturmanızın ardından banyonuza gelerek lazer ölçüm cihazıyla milimetrik hassasiyette ölçüm yapar.', 10),
+('Ölçü alma işlemi nasıl gerçekleştiriliyor?', 'Profesyonel ölçüm ekibimiz, randevu oluşturmanızın ardından banyonuza gelerek yerinde hassas ve milimetrik ölçüm yapar.', 10),
 ('Üretim süresi ne kadar?', 'Sipariş onayı ve ölçüm tamamlandıktan sonra standart üretim süremiz 7-10 iş günüdür. Özel tasarım ve kaplamalar için bu süre 12-15 iş gününe uzayabilir.', 20),
 ('Garanti kapsamı neleri içeriyor?', 'Tüm ürünlerimiz 10 yıl üretici garantisi kapsamındadır. Bu garanti; cam bütünlüğü, profil korozyonu, menteşe ve rulman mekanizmaları ile su sızdırmazlık contalarını kapsar.', 30),
 ('Kurulum sırasında banyom zarar görür mü?', 'Montaj ekibimiz zemin ve duvar koruyucu örtüler kullanarak çalışır. Eski kabininiz varsa söküm işlemi büyük bir hassasiyetle yapılarak yeni kurulum gerçekleştirilir.', 40);

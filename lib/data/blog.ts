@@ -1,5 +1,5 @@
 import { cache } from "react"
-import { createClient as createPublicClient } from "@/services/supabase/client"
+import { createPublicClient } from "@/services/supabase/public"
 
 export type BlogPost = {
   id: string
@@ -17,14 +17,14 @@ export type BlogPost = {
 export const fallbackBlogPosts: BlogPost[] = [
   {
     "id": "6-mm-mi-8-mm-dusakabin",
-    "title": "6 mm mi 8 mm mi? Duşakabin Cam Kalınlığı Seçim Rehberi",
+    "title": "6 mm Temperli Cam Neden En İdeal Seçimdir? Kalite Rehberi",
     "slug": "6-mm-mi-8-mm-dusakabin",
-    "description": "Duşakabin satın alırken en çok kararsız kalınan 6 mm ve 8 mm temperli camlar arasındaki dayanıklılık, ağırlık ve estetik farkları inceleyin.",
-    "body": "Duşakabin satın alma sürecinde en kritik teknik kararlardan biri cam kalınlığı seçimidir. Piyasada en yaygın tercih edilen 6 mm ve 8 mm temperli emniyet camları, banyonuzun boyutuna ve kullanım sıklığına göre farklı avantajlar sunar.\n\n### 1. 6 mm Temperli Cam Özellikleri\n6 mm kalınlığındaki emniyet camları, standart sürgülü ve rulmanlı duşakabin modellerinde sıklıkla kullanılır. \n- **Ağırlık:** 8 mm cama kıyasla %25 daha hafiftir, bu sayede rulman tekerleklerine binen yük azalır.\n- **Maliyet:** Fiyat-performans açısından daha ekonomiktir.\n- **Kullanım Alanı:** 90x90 cm veya 80x80 cm gibi standart ölçülerdeki ev banyoları için idealdir.\n\n### 2. 8 mm Temperli Cam Özellikleri\n8 mm kalınlığındaki camlar, lüks ve profilsiz menteşeli duşakabin modellerinin vazgeçilmezidir.\n- **Dayanıklılık:** Darbelere, ısı değişimlerine ve esnemeye karşı üstün direnç gösterir.\n- **Mimari Görünüm:** Profilsiz menteşeli sistemlerde rijit bir duruş sağlar, sallanma ve esneme yapmaz.\n- **Kullanım Alanı:** Geniş walk-in paneller, tavan boyu cam kabinler ve rezidans/villa projeleri için önerilir.\n\n### Sonuç: Hangisini Seçmelisiniz?\nEğer banyonuzda menteşeli profilsiz bir model veya 120 cm üzeri geniş tek parça cam tercih edecekseniz **8 mm temperli cam** şarttır. Standart kayar kapılı sürgülü bir kabin düşünüyorsanız **6 mm temperli cam** tam performans sağlayacaktır. Banyonuzun mimarisine özel cam kalınlığını belirlemek için [Özel Ölçü Tasarlama Robotumuzu](/tasarla) kullanabilir ya da [tüm duşakabin modellerimizi](/dusakabin-modelleri) inceleyebilirsiniz.",
+    "description": "Duşakabin satın alırken 6 mm temperli emniyet camının sunduğu yüksek dayanıklılık, ideal ağırlık ve güvenlik avantajlarını keşfedin.",
+    "body": "Duşakabin satın alma sürecinde en kritik teknik kararlardan biri cam kalınlığı seçimidir. ERAYDUŞ imalat standartlarında tercih edilen **6 mm temperli emniyet camları**, banyonuzun boyutuna ve kullanım sıklığına göre mükemmel bir güvenlik ve estetik dengesi sunar.\n\n### 1. 6 mm Temperli Cam Özellikleri\n6 mm kalınlığındaki emniyet camları, sürgülü, katlanır ve menteşeli duşakabin modellerinde ideal standarttır.\n- **İdeal Ağırlık:** Profil ve rulman tekerleklerine aşırı yük bindirmez, mekanizmaların uzun ömürlü çalışmasını sağlar.\n- **Yüksek Güvenlik:** 700°C ısııl işlemden geçen temperli yapısı sayesinde darbelere ve esnemeye karşı üstün direnç gösterir.\n- **Mükemmel Estetik:** Şeffaf, füme ve kumlama desen seçenekleriyle banyolara zarif bir dokunuş katar.\n\n### Sonuç: Güvenli ve Uzun Ömürlü Kullanım\nBanyonuzun ölçülerine özel 6mm temperli cam duşakabini tasarlamak için [Özel Ölçü Tasarlama Robotumuzu](/tasarla) kullanabilir ya da [tüm duşakabin modellerimizi](/urunler) inceleyebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-25T10:00:00+03:00",
-    "seo_title": "6 mm mi 8 mm Duşakabin Camı mı? | ERAYDUŞ Uzman Rehberi",
-    "seo_description": "6 mm ve 8 mm temperli duşakabin camı arasındaki farklar. Hangisi daha dayanıklı ve kullanışlı? Teknik karşılaştırma rehberi.",
+    "seo_title": "6 mm Temperli Duşakabin Camı Kalite Rehberi | ERAYDUŞ",
+    "seo_description": "6 mm temperli duşakabin camı özellikleri, dayanıklılığı ve güvenlik avantajları. ERAYDUŞ uzman rehberi.",
     "tags": [
       "Cam Kalınlığı",
       "Rehber",
@@ -35,8 +35,8 @@ export const fallbackBlogPosts: BlogPost[] = [
     "id": "nano-kaplama-nedir",
     "title": "Nano Kaplama Nedir? Kireç Tutmaz Banyo Cam Teknolojisi",
     "slug": "nano-kaplama-nedir",
-    "description": "Duşakabin camlarında kireç ve su lekesi oluşumunu %90 oranında engelleyen Nano-Shield sıvı cam kaplama teknolojisi nasıl çalışır?",
-    "body": "Banyo temizliğinde en çok vakit alan konu duşakabin camlarındaki kireç ve sabun kalıntılarıdır. ERAYDUŞ ürünlerinde uygulanan **Nano-Shield Hidrofobik Kaplama**, cam yüzeyindeki mikroskobik gözenekleri kapatarak suyun tutunmasını engeller.\n\n### Nano Kaplama Nasıl Çalışır?\nCam yüzeyi çıplak gözle pürüzsüz görünse de mikroskop altında girintili çıkıntılı bir yapıya sahiptir. Su damlaları bu girintilere yerleşerek kuruduğunda kireç lekesi oluşturur.\nNano kaplama, bu pürüzleri moleküler düzeyde doldurarak **Lotus (Nilüfer Çiçeği) Etkisi** yaratır. Su damlaları cam yüzeyinden bilye gibi kayarak akar.\n\n### Nano Kaplamanın 4 Büyük Avantajı\n1. **Zahmetsiz Temizlik:** Deterjan ve ovma gerektirmeden sadece bir mikrofiber bezle kurulama yeterlidir.\n2. **Kireç ve Mantar Engelleyici:** Küf, bakteri ve kireç birikimini önler.\n3. **İlk Günkü Parlaklık:** Camın matlaşmasını ve sararmasını engeller.\n4. **Çevre Dostu:** Kimyasal temizleyici kullanımını %80 azaltır.\n\nNano kaplamalı cam seçeneklerimizi keşfetmek için [Koleksiyonlarımızı](/urunler) ziyaret edebilir veya [Banyo Temizlik Rehberimize](/blog/siyah-dusakabin-temizligi) göz atabilirsiniz.",
+    "description": "Duşakabin camlarında kireç ve su lekesi oluşumunu engelleyen kolay temizlenir kireç önleyici cam teknolojisi nasıl çalışır?",
+    "body": "Banyo temizliğinde en çok vakit alan konu duşakabin camlarındaki kireç ve sabun kalıntılarıdır. ERAYDUŞ ürünlerinde uygulanan **Kireç Önleyici Cam Kaplaması**, cam yüzeyindeki gözenekleri kapatarak suyun tutunmasını engeller.\n\n### Kireç Önleyici Cam Nasıl Çalışır?\nCam yüzeyi çıplak gözle pürüzsüz görünse de mikroskop altında girintili çıkıntılı bir yapıya sahiptir. Su damlaları bu girintilere yerleşerek kuruduğunda kireç lekesi oluşturur.\nKireç önleyici kaplama, bu pürüzleri doldurarak su damlalarının cam yüzeyinden kayarak akmasını sağlar.\n\n### Kireç Önleyici Camın 4 Büyük Avantajı\n1. **Zahmetsiz Temizlik:** Deterjan ve ovma gerektirmeden nemli bir bezle rahatça temizlenir.\n2. **Kireç Engelleyici:** Küf, leke ve kireç birikimini önler.\n3. **İlk Günkü Parlaklık:** Camın matlaşmasını ve sararmasını engeller.\n4. **Pratik Kullanım:** Kimyasal temizleyici kullanımını azaltır.\n\nKireç tutmayan cam seçeneklerimizi keşfetmek için [Koleksiyonlarımızı](/urunler) ziyaret edebilir veya [Banyo Temizlik Rehberimize](/blog/siyah-dusakabin-temizligi) göz atabilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-24T10:00:00+03:00",
     "seo_title": "Nano Kaplama Cam Nedir? Kireç Tutmaz Banyo Camı | ERAYDUŞ",
@@ -50,17 +50,17 @@ export const fallbackBlogPosts: BlogPost[] = [
   },
   {
     "id": "altin-profil-kararir-mi",
-    "title": "Altın Profil Kararır mı? PVD Kaplama Dayanıklılık Analizi",
+    "title": "Altın Profil Kararır mı? Solmaz Renk Kaplama Dayanıklılık Analizi",
     "slug": "altin-profil-kararir-mi",
-    "description": "Gold ve altın renkli duşakabin profillerinde kararma, soyulma ve renk değişimi riski var mıdır? PVD titanyum teknolojisini keşfedin.",
-    "body": "Gold (Altın) renkli armatür ve duşakabin profilleri son yılların en popüler banyo trendlerinden biridir. Ancak kullanıcıların zihnindeki en büyük soru şudur: *'Altın profil zamanla kararır mı?'*\n\n### PVD Kaplama ile Yaş Boya Arasındaki Fark\nSıradan ucuza imal edilen altın profillerde püskürtme yaş boya veya lak kaplama kullanılır. Bu boyalar nemli banyo ortamında ve deterjan temasında 6 ay içinde soyulmaya ve kararmaya başlar.\n\nERAYDUŞ Gold serisinde ise **PVD (Physical Vapor Deposition)** titanyum buharlaştırma teknolojisi kullanılır:\n- Vakumlu yüksek sıcaklık odalarında titanyum atomları alüminyum profile işlenir.\n- Kaplama yüzeyin bir parçası haline gelir, üst üste binmiş katman oluşturmaz.\n- Çizilmeye, deterjana ve yüksek su sıcaklığına karşı %100 dayanıklıdır.\n\n### Altın Profil Temizliği Nasıl Yapılmalı?\nPVD kaplama altın profillerinizi temizlerken çamaşır suyu veya tuz ruhu gibi aşırı asidik kimyasallar yerine nötr sabunlu su kullanılması tavsiye edilir. Şık gold tasarımlarımızı yerinde görmek için [Showroom ve İletişim](/iletisim) sayfamızı ziyaret edin.",
+    "description": "Gold ve altın renkli duşakabin profillerinde kararma, soyulma ve renk değişimi riski var mıdır? Solmaz özel renk kaplama teknolojisini keşfedin.",
+    "body": "Gold (Altın) renkli armatür ve duşakabin profilleri son yılların en popüler banyo trendlerinden biridir. Ancak kullanıcıların zihnindeki en büyük soru şudur: *'Altın profil zamanla kararır mı?'*\n\n### Solmaz Renk Kaplama ile Sıradan Boya Arasındaki Fark\nSıradan ucuza imal edilen altın profillerde püskürtme yaş boya veya lak kaplama kullanılır. Bu boyalar nemli banyo ortamında ve deterjan temasında 6 ay içinde soyulmaya ve kararmaya başlar.\n\nERAYDUŞ Gold serisinde ise **Solmaz Özel Titanyum Kaplama** teknolojisi kullanılır:\n- Yüksek sıcaklık odalarında özel renk pikmentleri alüminyum profile işlenir.\n- Kaplama yüzeyin bir parçası haline gelir, dökülme ve soyulma yapmaz.\n- Çizilmeye, deterjana ve yüksek su sıcaklığına karşı %100 dayanıklıdır.\n\n### Altın Profil Temizliği Nasıl Yapılmalı?\nAltın profillerinizi temizlerken çamaşır suyu veya tuz ruhu gibi aşırı asidik ağır kimyasallar yerine ılık sabunlu su kullanılması tavsiye edilir. Şık gold tasarımlarımızı yerinde görmek için [Showroom ve İletişim](/iletisim) sayfamızı ziyaret edin.",
     "featured_image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-23T10:00:00+03:00",
-    "seo_title": "Altın Profil Duşakabin Kararır mı? PVD Kalite Analizi | ERAYDUŞ",
-    "seo_description": "Gold altın profil duşakabin modellerinde kararma olur mu? PVD titanyum kaplama kalitesi ve renk dayanıklılığı detayları.",
+    "seo_title": "Altın Profil Duşakabin Kararır mı? Kalite Analizi | ERAYDUŞ",
+    "seo_description": "Gold altın profil duşakabin modellerinde kararma olur mu? Solmayan kaplama kalitesi ve renk dayanıklılığı detayları.",
     "tags": [
       "Gold Profil",
-      "PVD Kaplama",
+      "Solmaz Kaplama",
       "Kalite",
       "Lüks Banyo"
     ]
@@ -70,7 +70,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Siyah Duşakabin Temizliği ve Bakımı: Lekesiz Görünüm Rehberi",
     "slug": "siyah-dusakabin-temizligi",
     "description": "Mat siyah profilli ve siyah çerçeveli duşakabinlerin beyaz kireç lekelerinden korunması ve ilk günkü estetiğini koruması için pratik öneriler.",
-    "body": "Mat siyah duşakabinler banyolara büyüleyici ve modern bir atmosfer katar. Ancak suyun içerisindeki kireç, mat siyah yüzeylerde beyaz lekeler halinde kendini belli edebilir.\n\n### Siyah Duşakabin Bakımında 3 Altın Kural\n1. **Asitli Temizleyicilerden Kaçının:** Sirke veya sert kireç çözücüler mat siyah elektrostatik boyanın dokusuna zarar verebilir. Bunun yerine elma sirkesi damlatılmış ılık su veya nötr banyo spreyi tercih edin.\n2. **Duş Sonrası Çekçek Kullanımı:** Duş bittikten sonra 30 saniyenizi ayırarak cam ve profillerdeki suyu çekçek ile sıyırmak leke oluşumunu kökten çözer.\n3. **Mikrofiber Bez Tercihi:** Çizilmeyi önlemek için sert süngerlerin yeşil kısmını kesinlikle siyah profillere sürmeyin.\n\nERAYDUŞ elektrostatik fırın boyalı siyah profilleri boya dökülmelerine karşı 10 yıl garantilidir. Trend siyah modellerimizi incelemek için [Siyah Duşakabin Serisi](/dusakabin-modelleri) kategorimizi keşfedin.",
+    "body": "Mat siyah duşakabinler banyolara büyüleyici ve modern bir atmosfer katar. Ancak suyun içerisindeki kireç, mat siyah yüzeylerde beyaz lekeler halinde kendini belli edebilir.\n\n### Siyah Duşakabin Bakımında 3 Altın Kural\n1. **Asitli Temizleyicilerden Kaçının:** Sirke veya sert kireç çözücüler mat siyah elektrostatik boyanın dokusuna zarar verebilir. Bunun yerine elma sirkesi damlatılmış ılık su veya nötr banyo spreyi tercih edin.\n2. **Duş Sonrası Çekçek Kullanımı:** Duş bittikten sonra 30 saniyenizi ayırarak cam ve profillerdeki suyu çekçek ile sıyırmak leke oluşumunu kökten çözer.\n3. **Mikrofiber Bez Tercihi:** Çizilmeyi önlemek için sert süngerlerin yeşil kısmını kesinlikle siyah profillere sürmeyin.\n\nERAYDUŞ elektrostatik fırın boyalı siyah profilleri boya dökülmelerine karşı 2 yıl garantilidir. Trend siyah modellerimizi incelemek için [Siyah Duşakabin Serisi](/dusakabin-modelleri) kategorimizi keşfedin.",
     "featured_image": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-22T10:00:00+03:00",
     "seo_title": "Siyah Duşakabin Temizliği Nasıl Yapılır? | ERAYDUŞ Rehberi",
@@ -87,7 +87,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Adım Adım Duşakabin Ölçüsü Nasıl Alınır? Teknik Rehber",
     "slug": "dusakabin-olculeri-nasil-alinir",
     "description": "Hatasız duşakabin siparişi için duvar eğiminden seramik payına kadar doğru ölçü alma tekniklerini fotoğraflarla öğrenin.",
-    "body": "Yanlış alınan duşakabin ölçüsü montaj sırasında su sızıntılarına ve uyumsuzluklara yol açabilir. Kendi ölçünüzü alırken dikkat etmeniz gereken adım adım rehberimiz:\n\n### 1. Duvardan Duvara Net Ölçü (Genişlik)\nMetrenizi seramik kaplanmış bitmiş duvardan karşı duvara uzatın. Ölçümü tabandan, ortadan ve tavana yakın yüksekten olmak üzere 3 farklı noktadan alın. En küçük çıkan ölçüyü esas alın (duvarlarda şakül kaçıklığı olabilir).\n\n### 2. Yükseklik Ölçüsü\nDuş teknesi veya seramik zeminden yukarıya doğru tavan mesafesini veya istediğiniz kabin yüksekliğini (standart 190 cm - 200 cm) belirleyin.\n\n### 3. Duvar Eğimi (Şakül Kontrolü)\nBir su terazisi yardımıyla duvarlarınızın dikliğini kontrol edin. Duvarınızda içeriye veya dışarıya doğru eğim varsa ayarlı dikme profili tercih edilmelidir.\n\n*Ankara merkez ilçelerinde ERAYDUŞ teknik ekibi adresinize gelerek profesyonel lazer metre ile ücretsiz ölçüm yapmaktadır.* Detaylı adım adım anlatım için [Montaj ve Ölçü Rehberimizi](/montaj-kilavuzu) inceleyebilirsiniz.",
+    "body": "Yanlış alınan duşakabin ölçüsü montaj sırasında su sızıntılarına ve uyumsuzluklara yol açabilir. Kendi ölçünüzü alırken dikkat etmeniz gereken adım adım rehberimiz:\n\n### 1. Duvardan Duvara Net Ölçü (Genişlik)\nMetrenizi seramik kaplanmış bitmiş duvardan karşı duvara uzatın. Ölçümü tabandan, ortadan ve tavana yakın yüksekten olmak üzere 3 farklı noktadan alın. En küçük çıkan ölçüyü esas alın (duvarlarda şakül kaçıklığı olabilir).\n\n### 2. Yükseklik Ölçüsü\nDuş teknesi veya seramik zeminden yukarıya doğru tavan mesafesini veya istediğiniz kabin yüksekliğini (standart 190 cm - 200 cm) belirleyin.\n\n### 3. Duvar Eğimi (Şakül Kontrolü)\nBir su terazisi yardımıyla duvarlarınızın dikliğini kontrol edin. Duvarınızda içeriye veya dışarıya doğru eğim varsa ayarlı dikme profili tercih edilmelidir.\n\n*Ankara merkez ilçelerinde ERAYDUŞ teknik ekibi adresinize gelerek yerinde ücretsiz keşif ve ölçüm yapmaktadır.* Detaylı adım adım anlatım için [Montaj ve Ölçü Rehberimizi](/montaj-kilavuzu) inceleyebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-21T10:00:00+03:00",
     "seo_title": "Duşakabin Ölçüsü Nasıl Alınır? (Teknik Rehber) | ERAYDUŞ",
@@ -104,7 +104,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Küçük Banyolar İçin Duşakabin Modelleri ve Yer Tasarruf Rehberi",
     "slug": "kucuk-banyolar-icin-dusakabin-modelleri",
     "description": "Dar ve küçük banyoları daha geniş göstermek, hareket alanını maksimuma çıkarmak için en ideal duşakabin modelleri ve yerleşim tavsiyeleri.",
-    "body": "Küçük banyolar için doğru duşakabin seçimi yapmak hem estetik hem de fonksiyonellik açısından hayati önem taşır. Yanlış seçilen dışa açılır kapılı bir duşakabin, lavabo veya klozet kullanımını engelleyerek banyonuzu daha da daraltabilir.\n\n### 1. Köşe L-Tipi ve Katlanır Duşakabinler\nKüçük banyolarda ölü alan olarak adlandırılan köşeleri değerlendirmek en akıllıca çözümdür. Köşe duşakabin modelleri, kare veya oval hatlarıyla duş alanını köşeye hapseder ve banyonun merkezindeki dolaşım alanını tamamen serbest bırakır.\n- **İçeri Katlanır Akordeon Kapılar:** Kapı açıldığında banyonun içine taşmaz, kendi üzerine katlanarak %100 alan tasarrufu sağlar.\n- **Kayar Sürgülü Sistemler:** Ray üzerinde çalışan kapılar ekstra açılım mesafesi gerektirmez.\n\n### 2. Şeffaf ve Oluklu (Fluted) Cam Tercihi\nOpak veya çok koyu füme camlar küçük banyoları kutu gibi göstererek alan algısını daraltır. Bunun yerine 8mm temperli şeffaf camlar veya gün ışığını kırmadan mahremiyet sağlayan oluklu (fluted) cam paneller tercih edilmelidir. Şeffaf cam, gözün duvarın sonuna kadar ilerlemesini sağlayarak banyonuzu olduğundan 2 kat daha büyük gösterir.\n\n### 3. Zeminle Hemzemin Walk-in Çözümleri\nYüksek duş tekneleri banyo zeminini böler ve görsel bir engel yaratır. Zemine sıfır olarak monte edilen Walk-in duş panelleri, seramik zeminle bütünleşerek kesintisiz bir görünüm sunar.\n\nBanyonuzun net ölçülerine göre en uygun modeli belirlemek için [Özel Ölçü Tasarla & Fiyat Al](/tasarla) konfigüratörümüzü kullanabilir veya [tüm duşakabin koleksiyonlarımızı](/urunler) inceleyebilirsiniz.",
+    "body": "Küçük banyolar için doğru duşakabin seçimi yapmak hem estetik hem de fonksiyonellik açısından hayati önem taşır. Yanlış seçilen dışa açılır kapılı bir duşakabin, lavabo veya klozet kullanımını engelleyerek banyonuzu daha da daraltabilir.\n\n### 1. Köşe L-Tipi ve Katlanır Duşakabinler\nKüçük banyolarda ölü alan olarak adlandırılan köşeleri değerlendirmek en akıllıca çözümdür. Köşe duşakabin modelleri, kare veya oval hatlarıyla duş alanını köşeye hapseder ve banyonun merkezindeki dolaşım alanını tamamen serbest bırakır.\n- **İçeri Katlanır Akordeon Kapılar:** Kapı açıldığında banyonun içine taşmaz, kendi üzerine katlanarak %100 alan tasarrufu sağlar.\n- **Kayar Sürgülü Sistemler:** Ray üzerinde çalışan kapılar ekstra açılım mesafesi gerektirmez.\n\n### 2. Şeffaf ve Oluklu (Fluted) Cam Tercihi\nOpak veya çok koyu füme camlar küçük banyoları kutu gibi göstererek alan algısını daraltır. Bunun yerine 6mm temperli şeffaf camlar veya gün ışığını kırmadan mahremiyet sağlayan oluklu (fluted) cam paneller tercih edilmelidir. Şeffaf cam, gözün duvarın sonuna kadar ilerlemesini sağlayarak banyonuzu olduğundan 2 kat daha büyük gösterir.\n\n### 3. Zeminle Hemzemin Tek Cam Duşakabin Çözümleri\nYüksek duş tekneleri banyo zeminini böler ve görsel bir engel yaratır. Zemine sıfır olarak monte edilen tek cam duş panelleri, seramik zeminle bütünleşerek kesintisiz bir görünüm sunar.\n\nBanyonuzun net ölçülerine göre en uygun modeli belirlemek için [Özel Ölçü Tasarla & Fiyat Al](/tasarla) konfigüratörümüzü kullanabilir veya [tüm duşakabin koleksiyonlarımızı](/urunler) inceleyebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-20T10:00:00+03:00",
     "seo_title": "Küçük Banyolar İçin Duşakabin Modelleri | ERAYDUŞ Rehberi",
@@ -138,7 +138,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Fluted (Oluklu) Cam Duşakabinler: Banyolara Retro-Modern Dokunuş",
     "slug": "fluted-oluklu-cam-dusakabin-trendleri",
     "description": "Çizgili ve oluklu yapısıyla ışığı kırarak büyüleyici bir mahremiyet yaratan Fluted oluklu temperli cam duşakabin modelleri.",
-    "body": "İç mimaride son yılların en güçlü trendlerinden biri olan **Fluted (Oluklu/Dikey Çizgili) Cam**, duşakabin tasarımlarında devrim yaratıyor. Fransız ve İtalyan banyo mimarisinden ilham alan oluklu camlar, şeffaflık ile gizlilik arasında mükemmel bir denge kurar.\n\n### Fluted Camın Öne Çıkan Özellikleri\n- **Işık Geçirgenliği ve Mahremiyet:** Işığı engellemez ancak arkasındaki silueti buğulayarak %100 mahremiyet sağlar.\n- **Su Lekesi Göstermeme:** Dikey çizgili yüzey dokusu sayesinde su ve su damlası izlerini gizler.\n- **Siyah ve Gold Profil Uyumu:** Mat siyah çerçevelerle birleştiğinde endüstriyel şıklık, gold profillerle birleştiğinde ise Art-Deco bir lüks sunar.\n\nERAYDUŞ üretim tesislerinde 6 mm ve 8 mm kalınlıkta güvenlik standartlarına uygun temperlenmiş oluklu camlar üretilmektedir. Özel tasarım projeleriniz için [Kumlama ve Özel Cam Sayfamızı](/kumlama-modelleri) inceleyin.",
+    "body": "İç mimaride son yılların en güçlü trendlerinden biri olan **Fluted (Oluklu/Dikey Çizgili) Cam**, duşakabin tasarımlarında devrim yaratıyor. Fransız ve İtalyan banyo mimarisinden ilham alan oluklu camlar, şeffaflık ile gizlilik arasında mükemmel bir denge kurar.\n\n### Fluted Camın Öne Çıkan Özellikleri\n- **Işık Geçirgenliği ve Mahremiyet:** Işığı engellemez ancak arkasındaki silueti buğulayarak %100 mahremiyet sağlar.\n- **Su Lekesi Göstermeme:** Dikey çizgili yüzey dokusu sayesinde su ve su damlası izlerini gizler.\n- **Siyah ve Gold Profil Uyumu:** Mat siyah çerçevelerle birleştiğinde endüstriyel şıklık, gold profillerle birleştiğinde ise Art-Deco bir lüks sunar.\n\nERAYDUŞ üretim tesislerinde 6 mm kalınlıkta güvenlik standartlarına uygun temperlenmiş oluklu camlar üretilmektedir. Özel tasarım projeleriniz için [Kumlama ve Özel Cam Sayfamızı](/kumlama-modelleri) inceleyin.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-18T10:00:00+03:00",
     "seo_title": "Fluted Oluklu Cam Duşakabin Modelleri | ERAYDUŞ Tasarım",
@@ -154,8 +154,8 @@ export const fallbackBlogPosts: BlogPost[] = [
     "id": "ankara-cankaya-dusakabin-montaj-rehberi",
     "title": "Çankaya'da Duşakabin Yenileme: Yerinde Ölçü ve Montaj Süreci",
     "slug": "ankara-cankaya-dusakabin-montaj-rehberi",
-    "description": "Ankara Çankaya, Ayrancı, Gaziosmanpaşa ve Bahçelievler bölgelerinde eski kabin sökümü, yerinde lazer ölçü ve hızlı montaj hizmeti.",
-    "body": "Ankara Çankaya bölgesindeki yüksek katlı konutlar, rezidanslar ve müstakil yapılarda banyo yenileme süreçleri özel bir teknik yaklaşım gerektirir. Eski yapılardaki duvar kaçıklıkları ve seramik altı tesisat durumları dikkate alınarak imalat yapılmalıdır.\n\n### Çankaya Bölgesi Özel Hizmet Sürecimiz\n1. **Aynı Gün Ücretsiz Keşif:** Çankaya, Gaziosmanpaşa, Ümitköy ve civarında adresinize gelerek hassas lazer metre ile ölçü alıyoruz.\n2. **Eski Kabin Sökümü ve Temizliği:** Mevcut eski plastik veya paslanmış kabininizi zarar vermeden söküp alandan uzaklaştırıyoruz.\n3. **Sızdırmazlık Garantili Montaj:** Antibakteriyel nötr silikon uygulaması ile 2 yıl su sızdırmazlık garantisi sunuyoruz.\n\nÇankaya ve çevresinde ikamet ediyorsanız detaylı bilgi için [Ankara Çankaya Duşakabin Hizmeti](/ankara-cankaya-dusakabin) sayfamızı ziyaret edin veya [bize doğrudan ulaşın](/iletisim).",
+    "description": "Ankara Çankaya, Ayrancı, Gaziosmanpaşa ve Bahçelievler bölgelerinde eski kabin sökümü, yerinde ücretsiz keşif ve hızlı montaj hizmeti.",
+    "body": "Ankara Çankaya bölgesindeki yüksek katlı konutlar, rezidanslar ve müstakil yapılarda banyo yenileme süreçleri özel bir teknik yaklaşım gerektirir. Eski yapılardaki duvar kaçıklıkları ve seramik altı tesisat durumları dikkate alınarak imalat yapılmalıdır.\n\n### Çankaya Bölgesi Özel Hizmet Sürecimiz\n1. **Aynı Gün Ücretsiz Keşif:** Çankaya, Gaziosmanpaşa, Ümitköy ve civarında adresinize gelerek banyonuzun net ölçüsünü alıyoruz.\n2. **Eski Kabin Sökümü ve Temizliği:** Mevcut eski plastik veya paslanmış kabininizi zarar vermeden söküp alandan uzaklaştırıyoruz.\n3. **Sızdırmazlık Garantili Montaj:** Antibakteriyel nötr silikon uygulaması ile 2 yıl su sızdırmazlık garantisi sunuyoruz.\n\nÇankaya ve çevresinde ikamet ediyorsanız detaylı bilgi için [Ankara Çankaya Duşakabin Hizmeti](/ankara-cankaya-dusakabin) sayfamızı ziyaret edin veya [bize doğrudan ulaşın](/iletisim).",
     "featured_image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-17T10:00:00+03:00",
     "seo_title": "Çankaya Duşakabin Montaj ve Yenileme Hizmeti | ERAYDUŞ Ankara",
@@ -171,7 +171,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "id": "ankara-cayyolu-umitkoy-banyo-dekorasyon",
     "title": "Çayyolu ve Ümitköy Bölgesi İçin Özel Ölçü Lüks Duşakabin Çözümleri",
     "slug": "ankara-cayyolu-umitkoy-banyo-dekorasyon",
-    "description": "Çayyolu, Ümitköy, İncek ve Alacaatlı bölgelerindeki villa ve lüks konutlara özel tavan boyu cam, gold profil ve walk-in kabin çözümleri.",
+    "description": "Çayyolu, Ümitköy, İncek ve Alacaatlı bölgelerindeki villa ve lüks konutlara özel tavan boyu cam, gold profil ve tek cam duşakabin çözümleri.",
     "body": "Çayyolu, Ümitköy ve İncek bölgesindeki geniş metrekareli villa ve müstakil konut banyolarında standart ölçü kabinler hem küçük kalmakta hem de mekanın lüks mimarisine uyum sağlayamamaktadır.\n\n### Lüks Konutlar İçin Öne Çıkan Mimari Çözümler\n- **240 cm Tavan Boyu Cam Paneller:** Yüksek tavanlı banyolarda tavana sabitlenen pirinç gergilerle sallantısız rüzgarlık mimarisi.\n- **PVD Gold ve Antik Bronz Profiller:** Armatürlerinize özel üretilen solmaz renk kaplamalı profiller.\n- **Gömme Niş ve Led Aydınlatma Uyumlu Kabinler:** Cam kabin içerisindeki şampuanlık nişleri ile entegre cam konumlandırması.\n\nAnkara Batı aksındaki villa projelerinize özel mimari destek almak için [Çayyolu Duşakabin Sayfamızı](/cayyolu-dusakabin) inceleyin ya da [Showroom Randevusu](/iletisim) oluşturun.",
     "featured_image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-16T10:00:00+03:00",
@@ -189,7 +189,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Duşakabin Altından Su Sızıyor! Nedeni ve Kesin Çözüm Yöntemleri",
     "slug": "dusakabin-su-sizdirma-sorunu-ve-cozumu",
     "description": "Duşakabin dışına su taşması ve silikon kararması gibi sızıntı problemlerinin teknik nedenleri ve antibakteriyel silikon çözüm adımları.",
-    "body": "Duş aldıktan sonra banyo zemininde su birikintisi görmek en can sıkıcı banyo problemlerinden biridir. Duşakabin su sızdırmasının 3 temel nedeni ve çözümü:\n\n### 1. Ömrünü Tamamlamış Silikon\nAsetik bazlı ucuz silikonlar zamanla kuruyarak çatlar ve seramik aralarından su sızdırır.\n- **Çözüm:** Eski silikon tamamen kazınmalı, alan alkol ile temizlenmeli ve %100 nötr antibakteriyel banyo silikonu çekilmelidir.\n\n### 2. Yıpranmış veya Eksik Mıknatıslı Fitiller\nKapıların birleştiği noktadaki mıknatıslı suluk fitilleri zamanla sertleşerek aralık kalabilir.\n- **Çözüm:** Cam kalınlığınıza uygun (6 mm veya 8 mm) şeffaf mıknatıslı suluk fitili ile değiştirilmelidir.\n\n### 3. Hatalı Duğ Eşiği ve Meyilsizlik\nZemin seramiğindeki meyil duş giderine doğru değilse su dışarı yönlenir.\n- **Çözüm:** Kabin altına mermer veya alüminyum su tutucu eşik profili eklenmelidir.\n\nTeknik destek ve garantili bakım hizmetimiz için [Sıkça Sorulan Sorular](/sss) kısmını inceleyebilir ya da [Servis Ekibimizle](/iletisim) iletişime geçebilirsiniz.",
+    "body": "Duş aldıktan sonra banyo zemininde su birikintisi görmek en can sıkıcı banyo problemlerinden biridir. Duşakabin su sızdırmasının 3 temel nedeni ve çözümü:\n\n### 1. Ömrünü Tamamlamış Silikon\nAsetik bazlı ucuz silikonlar zamanla kuruyarak çatlar ve seramik aralarından su sızdırır.\n- **Çözüm:** Eski silikon tamamen kazınmalı, alan alkol ile temizlenmeli ve %100 nötr antibakteriyel banyo silikonu çekilmelidir.\n\n### 2. Yıpranmış veya Eksik Mıknatıslı Fitiller\nKapıların birleştiği noktadaki mıknatıslı suluk fitilleri zamanla sertleşerek aralık kalabilir.\n- **Çözüm:** Cam kalınlığınıza uygun (6 mm) şeffaf mıknatıslı suluk fitili ile değiştirilmelidir.\n\n### 3. Hatalı Duğ Eşiği ve Meyilsizlik\nZemin seramiğindeki meyil duş giderine doğru değilse su dışarı yönlenir.\n- **Çözüm:** Kabin altına mermer veya alüminyum su tutucu eşik profili eklenmelidir.\n\nTeknik destek ve garantili bakım hizmetimiz için [Sıkça Sorulan Sorular](/sss) kısmını inceleyebilir ya da [Servis Ekibimizle](/iletisim) iletişime geçebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-15T10:00:00+03:00",
     "seo_title": "Duşakabin Su Sızdırıyor! Nedeni ve Çözümü | ERAYDUŞ",
@@ -206,7 +206,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Duşakabin Mıknatıslı Suluk Fitili Nasıl Değiştirilir? Bakım Rehberi",
     "slug": "miknatisli-fitil-degisimi-ve-bakimi",
     "description": "Zamanla sararan, kireçlenen veya tutıcılığını kaybeden duşakabin mıknatıs ve damlalık fitillerini evde değiştirme adımları.",
-    "body": "Duşakabin kapılarının su geçirmesini engelleyen en önemli sarf malzemesi cam kenarlarına takılan plastik ve mıknatıslı fitillerdir.\n\n### Fitiller Neden Sararır ve Bozulur?\nGüneş ışığı (UV), sert şebeke suyu ve kireç önleyici ağır kimyasallar plastik fitillerin esnekliğini kaybettirerek sararmasına neden olur.\n\n### 5 Adımda Evde Fitil Değişimi:\n1. **Cam Kalınlığını Ölçün:** Fitil almadan önce camınızın 4 mm, 6 mm mi yoksa 8 mm mi olduğunu kumpas veya cetvel ile ölçün.\n2. **Eski Fitili Çıkarın:** Eski fitili yukarı doğru çekerek camdan ayırın.\n3. **Cam Kenarını Temizleyin:** Cam birleşim yerindeki kireç ve tortuları sirke ile silin.\n4. **Yeni Fitili Kesin:** Yeni fitili kabin yüksekliğinize uygun maket bıçağı veya makasla kesin.\n5. **Cama Bastırarak Takın:** Aşağıdan yukarıya doğru bastırarak oturtun.\n\nYedek parça ve orijinal ERAYDUŞ aksesuar talepleriniz için [İletişim Formumuzu](/iletisim) doldurabilirsiniz.",
+    "body": "Duşakabin kapılarının su geçirmesini engelleyen en önemli sarf malzemesi cam kenarlarına takılan plastik ve mıknatıslı fitillerdir.\n\n### Fitiller Neden Sararır ve Bozulur?\nGüneş ışığı (UV), sert şebeke suyu ve kireç önleyici ağır kimyasallar plastik fitillerin esnekliğini kaybettirerek sararmasına neden olur.\n\n### 5 Adımda Evde Fitil Değişimi:\n1. **Cam Kalınlığını Ölçün:** Fitil almadan önce camınızın 6 mm olduğunu kumpas veya cetvel ile ölçün.\n2. **Eski Fitili Çıkarın:** Eski fitili yukarı doğru çekerek camdan ayırın.\n3. **Cam Kenarını Temizleyin:** Cam birleşim yerindeki kireç ve tortuları sirke ile silin.\n4. **Yeni Fitili Kesin:** Yeni fitili kabin yüksekliğinize uygun maket bıçağı veya makasla kesin.\n5. **Cama Bastırarak Takın:** Aşağıdan yukarıya doğru bastırarak oturtun.\n\nYedek parça ve orijinal ERAYDUŞ aksesuar talepleriniz için [İletişim Formumuzu](/iletisim) doldurabilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-14T10:00:00+03:00",
     "seo_title": "Duşakabin Mıknatıslı Fitil Değişimi Nasıl Yapılır? | ERAYDUŞ",
@@ -254,16 +254,16 @@ export const fallbackBlogPosts: BlogPost[] = [
   },
   {
     "id": "walk-in-dus-paneli-nedir",
-    "title": "Walk-in Duş Paneli Nedir? Hemzemin Banyo Tasarımının Avantajları",
+    "title": "Tek Cam Duşakabin Nedir? Hemzemin Banyo Tasarımının Avantajları",
     "slug": "walk-in-dus-paneli-nedir",
-    "description": "Kapısız, tek sabit cam panelden oluşan Walk-in duş alanlarının mimari lüksü, eşiksiz geçiş rahatlığı ve temizlik kolaylığı.",
-    "body": "Modern otel ve lüks banyo tasarımlarında sıklıkla karşılaştığımız **Walk-in Duş Panelleri**, herhangi bir açılır/kapanır kapısı olmayan, sabit bir cam sabitleyici profil ve gergiden oluşan minimalist sistemlerdir.\n\n### Walk-in Sistemlerin 4 Büyük Avantajı\n1. **Sıfır Engelli Geçiş:** Zeminle hemzemin seramik üzeri kurulumu sayesinde yaşlılar, çocuklar ve engelli bireyler için %100 güvenli ve basamaksız geçiş sunar.\n2. **Minimum Parça, Sıfır Arıza:** Rulman, menteşe veya hareketli kapı mekanizması olmadığı için mekanik arıza riski sıfırdır.\n3. **Işık ve Hacim Ferahlığı:** Banyonuzu bölmez, tek bir cam duvar görevi görerek mekanı devasa gösterir.\n4. **Temizlik Kolaylığı:** Profil birleşim detayları az olduğu için kir tutacak köşe kalmaz.\n\nWalk-in cam panellerinizde 8 mm temperli cam kullanılması statik duruş açısından zorunludur. Projenize özel tasarımı hemen [Özel Ölçü Tasarlama Robotumuzda](/tasarla) oluşturun.",
+    "description": "Kapısız, tek sabit cam panelden oluşan tek cam duşakabin alanlarının mimari lüksü, eşiksiz geçiş rahatlığı ve temizlik kolaylığı.",
+    "body": "Modern otel ve lüks banyo tasarımlarında sıklıkla karşılaştığımız **Tek Cam Duşakabinler**, herhangi bir açılır/kapanır kapısı olmayan, sabit bir cam sabitleyici profil ve gergiden oluşan minimalist sistemlerdir.\n\n### Tek Cam Sistemlerin 4 Büyük Avantajı\n1. **Sıfır Engelli Geçiş:** Zeminle hemzemin seramik üzeri kurulumu sayesinde yaşlılar, çocuklar ve engelli bireyler için %100 güvenli ve basamaksız geçiş sunar.\n2. **Minimum Parça, Sıfır Arıza:** Rulman, menteşe veya hareketli kapı mekanizması olmadığı için mekanik arıza riski sıfırdır.\n3. **Işık ve Hacim Ferahlığı:** Banyonuzu bölmez, tek bir cam duvar görevi görerek mekanı devasa gösterir.\n4. **Temizlik Kolaylığı:** Profil birleşim detayları az olduğu için kir tutacak köşe kalmaz.\n\nTek cam panellerinizde 6 mm temperli cam kullanılması statik duruş açısından zorunludur. Projenize özel tasarımı hemen [Özel Ölçü Tasarlama Robotumuzda](/tasarla) oluşturun.",
     "featured_image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-11T10:00:00+03:00",
-    "seo_title": "Walk-in Duş Paneli Nedir? Hemzemin Banyo | ERAYDUŞ",
-    "seo_description": "Walk-in kapısız duşakabin panelleri özellikleri. Hemzemin basamaksız banyo tasarımı ve minimalist şeffaf cam çözümleri.",
+    "seo_title": "Tek Cam Duşakabin Nedir? Hemzemin Banyo | ERAYDUŞ",
+    "seo_description": "Tek cam kapısız duşakabin panelleri özellikleri. Hemzemin basamaksız banyo tasarımı ve minimalist şeffaf cam çözümleri.",
     "tags": [
-      "Walk-in",
+      "Tek Cam",
       "Hemzemin Banyo",
       "Minimalizm",
       "Lüks Tasarım"
@@ -338,9 +338,9 @@ export const fallbackBlogPosts: BlogPost[] = [
     ]
   },
   {
-    "id": "banyo-haşereleri-ve-gider-kokusu-onleme",
+    "id": "banyo-hasereleri-ve-gider-kokusu-onleme",
     "title": "Banyo Gider Kokusu ve Haşereleri Önleyen Duşakabin Sifon Sistemleri",
-    "slug": "banyo-haşereleri-ve-gider-kokusu-onleme",
+    "slug": "banyo-hasereleri-ve-gider-kokusu-onleme",
     "description": "Banyodan gelen kötü kanalizasyon kokularını ve haşere girişini %100 engelleyen susuz çekvalfli ve klapeli gider sifonları.",
     "body": "Banyolarda sıkça yaşanan rahatsızlıklardan biri duş giderinden gelen kötü kokulardır. Özellikle rüzgarlı havalarda veya binanın havalandırma bacası yetersiz olduğunda kanalizasyon gazı banyoya sızabilir.\n\n### Koku Önleyici Çekvalfli Sifon Teknolojisi\nKlasik sulu sifonlarda su kuruduğunda koku engeli ortadan kalkar. ERAYDUŞ duş teknelerinde ve zemin troplarında kullanılan **Kuru Çekvalfli (Klapeli) Sifonlar**:\n- Su akarken klape açılır ve su hızla tahliye olur.\n- Su akışı bittiğinde yaylı klape veya mıknatıslı kapak tam kapanır.\n- Kötü koku, böcek ve haşere geçişini mekanik olarak %100 engeller.\n\nBanyonuzda koku problemini kökten çözmek için [Duşakabin ve Sifon Ürünlerimizi](/dusakabin-modelleri) inceleyebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1600&auto=format&fit=crop",
@@ -359,7 +359,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "İncek ve Batıkent Villa/Rezidans Banyoları İçin Kabin Önerileri",
     "slug": "incek-ve-batikent-konut-banyo-projeleri",
     "description": "Ankara İncek villaları ile Batıkent ve Eryaman yeni konut projelerine özel geniş cam kabin ve siyah profil trendleri.",
-    "body": "Ankara'nın hızla gelişen konut akslarından İncek, Batıkent ve Eryaman'daki yeni binalarda geniş ebatlı duş alanları standart hale gelmektedir.\n\n### İncek Villa Projelerinde Öne Çıkanlar:\n- **Tavan Boyu Siyah Menteşeli Sistemler:** 220 cm - 250 cm yükseklikte geniş açılır kapılar.\n- **Kişiye Özel Çift Girişli Walk-in Paneller:** Geniş banyolarda ada tipi duş kurulumları.\n\n### Batıkent & Eryaman Dairelerinde Öne Çıkanlar:\n- **İki Duvar Arası Sürgülü Siyah Kabinler:** 120 cm - 160 cm aralığındaki niş alanları değerlendiren raylı sistemler.\n\nAnkara genelinde yerinde ölçü ve ücretsiz keşif randevusu almak için [İletişim Formumuzu](/iletisim) doldurun.",
+    "body": "Ankara'nın hızla gelişen konut akslarından İncek, Batıkent ve Eryaman'daki yeni binalarda geniş ebatlı duş alanları standart hale gelmektedir.\n\n### İncek Villa Projelerinde Öne Çıkanlar:\n- **Tavan Boyu Siyah Menteşeli Sistemler:** 220 cm - 250 cm yükseklikte geniş açılır kapılar.\n- **Kişiye Özel Çift Girişli Tek Cam Duşakabinler:** Geniş banyolarda ada tipi duş kurulumları.\n\n### Batıkent & Eryaman Dairelerinde Öne Çıkanlar:\n- **İki Duvar Arası Sürgülü Siyah Kabinler:** 120 cm - 160 cm aralığındaki niş alanları değerlendiren raylı sistemler.\n\nAnkara genelinde yerinde ölçü ve ücretsiz keşif randevusu almak için [İletişim Formumuzu](/iletisim) doldurun.",
     "featured_image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-05T10:00:00+03:00",
     "seo_title": "İncek ve Batıkent Duşakabin Çözümleri | ERAYDUŞ Ankara",
@@ -410,7 +410,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Otel, Rezidans ve Toplu Konut Projeleri İçin Toptan Duşakabin Üretimi",
     "slug": "otel-ve-rezidanslar-icin-toptan-dusakabin",
     "description": "Müteahhitler, iç mimarlar ve otel projeleri için yüksek kapasiteli özel ölçü duşakabin imalatı ve toptan tedarik avantajları.",
-    "body": "ERAYDUŞ Ankara Siteler'deki modern üretim tesisinde bireysel tüketicilerin yanı sıra otel, rezidans, yurt ve toplu konut projelerine özel toptan duşakabin üretimi gerçekleştirmektedir.\n\n### Proje Kurumsal Avantajlarımız:\n- **Yüksek Üretim Kapasitesi:** Aylık 1.000+ adet cam kesim, temperleme ve profil işleme kapasitesi.\n- **Özel Şartname Uyumluluğu:** 6mm/8mm temperli cam, özel PVD kaplama ve paslanmaz aksam standartları.\n- **Zamanında Şantiye Teslimatı ve Montaj:** Proje takviminize sadık kalarak uzman montaj ekipleriyle hızlı kurulum.\n\nKurumsal iş ortaklığımız ve bayilik şartları için [Bayi ve Kurumsal Başvuru Sayfamızı](/bayi-basvurusu) ziyaret edin.",
+    "body": "ERAYDUŞ Ankara Siteler'deki modern üretim tesisinde bireysel tüketicilerin yanı sıra otel, rezidans, yurt ve toplu konut projelerine özel toptan duşakabin üretimi gerçekleştirmektedir.\n\n### Proje Kurumsal Avantajlarımız:\n- **Yüksek Üretim Kapasitesi:** Aylık 1.000+ adet cam kesim, temperleme ve profil işleme kapasitesi.\n- **Özel Şartname Uyumluluğu:** 6mm temperli cam, özel PVD kaplama ve paslanmaz aksam standartları.\n- **Zamanında Şantiye Teslimatı ve Montaj:** Proje takviminize sadık kalarak uzman montaj ekipleriyle hızlı kurulum.\n\nKurumsal iş ortaklığımız ve bayilik şartları için [Bayi ve Kurumsal Başvuru Sayfamızı](/bayi-basvurusu) ziyaret edin.",
     "featured_image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-07-02T10:00:00+03:00",
     "seo_title": "Toptan Duşakabin İmalatı & Proje Tedariği | ERAYDUŞ Kurumsal",
@@ -512,7 +512,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Tavan Boyu Cam Duşakabinler: Buhar Hapsi ve Mimari Şıklık",
     "slug": "tavan-boyu-dusakabin-modelleri",
     "description": "Zeminden tavana kadar kesintisiz uzanan tavan boyu cam duşakabinlerin buhar sauna etkisi ve mimari görkemi.",
-    "body": "Lüks rezidans ve pent-house banyolarında son dönemin en gözde mimari tercihi **Tavan Boyu Cam Duşakabinlerdir**. Cam panellerin tavana sıfır birleştiği bu sistemler, duş alanını adeta özel bir buhar odasına (sauna) dönüştürür.\n\n### Tavan Boyu Kabinlerin Özellikleri\n- **Buhar İzolasyonu:** Sıcak duş sırasında oluşan buhar banyonun geneline yayılmaz, kabin içinde hapsolarak sauna etkisi yaratır.\n- **Yüksek Statik Mukavemet:** Tavana özel pirinç aparatlarla bağlanan 8 mm temperli camlar titreşim yapmaz.\n- **Dikey Derinlik:** Banyoyu görsel olarak çok daha yüksek ve görkemli gösterir.\n\nProjelerinize özel tavan boyu cam üretimi için [Tasarım Konfigüratörümüzden](/tasarla) ölçülerinizi girebilirsiniz.",
+    "body": "Lüks rezidans ve pent-house banyolarında son dönemin en gözde mimari tercihi **Tavan Boyu Cam Duşakabinlerdir**. Cam panellerin tavana sıfır birleştiği bu sistemler, duş alanını adeta özel bir buhar odasına (sauna) dönüştürür.\n\n### Tavan Boyu Kabinlerin Özellikleri\n- **Buhar İzolasyonu:** Sıcak duş sırasında oluşan buhar banyonun geneline yayılmaz, kabin içinde hapsolarak sauna etkisi yaratır.\n- **Yüksek Statik Mukavemet:** Tavana özel pirinç aparatlarla bağlanan 6 mm temperli camlar titreşim yapmaz.\n- **Dikey Derinlik:** Banyoyu görsel olarak çok daha yüksek ve görkemli gösterir.\n\nProjelerinize özel tavan boyu cam üretimi için [Tasarım Konfigüratörümüzden](/tasarla) ölçülerinizi girebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-06-26T10:00:00+03:00",
     "seo_title": "Tavan Boyu Cam Duşakabin Modelleri | ERAYDUŞ Lüks Tasarım",
@@ -529,7 +529,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "2026 Banyo Yenileme Maliyeti: Duşakabin ve Seramik Bütçe Rehberi",
     "slug": "banyo-yenileme-maliyeti-ve-butce-planlama",
     "description": "2026 yılında bir banyoyu yenilerken duşakabin, seramik, tesisat ve işçilik kalemlerinin maliyet dağılımı ve bütçe ipuçları.",
-    "body": "Banyo tadilatına başlarken bütçeyi doğru planlamak sürpriz harcamaların önüne geçer. Standart bir banyo yenileme projesinde harcama kalemlerinin ortalama dağılımı şöyledir:\n\n### Banyo Yenileme Bütçe Dağılımı:\n1. **Duşakabin ve Cam Sistemleri (%30):** Banyonun odak noktasıdır. Kaliteli bir 6mm/8mm temperli cam kabin uzun ömürlülüğün anahtarıdır.\n2. **Seramik ve Zemin Kaplama (%25):** Fayans ve seramik malzeme maliyetleri.\n3. **Kırım, Tesisat ve İşçilik (%25):** Su ve gider tesisatının yenilenmesi.\n4. **Batarya ve Duş Setleri (%20):** Armatür ve duş başlıkları.\n\nEn uygun bütçeyle kaliteli bir duşakabine sahip olmak için [Özel Ölçü Tasarla & Fiyat Al](/tasarla) aracımızla anında fiyat teklifi oluşturabilirsiniz.",
+    "body": "Banyo tadilatına başlarken bütçeyi doğru planlamak sürpriz harcamaların önüne geçer. Standart bir banyo yenileme projesinde harcama kalemlerinin ortalama dağılımı şöyledir:\n\n### Banyo Yenileme Bütçe Dağılımı:\n1. **Duşakabin ve Cam Sistemleri (%30):** Banyonun odak noktasıdır. Kaliteli bir 6mm temperli cam kabin uzun ömürlülüğün anahtarıdır.\n2. **Seramik ve Zemin Kaplama (%25):** Fayans ve seramik malzeme maliyetleri.\n3. **Kırım, Tesisat ve İşçilik (%25):** Su ve gider tesisatının yenilenmesi.\n4. **Batarya ve Duş Setleri (%20):** Armatür ve duş başlıkları.\n\nEn uygun bütçeyle kaliteli bir duşakabine sahip olmak için [Özel Ölçü Tasarla & Fiyat Al](/tasarla) aracımızla anında fiyat teklifi oluşturabilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-06-25T10:00:00+03:00",
     "seo_title": "2026 Banyo Yenileme Maliyeti ve Bütçe Rehberi | ERAYDUŞ",
@@ -614,7 +614,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Duşakabin Alırken Yapılan 5 Kritik Hata ve Kaçınma Yolları",
     "slug": "dusakabin-alirken-yapilan-5-kritik-hata",
     "description": "İnce cam seçimi, yanlış ölçü alma, ucuz plastik profil kullanma gibi sıklıkla yapılan 5 hatanın çözümleri.",
-    "body": "Duşakabin alırken düşülen yaygın hatalar, kısa sürede su sızıntılarına ve kırılma risklerine yol açabilir.\n\n### En Çok Yapılan 5 Hata:\n1. **Temperlenmemiş Standart Cam Kullanmak:** Güvenlik riski oluşturur. Mutlaka TSE garantili temperli cam tercih edin.\n2. **Duvar Eğikliğini Göz Ardı Etmek:** Şakül kaçıklığı olan duvarlarda ayarlı dikme profili şarttır.\n3. **Plastik Rulman ve Menteşe Seçmek:** 6 ayda kırılır. Paslanmaz pirinç veya rulman çeliği tercih edilmelidir.\n4. **Yanlış Kapı Açılım Yönü:** Kapının klozet veya lavaboya çarpması.\n5. **Keşifsiz Sipariş Vermek:** Lazer metre ile ölçü alınmadan verilen siparişler uyumsuzluk yaratır.\n\nErayduş uzman ekibiyle riske girmeyin, [Ücretsiz Keşif Hizmetimizden](/iletisim) yararlanın.",
+    "body": "Duşakabin alırken düşülen yaygın hatalar, kısa sürede su sızıntılarına ve kırılma risklerine yol açabilir.\n\n### En Çok Yapılan 5 Hata:\n1. **Temperlenmemiş Standart Cam Kullanmak:** Güvenlik riski oluşturur. Mutlaka TSE garantili temperli cam tercih edin.\n2. **Duvar Eğikliğini Göz Ardı Etmek:** Şakül kaçıklığı olan duvarlarda ayarlı dikme profili şarttır.\n3. **Plastik Rulman ve Menteşe Seçmek:** 6 ayda kırılır. Paslanmaz pirinç veya rulman çeliği tercih edilmelidir.\n4. **Yanlış Kapı Açılım Yönü:** Kapının klozet veya lavaboya çarpması.\n5. **Keşifsiz Sipariş Vermek:** Yerinde profesyonel ölçü alınmadan verilen siparişler uyumsuzluk yaratır.\n\nErayduş uzman ekibiyle riske girmeyin, [Ücretsiz Keşif Hizmetimizden](/iletisim) yararlanın.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-06-20T10:00:00+03:00",
     "seo_title": "Duşakabin Alırken Yapılan 5 Kritik Hata | ERAYDUŞ",
@@ -665,11 +665,11 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Özel Ölçü Duşakabin Sipariş Süreci Nasıl İşler? Erayduş Deneyimi",
     "slug": "ozel-olcu-dusakabin-siparis-sureci",
     "description": "Keşif randevusundan milimetrik üretime, temperlemeden profesyonel montaja kadar adım adım sipariş rehberi.",
-    "body": "Standart yapı marketlerde satılan hazır kabinler çoğu zaman evinizin banyo ölçüsüne tam uymaz. ERAYDUŞ'ta tüm duşakabinler banyonuzun milimetrik ölçüsüne özel imal edilir.\n\n### 5 Adımda Sipariş Süreci:\n1. **Fiyat Teklifi ve Modellenme:** [Özel Ölçü Tasarla](/tasarla) aracımızla modelinizi seçip tahmini bütçenizi görün.\n2. **Ücretsiz Lazer Keşif:** Uzman ekibimiz adresinize gelerek duvar şakülünü ve net ölçüyü alır.\n3. **Özel Kesim ve Temperleme:** Camlarınız milimetrik kesilerek fırınlanır.\n4. **Montaj:** Belirlenen günde adresinizde temiz ve garantili kurulum yapılır.\n5. **Teslimat & Garanti:** Ürününüz 2 yıl üretici garantisiyle teslim edilir.\n\nHemen keşif randevusu almak için [İletişim Formumuzu](/iletisim) doldurun.",
+    "body": "Standart yapı marketlerde satılan hazır kabinler çoğu zaman evinizin banyo ölçüsüne tam uymaz. ERAYDUŞ'ta tüm duşakabinler banyonuzun milimetrik ölçüsüne özel imal edilir.\n\n### 5 Adımda Sipariş Süreci:\n1. **Fiyat Teklifi ve Modellenme:** [Özel Ölçü Tasarla](/tasarla) aracımızla modelinizi seçip tahmini bütçenizi görün.\n2. **Ücretsiz Keşif:** Uzman ekibimiz adresinize gelerek duvar şakülünü ve net ölçüyü alır.\n3. **Özel Kesim ve Temperleme:** Camlarınız milimetrik kesilerek fırınlanır.\n4. **Montaj:** Belirlenen günde adresinizde temiz ve garantili kurulum yapılır.\n5. **Teslimat & Garanti:** Ürününüz 2 yıl üretici garantisiyle teslim edilir.\n\nHemen keşif randevusu almak için [İletişim Formumuzu](/iletisim) doldurun.",
     "featured_image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-06-17T10:00:00+03:00",
     "seo_title": "Özel Ölçü Duşakabin Sipariş Süreci | ERAYDUŞ",
-    "seo_description": "Adım adım özel ölçü duşakabin sipariş ve montaj süreci. Lazer metre keşif, temperleme ve teslimat detayları.",
+    "seo_description": "Adım adım özel ölçü duşakabin sipariş ve montaj süreci. Yerinde keşif, temperleme ve teslimat detayları.",
     "tags": [
       "Özel Ölçü",
       "Sipariş Süreci",
@@ -679,17 +679,17 @@ export const fallbackBlogPosts: BlogPost[] = [
   },
   {
     "id": "paslanmaz-celik-dusakabin-aksesuarlari",
-    "title": "Paslanmaz Çelik Duşakabin Aksesuarları: Korozyona Karşı 304 Kalite Güvencesi",
+    "title": "Paslanmaz Çelik Duşakabin Aksesuarları: Korozyona Karşı Kaliteli Metal Güvencesi",
     "slug": "paslanmaz-celik-dusakabin-aksesuarlari",
-    "description": "Menteşe, kulp, gergilik ve tutamaklarda 304 kalite paslanmaz çelik kullanımının önemi ve döküm aksam farkları.",
-    "body": "Duşakabinin ömrünü belirleyen en kritik unsurlardan biri de kulp, menteşe ve gergi çubuklarının malzeme kalitesidir. Zamanla paslanan ve kırılan ucuz zamak döküm aksesuarlar tüm kabini kullanılamaz hale getirebilir.\n\n### Neden 304 Kalite Paslanmaz Çelik?\n- **Paslanmazlık:** Sürekli nem ve su buharına maruz kalan banyo ortamında paslanma veya kararma yapmaz.\n- **Yüksek Yük Taşıma:** 8 mm ağır temperli cam panelleri sarkma yapmadan yıllarca güvenle taşır.\n- **Hijyenik Yüzey:** Bakteri birikimine izin vermeyen pürüzsüz yüzey dokusu.\n\nERAYDUŞ menteşeli kabin serilerinde 1. sınıf 304 kalite paslanmaz çelik aksamlar standarttır. Ürün detaylarını [Koleksiyonlar sayfamızda](/urunler) görebilirsiniz.",
+    "description": "Menteşe, kulp, gergilik ve tutamaklarda paslanmaz çelik kullanımının önemi ve döküm aksam farkları.",
+    "body": "Duşakabinin ömrünü belirleyen en kritik unsurlardan biri de kulp, menteşe ve gergi çubuklarının malzeme kalitesidir. Zamanla paslanan ve kırılan ucuz zamak döküm aksesuarlar tüm kabini kullanılamaz hale getirebilir.\n\n### Neden Paslanmaz Çelik Aksam?\n- **Paslanmazlık:** Sürekli nem ve su buharına maruz kalan banyo ortamında paslanma veya kararma yapmaz.\n- **Yüksek Yük Taşıma:** 6 mm temperli cam panelleri sarkma yapmadan yıllarca güvenle taşır.\n- **Hijyenik Yüzey:** Bakteri birikimine izin vermeyen pürüzsüz yüzey dokusu.\n\nERAYDUŞ menteşeli kabin serilerinde 1. sınıf paslanmaz çelik ve alüminyum aksamlar standarttır. Ürün detaylarını [Koleksiyonlar sayfamızda](/urunler) görebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-06-16T10:00:00+03:00",
-    "seo_title": "304 Kalite Paslanmaz Çelik Duşakabin Aksesuarları | ERAYDUŞ",
-    "seo_description": "Duşakabin kulp, menteşe ve gergi çubuklarında 304 paslanmaz çelik kalitesi. Paslanmaz banyo aksamlarının önemi.",
+    "seo_title": "Paslanmaz Çelik Duşakabin Aksesuarları | ERAYDUŞ",
+    "seo_description": "Duşakabin kulp, menteşe ve gergi çubuklarında paslanmaz çelik kalitesi. Paslanmaz banyo aksamlarının önemi.",
     "tags": [
       "Paslanmaz Çelik",
-      "304 Kalite",
+      "Metal Aksam",
       "Aksesuar",
       "Kalite Standardı"
     ]
@@ -699,7 +699,7 @@ export const fallbackBlogPosts: BlogPost[] = [
     "title": "Otel Odası Banyo Tasarımları ve Duşakabin Seçim Kriterleri",
     "slug": "otel-odasi-banyo-tasarimlari-ve-kabin-secimi",
     "description": "Butik oteller ve zincir oteller için hızlı temizlenebilir, arıza riski düşük, lüks şeffaf duş kabini mimari standartları.",
-    "body": "Otel işletmeciliğinde banyolar müşteri memnuniyetini doğrudan etkileyen alanların başında gelir. Otel odası duşakabin seçiminde 3 altın kriter:\n\n### 1. Hızlı Temizlenebilirlik (Nano Cam)\nKat hizmetleri personelinin zamandan tasarruf etmesi için Nano kaplamalı kireç tutmaz camlar zorunludur.\n\n### 2. Düşük Arıza Riski (Walk-in veya Menteşe)\nSürgülü rulmanlı sistemler yerine mekanik parçası az olan Walk-in veya ağır hizmet tipi menteşeli camlar tercih edilir.\n\n### 3. Ses ve Su İzolasyonu\nKapı altı çift suluk fitilleri ile oda içine su taşması engellenir.\n\nOtel projelerinize özel çözümlerimiz için [Bayi ve Kurumsal Sayfamızı](/bayi-basvurusu) ziyaret edebilirsiniz.",
+    "body": "Otel işletmeciliğinde banyolar müşteri memnuniyetini doğrudan etkileyen alanların başında gelir. Otel odası duşakabin seçiminde 3 altın kriter:\n\n### 1. Hızlı Temizlenebilirlik (Nano Cam)\nKat hizmetleri personelinin zamandan tasarruf etmesi için Nano kaplamalı kireç tutmaz camlar zorunludur.\n\n### 2. Düşük Arıza Riski (Tek Cam veya Menteşe)\nSürgülü rulmanlı sistemler yerine mekanik parçası az olan Tek Cam veya ağır hizmet tipi menteşeli camlar tercih edilir.\n\n### 3. Ses ve Su İzolasyonu\nKapı altı çift suluk fitilleri ile oda içine su taşması engellenir.\n\nOtel projelerinize özel çözümlerimiz için [Bayi ve Kurumsal Sayfamızı](/bayi-basvurusu) ziyaret edebilirsiniz.",
     "featured_image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop",
     "published_at": "2026-06-15T10:00:00+03:00",
     "seo_title": "Otel Banyo Tasarımı ve Duşakabin Seçimi | ERAYDUŞ Kurumsal",
@@ -708,7 +708,7 @@ export const fallbackBlogPosts: BlogPost[] = [
       "Ostel Banyosu",
       "Proje Tasarımı",
       "Kurumsal",
-      "Walk-in"
+      "Tek Cam"
     ]
   },
   {
@@ -735,7 +735,7 @@ const postFields = "id, title, slug, description, body, featured_image, publishe
 export const getPublishedPosts = cache(async (): Promise<BlogPost[]> => {
   try {
     const supabase = createPublicClient()
-    const { data, error } = await supabase.from("blog").select(postFields).eq("content_type", "blog").eq("status", "published").not("slug", "is", null).order("published_at", { ascending: false })
+    const { data, error } = await supabase.from("blog").select(postFields).eq("status", "published").not("slug", "is", null).order("published_at", { ascending: false })
     if (error) throw error
     return data?.length ? (data as BlogPost[]) : fallbackBlogPosts
   } catch (error) {
@@ -779,11 +779,41 @@ export const getPostsByTag = cache(async (tagParam: string): Promise<BlogPost[]>
 export const getPublishedPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   try {
     const supabase = createPublicClient()
-    const { data, error } = await supabase.from("blog").select(postFields).eq("content_type", "blog").eq("status", "published").eq("slug", slug).maybeSingle()
+    const { data, error } = await supabase.from("blog").select(postFields).eq("status", "published").eq("slug", slug).maybeSingle()
     if (error) throw error
     return (data as BlogPost | null) || fallbackBlogPosts.find((post) => post.slug === slug) || null
   } catch (error) {
     console.error("Blog post could not be loaded:", error)
     return fallbackBlogPosts.find((post) => post.slug === slug) || null
   }
+})
+
+export const getRelatedPosts = cache(async (currentSlug: string, tags: string[] | null, limit = 3): Promise<BlogPost[]> => {
+  const posts = await getPublishedPosts()
+  const otherPosts = posts.filter(p => p.slug !== currentSlug)
+  
+  if (!tags || tags.length === 0) {
+    return otherPosts.slice(0, limit)
+  }
+
+  // Find posts with overlapping tags
+  const scoredPosts = otherPosts.map(post => {
+    let score = 0
+    if (post.tags) {
+      post.tags.forEach(t => {
+        if (tags.includes(t)) score++
+      })
+    }
+    return { post, score }
+  })
+  
+  // Sort by score desc, then by date desc
+  scoredPosts.sort((a, b) => {
+    if (a.score !== b.score) return b.score - a.score
+    const dateA = a.post.published_at ? new Date(a.post.published_at).getTime() : 0
+    const dateB = b.post.published_at ? new Date(b.post.published_at).getTime() : 0
+    return dateB - dateA
+  })
+  
+  return scoredPosts.map(sp => sp.post).slice(0, limit)
 })

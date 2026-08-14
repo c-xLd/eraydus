@@ -38,25 +38,71 @@ export default async function Home() {
     getHomepageFaqs(),
     getTestimonials(),
     getFeaturedCategories()
-    
+
   ])
 
   // Fallback to static if no faqs found
   const safeFaqs = faqs.length > 0 ? faqs : [
     {
       id: '1',
-      question: 'Ölçü alma işlemi nasıl gerçekleştiriliyor?',
-      answer: 'Profesyonel ölçüm ekibimiz, randevu oluşturmanızın ardından banyonuza gelerek lazer ölçüm cihazıyla milimetrik hassasiyette ölçüm yapar.',
+      question: 'Ankara içinde ücretsiz ölçü ve keşif hizmetiniz var mı?',
+      answer: 'Evet. Ankara genelinde (Çankaya, Çayyolu, Keçiören, Yenimahalle, Etimesgut, Batıkent ve tüm ilçelerde) adresinize gelerek banyonuzun net ölçüsünü tamamen ücretsiz alıyoruz.',
       sort_order: 1
+    },
+    {
+      id: '2',
+      question: 'Hangi cam kalınlığı ve modellerini kullanıyorsunuz?',
+      answer: 'Tüm duşakabinlerimizde darbelere karşı 5 kat dayanıklı 6mm temperli emniyet camı kullanıyoruz.',
+      sort_order: 2
+    },
+    {
+      id: '3',
+      question: 'Siparişim ne kadar sürede üretilir ve montajı nasıl yapılır?',
+      answer: 'Ölçü onayının ardından Siteler / Ankara imalatımızda 3-5 iş günü içerisinde duşakabininiz hazırlanır. Kendi uzman montaj ekibimiz adresinize gelerek 1-2 saat içinde temiz, güvenli ve garantili montajı tamamlar.',
+      sort_order: 3
+    },
+    {
+      id: '4',
+      question: 'Duşakabinde banyoya su sızdırma problemi yaşar mıyım?',
+      answer: 'Kesinlikle hayır. Güçlü mıknatıslı fitiller, su tutucu alt eşik profilleri ve antibakteriyel banyo silikonu uygulamamız ile su sızdırmazlık garantisi veriyoruz.',
+      sort_order: 4
+    },
+    {
+      id: '5',
+      question: 'Garanti süreniz ne kadar ve neleri kapsıyor?',
+      answer: 'Tüm duşakabin sistemlerimiz 2 Yıl Resmi Üretici Garantisi altındadır. İmalat, montaj, profil veya sızdırmazlık kaynaklı sorunlar ücretsiz giderilir. İlerleyen dönemlerde olası kaza durumlarında fabrikamızdan uygun fiyatla birebir orijinal yedek parça temin edilir.',
+      sort_order: 5
+    },
+    {
+      id: '6',
+      question: 'Banyom standart ölçüde değil veya eğimli, özel üretim yapıyor musunuz?',
+      answer: 'Evet. Duşakabinlerimizin tamamı fabrikasyon hazır paket değil, banyonuzun ölçüsüne, tavan yüksekliğine ve varsa kolon/kiriş detaylarına göre özel olarak imal edilir.',
+      sort_order: 6
     }
   ];
 
   const safeTestimonials = testimonials.length > 0 ? testimonials : [
     {
       id: '1',
-      name: 'Elif Karaca',
-      role: 'İç Mimar',
-      quote: 'Projelerimde yıllardır Erayduş ile çalışıyorum...',
+      name: 'Ahmet Yılmaz',
+      role: 'Çankaya, Ankara',
+      quote: 'Banyomuzun ölçüsü standart dışıydı. Ücretsiz keşfe gelip yerinde ölçü aldılar, 4 gün içinde tam oturan harika bir duşakabin monte ettiler. İşçilik ve malzeme çok kaliteli.',
+      rating: 5,
+      image_url: ''
+    },
+    {
+      id: '2',
+      name: 'Merve Öztürk',
+      role: 'Çayyolu, Ankara',
+      quote: 'Siyah profilli ve füme camlı duşakabin sipariş ettik. Banyonun havası tamamen değişti. Cam kalitesi ve silikon işçiliği tertemiz. Erayduş ekibine sonsuz teşekkürler.',
+      rating: 5,
+      image_url: ''
+    },
+    {
+      id: '3',
+      name: 'Serkan Kaya',
+      role: 'Keçiören, Ankara',
+      quote: 'Eski duşakabinimizin su sızdırmasından bıkmıştık. Erayduş imalatı yeni kabinde 1 damla bile su dışarı çıkmıyor. Montaj ekibi de çok bilgili ve saygılıydı.',
       rating: 5,
       image_url: ''
     }
@@ -83,13 +129,27 @@ export default async function Home() {
       />
       <HeroSection />
       <ProductShowcase categories={categories} />
-      <StatementSection />
-      <CraftsmanshipSection />
-      <WhyEraydusSection />
-      <ConfiguratorPreview />
-      <TestimonialsSection testimonials={safeTestimonials} />
-      <FAQSection faqs={safeFaqs} />
-      <FinalCTASection />
+      <div className="cv-auto">
+        <StatementSection />
+      </div>
+      <div className="cv-auto">
+        <CraftsmanshipSection />
+      </div>
+      <div className="cv-auto">
+        <WhyEraydusSection />
+      </div>
+      <div className="cv-auto">
+        <ConfiguratorPreview />
+      </div>
+      <div className="cv-auto">
+        <TestimonialsSection testimonials={safeTestimonials} />
+      </div>
+      <div className="cv-auto">
+        <FAQSection faqs={safeFaqs} />
+      </div>
+      <div className="cv-auto">
+        <FinalCTASection />
+      </div>
     </div>
   )
 }

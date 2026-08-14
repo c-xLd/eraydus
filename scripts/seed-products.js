@@ -10,19 +10,19 @@ const supabase = createClient(
 );
 
 const glassOptions = [
-  { id: 'clear', name: 'Şeffaf Extra Clear', colorClass: 'bg-white/20 backdrop-blur-sm', desc: 'Maksimum ışık geçirgenliği' },
-  { id: 'smoke', name: 'Füme (Siyah) Cam', colorClass: 'bg-black/60 backdrop-blur-md', desc: 'Gizlilik ve lüks görünüm' },
-  { id: 'bronze', name: 'Bronz Cam', colorClass: 'bg-amber-900/40 backdrop-blur-md', desc: 'Sıcak tonlar ve zarif yansıma' },
-  { id: 'fluted', name: 'Oluklu (Fluted) Cam', colorClass: 'bg-white/30 backdrop-blur-[2px] repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.1) 4px, rgba(255,255,255,0.1) 8px)', desc: 'Retro-modern yarı saydam yapı' },
-  { id: 'frosted', name: 'Buzlu (Kumlama) Cam', colorClass: 'bg-white/40 backdrop-blur-xl', desc: 'Tam mahremiyet' },
+  { id: 'seffaf', name: 'Şeffaf Extra Clear', colorClass: 'bg-white/20 backdrop-blur-sm', desc: 'Maksimum ışık geçirgenliği' },
+  { id: 'fume', name: 'Füme (Siyah) Cam', colorClass: 'bg-black/60 backdrop-blur-md', desc: 'Gizlilik ve lüks görünüm' },
+  { id: 'bronz', name: 'Bronz Cam', colorClass: 'bg-amber-900/40 backdrop-blur-md', desc: 'Sıcak tonlar ve zarif yansıma' },
+  { id: 'aynali', name: 'Aynalı Cam', colorClass: 'bg-slate-300/60 backdrop-blur-lg', desc: 'Genişlik hissi ve tam mahremiyet' },
+  { id: 'kumlama', name: 'Kumlama (Buzlu)', colorClass: 'bg-white/40 backdrop-blur-xl', desc: 'Özel desenler ve modern doku' },
+  { id: 'buz-mat', name: 'Buz Mat Cam', colorClass: 'bg-white/60 backdrop-blur-2xl', desc: 'Pürüzsüz mat yüzey ve tam gizlilik' },
 ]
 
 const profileOptions = [
-  { id: 'black', name: 'Mat Siyah', hex: '#1A1A1A' },
-  { id: 'chrome', name: 'Parlak Krom', hex: '#E8E9EB' },
+  { id: 'siyah', name: 'Mat Siyah', hex: '#1A1A1A' },
+  { id: 'firca-parlak', name: 'Parlak Krom', hex: '#E8E9EB' },
   { id: 'gold', name: 'Fırçalanmış Altın', hex: '#D4AF37' },
-  { id: 'bronze', name: 'Antik Bronz', hex: '#CD7F32' },
-  { id: 'white', name: 'Mat Beyaz', hex: '#F9FAFB' },
+  { id: 'beyaz', name: 'Mat Beyaz', hex: '#F9FAFB' },
 ]
 
 const products = [
@@ -33,11 +33,11 @@ const products = [
     collectionName: 'EDGE Serisi',
     base_price: 8500,
     new_product: false,
-    short_description: 'Ultra ince minimalist profiller ve 8mm Şişecam temperli cam ile köşe alanlar için üretilmiş lüks çözüm.',
+    short_description: 'Ultra ince minimalist profiller ve 6mm temperli cam ile köşe alanlar için üretilmiş lüks çözüm.',
     description: `Edge Köşe Kabin, 12mm ultra ince eloksal kaplama alüminyum profilleri ve net geometrik hatlarıyla modern banyo mimarisinin en şık örneklerinden biridir. Banyonun köşe alanına mükemmel uyum sağlayan L tipi veya kare yapısı, mekan içerisinde maksimum hareket alanı kazandırırken görsellerde ferahlık algısını üst seviyeye çıkarır.
 
 ### Mimari Tasarım ve Malzeme Standartları
-Tasarımında kullanılan 8 mm Şişecam ürünü yüksek mukavemetli temperli güvenlik camları, darbe ve yüksek ısıl farklara karşı sıradan camlara kıyasla 5 kat daha dayanıklıdır. Cam yüzeyine üretim aşamasında moleküler düzeyde entegre edilen Nano-Shield hidrofobik kaplama sayesinde su damlacıkları cam yüzeyinde tutunamaz, kireç ve sabun lekesi oluşumu %90 oranında engellenir. Profil aksamları ise korozyona, neme ve kimyasal temizleyicilere dirençli fırınlanmış elektrostatik boya ile kaplanmıştır.
+Tasarımında kullanılan 6 mm yüksek mukavemetli temperli güvenlik camları, darbe ve yüksek ısıl farklara karşı dayanıklıdır. Profil aksamları ise korozyona, neme ve kimyasal temizleyicilere dirençli fırınlanmış elektrostatik boya ile kaplanmıştır.
 
 ### Teknik Donanım ve Donatılar
 - **Profil Yapısı:** 1.8mm et kalınlığında alüminyum gövde, gizli vidalama kanalları.
@@ -47,9 +47,9 @@ Tasarımında kullanılan 8 mm Şişecam ürünü yüksek mukavemetli temperli g
 ### Montaj ve Kurulum Talimatları
 Edge Köşe Kabin montajı öncesinde zemin seramiklerinin terazi kontrolü ve duvarların şakül ayarı yapılmalıdır. Duvar dikme profilleri paslanmaz dübel ve vidalarla sabitlendikten sonra, cam paneller profil kanallarına sızdırmaz fitiller eşliğinde oturtulur. Montaj tamamlandıktan sonra dış birleşim noktalarına antibakteriyel, sararma yapmayan nötr silikon çekilmelidir. Silikonun tam kürleşmesi için ürün 24 saat boyunca kullanılmamalı ve su ile temas ettirilmemelidir.`,
     images: ['https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop', 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2070&auto=format&fit=crop'],
-    features: ['12mm Ultra İnce Profil', 'Köşe L-Tipi Yapı', 'Gizli Menteşe Sistemleri', '8mm Temperli Cam', 'Nano-Shield Kireç Önleyici'],
+    features: ['12mm Ultra İnce Profil', 'Köşe L-Tipi Yapı', 'Gizli Menteşe Sistemleri', '6mm Temperli Cam'],
     technical_specs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['6mm'],
       height: '190cm - 220cm',
       widthRange: '80x80cm - 120x120cm',
       installation: 'Zemin üstü (Eşiksiz) veya Tekne üstü',
@@ -60,17 +60,17 @@ Edge Köşe Kabin montajı öncesinde zemin seramiklerinin terazi kontrolü ve d
     status: 'active'
   },
   {
-    sku: 'pure-walkin',
-    slug: 'pure-walkin',
-    name: 'Pure Walk-in',
+    sku: 'pure-tek-cam',
+    slug: 'pure-tek-cam',
+    name: 'Pure Tek Cam Duşakabin',
     collectionName: 'PURE Serisi',
     base_price: 12000,
     new_product: true,
     short_description: 'Tamamen çerçevesiz, kapısız ve eşiksiz. Maksimum şeffaflık ve kesintisiz banyo alanı için tasarlandı.',
-    description: `Pure Walk-in, geleneksel duşakabin kalıplarını yıkarak duş alanını banyonun doğal bir uzantısı haline getiren mimari bir masterwork'tür. Çerçevesiz, kapısız ve zemine sıfır yerleşimi sayesinde engelsiz geçiş (barrier-free) imkanı tanır. Rezidans, villa ve lüks otel banyolarında alan derinliğini görsel olarak iki katına çıkaran bu sistem, kesintisiz bir ferahlık duygusu yaratır.
+    description: `Pure Tek Cam Duşakabin, geleneksel duşakabin kalıplarını yıkarak duş alanını banyonun doğal bir uzantısı haline getiren mimari bir masterwork'tür. Çerçevesiz, kapısız ve zemine sıfır yerleşimi sayesinde engelsiz geçiş (barrier-free) imkanı tanır. Rezidans, villa ve lüks otel banyolarında alan derinliğini görsel olarak iki katına çıkaran bu sistem, kesintisiz bir ferahlık duygusu yaratır.
 
 ### Malzeme Mühendisliği ve Güvenlik
-Pure Walk-in panelinde 10 mm veya isteğe bağlı 12 mm ekstra rodajlı Şişecam temperli emniyet camı kullanılır. Kalın ve masif yapısı sayesinde panellerde en ufak bir esneme veya sallantı meydana gelmez. Üst sabitleme kolu (gergi çubuğu), 304 kalite paslanmaz çelikten imal edilmiş olup tavana veya karşı duvara milimetrik olarak ankraj edilir. PVD kaplama teknolojisiyle renklendirilen metal aksamlar, banyodaki buhar ve sudan etkilenmeden onlarca yıl parlaklığını ve dokusunu muhafaza eder.
+Pure Tek Cam panelinde 10 mm veya isteğe bağlı 12 mm ekstra rodajlı Şişecam temperli emniyet camı kullanılır. Kalın ve masif yapısı sayesinde panellerde en ufak bir esneme veya sallantı meydana gelmez. Üst sabitleme kolu (gergi çubuğu), 304 kalite paslanmaz çelikten imal edilmiş olup tavana veya karşı duvara milimetrik olarak ankraj edilir. PVD kaplama teknolojisiyle renklendirilen metal aksamlar, banyodaki buhar ve sudan etkilenmeden onlarca yıl parlaklığını ve dokusunu muhafaza eder.
 
 ### Özel Detaylar ve Avantajlar
 - **Engelsiz Erişim:** Yaşlılar, çocuklar ve tekerlekli sandalye erişimi için %100 uyumluluk.
@@ -78,15 +78,15 @@ Pure Walk-in panelinde 10 mm veya isteğe bağlı 12 mm ekstra rodajlı Şişeca
 - **Kolay Temizlik:** Kapı menteşesi, girinti ve tekerlek mekanizması bulunmadığı için silinmesi saniyeler alır.
 
 ### Profesyonel Kurulum ve Zemin Hazırlığı
-Walk-in duş paneli montajından önce duş alanında eğim giderinin (lineer süzgeç) doğru hesaplanması gerekmektedir. Zemin seramik altına uygulanan su yalıtım mebranı kontrol edilmelidir. Cam alt U-profili zemine gömülü veya yüzeye monte edilebilir. Sabitleme gergi kolu 45 derece veya 90 derece açıyla duvara vidalandıktan sonra, şeffaf nötr izolasyon jeli ile birleşim yerleri mühürlenir. İzolasyonun tam mukavemet kazanması için 24 saat kuruma süresi beklenmelidir.`,
+Tek cam duşakabin paneli montajından önce duş alanında eğim giderinin (lineer süzgeç) doğru hesaplanması gerekmektedir. Zemin seramik altına uygulanan su yalıtım mebranı kontrol edilmelidir. Cam alt U-profili zemine gömülü veya yüzeye monte edilebilir. Sabitleme gergi kolu 45 derece veya 90 derece açıyla duvara vidalandıktan sonra, şeffaf nötr izolasyon jeli ile birleşim yerleri mühürlenir. İzolasyonun tam mukavemet kazanması için 24 saat kuruma süresi beklenmelidir.`,
     images: ['https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070&auto=format&fit=crop'],
-    features: ['%100 Çerçevesiz Tasarım', 'Kapısız Serbest Geçiş', 'Zemine Sıfır Montaj', '304 Paslanmaz Çelik Gergi Kolu', '10mm Temperli Cam'],
+    features: ['%100 Çerçevesiz Tasarım', 'Kapısız Serbest Geçiş', 'Zemine Sıfır Montaj', '304 Paslanmaz Çelik Gergi Kolu', '6mm Temperli Cam'],
     technical_specs: {
-      glassThickness: ['8mm', '10mm'],
+      glassThickness: ['6mm'],
       height: '200cm - 240cm',
       widthRange: '90cm - 160cm',
       installation: 'Sadece Zemin Üstü (Eşiksiz)',
-      layoutType: 'Walk-in'
+      layoutType: 'Tek Cam'
     },
     compatible_glass: glassOptions,
     compatible_profiles: [profileOptions[0], profileOptions[1], profileOptions[2], profileOptions[3]],
@@ -103,7 +103,7 @@ Walk-in duş paneli montajından önce duş alanında eğim giderinin (lineer s�
     description: `Luxury Sürgülü, endüstriyel rulman mühendisliğini yüksek lüks tasarımla buluşturan amiral gemisi duşakabin modelimizdir. Üst taşımalı masif alüminyum ray üzerinde sessizce ve zahmetsizce kayan ağır cam paneller, özel sıvı amortisörlü soft-close (yavaşlatıcı fren) mekanizması sayesinde kapanma noktasına ulaştığında darbesiz ve gürültüsüz şekilde kendiliğinden çekilerek kapanır.
 
 ### Premium Malzeme Yapısı
-Sistemde kullanılan 8 mm rodajlı temperli emniyet camları, ağır yük kapasiteli paslanmaz çelik rulman tekerlekler tarafından taşınır. Tekerlek rulmanları çift bilyalı ve Teflon kaplamalı olduğu için su ve kireçten etkilenmez, yıllar geçse de ilk günkü akıcı hareketini korur. Ray ve dikme profillerinde uygulanan fırçalanmış titanyum ve PVD altın/krom kaplama seçenekleri, banyonuza konut projelerinde aranan büyüleyici dokuyu katar.
+Sistemde kullanılan 6 mm rodajlı temperli emniyet camları, ağır yük kapasiteli paslanmaz çelik rulman tekerlekler tarafından taşınır. Tekerlek rulmanları çift bilyalı ve Teflon kaplamalı olduğu için su ve kireçten etkilenmez, yıllar geçse de ilk günkü akıcı hareketini korur. Ray ve dikme profillerinde uygulanan fırçalanmış titanyum ve PVD altın/krom kaplama seçenekleri, banyonuza konut projelerinde aranan büyüleyici dokuyu katar.
 
 ### Teknik Üstünlükler
 - **Soft-Close Amortisör:** Çarpmaları ve cam kırılma riskini sıfıra indiren hidrolik frenleme.
@@ -113,9 +113,9 @@ Sistemde kullanılan 8 mm rodajlı temperli emniyet camları, ağır yük kapasi
 ### Kurulum ve Ayar Esasları
 Luxury Sürgülü montajında üst taşıyıcı rayın hassas su terazisinde olması şarttır. Rayın teraziden kaçması durumunda cam kapı kendi kendine kayabilir. Duvar dikmeleri monte edildikten sonra rulman eksen ayarları üst makaralar üzerindeki eksantrik cıvatalar yardımıyla milimetrik olarak dengelenir. Alt su engelleyici çıta montajı yapıldıktan sonra tüm kenarlar yüksek tutuculuklu hijyenik silikon ile izolasyon altına alınır.`,
     images: ['https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=2070&auto=format&fit=crop'],
-    features: ['Soft-Close Fren Amortisörü', '316 Çelik Çift Bilyalı Rulman', 'Akustik Sızdırmazlık Fitilleri', '8mm Güvenlik Camı', 'PVD Kaplama Profil'],
+    features: ['Soft-Close Fren Amortisörü', '316 Çelik Çift Bilyalı Rulman', 'Akustik Sızdırmazlık Fitilleri', '6mm Güvenlik Camı', 'PVD Kaplama Profil'],
     technical_specs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['6mm'],
       height: '190cm - 220cm',
       widthRange: '120cm - 200cm',
       installation: 'İki Duvar Arası (Niş) veya L-Tipi Dönüşlü',
@@ -136,7 +136,7 @@ Luxury Sürgülü montajında üst taşıyıcı rayın hassas su terazisinde olm
     description: `Edge Pivot Duşakabin, banyonuzdaki iki duvar arası niş alanları en verimli ve estetik biçimde değerlendirmek için geliştirilmiş minimalist bir tasarım harikasıdır. Dış çerçeve profili olmadan, sadece alt ve üst pivot dönme noktaları üzerinden çalışan kapı mekanizması, hem içe hem dışa 180 derece geniş açılım sağlayarak kullanım kolaylığı sunar.
 
 ### Malzeme ve Tasarım Detayları
-8 mm Şişecam temperli cam paneller, pirinç döküm üzerine krom veya mat siyah elektrostatik fırın boya kaplanmış pivot menteşeler ile sabitlenir. Menteşelerin içinde yer alan kendinden yükselen (lift-up) mekanizma, kapı açılırken camı 3 mm yukarı kaldırarak alt contanın zemine sürtünmesini ve yıpranmasını önler; kapı kapandığında ise tekrar zemine oturarak tam sızdırmazlık sağlar.
+6 mm Şişecam temperli cam paneller, pirinç döküm üzerine krom veya mat siyah elektrostatik fırın boya kaplanmış pivot menteşeler ile sabitlenir. Menteşelerin içinde yer alan kendinden yükselen (lift-up) mekanizma, kapı açılırken camı 3 mm yukarı kaldırarak alt contanın zemine sürtünmesini ve yıpranmasını önler; kapı kapandığında ise tekrar zemine oturarak tam sızdırmazlık sağlar.
 
 ### Öne Çıkan Özellikler
 - **Lift-Up Pivot Menteşe:** Açılışta yükselen, kapanışta tam mühürleme yapan akıllı conta koruma sistemi.
@@ -146,9 +146,9 @@ Luxury Sürgülü montajında üst taşıyıcı rayın hassas su terazisinde olm
 ### Montaj Rehberi ve İpuçları
 Pivot kabin montajında kapı ekseninin düşey şakülü kusursuz olmalıdır. Duvar tırnakları dikeyde teraziye alındıktan sonra pivot alt pirinç yatak zemine paslanmaz cıvatalarla çakılır. Kapı kanadı takıldıktan sonra lift-up yükselme mesafesi alt ayar vidasından sabitlenir. Duvar ve seramik birleşim yerlerine uygulanan antibakteriyel silikon çekildikten sonra 24 saat boyunca kapı hareket ettirilmemeli ve kurumaya bırakılmalıdır.`,
     images: ['https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2070&auto=format&fit=crop'],
-    features: ['Lift-Up Yükselen Pivot Menteşe', '180 Derece Çift Yönlü Açılım', 'Neodyum Mıknatıslı Fitil', '8mm Temperli Cam', 'Niş İki Duvar Arası Uyum'],
+    features: ['Lift-Up Yükselen Pivot Menteşe', '180 Derece Çift Yönlü Açılım', 'Neodyum Mıknatıslı Fitil', '6mm Temperli Cam', 'Niş İki Duvar Arası Uyum'],
     technical_specs: {
-      glassThickness: ['6mm', '8mm'],
+      glassThickness: ['6mm'],
       height: '190cm - 220cm',
       widthRange: '70cm - 110cm',
       installation: 'Sadece İki Duvar Arası (Niş)',
@@ -169,7 +169,7 @@ Pivot kabin montajında kapı ekseninin düşey şakülü kusursuz olmalıdır. 
     description: `Luxury Premium Köşe, ferah ve geniş köşe banyo alanları için tasarlanmış lüks bir duşakabin modelidir. Çift kanatlı dışa doğru açılabilen pirinç döküm menteşeleri, banyoya girip çıkarken maksimum açıklık ve konfor sunar. Altın, antik bronz ve mat siyah renk seçenekleriyle mimari projelerin aranan yıldızıdır.
 
 ### Kalite ve Yapısal Özellikler
-Üründe 8 mm veya 10 mm kalınlığında rodajlı temperli emniyet camları kullanılmıştır. Yüksek mukavemetli pirinç menteşe gövdeleri 100.000 açma-kapama testinden başarıyla geçmiştir. Cam panellerin dış yüzeyi standart olarak kireç tutmaz Nano-Shield kaplamalıdır. Profillerde kullanılan PVD titanyum kaplama teknolojisi, kireçli suya, banyo nemine ve deterjanlara karşı ürünü 10 yıl boyunca renk solmasına ve kararmaya karşı korur.
+Üründe 6 mm kalınlığında rodajlı temperli emniyet camları kullanılmıştır. Yüksek mukavemetli pirinç menteşe gövdeleri 100.000 açma-kapama testinden başarıyla geçmiştir. Cam panellerin dış yüzeyi standart olarak kireç tutmaz Nano-Shield kaplamalıdır. Profillerde kullanılan PVD titanyum kaplama teknolojisi, kireçli suya, banyo nemine ve deterjanlara karşı ürünü 10 yıl boyunca renk solmasına ve kararmaya karşı korur.
 
 ### Donanım Özellikleri
 - **Çift Kanat Menteşe:** Geniş açı ile dışa açılan esnek kapı sistemi.
@@ -179,9 +179,9 @@ Pivot kabin montajında kapı ekseninin düşey şakülü kusursuz olmalıdır. 
 ### Montaj ve İzolasyon Kuralları
 Kurulum öncesi 90 derecelik köşe açısının gönye kontrolü yapılmalıdır. Menteşe sabitleme plakaları duvara paslanmaz çelik çelik dübeller ile tutturulur. Cam paneller menteşe yuvalarına tork anahtarı ile eşit sıkılıkta sabitlenir. Alt eşik çıtası zemine şeffaf nötr silikon ile yapıştırıldıktan sonra kabin 24 saat boyunca kurumaya bırakılmalıdır.`,
     images: ['https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070&auto=format&fit=crop'],
-    features: ['Çift Kanat Menteşeli Açılım', 'PVD Titanyum Kaplama', '8mm / 10mm Cam Seçeneği', 'Nano Kireç Koruma', 'Masif Çelik Tutamaklar'],
+    features: ['Çift Kanat Menteşeli Açılım', 'PVD Titanyum Kaplama', '6mm Cam Seçeneği', 'Nano Kireç Koruma', 'Masif Çelik Tutamaklar'],
     technical_specs: {
-      glassThickness: ['8mm', '10mm'],
+      glassThickness: ['6mm'],
       height: '200cm - 230cm',
       widthRange: '100x100cm - 140x140cm',
       installation: 'Zemin Üstü veya Tekne Üstü',
@@ -202,19 +202,19 @@ Kurulum öncesi 90 derecelik köşe açısının gönye kontrolü yapılmalıdı
     description: `Pure Gizli Sürgülü, makaraların, tekerleklerin ve hareket mekanizmalarının profiller içerisine tamamen entegre edildiği, dışarıdan bakıldığında sadece camın pürüzsüz akışının göründüğü yüksek teknoloji ürünü bir duş sistemidir. Minimalist mimaride karmaşayı reddedenler için tasarlanmıştır.
 
 ### Mimari Detaylar ve Teknoloji
-10 mm kalınlığında ağır temperli emniyet camları, üst kapalı profil kanalı içerisinde gizlenen paslanmaz bilyalı rulmanlar üzerinde hareket eder. İçerisindeki dahili frenleme mekanizması, kapı açılırken veya kapanırken son 5 santimetrede devreye girerek yumuşak ve sessiz duruş sağlar. Profiller mat antrasit, siyah veya parlak krom boyalı alüminyumdan üretilmiştir.
+6 mm kalınlığında temperli emniyet camları, üst kapalı profil kanalı içerisinde gizlenen paslanmaz bilyalı rulmanlar üzerinde hareket eder. İçerisindeki dahili frenleme mekanizması, kapı açılırken veya kapanırken son 5 santimetrede devreye girerek yumuşak ve sessiz duruş sağlar. Profiller mat antrasit, siyah veya parlak krom boyalı alüminyumdan üretilmiştir.
 
 ### Avantajlar
 - **Gizli Mekanizma:** Tekerlek kirlenmesini ve su lekelerini engelleyen kapalı ray tasarımı.
-- **10mm Masif Cam:** Yüksek ses ve ısı izolasyonu sağlayan ağır temperli cam panel.
+- **6mm Masif Cam:** Yüksek ses ve ısı izolasyonu sağlayan temperli cam panel.
 - **Sıfır Yalpalama:** Çift yönlü dengelenmiş alt yönlendirici kılavuz.
 
 ### Kurulum Talimatı
 Sistem montajında gizli üst ray profili terazide duvara ankraj edildikten sonra cam paneller özel askı aparatları ile raya takılır. Gizli fren tamponlarının mesafe ayarları alyen anahtar ile yapıldıktan sonra kapak profilleri kapatılır. Seramik ile profil birleşim hattına silikon uygulanır ve 24 saatlik kürleşme süresi beklenir.`,
     images: ['https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop'],
-    features: ['Tam Gizli Ray ve Rulman', 'Görünmez Fren Amortisörü', '10mm Temperli Cam', 'Ses İzolasyonlu Ray', 'Kolay Temizlenebilir Kapalı Profil'],
+    features: ['Tam Gizli Ray ve Rulman', 'Görünmez Fren Amortisörü', '6mm Temperli Cam', 'Ses İzolasyonlu Ray', 'Kolay Temizlenebilir Kapalı Profil'],
     technical_specs: {
-      glassThickness: ['8mm', '10mm'],
+      glassThickness: ['6mm'],
       height: '200cm - 240cm',
       widthRange: '140cm - 220cm',
       installation: 'İki Duvar Arası (Niş)',

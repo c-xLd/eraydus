@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERAYDUŞ — Ankara Lüks Duşakabin Sistemleri | eraydus.net</title>
+  <meta name="description" content="Ankara merkezli Erayduş, Çankaya, Çayyolu, İncek, Batıkent, Keçiören ve tüm bölgelere özel ölçü 6mm temperli cam, paslanmaz profil duşakabin çözümleri sunar. WhatsApp ile anında fiyat alın!">
+  <meta name="keywords" content="erayduş, eraydus.net, ankara duşakabin, özel ölçü duşakabin, siyah duşakabin, gold duşakabin, temperli cam duşakabin, çankaya duşakabin, batıkent duşakabin, keçiören duşakabin">
+
+  <!-- Open Graph / SEO -->
+  <meta property="og:title" content="ERAYDUŞ — Ankara Lüks Duşakabin Sistemleri">
+  <meta property="og:description" content="Banyonuzun mimarisine özel tasarlanan premium duşakabin sistemleri. 2 Yıl Garanti & Ücretsiz Keşif.">
+  <meta property="og:image" content="./images/eray_gold.jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* Top Bar Announcement */
+    .top-announcement {
+      background: linear-gradient(90deg, #0b1329 0%, #1e293b 50%, #0b1329 100%);
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+    .top-announcement span {
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    /* Model Selection Tabs */
+    .model-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .model-tab-btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: var(--transition-fast);
+      cursor: pointer;
+    }
+    .model-tab-btn.active, .model-tab-btn:hover {
+      background: rgba(var(--accent-rgb), 0.18);
+      border-color: var(--border-accent);
+      color: var(--text-main);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    /* WhatsApp Special Action Buttons */
+    .btn-whatsapp {
+      flex: 1;
+      min-width: 260px;
+      height: 56px;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 0 25px rgba(37, 211, 102, 0.4);
+      transition: var(--transition-normal);
+      border: none;
+      cursor: pointer;
+    }
+    .btn-whatsapp:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
+    }
+    .btn-secondary-kesif {
+      height: 56px;
+      padding: 0 28px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color-glow);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition-fast);
+      cursor: pointer;
+    }
+    .btn-secondary-kesif:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--text-main);
+      transform: translateY(-2px);
+    }
+
+    /* Custom Form Selectors */
+    .option-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .custom-select {
+      background: rgba(18, 26, 43, 0.8);
+      border: 1px solid var(--border-color-glow);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+    }
+    .custom-select option {
+      background: #0d121d;
+      color: #fff;
+    }
+
+    /* Price Badge Box */
+    .price-calculator-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 0;
+    }
+    .price-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .price-amount {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #34d399;
+    }
+
+    /* Corporate Footer */
+    .footer-eraydus {
+      background: #05070b;
+      border-top: 1px solid var(--border-color);
+      padding: 60px 0 30px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-title {
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a:hover {
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-announcement">
+    📍 Ankara (Çankaya, Çayyolu, İncek, Batıkent, Keçiören) & Tüm Bölgelere <span>ÜCRETSİZ KEŞİF ve MONTAJ</span> | 📞 <span>0554 883 00 71</span>
+  </div>
+
+  <!-- ==========================================
+       Liquid Glass Header Navigation
+       ========================================== -->
+  <header class="header-glass">
+    <div class="nav-content">
+      <a href="https://eraydus.net" class="brand-logo" id="brandLogo">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);">
+          <i class="fa-solid fa-shower" style="color: #fff; font-size: 1.1rem;"></i>
+        </div>
+        <span>ERAYDUŞ <span style="font-size: 0.7rem; color: #eab308; font-weight: 600; letter-spacing: 1px; display: block;">eraydus.net</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active">Koleksiyon</a></li>
+        <li><a href="#tasarla" class="nav-link">3D Tasarla & Fiyat Al</a></li>
+        <li><a href="#bento" class="nav-link">Kalite Standartları</a></li>
+        <li><a href="#hotspot" class="nav-link">Donanım</a></li>
+        <li><a href="#nano" class="nav-link">Kolay Temizlenen Cam</a></li>
+        <li><a href="#reviews" class="nav-link">Referanslar</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn-whatsapp" onclick="window.open('https://wa.me/905548830071', '_blank')" style="height: 42px; padding: 0 20px; font-size: 0.85rem; min-width: auto;">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp 0554 883 00 71
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       Hero Section (Product Showcase & 3D Configurator)
+       ========================================== -->
+  <section class="hero-section" id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        
+        <!-- Left Showcase & Gallery -->
+        <div class="product-showcase">
+          <div class="award-badge">
+            <i class="fa-solid fa-certificate" style="color: #eab308;"></i> 2 Yıl Resmi Garanti & Paslanmaz Profil
+          </div>
+          <div class="stock-badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #34d399;">
+            <span class="pulse-dot" style="background-color: #10b981; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);"></span> Lazer Ölçüm & Özel İmalat
+          </div>
+
+          <div class="main-image-container">
+            <img src="./images/eray_gold.jpg" alt="ERAYDUŞ Solmayan Gold Kaplama Lüks Duşakabin" id="mainProductImg" class="main-product-img">
+          </div>
+
+          <div class="view-controls">
+            <button class="view-btn active">3D Stüdyo</button>
+            <button class="view-btn">Profil Açısı</button>
+            <button class="view-btn">Cam Detayı</button>
+          </div>
+        </div>
+
+        <!-- Right Configurator Details -->
+        <div class="product-details" id="tasarla">
+          <div class="tag-category">
+            <i class="fa-solid fa-gem"></i> eraydus.net Mimari Serisi
+          </div>
+
+          <h1 class="product-title" id="selectedModelName">Livorno Serisi</h1>
+
+          <p class="product-description" style="font-size: 0.95rem;">
+            Banyonuzun ölçüsüne özel üretilen, 6mm temperli emniyet camı ve solmayan profillerle zamansız estetik sunan duşakabin sistemleri.
+          </p>
+
+          <!-- Model Tab Seçimi -->
+          <div class="picker-label">Model Serisi Seçin:</div>
+          <div class="model-tabs">
+            <button class="model-tab-btn active" data-model="livorno">Livorno Serisi</button>
+            <button class="model-tab-btn" data-model="askili">Askılı Sistem</button>
+            <button class="model-tab-btn" data-model="katlanir">Katlanır Seri</button>
+            <button class="model-tab-btn" data-model="kare">Kare Cam</button>
+          </div>
+
+          <!-- Profil Donanım Renk Seçimi -->
+          <div class="variant-picker">
+            <div class="picker-label">Profil & Donanım Rengi: <span id="selectedVariantName" style="color: var(--text-main); font-weight: 700;">Altın Sarısı (Gold Profil)</span></div>
+            <div class="color-swatches">
+              <button class="swatch-btn active" data-variant="gold" title="Solmayan Gold (Altın) Profil">
+                <div class="swatch-fill swatch-gold"></div>
+              </button>
+              <button class="swatch-btn" data-variant="black" title="Mat Siyah Profil">
+                <div class="swatch-fill swatch-black"></div>
+              </button>
+              <button class="swatch-btn" data-variant="chrome" title="Parlak Krom Paslanmaz">
+                <div class="swatch-fill swatch-silver"></div>
+              </button>
+              <button class="swatch-btn" data-variant="gunmetal" title="Bronz / Rose Özel Seri">
+                <div class="swatch-fill" style="background: #f43f5e;"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cam Kalınlığı & Rengi -->
+          <div class="option-row">
+            <div class="option-group">
+              <label class="picker-label">Cam Kalınlığı:</label>
+              <select class="custom-select" id="glassThicknessSelect">
+                <option value="6mm" selected>6mm Şişecam Temperli Emniyet Camı</option>
+              </select>
+            </div>
+
+            <div class="option-group">
+              <label class="picker-label">Cam Rengi / Tipi:</label>
+              <select class="custom-select" id="glassColorSelect">
+                <option value="Şeffaf Extra Clear">Şeffaf Extra Clear Cam</option>
+                <option value="Füme (Siyah) Cam">Füme (Siyah) Cam</option>
+                <option value="Bronz Cam">Bronz Cam</option>
+                <option value="Aynalı Cam">Aynalı Cam</option>
+                <option value="Kumlama (Buzlu Desenli)">Kumlama (Buzlu Desenli) Cam</option>
+                <option value="Buz Mat Cam">Buz Mat Cam</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Ölçü Seçimi -->
+          <div class="option-group">
+            <label class="picker-label">Banyo Ölçünüz:</label>
+            <select class="custom-select" id="sizeSelect">
+              <option value="90x90cm">90 x 90 cm (Kare Standart)</option>
+              <option value="80x80cm">80 x 80 cm (Kare)</option>
+              <option value="100x100cm">100 x 100 cm (Geniş Kare)</option>
+              <option value="90x120cm">90 x 120 cm (Dikdörtgen Lüks)</option>
+              <option value="100x140cm">100 x 140 cm (Büyük Lüks)</option>
+              <option value="Özel Ölçü">Özel Ölçü (Milimetrik İmalat)</option>
+            </select>
+          </div>
+
+          <!-- Özel Ölçü Alanı -->
+          <div id="customSizeBox" style="display: none; gap: 12px;">
+            <input type="number" id="customWidthInput" placeholder="Genişlik (cm)" value="90" class="custom-select">
+            <input type="number" id="customHeightInput" placeholder="Yükseklik (cm)" value="200" class="custom-select">
+          </div>
+
+          <!-- Anlık Fiyat Tahmin Kutusu -->
+          <div class="price-calculator-box">
+            <div>
+              <div class="price-label">Konfigüratör Tahmini Fiyat:</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">Ankara İçi Ücretsiz Keşif & Montaj Dahil</div>
+            </div>
+            <div class="price-amount" id="priceDisplay">₺15.900</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="purchase-row" style="flex-wrap: wrap; gap: 12px;">
+            <button class="btn-whatsapp" id="waBtnMain">
+              <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i> WhatsApp'tan Fiyat Al & Sipariş Ver
+            </button>
+
+            <button class="btn-secondary-kesif" id="waKesifBtn">
+              <i class="fa-solid fa-ruler-combined"></i> Ücretsiz Keşif İste
+            </button>
+          </div>
+
+          <div class="express-payments">
+            <span class="express-label">Erayduş Standartları:</span>
+            <div class="pay-btn"><i class="fa-solid fa-truck-fast"></i> 3-5 İş Günü İmalat</div>
+            <div class="pay-btn"><i class="fa-solid fa-wrench"></i> Profesyonel Montaj</div>
+            <div class="pay-btn"><i class="fa-solid fa-shield-halved"></i> 2 Yıl Resmi Garanti</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       Dribbble Bento Grid Highlights (eraydus.net Kalitesi)
+       ========================================== -->
+  <section class="bento-section" id="bento">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Ustalık ve Kalite</div>
+        <h2 class="section-title">Neden Erayduş?</h2>
+        <p class="section-subtitle">Hazır paketler yerine banyonuzun ölçüsüne özel, sağlam ve şık duşakabinler.</p>
+      </div>
+
+      <div class="bento-grid">
+        
+        <!-- Bento 1: Milimetrik Lazer Ölçüm -->
+        <div class="bento-card bento-wide">
+          <div class="bento-content">
+            <div class="bento-badge">MİMARİ HASSASİYET</div>
+            <h3 class="bento-title">Ücretsiz Lazer Ölçüm & Sıfır Hata İmalat</h3>
+            <p class="bento-desc">Ankara içi adresinize gelerek duvar dikliğini ve zemin meyilini lazerle ölçüyor, banyonuza tam oturan kabinler üretiyoruz.</p>
+          </div>
+          <div class="bento-interactive-wave">
+            <canvas id="glassCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Bento 2: Paslanmaz Çelik & Solmaz Profil -->
+        <div class="bento-card bento-col-4">
+          <div class="bento-header">
+            <div class="bento-icon"><i class="fa-solid fa-shield-cat"></i></div>
+            <h3 class="bento-title">Paslanmayan Çelik & Solmaz Profil</h3>
+            <p class="bento-desc">Banyonun nemli ortamında kararmayan, soyulmayan fırın boyalı dayanıklı profil teknolojisi.</p>
+          </div>
+          <div style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: #eab308; margin-top: 10px;">
+            PASLANMAZ
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Garantili Profil & Aksam</div>
+        </div>
+
+        <!-- Bento 3: 3-5 İş Günü Teslimat -->
+        <div class="bento-card bento-col-6">
+          <div class="bento-header">
+            <div class="bento-icon"><i class="fa-solid fa-bolt"></i></div>
+            <h3 class="bento-title">3-5 İş Günü İçinde Fabrika İmalatı ve Montaj</h3>
+            <p class="bento-desc">Sipariş onayından sonra Siteler fabrikamızda özel imalat yapılır. Ankara içi adresinizde randevu saatinizde temiz montaj tamamlanır.</p>
+          </div>
+        </div>
+
+        <!-- Bento 4: 2 Yıl Garanti & Destek -->
+        <div class="bento-card bento-col-6">
+          <div class="bento-header">
+            <div class="bento-icon"><i class="fa-solid fa-award"></i></div>
+            <h3 class="bento-title">2 Yıl Resmi İmalatçı Garantisi</h3>
+            <p class="bento-desc">Ürünlerimize olan güvenimizin kanıtı olarak imalat, montaj ve su sızdırmazlıkta 2 yıl boyunca ücretsiz servis ve garanti sunuyoruz.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       Interactive Hotspot Section
+       ========================================== -->
+  <section class="hotspot-section" id="hotspot">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Mimari Detaylar</div>
+        <h2 class="section-title">Erayduş Donanım Anatomisi</h2>
+        <p class="section-subtitle">Duş kabini üzerindeki noktaları tıklayarak yedek parça ve donanım kalitemizi inceleyin.</p>
+      </div>
+
+      <div class="hotspot-container">
+        <div class="hotspot-image-wrapper">
+          <img src="./images/eray_exploded.jpg" alt="Erayduş Donanım Görünümü" class="hotspot-bg-img">
+
+          <!-- Hotspots -->
+          <div class="hotspot-node node-1" data-hotspot="1" title="Rulman Teker">
+            <div class="hotspot-dot"></div>
+          </div>
+          <div class="hotspot-node node-2" data-hotspot="2" title="Mıknatıslı Fitil">
+            <div class="hotspot-dot"></div>
+          </div>
+          <div class="hotspot-node node-3" data-hotspot="3" title="6mm Temperli Cam">
+            <div class="hotspot-dot"></div>
+          </div>
+          <div class="hotspot-node node-4" data-hotspot="4" title="Solmaz Profil">
+            <div class="hotspot-dot"></div>
+          </div>
+        </div>
+
+        <!-- Hotspot Popup -->
+        <div class="hotspot-modal" id="hotspotModal">
+          <div class="modal-header">
+            <h4 class="modal-title" id="hotspotModalTitle">Bileşen Detayı</h4>
+            <button class="modal-close" id="hotspotClose">&times;</button>
+          </div>
+          <div class="modal-body" id="hotspotModalBody">
+            Donanım ayrıntılarını görmek için haritadaki noktalara tıklayın.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       Easy-Clean Nano Cam İnteraktif Demo
+       ========================================== -->
+  <section class="equalizer-section" id="nano">
+    <div class="container">
+      <div class="eq-card">
+        <div>
+          <div class="section-tag">Kristal Berraklık</div>
+          <h2 class="section-title" style="font-size: 2rem;">Kireç Tutmayan Kolay Temizlenen Cam</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+            En kaliteli 6mm Şişecam temperli cam panellerimiz, su damlalarının iz bırakmadan süzüldüğü pürüzsüz yapısıyla her zaman pırıl pırıldır.
+          </p>
+
+          <button class="btn-secondary-kesif" id="resetNanoBtn">
+            <i class="fa-solid fa-rotate-right"></i> Cam Temizleme Demosunu Sıfırla
+          </button>
+        </div>
+
+        <div class="eq-visualizer-container" style="background: #0f172a;">
+          <canvas id="nanoCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       Müşteri Yorumları & Mimari Referanslar
+       ========================================== -->
+  <section class="reviews-section" id="reviews">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Gerçek Müşteri Yorumları</div>
+        <h2 class="section-title">Ankara Genelinde Güvenle Tercih Ediliyoruz</h2>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="reviews-summary-card">
+          <div class="rating-big">5.0</div>
+          <div class="stars-big">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Ankara Çankaya, Çayyolu, Batıkent, Keçiören ve tüm ilçelerde tamamlanan 1.500+ memnun müşteri.</p>
+
+          <button class="btn-whatsapp" onclick="window.open('https://wa.me/905548830071?text=Merhaba,%20duşakabin%20modelleriniz%20hakkında%20bilgi%20ve%20fotoğraf%20alabilir%20miyim?', '_blank')" style="width: 100%; height: 46px; margin-top: 24px; font-size: 0.9rem; min-width: auto;">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp'tan Canlı Bilgi Al
+          </button>
+        </div>
+
+        <div class="reviews-list">
+          <div class="review-card">
+            <div class="review-header">
+              <div class="user-info">
+                <div class="user-avatar" style="background: #eab308;">EK</div>
+                <div>
+                  <div class="user-name">Elif Karaca</div>
+                  <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> İç Mimar, Çankaya Projesi</div>
+                </div>
+              </div>
+              <div class="stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            </div>
+            <p class="review-text">
+              "Erayduş ile projelerimizde 3 yıldır çalışıyoruz. Gold profilli askılı sistemleri ve 6mm temperli cam kalitesi harika. Teslim sürelerine sadıklar."
+            </p>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <div class="user-info">
+                <div class="user-avatar" style="background: #10b981;">MY</div>
+                <div>
+                  <div class="user-name">Murat Yılmaz</div>
+                  <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Ev Sahibi, İncek Çayyolu</div>
+                </div>
+              </div>
+              <div class="stars-row"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            </div>
+            <p class="review-text">
+              "Eğri olan banyo köşeme ücretsiz keşif ekibi gelip net ölçü aldı. Mat siyah profilli Livorno kabinimiz söz verdikleri gibi 4 günde monte edildi."
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       Floating Sticky WhatsApp Bottom Bar
+       ========================================== -->
+  <div class="floating-buy-bar" id="floatingBuyBar">
+    <div class="float-product-info">
+      <img src="./images/eray_gold.jpg" alt="ERAYDUŞ" class="float-img" id="floatImg">
+      <div>
+        <div class="float-name">ERAYDUŞ Lüks Duşakabin</div>
+        <div class="float-price" id="floatPrice" style="color: #34d399;">Tahmini ₺15.900</div>
+      </div>
+    </div>
+
+    <button class="btn-whatsapp" id="waBtnFloat" style="padding: 0 24px; height: 44px; font-size: 0.9rem; min-width: auto;">
+      <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> WhatsApp ile Fiyat Al
+    </button>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card">
+      <h3 id="modalTitle" style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 12px;">Bilgilendirme</h3>
+      <p id="modalBody" style="color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">Metin</p>
+      <button class="btn-primary" id="modalClose" style="width: 100%;">Kapat</button>
+    </div>
+  </div>
+
+  <!-- Official Corporate Footer -->
+  <footer class="footer-eraydus">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 16px;">
+            <div class="brand-icon" style="background: #eab308; width: 32px; height: 32px;">
+              <i class="fa-solid fa-shower" style="color: #fff; font-size: 0.9rem;"></i>
+            </div>
+            <span style="font-size: 1.2rem;">ERAYDUŞ</span>
+          </div>
+          <p style="line-height: 1.6; margin-bottom: 16px;">
+            Ankara Siteler merkezli duşakabin imalatçısı olarak 6mm temperli cam ve paslanmaz profil ile özel ölçü banyo çözümleri sunuyoruz.
+          </p>
+          <div style="color: #fff; font-weight: 700; display: flex; flex-direction: column; gap: 6px;">
+            <span><i class="fa-solid fa-phone" style="color: #eab308;"></i> (0312) 350 79 39</span>
+            <span><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i> 0554 883 00 71</span>
+            <span><i class="fa-solid fa-envelope" style="color: #38bdf8;"></i> info@eraydus.net</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Koleksiyonlar</h4>
+          <ul class="footer-links">
+            <li><a href="https://eraydus.net/urunler">Tüm Modeller</a></li>
+            <li><a href="https://eraydus.net/urunler">Sürgülü Sistemler</a></li>
+            <li><a href="https://eraydus.net/urunler">Menteşeli Kabinler</a></li>
+            <li><a href="https://eraydus.net/urunler">Mat Siyah Profil</a></li>
+            <li><a href="https://eraydus.net/urunler">Gold Profil</a></li>
+            <li><a href="https://eraydus.net/kumlama-modelleri">Kumlama Cam Desenleri</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Ankara Bölgeleri</h4>
+          <ul class="footer-links">
+            <li><a href="https://eraydus.net/ankara-cankaya-dusakabin">Çankaya Duşakabin</a></li>
+            <li><a href="https://eraydus.net/cayyolu-dusakabin">Çayyolu & İncek</a></li>
+            <li><a href="https://eraydus.net/batikent-dusakabin">Batıkent & Yenimahalle</a></li>
+            <li><a href="https://eraydus.net/kecioren-dusakabin">Keçiören Duşakabin</a></li>
+            <li><a href="https://eraydus.net/projeler">Mimari Projeler</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Showroom & Adres</h4>
+          <p style="line-height: 1.6; margin-bottom: 12px;">
+            Malazgirt Caddesi No:121/1B, Siteler / Ankara
+          </p>
+          <p style="font-size: 0.8rem;">
+            Çalışma Saatleri: Pazartesi – Cumartesi 09:00 – 19:00
+          </p>
+          <a href="https://eraydus.net/tasarla" class="btn-secondary-kesif" style="margin-top: 16px; justify-content: center; height: 42px;">
+            <i class="fa-solid fa-cube"></i> 3D Konfigüratörü Başlat
+          </a>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border-color); padding-top: 24px; text-align: center; font-size: 0.8rem;">
+        © 2026 ERAYDUŞ Lüks Duşakabin Sistemleri. Tüm hakları saklıdır. (eraydus.net)
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>

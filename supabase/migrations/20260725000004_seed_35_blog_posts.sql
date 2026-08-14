@@ -18,7 +18,7 @@ INSERT INTO public.content_calendar (
 8 mm kalınlığındaki camlar, lüks ve profilsiz menteşeli duşakabin modellerinin vazgeçilmezidir.
 - **Dayanıklılık:** Darbelere, ısı değişimlerine ve esnemeye karşı üstün direnç gösterir.
 - **Mimari Görünüm:** Profilsiz menteşeli sistemlerde rijit bir duruş sağlar, sallanma ve esneme yapmaz.
-- **Kullanım Alanı:** Geniş walk-in paneller, tavan boyu cam kabinler ve rezidans/villa projeleri için önerilir.
+- **Kullanım Alanı:** Geniş tek cam paneller, tavan boyu cam kabinler ve rezidans/villa projeleri için önerilir.
 
 ### Sonuç: Hangisini Seçmelisiniz?
 Eğer banyonuzda menteşeli profilsiz bir model veya 120 cm üzeri geniş tek parça cam tercih edecekseniz **8 mm temperli cam** şarttır. Standart kayar kapılı sürgülü bir kabin düşünüyorsanız **6 mm temperli cam** tam performans sağlayacaktır. Banyonuzun mimarisine özel cam kalınlığını belirlemek için [Özel Ölçü Tasarlama Robotumuzu](/tasarla) kullanabilir ya da [tüm duşakabin modellerimizi](/dusakabin-modelleri) inceleyebilirsiniz.',
@@ -166,7 +166,7 @@ Duş teknesi veya seramik zeminden yukarıya doğru tavan mesafesini veya istedi
 ### 3. Duvar Eğimi (Şakül Kontrolü)
 Bir su terazisi yardımıyla duvarlarınızın dikliğini kontrol edin. Duvarınızda içeriye veya dışarıya doğru eğim varsa ayarlı dikme profili tercih edilmelidir.
 
-*Ankara merkez ilçelerinde ERAYDUŞ teknik ekibi adresinize gelerek profesyonel lazer metre ile ücretsiz ölçüm yapmaktadır.* Detaylı adım adım anlatım için [Montaj ve Ölçü Rehberimizi](/montaj-kilavuzu) inceleyebilirsiniz.',
+*Ankara merkez ilçelerinde ERAYDUŞ teknik ekibi adresinize gelerek yerinde ücretsiz keşif ve ölçüm yapmaktadır.* Detaylı adım adım anlatım için [Montaj ve Ölçü Rehberimizi](/montaj-kilavuzu) inceleyebilirsiniz.',
   'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop',
   '2026-07-21T10:00:00+03:00'::timestamptz,
   'blog',
@@ -202,8 +202,8 @@ Küçük banyolarda ölü alan olarak adlandırılan köşeleri değerlendirmek 
 ### 2. Şeffaf ve Oluklu (Fluted) Cam Tercihi
 Opak veya çok koyu füme camlar küçük banyoları kutu gibi göstererek alan algısını daraltır. Bunun yerine 8mm temperli şeffaf camlar veya gün ışığını kırmadan mahremiyet sağlayan oluklu (fluted) cam paneller tercih edilmelidir. Şeffaf cam, gözün duvarın sonuna kadar ilerlemesini sağlayarak banyonuzu olduğundan 2 kat daha büyük gösterir.
 
-### 3. Zeminle Hemzemin Walk-in Çözümleri
-Yüksek duş tekneleri banyo zeminini böler ve görsel bir engel yaratır. Zemine sıfır olarak monte edilen Walk-in duş panelleri, seramik zeminle bütünleşerek kesintisiz bir görünüm sunar.
+### 3. Zeminle Hemzemin Tek Cam Duşakabin Çözümleri
+Yüksek duş tekneleri banyo zeminini böler ve görsel bir engel yaratır. Zemine sıfır olarak monte edilen tek cam duş panelleri, seramik zeminle bütünleşerek kesintisiz bir görünüm sunar.
 
 Banyonuzun net ölçülerine göre en uygun modeli belirlemek için [Özel Ölçü Tasarla & Fiyat Al](/tasarla) konfigüratörümüzü kullanabilir veya [tüm duşakabin koleksiyonlarımızı](/koleksiyonlar) inceleyebilirsiniz.',
   'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop',
@@ -302,11 +302,11 @@ INSERT INTO public.content_calendar (
 ) VALUES (
   'Çankaya''da Duşakabin Yenileme: Yerinde Ölçü ve Montaj Süreci',
   'ankara-cankaya-dusakabin-montaj-rehberi',
-  'Ankara Çankaya, Ayrancı, Gaziosmanpaşa ve Bahçelievler bölgelerinde eski kabin sökümü, yerinde lazer ölçü ve hızlı montaj hizmeti.',
+  'Ankara Çankaya, Ayrancı, Gaziosmanpaşa ve Bahçelievler bölgelerinde eski kabin sökümü, yerinde ücretsiz keşif ve hızlı montaj hizmeti.',
   'Ankara Çankaya bölgesindeki yüksek katlı konutlar, rezidanslar ve müstakil yapılarda banyo yenileme süreçleri özel bir teknik yaklaşım gerektirir. Eski yapılardaki duvar kaçıklıkları ve seramik altı tesisat durumları dikkate alınarak imalat yapılmalıdır.
 
 ### Çankaya Bölgesi Özel Hizmet Sürecimiz
-1. **Aynı Gün Ücretsiz Keşif:** Çankaya, Gaziosmanpaşa, Ümitköy ve civarında adresinize gelerek hassas lazer metre ile ölçü alıyoruz.
+1. **Aynı Gün Ücretsiz Keşif:** Çankaya, Gaziosmanpaşa, Ümitköy ve civarında adresinize gelerek banyonuzun net ölçüsünü alıyoruz.
 2. **Eski Kabin Sökümü ve Temizliği:** Mevcut eski plastik veya paslanmış kabininizi zarar vermeden söküp alandan uzaklaştırıyoruz.
 3. **Sızdırmazlık Garantili Montaj:** Antibakteriyel nötr silikon uygulaması ile 2 yıl su sızdırmazlık garantisi sunuyoruz.
 
@@ -335,7 +335,7 @@ INSERT INTO public.content_calendar (
 ) VALUES (
   'Çayyolu ve Ümitköy Bölgesi İçin Özel Ölçü Lüks Duşakabin Çözümleri',
   'ankara-cayyolu-umitkoy-banyo-dekorasyon',
-  'Çayyolu, Ümitköy, İncek ve Alacaatlı bölgelerindeki villa ve lüks konutlara özel tavan boyu cam, gold profil ve walk-in kabin çözümleri.',
+  'Çayyolu, Ümitköy, İncek ve Alacaatlı bölgelerindeki villa ve lüks konutlara özel tavan boyu cam, gold profil ve tek cam duşakabin çözümleri.',
   'Çayyolu, Ümitköy ve İncek bölgesindeki geniş metrekareli villa ve müstakil konut banyolarında standart ölçü kabinler hem küçük kalmakta hem de mekanın lüks mimarisine uyum sağlayamamaktadır.
 
 ### Lüks Konutlar İçin Öne Çıkan Mimari Çözümler
@@ -513,25 +513,25 @@ DO UPDATE SET
 INSERT INTO public.content_calendar (
   title, slug, description, body, featured_image, published_at, content_type, status, seo_title, seo_description, tags
 ) VALUES (
-  'Walk-in Duş Paneli Nedir? Hemzemin Banyo Tasarımının Avantajları',
+  'Tek Cam Duşakabin Nedir? Hemzemin Banyo Tasarımının Avantajları',
   'walk-in-dus-paneli-nedir',
-  'Kapısız, tek sabit cam panelden oluşan Walk-in duş alanlarının mimari lüksü, eşiksiz geçiş rahatlığı ve temizlik kolaylığı.',
-  'Modern otel ve lüks banyo tasarımlarında sıklıkla karşılaştığımız **Walk-in Duş Panelleri**, herhangi bir açılır/kapanır kapısı olmayan, sabit bir cam sabitleyici profil ve gergiden oluşan minimalist sistemlerdir.
+  'Kapısız, tek sabit cam panelden oluşan tek cam duşakabin alanlarının mimari lüksü, eşiksiz geçiş rahatlığı ve temizlik kolaylığı.',
+  'Modern otel ve lüks banyo tasarımlarında sıklıkla karşılaştığımız **Tek Cam Duşakabinler**, herhangi bir açılır/kapanır kapısı olmayan, sabit bir cam sabitleyici profil ve gergiden oluşan minimalist sistemlerdir.
 
-### Walk-in Sistemlerin 4 Büyük Avantajı
+### Tek Cam Sistemlerin 4 Büyük Avantajı
 1. **Sıfır Engelli Geçiş:** Zeminle hemzemin seramik üzeri kurulumu sayesinde yaşlılar, çocuklar ve engelli bireyler için %100 güvenli ve basamaksız geçiş sunar.
 2. **Minimum Parça, Sıfır Arıza:** Rulman, menteşe veya hareketli kapı mekanizması olmadığı için mekanik arıza riski sıfırdır.
 3. **Işık ve Hacim Ferahlığı:** Banyonuzu bölmez, tek bir cam duvar görevi görerek mekanı devasa gösterir.
 4. **Temizlik Kolaylığı:** Profil birleşim detayları az olduğu için kir tutacak köşe kalmaz.
 
-Walk-in cam panellerinizde 8 mm temperli cam kullanılması statik duruş açısından zorunludur. Projenize özel tasarımı hemen [Özel Ölçü Tasarlama Robotumuzda](/tasarla) oluşturun.',
+Tek cam panellerinizde 8 mm temperli cam kullanılması statik duruş açısından zorunludur. Projenize özel tasarımı hemen [Özel Ölçü Tasarlama Robotumuzda](/tasarla) oluşturun.',
   'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1600&auto=format&fit=crop',
   '2026-07-11T10:00:00+03:00'::timestamptz,
   'blog',
   'published',
-  'Walk-in Duş Paneli Nedir? Hemzemin Banyo | ERAYDUŞ',
-  'Walk-in kapısız duşakabin panelleri özellikleri. Hemzemin basamaksız banyo tasarımı ve minimalist şeffaf cam çözümleri.',
-  ARRAY['Walk-in', 'Hemzemin Banyo', 'Minimalizm', 'Lüks Tasarım']::text[]
+  'Tek Cam Duşakabin Nedir? Hemzemin Banyo | ERAYDUŞ',
+  'Tek cam kapısız duşakabin panelleri özellikleri. Hemzemin basamaksız banyo tasarımı ve minimalist şeffaf cam çözümleri.',
+  ARRAY['Tek Cam', 'Hemzemin Banyo', 'Minimalizm', 'Lüks Tasarım']::text[]
 ) ON CONFLICT (slug) WHERE content_type = 'blog' AND slug IS NOT NULL
 DO UPDATE SET
   title = EXCLUDED.title,
@@ -725,7 +725,7 @@ INSERT INTO public.content_calendar (
 
 ### İncek Villa Projelerinde Öne Çıkanlar:
 - **Tavan Boyu Siyah Menteşeli Sistemler:** 220 cm - 250 cm yükseklikte geniş açılır kapılar.
-- **Kişiye Özel Çift Girişli Walk-in Paneller:** Geniş banyolarda ada tipi duş kurulumları.
+- **Kişiye Özel Çift Girişli Tek Cam Duşakabinler:** Geniş banyolarda ada tipi duş kurulumları.
 
 ### Batıkent & Eryaman Dairelerinde Öne Çıkanlar:
 - **İki Duvar Arası Sürgülü Siyah Kabinler:** 120 cm - 160 cm aralığındaki niş alanları değerlendiren raylı sistemler.
@@ -1238,7 +1238,7 @@ INSERT INTO public.content_calendar (
 2. **Duvar Eğikliğini Göz Ardı Etmek:** Şakül kaçıklığı olan duvarlarda ayarlı dikme profili şarttır.
 3. **Plastik Rulman ve Menteşe Seçmek:** 6 ayda kırılır. Paslanmaz pirinç veya rulman çeliği tercih edilmelidir.
 4. **Yanlış Kapı Açılım Yönü:** Kapının klozet veya lavaboya çarpması.
-5. **Keşifsiz Sipariş Vermek:** Lazer metre ile ölçü alınmadan verilen siparişler uyumsuzluk yaratır.
+5. **Keşifsiz Sipariş Vermek:** Yerinde profesyonel ölçü alınmadan verilen siparişler uyumsuzluk yaratır.
 
 Erayduş uzman ekibiyle riske girmeyin, [Ücretsiz Keşif Hizmetimizden](/iletisim) yararlanın.',
   'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop',
@@ -1339,7 +1339,7 @@ INSERT INTO public.content_calendar (
 
 ### 5 Adımda Sipariş Süreci:
 1. **Fiyat Teklifi ve Modellenme:** [Özel Ölçü Tasarla](/tasarla) aracımızla modelinizi seçip tahmini bütçenizi görün.
-2. **Ücretsiz Lazer Keşif:** Uzman ekibimiz adresinize gelerek duvar şakülünü ve net ölçüyü alır.
+2. **Ücretsiz Keşif:** Uzman ekibimiz adresinize gelerek duvar şakülünü ve net ölçüyü alır.
 3. **Özel Kesim ve Temperleme:** Camlarınız milimetrik kesilerek fırınlanır.
 4. **Montaj:** Belirlenen günde adresinizde temiz ve garantili kurulum yapılır.
 5. **Teslimat & Garanti:** Ürününüz 2 yıl üretici garantisiyle teslim edilir.
@@ -1350,7 +1350,7 @@ Hemen keşif randevusu almak için [İletişim Formumuzu](/iletisim) doldurun.',
   'blog',
   'published',
   'Özel Ölçü Duşakabin Sipariş Süreci | ERAYDUŞ',
-  'Adım adım özel ölçü duşakabin sipariş ve montaj süreci. Lazer metre keşif, temperleme ve teslimat detayları.',
+  'Adım adım özel ölçü duşakabin sipariş ve montaj süreci. Yerinde keşif, temperleme ve teslimat detayları.',
   ARRAY['Özel Ölçü', 'Sipariş Süreci', 'Keşif', 'Montaj']::text[]
 ) ON CONFLICT (slug) WHERE content_type = 'blog' AND slug IS NOT NULL
 DO UPDATE SET
@@ -1408,8 +1408,8 @@ INSERT INTO public.content_calendar (
 ### 1. Hızlı Temizlenebilirlik (Nano Cam)
 Kat hizmetleri personelinin zamandan tasarruf etmesi için Nano kaplamalı kireç tutmaz camlar zorunludur.
 
-### 2. Düşük Arıza Riski (Walk-in veya Menteşe)
-Sürgülü rulmanlı sistemler yerine mekanik parçası az olan Walk-in veya ağır hizmet tipi menteşeli camlar tercih edilir.
+### 2. Düşük Arıza Riski (Tek Cam veya Menteşe)
+Sürgülü rulmanlı sistemler yerine mekanik parçası az olan Tek Cam veya ağır hizmet tipi menteşeli camlar tercih edilir.
 
 ### 3. Ses ve Su İzolasyonu
 Kapı altı çift suluk fitilleri ile oda içine su taşması engellenir.
@@ -1421,7 +1421,7 @@ Otel projelerinize özel çözümlerimiz için [Bayi ve Kurumsal Sayfamızı](/b
   'published',
   'Otel Banyo Tasarımı ve Duşakabin Seçimi | ERAYDUŞ Kurumsal',
   'Otel ve rezidans banyoları için duşakabin seçim kriterleri. Hızlı temizlik, dayanıklılık ve lüks şeffaf cam standartları.',
-  ARRAY['Ostel Banyosu', 'Proje Tasarımı', 'Kurumsal', 'Walk-in']::text[]
+  ARRAY['Ostel Banyosu', 'Proje Tasarımı', 'Kurumsal', 'Tek Cam']::text[]
 ) ON CONFLICT (slug) WHERE content_type = 'blog' AND slug IS NOT NULL
 DO UPDATE SET
   title = EXCLUDED.title,

@@ -76,9 +76,9 @@ export function getOrganizationSchema(siteName?: string, description?: string, g
       'Duşakabin Üretimi',
       'Temperli Cam Teknolojisi',
       'Nano Cam Kaplama',
-      'PVD Kararmaz Profil',
+      'Solmayan Renkli Profil',
       'Özel Ölçü Banyo Kabinleri',
-      'Mimari Banyo Çözümleri',
+      'Özel Banyo Çözümleri',
     ],
   };
 }

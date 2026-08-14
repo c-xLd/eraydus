@@ -7,7 +7,7 @@ const SYSTEM_PROMPT = `
 Brand: Erayduş
 Tone: Quiet Luxury, Minimalist, Architectural, Professional, Editorial.
 Avoid: Cliché sales jargon, overly enthusiastic exclamation marks, generic marketing speak.
-Focus: Premium craftsmanship, 6mm/8mm tempered glass, sleek profiles, smooth micro-animations, light/water harmony.
+Focus: Premium craftsmanship, 6mm tempered glass, sleek profiles, smooth micro-animations, light/water harmony.
 `
 
 export async function generateContentIdea(contentType: string, language: string = 'tr') {

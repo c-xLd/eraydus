@@ -42,7 +42,7 @@ export async function generateMetaDescription(req: {
   return callOpenRouter(
     SYSTEM_TR,
     `Aşağıdaki ürün için 160 karakteri geçmeyen, ikna edici bir Türkçe meta açıklaması yaz. Anahtar kelimeler ve bir çağrı (call-to-action) içersin. Sadece metni döndür.\n\nÜrün: ${productDescription}`,
-    "Erayduş ile kaliteli duşakabin sistemleri. Özel üretim, lüks tasarım ve mimari çözümler."
+    "Erayduş ile kaliteli duşakabin sistemleri. Özel üretim, lüks tasarım ve özel çözümler."
   )
 }
 

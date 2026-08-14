@@ -25,20 +25,21 @@ export const globalSeoData = {
   twitterHandle: '@eraydus',
   // GEO & Local Business Data
   contact: {
-    phone: '+90 555 123 4567',
+    phone: '+90 312 350 79 39',
+    mobile: '+90 554 883 00 71',
     email: 'info@eraydus.net',
     address: {
-      streetAddress: 'Ostim OSB, 100. Yıl Bulvarı',
-      addressLocality: 'Yenimahalle',
+      streetAddress: 'Malazgirt Caddesi No:121/1B, Siteler',
+      addressLocality: 'Altındağ',
       addressRegion: 'Ankara',
-      postalCode: '06374',
+      postalCode: '06160',
       addressCountry: 'TR'
     }
   },
   geo: {
     region: 'TR-06', // Ankara
     placename: 'Ankara',
-    position: '39.9334;32.8597'
+    position: '39.957;32.898'
   },
   localBusiness: {
     openingHours: 'Mo,Tu,We,Th,Fr,Sa 09:00-19:00',
@@ -63,8 +64,8 @@ export const pagesSeoData: PageSEO[] = [
     id: 'home',
     path: '/',
     title: 'Ankara Duşakabin Sistemleri',
-    description: 'Erayduş ile lüks ve modern duşakabin deneyimini keşfedin. Özel ölçü üretim mimari cam kabinler.',
-    keywords: 'duşakabin, cam kabin, mimari tasarım, lüks banyo, özel üretim',
+    description: 'Erayduş ile lüks ve modern duşakabin deneyimini keşfedin. Özel ölçü üretim cam kabinler.',
+    keywords: 'duşakabin, cam kabin, özel tasarım, lüks banyo, özel üretim',
     isIndexable: true,
     lastModified: '2023-10-24T10:00:00Z',
   },
@@ -73,7 +74,7 @@ export const pagesSeoData: PageSEO[] = [
     path: '/urunler',
     title: 'Koleksiyonlar',
     description: 'Edge, Pure ve Neo serilerimizle banyonuza değer katacak modern duşakabin modellerini inceleyin.',
-    keywords: 'sürgülü duşakabin, pivot kapı, walk-in kabin, siyah profil',
+    keywords: 'sürgülü duşakabin, pivot kapı, tek cam duşakabin, siyah profil',
     isIndexable: true,
     lastModified: '2023-10-25T11:30:00Z',
   },
@@ -89,9 +90,9 @@ export const pagesSeoData: PageSEO[] = [
   {
     id: 'projeler',
     path: '/projeler',
-    title: 'Mimari Projeler',
+    title: 'Referans Projeler',
     description: 'Otel, rezidans ve özel villalar için gerçekleştirdiğimiz referans duşakabin projelerimiz.',
-    keywords: 'otel duşakabin projeleri, villa banyo, mimari duşakabin',
+    keywords: 'otel duşakabin projeleri, villa banyo, lüks duşakabin',
     isIndexable: true,
     lastModified: '2023-10-20T14:20:00Z',
   },

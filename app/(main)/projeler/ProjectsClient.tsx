@@ -69,7 +69,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             transition={{ duration: 1.2, delay: 0.1, ease }}
             className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-3xl leading-[1.1]"
           >
-            Mimari{' '}
+            Referans{' '}
             <span className="font-semibold">Projeler</span>
           </motion.h1>
           <motion.p
@@ -318,7 +318,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             </h2>
             <p className="text-white/60 text-lg md:text-xl font-light mt-6 max-w-2xl mx-auto">
               Otel, rezidans, villa veya ticari projeniz için ERAYDUŞ kalitesini
-              deneyimleyin. Mimari ekibimiz sizin için hazır.
+              deneyimleyin. Uzman ekibimiz sizin için hazır.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
               <Link

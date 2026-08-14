@@ -52,6 +52,20 @@ export async function updateSession(request: NextRequest) {
       url.searchParams.delete('redirectedFrom')
       return NextResponse.redirect(url)
     }
+
+    // [RBAC] Rol Tabanlı Erişim Kontrolü
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role_id')
+      .eq('id', user.id)
+      .single()
+
+    // Sadece role_id = 1 olanlar admin kabul ediliyor
+    if (!profile || profile.role_id !== 1) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/' // Yetkisizse anasayfaya at
+      return NextResponse.redirect(url)
+    }
   }
 
   // If user is logged in and tries to access /giris, redirect to /admin
@@ -70,6 +84,22 @@ export async function updateSession(request: NextRequest) {
   supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
   supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   supabaseResponse.headers.set('Cache-Control', 'no-store, max-age=0')
+
+  // [CSP] Sadece /admin için katı Güvenlik Başlıkları
+  if (pathname.startsWith('/admin')) {
+    const csp = `
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: blob:;
+      font-src 'self' data:;
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.vercel-scripts.com https://vitals.vercel-insights.com https://*.google-analytics.com;
+      frame-ancestors 'none';
+      form-action 'self';
+    `.replace(/\s{2,}/g, ' ').trim()
+
+    supabaseResponse.headers.set('Content-Security-Policy', csp)
+  }
 
   return supabaseResponse
 }

@@ -1,8 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap');
-
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
+@source "../app";
+@source "../components";
+@source "../features";
+@source "../lib";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -10,13 +14,9 @@
   /* Default Shadcn Mappings */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
-
-  /* Custom Font Override */
-  --font-sans: "Plus Jakarta Sans", var(--font-geist-sans);
-  --font-mono: "Space Mono", var(--font-geist-mono);
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+  --font-heading: var(--font-sans), system-ui, sans-serif;
 
   /* Eraydus Design Tokens mapped to Shadcn */
   --color-primary: var(--primary);
@@ -70,16 +70,16 @@
   --color-blueprint-900: #0c4a6e;
   --color-blueprint-950: #082f49;
 
-  --color-sepia-50: '#fffbeb';
-  --color-sepia-100: '#fef3c7';
-  --color-sepia-200: '#fde68a';
-  --color-sepia-300: '#fcd34d';
-  --color-sepia-400: '#fbbf24';
-  --color-sepia-500: '#f59e0b';
-  --color-sepia-600: '#d97706';
-  --color-sepia-700: '#b45309';
-  --color-sepia-800: '#92400e';
-  --color-sepia-900: '#78350f';
+  --color-sepia-50: #fffbeb;
+  --color-sepia-100: #fef3c7;
+  --color-sepia-200: #fde68a;
+  --color-sepia-300: #fcd34d;
+  --color-sepia-400: #fbbf24;
+  --color-sepia-500: #f59e0b;
+  --color-sepia-600: #d97706;
+  --color-sepia-700: #b45309;
+  --color-sepia-800: #92400e;
+  --color-sepia-900: #78350f;
 
   --color-paper: #f8fafc;
   --color-grid: #e2e8f0;
@@ -147,17 +147,11 @@ html {
   --sidebar-accent-foreground: #111111;
   --sidebar-border: #DDDDDD;
   --sidebar-ring: #111111;
-
-  /* Architectural Theme Tokens */
-  --color-background: var(--color-paper);
-  --color-foreground: var(--color-blueprint-900);
 }
 
 .dark {
   --background: #090909;
   --background-secondary: #121212;
-  --surface: #1E1E1E;
-  --surface-elevated: #2Abackground-secondary: #121212;
   --surface: #1E1E1E;
   --surface-elevated: #2A2A2A;
   --surface-dark: #FFFFFF;
@@ -200,10 +194,6 @@ html {
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: #333333;
   --sidebar-ring: #FFFFFF;
-
-  /* Architectural Theme Tokens (Dark) */
-  --color-background: #0f172a; /* blueprint-900 */
-  --color-foreground: #f0f9ff; /* blueprint-50 */
 }
 
 @layer base {
@@ -316,13 +306,6 @@ html {
   animation: var(--animation-draft-line);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  * {
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-  }
-}
 
 /* Responsive Container */
 .container {
@@ -369,4 +352,10 @@ html {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Off-screen Render Optimization for 100 PageSpeed */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
 }

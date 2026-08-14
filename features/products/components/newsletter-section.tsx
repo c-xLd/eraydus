@@ -37,7 +37,7 @@ export function NewsletterSection() {
               Ayrıcalıklara Katılın
             </h2>
             <p className="text-black/50 text-lg mb-12 font-light">
-              Yeni ürün serileri, özel mimari çözümler ve tasarım ilhamları için kayıt olun.
+              Yeni ürün serileri, özel tasarım çözümleri ve ilham veren banyo fikirleri için kayıt olun.
             </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row max-w-lg mx-auto">

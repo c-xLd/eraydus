@@ -12,10 +12,21 @@ export const metadata: Metadata = {
   }
 }
 
+import { createPublicClient } from '@/services/supabase/server'
+
 export const revalidate = 3600
 
 export default async function JakuziPage() {
-  const page = await getSitePage('jakuzi-tekneler')
+  const supabase = createPublicClient()
+
+  const [page, productsRes] = await Promise.all([
+    getSitePage('jakuzi-tekneler'),
+    supabase
+      .from('products')
+      .select('*, categories(slug, name)')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+  ])
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -54,7 +65,7 @@ export default async function JakuziPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <JakuziClient content={page?.content} />
+      <JakuziClient content={page?.content} products={productsRes.data || []} />
     </>
   )
 }

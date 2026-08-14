@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, MessageCircleQuestion } from 'lucide-react';
 
@@ -21,10 +21,7 @@ export function GlobalFAQAccordion() {
     async function fetchFaqs() {
       try {
         setLoading(true);
-        const supabase = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-        );
+        const supabase = createClient();
         const { data: pageSeo } = await supabase
           .from('seo_metadata')
           .select('faq_data, faq_schema_enabled')
@@ -61,7 +58,7 @@ export function GlobalFAQAccordion() {
           <motion.div
             initial={{ opacity: 0.01, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center justify-center gap-2 text-champagne mb-4"
           >
@@ -71,7 +68,7 @@ export function GlobalFAQAccordion() {
           <motion.h2
             initial={{ opacity: 0.01, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-3xl md:text-5xl font-light tracking-tight text-foreground"
           >
@@ -87,7 +84,7 @@ export function GlobalFAQAccordion() {
                 key={index}
                 initial={{ opacity: 0.01, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: true, margin: "200px" }}
                 transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className={`border rounded-3xl overflow-hidden transition-colors duration-500 ${
                   isOpen ? 'bg-background/80 border-champagne/30 shadow-lg shadow-champagne/5' : 'bg-surface/50 border-border/50 hover:border-border'

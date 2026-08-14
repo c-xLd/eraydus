@@ -1,46 +1,46 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Ruler, Package, Wrench, Droplets, Sparkles, AlertTriangle, Download, ArrowRight } from 'lucide-react'
+import { Ruler, Package, Wrench, Droplets, Sparkles, AlertTriangle, Phone, Mail, MapPin } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Montaj Kılavuzu',
+  title: 'Montaj Kılavuzu & Kurulum Rehberi | ERAYDUŞ Ankara',
   description:
-    'Erayduş duşakabin montaj kılavuzu. Kurulum öncesi hazırlık, adım adım montaj süreci, bakım önerileri ve dikkat edilmesi gerekenler.',
+    'Erayduş 6mm temperli cam duşakabin montaj kılavuzu. Kurulum öncesi hazırlık, adım adım montaj adımları, su sızdırmazlık ve bakım önerileri.',
 }
 
 const steps = [
   {
     icon: Ruler,
-    title: 'Ölçüm & Hazırlık',
-    text: 'Montaj alanının tesviyesini ve duvar dikliğini kontrol edin. Fayans yüzeyin temiz, kuru ve düz olduğundan emin olun. Su ve elektrik hatlarının konumunu işaretleyin.',
+    title: 'Ölçüm & Zemin Hazırlığı',
+    text: 'Montaj alanının su terazisi ile duvardan duvara tesviyesini kontrol edin. Fayans yüzeyin temiz, kuru ve deterjandan arınmış olduğunu doğrulayın. (Ankara içi siparişlerinizde bu işlem Erayduş uzman keşif ekibimizce ücretsiz yapılır).',
   },
   {
     icon: Package,
     title: 'Parçaların Kontrolü',
-    text: 'Paket içeriğini montaj listesiyle karşılaştırın. Cam paneller, profiller, menteşeler, contalar ve vida setinin eksiksiz olduğunu doğrulayın. Camları düz bir zeminde güvenle bekletin.',
+    text: 'Paket içeriğini inceleyin: 6mm Şişecam temperli emniyet camları, paslanmaz alüminyum profiller, mıknatıslı suluk fitilleri ve vida takımlarını kontrol edin. Cam panelleri altlarına karton koyarak düz zeminde dik bekletin.',
   },
   {
     icon: Wrench,
-    title: 'Profil Montajı',
-    text: 'Duvar profillerini terazi yardımıyla dikey hizalayın ve delik yerlerini işaretleyin. Uygun dübel ve vidalarla sabitleyin. Alt eşik profilini zemine yerleştirin.',
+    title: 'Profil & Dikme Montajı',
+    text: 'Duvar dikme profillerini su terazisi yardımıyla dikey hizada sabitleyin ve delik yerlerini markalayın. Uygun dübel ve vidalarla sıkın. Alt su tutucu eşik profilini zemine oturtun.',
   },
   {
     icon: Droplets,
-    title: 'Cam & Sızdırmazlık',
-    text: 'Cam panelleri profillere dikkatlice yerleştirin ve menteşeleri sıkın. Tüm birleşim noktalarına ve alt eşiğe silikon uygulayarak sızdırmazlığı sağlayın.',
+    title: 'Cam Paneller & Nötr Silikon',
+    text: '6mm temperli cam panelleri profillere yerleştirin. Menteşeli modellerde menteşe vidalarını, sürgülü modellerde rulman tekerlek ayarlarını yapın. Birleşim yerlerine %100 nötr antibakteriyel şeffaf banyo silikonu çekin.',
   },
   {
     icon: Sparkles,
-    title: 'Test & Temizlik',
-    text: 'Silikonun tam kuruması için en az 24 saat bekleyin. Ardından su testi yaparak sızdırmazlığı kontrol edin. Yüzeyi yumuşak bezle temizleyin.',
+    title: 'Kuruma & Sızdırmazlık Testi',
+    text: 'Silikonun tam kemikleşmesi ve kuruması için en az 24 saat kabini kullanmayın. 24 saat sonunda duş başlığı ile su sızdırmazlık testini gerçekleştirin.',
   },
 ]
 
 const maintenance = [
-  'Cam yüzeyi düzenli olarak yumuşak bez ve su ile silin; kireç oluşumunu önleyin.',
-  'Aşındırıcı, asit veya çözücü içeren temizlik ürünleri kullanmayın.',
-  'Menteşe ve rayları yılda birkaç kez kontrol edin, gerekirse ince yağ uygulayın.',
-  'Contalarda deformasyon fark ederseniz zamanında değiştirin.',
+  'Cam yüzeyindeki su damlalarını her duş sonrası çekçek ile sıyırarak kireç lekesini önleyin.',
+  'Profilleri temizlerken tuz ruhu, çamaşır suyu gibi asitli kimyasallar yerine ılık sabunlu su kullanın.',
+  'Sürgülü rulman tekerleklerini yılda bir kez silikon sprey ile tozdan arındırın.',
+  'Zamanla sertleşen suluk ve mıknatıs fitillerini 6mm cam ölçüsüne uygun yenileriyle değiştirin.',
 ]
 
 export default function InstallationGuidePage() {
@@ -51,27 +51,27 @@ export default function InstallationGuidePage() {
         {/* Header */}
         <header className="mb-16">
           <p className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-champagne">
-            Teknik Destek
+            Teknik Rehber & Kurulum
           </p>
           <h1 className="mb-6 text-4xl font-light tracking-tight lg:text-5xl">
             Montaj <span className="font-semibold">Kılavuzu</span>
           </h1>
           <p className="max-w-2xl text-lg font-light text-muted-foreground leading-relaxed">
-            Duşakabininizin doğru ve güvenli kurulumu için adım adım rehber. Üstün performans ve uzun ömür için profesyonel montaj hizmetimizi tercih etmenizi öneririz.
+            Erayduş 6mm temperli emniyet camlı duşakabinlerinizin doğru ve uzun ömürlü kullanımı için hazırlanan teknik montaj adımları. Ankara içi siparişlerinizde kurulum kendi uzman montaj ekibimizce ücretsiz gerçekleştirilir.
           </p>
         </header>
 
         {/* Warning banner */}
-        <div className="mb-20 overflow-hidden relative rounded-3xl border border-champagne/20 bg-champagne/[0.03] p-8 md:p-10">
+        <div className="mb-20 overflow-hidden relative rounded-3xl border border-champagne/20 bg-champagne/[0.03] p-8 md:p-10 shadow-sm">
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-champagne" />
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-champagne/10">
               <AlertTriangle className="size-5 text-champagne" strokeWidth={1.5} />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-champagne mb-2">Önemli Uyarı</h3>
+              <h3 className="text-lg font-semibold text-champagne mb-2">Güvenlik ve İmalatçı Uyarısı</h3>
               <p className="text-[15px] font-light leading-relaxed text-muted-foreground">
-                Temperli cam paneller ağır ve hassastır. Montaj sırasında en az iki kişi çalışılması ve uygun koruyucu ekipman kullanılması şiddetle önerilir. Hatalı veya yetkisiz montaj, ürünün garanti kapsamını geçersiz kılabilir.
+                6mm temperli emniyet camları yüksek dayanıklılığa sahip olmakla birlikte hassastır. Bireysel montaj esnasında cam köşelerinin fayans veya sert zeminle temas etmemesine dikkat edilmelidir. Hatalı montaj ve silikon uygulamaları garanti kapsamını etkileyebileceğinden, montajın uzman ekiplerimizce yapılması önerilir.
               </p>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function InstallationGuidePage() {
           
           {/* Steps Timeline */}
           <div className="lg:col-span-7">
-            <h2 className="text-2xl font-semibold mb-10">Kurulum Adımları</h2>
+            <h2 className="text-2xl font-semibold mb-10">Adım Adım Kurulum</h2>
             <div className="relative pl-8 md:pl-0">
               {/* Timeline Line (Mobile) */}
               <div className="absolute left-[15px] top-4 bottom-4 w-px bg-border md:hidden" />
@@ -120,10 +120,10 @@ export default function InstallationGuidePage() {
 
           {/* Maintenance Sidebar */}
           <div className="lg:col-span-5">
-            <div className="sticky top-32 rounded-3xl bg-surface border border-border/50 p-8 md:p-10">
+            <div className="sticky top-32 rounded-3xl bg-surface border border-border/50 p-8 md:p-10 shadow-sm">
               <h2 className="mb-8 text-xl font-semibold flex items-center gap-3">
                 <Sparkles className="size-5 text-champagne" />
-                Bakım Önerileri
+                Uzun Ömürlü Kullanım İpuçları
               </h2>
               <ul className="space-y-6">
                 {maintenance.map((item, i) => (
@@ -136,41 +136,44 @@ export default function InstallationGuidePage() {
                 ))}
               </ul>
               
-              <div className="mt-10 pt-8 border-t border-border/50">
-                <a
-                  href="/iletisim"
-                  className="group flex w-full items-center justify-between rounded-xl bg-background border border-border/50 p-4 transition-colors hover:border-champagne hover:bg-champagne/5"
-                >
-                  <span className="flex items-center gap-3 text-sm font-semibold">
-                    <Download className="size-4 text-champagne" />
-                    PDF Kılavuz İndir
-                  </span>
-                  <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
-                </a>
+              <div className="mt-10 pt-8 border-t border-border/50 space-y-3">
+                <div className="text-xs font-medium text-foreground uppercase tracking-wider mb-2">İletişim & Destek Hattı</div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Phone className="w-4 h-4 text-champagne shrink-0" />
+                  <span>(0312) 350 79 39 &bull; 0554 883 00 71</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Mail className="w-4 h-4 text-champagne shrink-0" />
+                  <span>info@eraydus.net</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <MapPin className="w-4 h-4 text-champagne shrink-0" />
+                  <span>Siteler / Altındağ / Ankara</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* CTA */}
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-surface px-8 py-12 md:px-12 md:py-16">
+        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-surface px-8 py-12 md:px-12 md:py-16 shadow-xl">
           <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
           </div>
           
           <div className="relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-lg">
-              <h3 className="text-2xl font-semibold tracking-tight">Profesyonel montaj mı istiyorsunuz?</h3>
+              <h3 className="text-2xl font-semibold tracking-tight">Ankara içi profesyonel montaj ister misiniz?</h3>
               <p className="mt-3 text-base font-light text-muted-foreground">
-                Uzman ekibimizle güvenli ve garantili kurulum için randevu alın. Hata riskini sıfıra indirin.
+                Uzman ekiplerimiz adresinize gelerek yerinde ölçü almakta ve aynı hafta içinde garantili kurulum sağlamaktadır.
               </p>
             </div>
             <Link
               href="/iletisim"
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-champagne px-8 py-4 text-sm font-semibold text-white transition-all hover:bg-champagne/90 hover:scale-105 active:scale-95"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-champagne px-8 py-4 text-sm font-semibold text-foreground transition-all hover:bg-champagne/90 hover:scale-105 active:scale-95 shadow-lg"
             >
               <Wrench className="size-4" />
-              Montaj Randevusu
+              Ücretsiz Keşif & Montaj Al
             </Link>
           </div>
         </div>

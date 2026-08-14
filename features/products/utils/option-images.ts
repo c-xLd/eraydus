@@ -44,7 +44,7 @@ export function getGlassImageUrl(id: string, name?: string): string {
     if (normalizedName.includes('füme') || normalizedName.includes('fume') || normalizedName.includes('siyah')) return GLASS_IMAGE_MAP.fume
     if (normalizedName.includes('bronz')) return GLASS_IMAGE_MAP.bronz
     if (normalizedName.includes('ayna')) return GLASS_IMAGE_MAP.aynali
-    if (normalizedName.includes('kumlama') || normalizedName.includes('oluklu') || normalizedName.includes('fluted')) return GLASS_IMAGE_MAP.kumlama
+    if (normalizedName.includes('kumlama')) return GLASS_IMAGE_MAP.kumlama
     if (normalizedName.includes('buz')) return GLASS_IMAGE_MAP.buzlu
   }
 

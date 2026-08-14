@@ -13,7 +13,7 @@ SET content = '{
     "title_bold": "Değer Katıyoruz",
     "p1": "Ankara Siteler''de faaliyet gösteren Erayduş, pivot, livorno, katlanır, kare, mika ve askılı sistem gibi geniş bir ürün yelpazesiyle her banyoya uygun çözümler sunmaktadır.",
     "p2": "Kaliteli malzeme, profesyonel montaj ve müşteri odaklı hizmet anlayışını ilke edinen ekibimiz; ücretsiz keşif ve montaj hizmetiyle projenizin başından sonuna kadar yanınızdadır.",
-    "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop",
+    "image": "/images/eray_gold.jpg",
     "years_experience": "10+",
     "years_text": "Yıllık sektor deneyimi ve yüzlerce tamamlanan proje"
   },
@@ -78,7 +78,7 @@ SET content = '{
     "title_normal": "Siteler''de",
     "title_bold": "Yerinde İnceleyin",
     "description": "Malazgirt Caddesi No:121/1B Siteler/Ankara adresindeki showroom''umuzda tüm duşakabin modellerimizi yerinde inceleyebilirsiniz. Pazartesi''den Cumartesi''ye 09:00–18:00 saatleri arasında alanında uzman ekibimiz sizlere hizmet vermektedir.",
-    "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop",
+    "image": "/images/eray_exploded.jpg",
     "stats": [
       { "value": "7+", "label": "Ürün Kategorisi" },
       { "value": "Ücretsiz", "label": "Keşif & Montaj" },

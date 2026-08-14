@@ -32,11 +32,11 @@ export function ShowroomHero() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tighter text-black leading-tight">
-                Banyonuzun <span className="font-semibold">Mimarisi</span>
+                Banyonuzun <span className="font-semibold">Estetiği</span>
               </h1>
 
               <p className="text-black/60 text-xs sm:text-base font-light leading-relaxed max-w-xl pt-1">
-                Milimetrik hassasiyetle üretilen mimari tasarım duşakabin sistemleri.
+                Hassasiyetle üretilen özel tasarım duşakabin sistemleri.
               </p>
             </div>
 

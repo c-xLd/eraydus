@@ -13,9 +13,8 @@ const formatDate = (date: string | null) =>
 
 export async function generateStaticParams() {
   const tags = await getAllTags()
-  const slugified = tags.map(tag => ({ tag: slugifyTag(tag) }))
-  const raw = tags.map(tag => ({ tag: encodeURIComponent(tag) }))
-  return [...slugified, ...raw]
+  const uniqueSlugs = Array.from(new Set(tags.map(tag => slugifyTag(tag)).filter(Boolean)))
+  return uniqueSlugs.map(tag => ({ tag }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

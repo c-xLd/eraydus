@@ -26,6 +26,8 @@ export default function NewBlogPostPage() {
     tagsStr: ''
   })
 
+  const [isSlugEdited, setIsSlugEdited] = useState(false)
+
   const handleTitleChange = (newTitle: string) => {
     const generatedSlug = newTitle
       .toLowerCase()
@@ -43,7 +45,7 @@ export default function NewBlogPostPage() {
     setFormData(prev => ({
       ...prev,
       title: newTitle,
-      slug: prev.slug ? prev.slug : generatedSlug
+      slug: isSlugEdited ? prev.slug : generatedSlug
     }))
   }
 
@@ -133,7 +135,10 @@ export default function NewBlogPostPage() {
                   type="text"
                   required
                   value={formData.slug}
-                  onChange={e => setFormData({ ...formData, slug: e.target.value })}
+                  onChange={e => {
+                    setIsSlugEdited(true)
+                    setFormData({ ...formData, slug: e.target.value })
+                  }}
                   className="w-full pl-16 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-black"
                 />
               </div>

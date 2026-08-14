@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ChevronDown, MessageCircle } from 'lucide-react'
+import { ChevronDown, MessageCircle, Phone, Mail, MapPin, ShieldCheck } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Sıkça Sorulan Sorular (SSS)',
+  title: 'Sıkça Sorulan Sorular (SSS) | ERAYDUŞ Ankara',
   description:
-    'Erayduş duşakabin ürünleri, sipariş, teslimat, montaj ve garanti süreçleri hakkında en sık sorulan soruların yanıtları.',
+    'Erayduş duşakabin modelleri, özel ölçü üretimi, Ankara içi ücretsiz keşif, 6mm temperli emniyet camları ve 2 yıl garanti süreçleri hakkında merak edilenler.',
 }
 
 interface FaqItem {
@@ -20,49 +20,53 @@ interface FaqGroup {
 
 const faqGroups: FaqGroup[] = [
   {
-    title: 'Ürünler & Sipariş',
+    title: 'Ürünler & Özel Ölçü İmalat',
     items: [
       {
         q: 'Duşakabinleriniz özel ölçüye göre üretiliyor mu?',
-        a: 'Evet. Tüm duşakabin sistemlerimiz banyonuzun ölçülerine göre özel olarak üretilir. Standart ölçülerin dışında, milimetrik hassasiyetle projenize uygun çözümler sunuyoruz.',
+        a: 'Evet. Tüm duşakabin sistemlerimiz banyonuzun net ölçülerine özel olarak Siteler / Ankara fabrikamızda üretilir. Ankara merkez ilçelerinde teknik ekibimiz adresinize gelerek ücretsiz ölçü almaktadır.',
       },
       {
-        q: 'Hangi cam türlerini kullanıyorsunuz?',
-        a: 'Şeffaf extra clear, füme (siyah), bronz, oluklu (fluted) ve buzlu (kumlama) cam seçeneklerimiz mevcuttur. Tüm camlarımız 8 mm temperli güvenlik camıdır ve nano yüzey kaplama ile su lekesine karşı korunur.',
+        q: 'Hangi cam kalınlığı ve türlerini kullanıyorsunuz?',
+        a: 'Tüm duşakabinlerimizde 6mm temperli emniyet camı kullanılmaktadır. Camlarımız darbelere 5 kat dayanıklıdır. Ürünler sayfamızda sunulan cam türleri: Şeffaf, Füme (Siyah) Cam, Bronz Cam, Aynalı Cam, Kumlama (Buzlu Özel Desenli) ve Buz Mat Cam.',
       },
       {
-        q: 'Sipariş vermeden önce fiyat teklifi alabilir miyim?',
-        a: 'Elbette. İletişim formu, WhatsApp veya online konfigüratörümüz üzerinden ölçülerinizi ve tercihlerinizi ileterek ücretsiz fiyat teklifi alabilirsiniz.',
-      },
-    ],
-  },
-  {
-    title: 'Teslimat & Montaj',
-    items: [
-      {
-        q: 'Üretim ve teslimat süresi ne kadar?',
-        a: 'Özel üretim duşakabinlerimizin üretim süresi ortalama 7-14 iş günüdür. Ürün hazır olduğunda montaj randevusu için sizinle iletişime geçilir.',
-      },
-      {
-        q: 'Montaj hizmeti veriyor musunuz?',
-        a: 'Evet, uzman montaj ekibimiz profesyonel kurulum hizmeti sunar. Montaj öncesi hazırlık ve adımlar için Montaj Kılavuzu sayfamızı inceleyebilirsiniz.',
-      },
-      {
-        q: 'Türkiye’nin her yerine gönderim yapıyor musunuz?',
-        a: 'Evet, 81 ile anlaşmalı kargo ve montaj iş ortaklarımız aracılığıyla gönderim yapıyoruz. Bölgenize göre teslimat koşulları değişebilir.',
+        q: 'Sipariş öncesi net fiyat teklifi nasıl alabilirim?',
+        a: 'Web sitemizdeki 2D Konfigöratörü kullanarak, WhatsApp hattımızdan (0554 883 00 71) ölçü göndererek veya (0312) 350 79 39 nolu telefonumuzdan anında ücretsiz net fiyat teklifi alabilirsiniz.',
       },
     ],
   },
   {
-    title: 'Garanti & Servis',
+    title: 'Teslimat, Keşif & Montaj',
     items: [
       {
-        q: 'Ürünleriniz garantili mi?',
-        a: 'Tüm ürünlerimiz üretim ve malzeme hatalarına karşı garanti kapsamındadır. Detaylar için Garanti Şartları sayfamızı inceleyebilirsiniz.',
+        q: 'Ankara içi keşif ve ölçüm ücretli midir?',
+        a: 'Hayır, Ankara Çankaya, Çayyolu, İncek, Keçiören, Yenimahalle, Etimesgut, Batıkent ve tüm merkez ilçelerde yerinde ölçüm ve teknik keşif hizmetimiz tamamen ücretsizdir.',
       },
       {
-        q: 'Yedek parça temin ediyor musunuz?',
-        a: 'Menteşe, conta, tekerlek ve aksesuar gibi yedek parçaları uzun yıllar boyunca temin ediyoruz. Servis talepleriniz için iletişim kanallarımızdan bize ulaşabilirsiniz.',
+        q: 'İmalat ve montaj süresi ne kadar sürer?',
+        a: 'Ölçü onayının ardından 6mm temperli cam kesimi ve profil imalatı ortalama 3-5 iş günü içinde tamamlanır. Kendi uzman ekibimiz adresinizde montajı 1-2 saat içerisinde başarıyla tamamlayıp teslim eder.',
+      },
+      {
+        q: 'Duşakabinde su sızdırma sorunu yaşar mıyım?',
+        a: 'Kesinlikle hayır. Mıknatıslı suluk fitilleri, alüminyum su tutucu eşik profilleri ve antibakteriyel banyo silikonu uygulamamız sayesinde su sızdırmazlık garantisi veriyoruz.',
+      },
+    ],
+  },
+  {
+    title: 'Garanti, Servis & Temizlik',
+    items: [
+      {
+        q: 'Ürünleriniz garantili mi ve kapsam şartları nelerdir?',
+        a: 'Tüm Erayduş duşakabin modellerimiz 2 Yıl Resmi Üretici Garantisi altındadır. İmalat, malzeme ve montaj kaynaklı tüm kusurlar garanti kapsamında ücretsiz giderilir. Sert darbe veya kaza kaynaklı cam kırılmalarında ise makul ücret karşılığı orijinal parça temini sağlanır.',
+      },
+      {
+        q: 'Siyah ve Gold profillerde zamanla kararma veya soyulma olur mu?',
+        a: 'Hayır. Profillerimizde boya ve solmaz özel renk kaplama teknolojileri kullanılır. Banyo nemine ve sıcak suya karşı yüksek dirençlidir.',
+      },
+      {
+        q: 'Duşakabin temizliği nasıl yapılmalıdır?',
+        a: 'Tuz ruhu veya kezzap gibi asitli ağır kimyasallar yerine ılık sabunlu su ve yumuşak mikrofiber bez kullanılmalıdır. Duş sonrası camları çekçek ile sıyırmak kireç lekesi oluşumunu %90 engeller.',
       },
     ],
   },
@@ -74,30 +78,31 @@ export default function FaqPage() {
       <div className="container mx-auto max-w-4xl px-6">
         {/* Header */}
         <p className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-champagne">
-          Yardım Merkezi
+          Erayduş Yardım Merkezi
         </p>
         <h1 className="mb-4 text-4xl font-light tracking-tight lg:text-5xl">
           Sıkça Sorulan <span className="font-semibold">Sorular</span>
         </h1>
-        <p className="mb-14 max-w-2xl text-lg font-light text-muted-foreground">
-          Ürünlerimiz, sipariş, teslimat ve garanti süreçleri hakkında merak ettiklerinizi burada topladık.
+        <p className="mb-14 max-w-2xl text-lg font-light text-muted-foreground leading-relaxed">
+          Erayduş 6mm temperli cam duşakabin modellerimiz, Ankara ücretsiz keşif hizmetimiz, özel ölçü imalatı ve 2 yıl garanti süreçlerimiz hakkında merak edilen tüm yanıtlar.
         </p>
 
         {/* Groups */}
         <div className="space-y-14">
           {faqGroups.map((group) => (
             <section key={group.title}>
-              <h2 className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              <h2 className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-champagne" />
                 {group.title}
               </h2>
-              <div className="divide-y divide-border border-y border-border">
+              <div className="divide-y divide-border border-y border-border rounded-2xl overflow-hidden bg-surface/30">
                 {group.items.map((item) => (
-                  <details key={item.q} className="group">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left text-base font-medium text-foreground transition-colors hover:text-champagne [&::-webkit-details-marker]:hidden">
-                      {item.q}
-                      <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180" />
+                  <details key={item.q} className="group p-2">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 text-left text-base md:text-lg font-medium text-foreground transition-colors hover:text-champagne [&::-webkit-details-marker]:hidden">
+                      <span>{item.q}</span>
+                      <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180 text-champagne" />
                     </summary>
-                    <p className="pb-5 pr-10 text-[15px] font-light leading-relaxed text-muted-foreground">
+                    <p className="px-4 pb-4 pt-1 text-[15px] font-light leading-relaxed text-muted-foreground border-t border-border/30 mt-2">
                       {item.a}
                     </p>
                   </details>
@@ -107,21 +112,28 @@ export default function FaqPage() {
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-16 flex flex-col items-start gap-5 rounded-2xl bg-surface p-8 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">Sorunuzu bulamadınız mı?</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Uzman ekibimiz tüm sorularınızı yanıtlamaktan memnuniyet duyar.
-            </p>
+        {/* Contact Info Box */}
+        <div className="mt-16 p-8 rounded-3xl bg-surface border border-border/50 shadow-sm">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <h3 className="text-xl font-semibold">Aradığınız cevabı bulamadınız mı?</h3>
+              <p className="mt-2 text-sm text-muted-foreground font-light max-w-md">
+                Ankara Siteler genel merkezimiz ve uzman teknik ekibimiz tüm sorularınızı yanıtlamaktan memnuniyet duyar.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-champagne" /> (0312) 350 79 39</span>
+                <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-champagne" /> 0554 883 00 71</span>
+                <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-champagne" /> info@eraydus.net</span>
+              </div>
+            </div>
+            <Link
+              href="/iletisim"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-champagne px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:bg-champagne/90 hover:scale-105 active:scale-95 shadow-lg"
+            >
+              <MessageCircle className="size-4" />
+              İletişime Geçin
+            </Link>
           </div>
-          <Link
-            href="/iletisim"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-champagne px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-champagne/90"
-          >
-            <MessageCircle className="size-4" />
-            Bize Ulaşın
-          </Link>
         </div>
       </div>
     </div>

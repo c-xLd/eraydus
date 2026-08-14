@@ -18,8 +18,8 @@ export function InspirationSection({
   const features = [
     {
       icon: <Droplets className="w-5 h-5" />,
-      title: 'Nano Teknolojili Camlar',
-      desc: 'Su ve kireç tutmayan özel yüzey işlemi ile duşakabininiz her zaman ilk günkü gibi temiz ve parlak kalır.',
+      title: '6mm Temperli Camlar',
+      desc: 'Darbe direnci yüksek Şişecam üretimi emniyet camı ile yüksek güvenlik ve uzun ömürlü kullanım.',
     },
     {
       icon: <Wind className="w-5 h-5" />,
@@ -34,7 +34,7 @@ export function InspirationSection({
     {
       icon: <Ruler className="w-5 h-5" />,
       title: 'Milimetrik Özel Üretim',
-      desc: 'Banyonuzun mimari yapısı ve ölçülerine birebir uyum sağlayan, tamamen kişiselleştirilebilir kesimler.',
+      desc: 'Banyonuzun yerleşimi ve ölçülerine birebir uyum sağlayan, tamamen kişiselleştirilebilir kesimler.',
     },
   ]
 

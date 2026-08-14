@@ -4,8 +4,8 @@ import { Project } from './ProjectsClient'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Mimari Projeler | Erayduş',
-  description: 'Erayduş imzası taşıyan otel, rezidans, villa ve ticari mimari referans projelerimiz.',
+  title: 'Referans Projeler | Erayduş',
+  description: 'Erayduş imzası taşıyan otel, rezidans, villa ve ticari referans projelerimiz.',
 }
 
 export const dynamic = 'force-dynamic'

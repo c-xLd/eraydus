@@ -23,7 +23,6 @@ export async function createBlogPost(data: {
       description: data.description || null,
       body: data.body || null,
       featured_image: data.featured_image || null,
-      content_type: 'blog',
       status: data.status || 'published',
       published_at: data.status === 'draft' ? null : new Date().toISOString(),
       seo_title: data.seo_title || data.title,

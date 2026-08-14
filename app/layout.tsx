@@ -1,27 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
-
+import { Toaster } from "sonner";
 
 import { FramerMotionFix } from "./FramerMotionFix";
 import { AIGraphSchema } from "@/components/seo/AIGraphSchema";
 import { globalSeoData } from "@/lib/data/seo";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-sans",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  preload: true,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  variable: "--font-mono",
   subsets: ["latin"],
+  display: "swap",
+  preload: false,
 });
 
 import { getGlobalSeoData } from "@/lib/data/seo";
-import { createClient } from "@/lib/server";
 import { ServerFAQSchema } from "@/components/seo/ServerFAQSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -74,15 +78,20 @@ export default async function RootLayout({
   }>) {
     const { getGlobalSeoData } = await import('@/lib/data/seo');
     const geoData = await getGlobalSeoData();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
     return (
       <html
         lang="tr"
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${plusJakarta.variable} ${spaceMono.variable} antialiased`}
       >
         <head>
-          <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />
-          <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+          {supabaseUrl && (
+            <>
+              <link rel="preconnect" href={supabaseUrl} crossOrigin="anonymous" />
+              <link rel="dns-prefetch" href={supabaseUrl} />
+            </>
+          )}
         </head>
         <body className="min-h-screen flex flex-col font-sans">
           {geoData?.analytics?.googleTagManagerId && (
@@ -95,11 +104,11 @@ export default async function RootLayout({
           <AIGraphSchema />
           <ServerFAQSchema />
 
-          {/* Google Analytics (GA4) */}
+          {/* Google Analytics (GA4) - Lazy loaded to protect FCP/LCP */}
           {geoData?.analytics?.googleAnalyticsId && (
             <>
-              <Script src={`https://www.googletagmanager.com/gtag/js?id=${geoData.analytics.googleAnalyticsId}`} strategy="afterInteractive" />
-              <Script id="google-analytics" strategy="afterInteractive">
+              <Script src={`https://www.googletagmanager.com/gtag/js?id=${geoData.analytics.googleAnalyticsId}`} strategy="lazyOnload" />
+              <Script id="google-analytics" strategy="lazyOnload">
                 {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
@@ -110,9 +119,9 @@ export default async function RootLayout({
             </>
           )}
 
-          {/* Google Tag Manager (GTM) */}
+          {/* Google Tag Manager (GTM) - Lazy loaded to protect FCP/LCP */}
           {geoData?.analytics?.googleTagManagerId && (
-            <Script id="google-tag-manager" strategy="afterInteractive">
+            <Script id="google-tag-manager" strategy="lazyOnload">
               {`
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -123,9 +132,9 @@ export default async function RootLayout({
             </Script>
           )}
 
-          {/* Meta Pixel */}
+          {/* Meta Pixel - Lazy loaded */}
           {geoData?.analytics?.metaPixelId && (
-            <Script id="meta-pixel" strategy="afterInteractive">
+            <Script id="meta-pixel" strategy="lazyOnload">
               {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -142,6 +151,7 @@ export default async function RootLayout({
           )}
 
           {children}
+          <Toaster position="top-right" richColors closeButton />
           <SpeedInsights />
           <Analytics />
         </body>

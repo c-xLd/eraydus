@@ -1,31 +1,39 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getProductBySlug } from "@/features/products/actions/product-detail"
+import { getApprovedReviews } from "@/features/products/actions/reviews"
 import { getProductsByCollection } from "@/features/products/services/products"
 import { getCategoryBySlug } from "@/features/products/services/categories"
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/features/products/utils/seo"
-import { ProductGallery } from "@/features/products/components/product-gallery"
-import { ProductInfo } from "@/features/products/components/product-info"
-import { ProductDetailSections } from "@/features/products/components/product-detail-sections"
+import { ProductLuxuryDetailView } from "@/features/products/components/product-luxury-detail-view"
 import { ProductRelated } from "@/features/products/components/product-related"
-import { ProductBreadcrumb } from "@/features/products/components/product-breadcrumb"
 
 interface Props {
   params: Promise<{ categorySlug: string; productSlug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { productSlug } = await params
-  const result = await getProductBySlug(productSlug)
-  if (!result.success || !result.data) return { title: 'Bulunamadı' }
+  const { categorySlug, productSlug } = await params
+  const [result, category] = await Promise.all([
+    getProductBySlug(productSlug),
+    getCategoryBySlug(categorySlug),
+  ])
+  if (!result.success || !result.data) return { title: 'Bulunamadı | ERAYDUŞ' }
   const product = result.data
+  const categoryName = category?.name || 'Lüks Duşakabin'
+  const title = `${product.name} | ${categoryName} - ERAYDUŞ`
+  const desc = product.meta_description || product.short_description || `${product.name} özel tasarım duşakabin modeli. 6mm Şişecam temperli güvenlik camı, paslanmaz profil seçenekleri ve Ankara içi ücretsiz keşif & montaj avantajıyla.`
+
+  const rawImages = (product as unknown as { images?: string[] }).images
+  const imgUrl = product.main_image_url || (Array.isArray(rawImages) && rawImages.length > 0 ? String(rawImages[0]) : '')
+
   return {
-    title: product.meta_title || `${product.name} | ERAYDUŞ`,
-    description: product.meta_description || product.short_description || `${product.name} - ERAYDUŞ mimari cam çözümleri`,
+    title,
+    description: desc,
     openGraph: {
-      title: product.meta_title || `${product.name} | ERAYDUŞ`,
-      description: product.meta_description || product.short_description || '',
-      images: product.main_image_url ? [{ url: product.main_image_url }] : [],
+      title,
+      description: desc,
+      images: imgUrl ? [{ url: imgUrl }] : [],
     }
   }
 }
@@ -36,49 +44,66 @@ export default async function ProductDetailPage({ params }: Props) {
     getProductBySlug(productSlug),
     getCategoryBySlug(categorySlug),
   ])
-  
-  if (!result.success || !result.data || !category) { notFound() }
-  
+
+  if (!result.success || !result.data) {
+    notFound()
+  }
+
   const product = result.data
-  const allCategoryProducts = await getProductsByCollection(category.id)
+
+  // Robust category resolution to prevent broken breadcrumb slugs or 404s
+  const activeCategory = category || (product as unknown as { category?: { id: string; name: string; slug: string } }).category || (product as unknown as { collection?: { id: string; name: string; slug: string } }).collection || {
+    id: 'dusakabin',
+    name: 'Duşakabin Modelleri',
+    slug: categorySlug || 'dusakabin'
+  }
+
+  const [reviewsResult, allCategoryProducts] = await Promise.all([
+    getApprovedReviews(product.id),
+    getProductsByCollection(activeCategory.id),
+  ])
+
+  const reviews = reviewsResult.success && reviewsResult.data ? reviewsResult.data : []
   const relatedProducts = allCategoryProducts.filter(p => p.slug !== productSlug).slice(0, 8)
 
   const breadcrumbItems = [
     { name: "Anasayfa", url: "/" },
-    { name: "Ürünler", url: "/urunler" },
-    { name: category.name, url: `/urunler/${categorySlug}` },
-    { name: product.name, url: `/urunler/${categorySlug}/${product.slug}` }
+    { name: "Koleksiyonlar", url: "/urunler" },
+    { name: activeCategory.name, url: `/urunler/${activeCategory.slug}` },
+    { name: product.name }
   ]
+
   const productJsonLd = generateProductJsonLd(product)
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(breadcrumbItems)
 
   return (
-    <div className="bg-white min-h-screen">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      
-      <div className="pt-32 pb-16 px-4 md:px-6">
-        <div className="container mx-auto">
-          <ProductBreadcrumb items={breadcrumbItems} className="mb-12" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 relative">
-            <div className="lg:sticky lg:top-32 lg:self-start">
-              <ProductGallery images={product.gallery} mainImage={product.main_image_url} name={product.name} />
-            </div>
-            <ProductInfo product={product} />
+    <article className="min-h-screen bg-[#FBFBFA]">
+      {/* ─── SEO JSON-LD ─── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
+      {/* ─── EXACT LUXURY DETAIL VIEW FROM PROTOTYPE ─── */}
+      <ProductLuxuryDetailView
+        product={product}
+        category={activeCategory}
+        initialReviews={reviews}
+      />
+
+      {/* ─── BENZER TASARIMLAR ─── */}
+      {relatedProducts.length > 0 && (
+        <section className="border-t border-black/[0.06] bg-white relative z-10">
+          <div className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
+            <ProductRelated products={relatedProducts} title="Benzer Koleksiyon Tasarımları" />
           </div>
-        </div>
-      </div>
-      
-      <div className="border-t border-black/5">
-        <ProductDetailSections product={product} />
-      </div>
-      
-      <div className="bg-black/[0.02] py-24">
-        <div className="container mx-auto px-4 md:px-6">
-          <ProductRelated products={relatedProducts} title="Benzer Tasarımlar" />
-        </div>
-      </div>
-    </div>
+        </section>
+      )}
+    </article>
   )
 }
+

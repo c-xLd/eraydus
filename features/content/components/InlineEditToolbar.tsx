@@ -3,10 +3,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useAdminEdit } from './AdminEditProvider'
 import { PencilLine, X, Check, Loader2, Upload, LayoutDashboard, Eye, Plus, User, LogOut, FileText, Folder, ShoppingBag, Zap, RefreshCw, Search } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { TiptapEditor } from '../editor/TiptapEditor'
 import { updateInlineField } from '../actions/inline-actions'
+
+const TiptapEditor = dynamic(
+  () => import('../editor/TiptapEditor').then((mod) => mod.TiptapEditor),
+  { ssr: false, loading: () => <div className="p-4 text-xs text-muted-foreground">Editör yükleniyor...</div> }
+)
 import { uploadImageToSupabase } from '../actions/upload-actions'
 import { purgeSiteCache } from '../actions/cache-actions'
 import { getPageSeo, updatePageSeo, SeoData } from '../actions/seo-actions'

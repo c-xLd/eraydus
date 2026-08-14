@@ -15,15 +15,118 @@ const iconMap: Record<string, any> = {
   'Sürdürülebilirlik': Leaf,
 }
 
+const defaultAboutContent = {
+  hero: {
+    subtitle: '1997’den Beri Kalite ve Güven',
+    title_normal: 'Banyonuza Değer Katan',
+    title_bold: 'Özel İmalat Duşakabinler',
+    description: 'Erayduş olarak Ankara Siteler’deki tesisimizde, banyonuzun tam ölçüsüne özel kırılmaya dayanıklı temperli cam ve paslanmaz çelik aksamlı duşakabin çözümleri üretiyoruz.'
+  },
+  story: {
+    subtitle: 'Hikayemiz',
+    title_normal: 'Çeyrek Asırlık',
+    title_bold: 'Ustalık ve Mühendislik',
+    p1: 'Erayduş, 1997 yılından bu yana banyo mimarisinde kalite, estetik ve güven ilkesiyle faaliyet göstermektedir. Ankara genelinde binlerce konut, villa ve otel projesine özel duşakabin imalatı ve montajı gerçekleştirdik.',
+    p2: 'Standart seri üretim kalıplarına sıkışmadan, her banyonun mimari yapısına, girintisine ve ölçüsüne özel milimetrik üretim yapıyor; sızdırmazlık garantimiz ve uzman montaj kadromuz ile müşteri memnuniyetini en üst seviyede tutuyoruz.',
+    image: '/images/eray_gold.jpg',
+    years_experience: '28+',
+    years_text: 'Yıllık Deneyim ve İmalat Güvencesi'
+  },
+  values: {
+    subtitle: 'Değerlerimiz',
+    title_normal: 'Kalite Standartlarımız ve',
+    title_bold: 'İlkelerimiz',
+    items: [
+      {
+        title: 'Hassasiyet',
+        description: 'Banyonuzun mimarisine tam uyumlu, milimetrik hassasiyette ve sıfır hata payıyla üretim yapıyoruz.'
+      },
+      {
+        title: 'Yenilikçilik',
+        description: 'Leke tutmayan Easy Clean cam teknolojisi ve solmayan paslanmaz profil kaplamaları sunuyoruz.'
+      },
+      {
+        title: 'Sürdürülebilirlik',
+        description: 'Uzun ömürlü paslanmaz çelik aksamlar ve geri dönüştürülebilir yerli malzeme standartları.'
+      }
+    ]
+  },
+  process: {
+    subtitle: 'Üretim Sürecimiz',
+    title_normal: 'Fikirden Kuruluma',
+    title_bold: 'Adım Adım Kalite',
+    steps: [
+      { number: '01', title: 'Ücretsiz Keşif', description: 'Adresinize gelerek banyonuzun net ve hassas ölçüsünü alıyoruz.' },
+      { number: '02', title: 'Model Seçimi', description: 'Cam deseni, profil rengi ve kapı mekanizmasını belirlersiniz.' },
+      { number: '03', title: 'Hassas Kesim', description: 'Ölçülerinize uygun cam ve profiller kesilir ve hazırlanır.' },
+      { number: '04', title: 'Temperleme', description: 'Camlar 700°C fırınlarda darbelere dayanıklı 6mm temperli güvenlik camına dönüştürülür.' },
+      { number: '05', title: 'Kalite Kontrol', description: 'Su sızdırmazlık ve mekanik dayanım testleri yapılır.' },
+      { number: '06', title: 'Uzman Montaj', description: 'Kendi ekibimizle adresinizde temiz ve sağlam kurulum tamamlanır.' }
+    ]
+  },
+  facility: {
+    subtitle: 'Üretim Tesisimiz',
+    title_normal: 'Yerli Üretim ve',
+    title_bold: 'Yüksek Kapasite',
+    description: 'Ankara Siteler’deki üretim tesisimizde gelişmiş cam işleme ve montaj hatları ile bireysel ve kurumsal projelere kesintisiz hizmet veriyoruz.',
+    image: '/images/eray_exploded.jpg',
+    stats: [
+      { value: '5.000+', label: 'Tamamlanan Proje' },
+      { value: '%100', label: 'Müşteri Memnuniyeti' },
+      { value: '2 Yıl', label: 'Koşulsuz Garanti' }
+    ]
+  },
+  cta: {
+    title_normal: 'Banyonuz İçin Özel',
+    title_bold: 'Duşakabin Tasarlayın',
+    description: 'Hemen banyo ölçülerinizi girip fiyat hesaplayabilir veya Ankara içi ücretsiz keşif randevusu oluşturabilirsiniz.'
+  }
+}
+
+function resolveSiteImage(url: string | undefined | null, fallback: string): string {
+  if (!url || url.includes('unsplash.com')) {
+    return fallback
+  }
+  return url
+}
+
 interface AboutClientProps {
   content: any
 }
 
 export default function AboutClient({ content }: AboutClientProps) {
-  // If content is missing, render nothing or a fallback
-  if (!content || !content.hero) return null
+  const activeContent = (content && content.hero) ? content : defaultAboutContent
+  const { hero, story, values, process, facility, cta } = activeContent
 
-  const { hero, story, values, process, facility, cta } = content
+  const storyImage = resolveSiteImage(story?.image, '/images/eray_gold.jpg')
+  const facilityImage = resolveSiteImage(facility?.image, '/images/eray_exploded.jpg')
+
+  const galleryShowcase = [
+    {
+      title: 'Gold PVD Lüks Seri',
+      tag: 'Özel Kaplama',
+      image: '/images/eray_gold.jpg',
+      desc: 'Paslanmaz altın PVD kaplama & 6mm Clear temperli cam',
+    },
+    {
+      title: 'Titanyum Gunmetal',
+      tag: 'Mimari Trend',
+      image: '/images/eray_gunmetal.jpg',
+      desc: 'Mat antrasit çizilmez gövde & soft-close sürgü sistemi',
+    },
+    {
+      title: 'Aura Mat Siyah',
+      tag: 'Minimalist Çizgi',
+      image: '/images/aura_black.jpg',
+      desc: 'Elektrostatik fırın boyalı siyah çerçevesiz profil',
+    },
+    {
+      title: 'Kristal Parlak Krom',
+      tag: 'Klasik Şıklık',
+      image: '/images/eray_chrome.jpg',
+      desc: 'Korozyona dayanıklı eloksallı ayna parlaklığında alüminyum',
+    },
+  ]
 
   return (
     <div className="flex flex-col w-full">
@@ -99,10 +202,10 @@ export default function AboutClient({ content }: AboutClientProps) {
               className="relative"
             >
               <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface group">
-                <InlineEditable path="story.image" value={story.image} type="image" className="w-full h-full block relative">
+                <InlineEditable path="story.image" value={storyImage} type="image" className="w-full h-full block relative">
                   <Image
-                    src={story.image || ''}
-                    alt="Hikayemiz"
+                    src={storyImage}
+                    alt="ERAYDUŞ Lüks Duşakabin İmalatı ve Ustalık"
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
@@ -333,18 +436,80 @@ export default function AboutClient({ content }: AboutClientProps) {
               transition={{ duration: 1.2, ease }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-white/5 group">
-                <InlineEditable path="facility.image" value={facility.image} type="image" className="w-full h-full block relative">
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-white/5 group border border-white/10 shadow-2xl">
+                <InlineEditable path="facility.image" value={facilityImage} type="image" className="w-full h-full block relative">
                   <Image
-                    src={facility.image || ''}
-                    alt="Tesis"
+                    src={facilityImage}
+                    alt="ERAYDUŞ Ankara Siteler Fabrika ve Mühendislik"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover opacity-80 transition-transform duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100"
+                    className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                   />
                 </InlineEditable>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────────── Flagship Model Showcase ───────────── */}
+      <section className="py-28 md:py-36 bg-surface border-y border-border relative overflow-hidden">
+        <div className="container mx-auto px-6 max-w-[1440px]">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-champagne text-xs tracking-[0.3em] uppercase font-semibold">
+              Koleksiyonumuzdan İmzalar
+            </span>
+            <h2 className="text-3xl md:text-5xl font-light tracking-tight mt-4">
+              Özel Üretim <span className="font-semibold text-champagne">Profil ve Cam Çözümleri</span>
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base font-light mt-4 leading-relaxed">
+              Siteler tesisimizde ürettiğimiz tüm serilerde 1. sınıf paslanmaz alüminyum ve temperli güvenlik camı kullanıyoruz.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {galleryShowcase.map((item, idx) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0.01, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.8, delay: idx * 0.1, ease }}
+                className="group relative rounded-2xl overflow-hidden bg-card border border-border hover:border-champagne/40 transition-all duration-500 shadow-sm hover:shadow-xl flex flex-col"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider bg-black/70 backdrop-blur-md text-champagne px-2.5 py-1 rounded-full border border-champagne/20">
+                      {item.tag}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-semibold text-foreground group-hover:text-champagne transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground font-light mt-1.5 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <Link
+                    href="/urunler"
+                    className="mt-4 pt-3 border-t border-border/50 text-xs font-medium text-champagne inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all"
+                  >
+                    <span>Koleksiyonu İncele</span>
+                    <ArrowRight className="size-3.5" />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

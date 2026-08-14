@@ -61,6 +61,9 @@ export interface ProductDetail {
   images?: string[] | null
   features: string[]
   technical_specs: TechnicalSpecs
+  production_time?: string | null
+  availability?: string | null
+  warranty?: string | null
   compatible_glass: string[]
   compatible_profiles: string[]
   status: string

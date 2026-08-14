@@ -63,7 +63,7 @@ function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
 
 export function FAQSection({ faqs }: FAQSectionProps) {
   return (
-    <section className="py-20 md:py-24 bg-surface ">
+    <section className="py-20 md:py-24 bg-surface">
       <div className="container mx-auto px-6 max-w-[1440px]">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
           {/* Left — Header */}
@@ -75,7 +75,7 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               transition={{ duration: 0.8, ease }}
               className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
             >
-              SSS
+              Merak Edilenler
             </motion.span>
             <motion.h2
               initial={{ opacity: 0.01, y: 30 }}
@@ -92,12 +92,38 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.2, ease }}
-              className="text-muted-foreground leading-relaxed"
+              className="text-muted-foreground leading-relaxed mb-8"
             >
-              Merak ettiğiniz her şeyin cevabını burada bulabilirsiniz.
-              Aradığınız bilgiyi bulamadıysanız bizimle iletişime geçmekten
-              çekinmeyin.
+              Özel ölçü duşakabin imalatı, 6mm temperli cam modellerimiz, Ankara içi ücretsiz keşif ve montaj süreçlerimiz hakkında merak ettiğiniz tüm soruların yanıtları.
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0.01, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "200px" }}
+              transition={{ duration: 0.8, delay: 0.3, ease }}
+              className="p-5 rounded-2xl bg-background/70 border border-border/60"
+            >
+              <p className="text-sm font-medium text-foreground mb-1">Farklı bir sorunuz mu var?</p>
+              <p className="text-xs text-muted-foreground mb-3">Teknik ekibimiz banyonuz için en doğru modeli belirlemenize yardımcı olsun.</p>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href="https://wa.me/905548830071?text=Merhaba,%20duşakabin%20hakkında%20bilgi%20almak%20istiyorum."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center text-xs font-semibold text-champagne hover:underline"
+                >
+                  WhatsApp Destek Hattı →
+                </a>
+                <span className="text-border">&bull;</span>
+                <a
+                  href="tel:+903123507939"
+                  className="inline-flex items-center text-xs font-medium text-muted-foreground hover:text-foreground"
+                >
+                  (0312) 350 79 39
+                </a>
+              </div>
+            </motion.div>
           </div>
 
           {/* Right — Accordion */}

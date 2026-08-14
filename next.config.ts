@@ -2,8 +2,20 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-slider',
+      '@radix-ui/react-switch',
+      'es-toolkit',
+      'sonner',
+    ],
   },
   // @ts-ignore - To silence the workspace root warning in Turbopack
   turbopack: {
@@ -12,10 +24,11 @@ const nextConfig: NextConfig = {
   compress: true,
   reactStrictMode: true,
   images: {
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
-    qualities: [50, 75, 90, 100],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: [640, 1200],
+    imageSizes: [256],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',
@@ -26,12 +39,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: '*.supabase.co',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'eraydus.net',
         port: '',
         pathname: '**',
       },

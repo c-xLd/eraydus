@@ -18,7 +18,7 @@ export function StatementSection() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-6"
         >
-          <span className="text-champagne text-sm font-medium tracking-[0.2em] uppercase">Felsefemiz</span>
+          <span className="text-champagne text-sm font-medium tracking-[0.2em] uppercase">Erayduş Kalite Sözü</span>
         </motion.div>
 
         <motion.h2 
@@ -28,11 +28,10 @@ export function StatementSection() {
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           className="text-[clamp(1.75rem,4vw,3.5rem)] font-light tracking-[-0.02em] text-foreground leading-[1.1] max-w-4xl mx-auto"
         >
-          Her Banyo{' '}
-          <span className="text-muted-foreground">Sıradan Bir</span>
+          Banyonuzun Ölçüsüne Tam Uyan,{' '}
+          <span className="text-muted-foreground">Su Sızdırmayan</span>
           <br />
-          Duşakabini{' '}
-          <span className="font-semibold italic">Hak Etmez.</span>
+          Kaliteli <span className="font-semibold italic">Duşakabinler.</span>
         </motion.h2>
 
         <motion.div

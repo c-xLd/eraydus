@@ -54,8 +54,8 @@ export function FinalCTASection() {
           transition={{ duration: 1, delay: 0.1, ease }}
           className="text-white text-2xl md:text-3xl lg:text-4xl font-light tracking-tight max-w-3xl leading-[1.1] mb-6"
         >
-          Hayalinizdeki Duşakabini{' '}
-          <span className="font-semibold">Tasarlamaya Hazır Mısınız?</span>
+          Banyonuz İçin En Uygun Duşakabini{' '}
+          <span className="font-semibold text-champagne">Birlikte Seçelim</span>
         </motion.h2>
 
         {/* Subtitle */}
@@ -64,10 +64,9 @@ export function FinalCTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.2, ease }}
-          className="text-white/60 text-sm md:text-base max-w-xl mb-10"
+          className="text-white/70 text-sm md:text-base max-w-xl mb-10 leading-relaxed"
         >
-          Online konfigüratörümüzle dakikalar içinde tasarlayın veya
-          uzmanlarımızla hemen iletişime geçin.
+          Web sitemiz üzerinden banyo ölçülerinizi girerek anında fiyat alabilir veya WhatsApp ile banyo fotoğrafınızı gönderip özel teklif isteyebilirsiniz.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -80,20 +79,20 @@ export function FinalCTASection() {
         >
           <Link
             href="/tasarla"
-            className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-white text-black px-8 h-14 text-base font-semibold hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-champagne text-black px-8 h-14 text-base font-semibold hover:bg-champagne/90 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
-            Konfigüratörü Başlat
+            Modelini Tasarla & Fiyat Al
             <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <Link
-            href="https://wa.me/905000000000"
+          <a
+            href="https://wa.me/905548830071?text=Merhaba,%20duşakabin%20hakkında%20bilgi%20almak%20istiyorum."
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center justify-center gap-3 rounded-2xl border border-white/30 text-white px-8 h-14 text-base font-semibold hover:bg-white/10 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <MessageCircle className="size-4" />
-            WhatsApp ile İletişime Geç
-          </Link>
+            WhatsApp İle Bilgi Al
+          </a>
         </motion.div>
 
         {/* Trust line */}
@@ -102,9 +101,9 @@ export function FinalCTASection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.5, ease }}
-          className="text-white/30 text-sm mt-16 tracking-wide"
+          className="text-white/40 text-xs sm:text-sm mt-16 tracking-wide"
         >
-          2 Yıl Garanti &nbsp;·&nbsp; Ücretsiz Keşif &nbsp;·&nbsp; Taksit İmkânı
+          Ankara İçi Ücretsiz Keşif &nbsp;·&nbsp; 2 Yıl Garanti &nbsp;·&nbsp; Taksit İmkânı
         </motion.p>
       </div>
     </section>
