@@ -77,7 +77,9 @@ export function CategoryPageClient({ products, category, categories }: CategoryP
     }
 
     // Price
-    result = result.filter(p => p.price >= priceRange.min && p.price <= priceRange.max)
+    const minP = activeFilters.minPrice?.length ? Number(activeFilters.minPrice[0]) : priceRange.min;
+    const maxP = activeFilters.maxPrice?.length ? Number(activeFilters.maxPrice[0]) : priceRange.max;
+    result = result.filter(p => p.price >= minP && p.price <= maxP)
 
     // Sort
     switch (sortBy) {
@@ -114,7 +116,7 @@ export function CategoryPageClient({ products, category, categories }: CategoryP
     <div className="container mx-auto px-4 md:px-6 py-8 md:py-16 pb-28 lg:pb-16">
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Desktop Filters */}
-        <aside className="hidden lg:block w-72 shrink-0">
+        <aside className="hidden lg:block w-72 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar pb-10">
           <ProductFilters 
             options={filterOptions}
             activeFilters={activeFilters}

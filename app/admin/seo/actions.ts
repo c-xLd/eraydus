@@ -1,11 +1,26 @@
 "use server"
 
-import { createClient } from '@/lib/server'
+import { createClient as createLocalClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
+
+async function getAdminSupabase() {
+  let supabase: any
+  try {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const { createAdminClient } = await import('@/services/supabase/server')
+      supabase = createAdminClient()
+    } else {
+      supabase = await createLocalClient()
+    }
+  } catch {
+    supabase = await createLocalClient()
+  }
+  return supabase
+}
 
 export async function saveGlobalSeo(data: any) {
   // In a real app, global SEO might be saved to a specific row in settings or seo_metadata with page_slug='global'
-  const supabase = (await createClient()) as any
+  const supabase = await getAdminSupabase()
 
   const { data: existing } = await supabase
     .from('seo_metadata')
@@ -52,7 +67,7 @@ export async function saveGlobalSeo(data: any) {
 }
 
 export async function updateSeoMetadata(id: string, data: any) {
-  const supabase = (await createClient()) as any
+  const supabase = await getAdminSupabase()
 
   const { data: updated, error } = await supabase
     .from('seo_metadata')
@@ -80,7 +95,7 @@ export async function updateSeoMetadata(id: string, data: any) {
 }
 
 export async function deleteSeoMetadata(id: string) {
-  const supabase = (await createClient()) as any
+  const supabase = await getAdminSupabase()
 
   const { error } = await supabase
     .from('seo_metadata')

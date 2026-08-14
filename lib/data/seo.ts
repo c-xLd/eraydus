@@ -126,9 +126,12 @@ export const getGlobalSeoData = cache(
       try {
         // We use a standard cookie-less client here to prevent Next.js from throwing DYNAMIC_SERVER_USAGE
         // during static generation. Global SEO data is public anyway.
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co';
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY';
+        
         const supabase = createSupabaseClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co',
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY',
+          supabaseUrl,
+          supabaseKey,
           {
             global: {
               fetch: (url, options) => fetch(url, { ...options, cache: 'force-cache' })

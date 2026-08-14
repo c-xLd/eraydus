@@ -10,7 +10,7 @@ export default async function AdminProjectsPage() {
 
   const { data, error } = await supabase
     .from('projects')
-    .select('id, title, location, category, description, main_image_url, created_at')
+    .select('id, name, location, category, description, image_url, created_at')
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -20,11 +20,11 @@ export default async function AdminProjectsPage() {
   const projects =
     data?.map((project) => ({
       id: project.id,
-      name: project.title,
+      name: project.name,
       location: project.location ?? '',
       category: project.category ?? '',
       description: project.description ?? '',
-      image_url: project.main_image_url ?? '',
+      image_url: project.image_url ?? '',
       created_at: project.created_at,
     })) || []
 

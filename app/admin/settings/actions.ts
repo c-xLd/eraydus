@@ -1,15 +1,30 @@
 "use server"
 
-import { createClient } from "@/lib/server"
+import { createClient as createLocalClient } from "@/lib/server"
 import { revalidatePath } from "next/cache"
+
+async function getAdminSupabase() {
+  let supabase: any
+  try {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const { createAdminClient } = await import('@/services/supabase/server')
+      supabase = createAdminClient()
+    } else {
+      supabase = await createLocalClient()
+    }
+  } catch {
+    supabase = await createLocalClient()
+  }
+  return supabase
+}
 
 export async function getSiteSettings() {
   try {
-    const supabase = (await createClient()) as any
+    const supabase = await getAdminSupabase()
     const { data, error } = await supabase
       .from('site_settings')
       .select('value')
-      .eq('key', 'global_seo')
+      .eq('key', 'general_settings')
       .single()
 
     if (error) {
@@ -25,13 +40,13 @@ export async function getSiteSettings() {
 
 export async function updateSiteSettings(settings: Record<string, unknown>) {
   try {
-    const supabase = (await createClient()) as any
+    const supabase = await getAdminSupabase()
     
     // Check if exists
     const { data: existing } = await supabase
       .from('site_settings')
       .select('key')
-      .eq('key', 'global_seo')
+      .eq('key', 'general_settings')
       .single()
 
     let error;
@@ -40,12 +55,12 @@ export async function updateSiteSettings(settings: Record<string, unknown>) {
       const { error: updateError } = await supabase
         .from('site_settings')
         .update({ value: settings })
-        .eq('key', 'global_seo')
+        .eq('key', 'general_settings')
       error = updateError;
     } else {
       const { error: insertError } = await supabase
         .from('site_settings')
-        .insert({ key: 'global_seo', value: settings })
+        .insert({ key: 'general_settings', value: settings })
       error = insertError;
     }
 

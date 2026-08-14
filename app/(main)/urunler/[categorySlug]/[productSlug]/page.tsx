@@ -6,6 +6,7 @@ import { getProductsByCollection } from "@/features/products/services/products"
 import { getCategoryBySlug } from "@/features/products/services/categories"
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/features/products/utils/seo"
 import { ProductLuxuryDetailView } from "@/features/products/components/product-luxury-detail-view"
+import { ProductCabinetDetailView } from "@/features/products/components/product-cabinet-detail-view"
 import { ProductRelated } from "@/features/products/components/product-related"
 
 interface Props {
@@ -20,9 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ])
   if (!result.success || !result.data) return { title: 'Bulunamadı | ERAYDUŞ' }
   const product = result.data
-  const categoryName = category?.name || 'Lüks Duşakabin'
+  const isCabinet = categorySlug === 'banyo-dolabi' || categorySlug.includes('dolabi')
+  const categoryName = category?.name || (isCabinet ? 'Lüks Banyo Dolabı' : 'Lüks Duşakabin')
   const title = `${product.name} | ${categoryName} - ERAYDUŞ`
-  const desc = product.meta_description || product.short_description || `${product.name} özel tasarım duşakabin modeli. 6mm Şişecam temperli güvenlik camı, paslanmaz profil seçenekleri ve Ankara içi ücretsiz keşif & montaj avantajıyla.`
+  const defaultDesc = isCabinet 
+    ? `${product.name} özel tasarım banyo dolabı modeli. Neme dayanıklı gövde ve şık detaylarıyla banyonuza değer katar.`
+    : `${product.name} özel tasarım duşakabin modeli. 6mm Şişecam temperli güvenlik camı, paslanmaz profil seçenekleri ve Ankara içi ücretsiz keşif & montaj avantajıyla.`
+  const desc = product.meta_description || product.short_description || defaultDesc
 
   const rawImages = (product as unknown as { images?: string[] }).images
   const imgUrl = product.main_image_url || (Array.isArray(rawImages) && rawImages.length > 0 ? String(rawImages[0]) : '')
@@ -64,17 +69,19 @@ export default async function ProductDetailPage({ params }: Props) {
   ])
 
   const reviews = reviewsResult.success && reviewsResult.data ? reviewsResult.data : []
-  const relatedProducts = allCategoryProducts.filter(p => p.slug !== productSlug).slice(0, 8)
+  const relatedProducts = allCategoryProducts.filter(p => p.slug !== productSlug).slice(0, 4)
 
   const breadcrumbItems = [
     { name: "Anasayfa", url: "/" },
-    { name: "Koleksiyonlar", url: "/urunler" },
+    { name: "Ürünler", url: "/urunler" },
     { name: activeCategory.name, url: `/urunler/${activeCategory.slug}` },
     { name: product.name }
   ]
 
   const productJsonLd = generateProductJsonLd(product)
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(breadcrumbItems)
+
+  const isCabinet = activeCategory.slug === 'banyo-dolabi' || activeCategory.slug.includes('dolabi') || activeCategory.slug.includes('banyo-mobilyasi')
 
   return (
     <article className="min-h-screen bg-[#FBFBFA]">
@@ -88,18 +95,26 @@ export default async function ProductDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      {/* ─── EXACT LUXURY DETAIL VIEW FROM PROTOTYPE ─── */}
-      <ProductLuxuryDetailView
-        product={product}
-        category={activeCategory}
-        initialReviews={reviews}
-      />
+      {/* ─── DETAIL VIEW SWITCHER ─── */}
+      {isCabinet ? (
+        <ProductCabinetDetailView
+          product={product}
+          category={activeCategory}
+          initialReviews={reviews}
+        />
+      ) : (
+        <ProductLuxuryDetailView
+          product={product}
+          category={activeCategory}
+          initialReviews={reviews}
+        />
+      )}
 
       {/* ─── BENZER TASARIMLAR ─── */}
       {relatedProducts.length > 0 && (
         <section className="border-t border-black/[0.06] bg-white relative z-10">
           <div className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
-            <ProductRelated products={relatedProducts} title="Benzer Koleksiyon Tasarımları" />
+            <ProductRelated products={relatedProducts} title="Benzer Tasarımlar" />
           </div>
         </section>
       )}

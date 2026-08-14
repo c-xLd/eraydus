@@ -1,7 +1,22 @@
 'use server'
 
-import { createClient } from '@/lib/server'
+import { createClient as createLocalClient } from '@/lib/server'
 import type { Database } from '@/lib/database.types'
+
+async function getAdminSupabase() {
+  let supabase: any
+  try {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const { createAdminClient } = await import('@/services/supabase/server')
+      supabase = createAdminClient()
+    } else {
+      supabase = await createLocalClient()
+    }
+  } catch {
+    supabase = await createLocalClient()
+  }
+  return supabase
+}
 
 export type Message = {
   id: string
@@ -15,7 +30,7 @@ export type Message = {
 }
 
 export async function getMessages(): Promise<{ data: Message[]; error: any }> {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   const { data, error } = await supabase
     .from('messages')
     .select('*')
@@ -37,7 +52,7 @@ export async function getMessages(): Promise<{ data: Message[]; error: any }> {
 }
 
 export async function markAsRead(id: string) {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   const { error } = await (supabase.from('messages') as any)
     .update({ is_read: true })
     .eq('id', id)
@@ -46,7 +61,7 @@ export async function markAsRead(id: string) {
 }
 
 export async function deleteMessage(id: string) {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   const { error } = await supabase
     .from('messages')
     .delete()

@@ -26,13 +26,18 @@ import {
   ThumbsUp,
   Camera,
   HelpCircle,
-  MessageCircle
+  MessageCircle,
+  Layers,
+  Box,
+  Ruler,
+  CheckCircle2,
+  Wrench,
+  Sparkle
 } from 'lucide-react'
 import { submitProductReview } from '@/features/products/actions/reviews'
 import type { ProductWithOptions } from '@/features/products/types/product'
-import { getGlassImageUrl, getProfileImageUrl } from '@/features/products/utils/option-images'
 
-interface ProductLuxuryDetailViewProps {
+interface ProductCabinetDetailViewProps {
   product: ProductWithOptions
   category: { id: string; name: string; slug: string }
   initialReviews: Array<{
@@ -44,32 +49,6 @@ interface ProductLuxuryDetailViewProps {
     is_approved?: boolean
   }>
 }
-
-// Glass Options matching exactly the /urunler showcase
-const DEFAULT_GLASS_OPTIONS = [
-  { id: 'seffaf', name: 'Şeffaf Extra Clear', desc: 'Maksimum ışık geçirgenliği ve ferahlık.', price: 0 },
-  { id: 'fume', name: 'Füme (Siyah) Cam', desc: 'Keskin hatlar, mahremiyet ve lüks görünüm.', price: 1800 },
-  { id: 'bronz', name: 'Bronz Cam', desc: 'Sıcak tonlar ve zarif yansıma.', price: 2100 },
-  { id: 'aynali', name: 'Aynalı Cam', desc: 'Genişlik hissi ve tam mahremiyet.', price: 3400 },
-  { id: 'kumlama', name: 'Kumlama (Buzlu)', desc: 'Özel desenler ve modern doku.', price: 2800 },
-  { id: 'buz-mat', name: 'Buz Mat Cam', desc: 'Pürüzsüz mat yüzey ve tam gizlilik.', price: 1900 },
-]
-
-const DEFAULT_PROFILE_OPTIONS = [
-  { id: 'siyah', name: 'Mat Siyah', desc: 'Elektrostatik fırın boyalı mat kaplama' },
-  { id: 'firca-parlak', name: 'Parlak Krom', desc: 'Ayna parlaklığında paslanmaz yüzey' },
-  { id: 'gold', name: 'Fırçalanmış Altın', desc: 'Solmayan titanyum altın kaplama' },
-  { id: 'beyaz', name: 'Mat Beyaz', desc: 'Minimalist beyaz profil' },
-]
-
-// Kumlama Glass specific patterns
-const KUMLAMA_MODELS = [
-  { id: 'k1', name: 'Çizgi Desen' },
-  { id: 'k2', name: 'Kare Desen' },
-  { id: 'k3', name: 'Dalga Desen' },
-  { id: 'k4', name: 'Mozaik Desen' },
-  { id: 'k5', name: 'Puslu Desen' },
-]
 
 const SPRING_ULTRA = "transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
 const SPRING_FAST = "transition-all duration-200 ease-out"
@@ -105,7 +84,7 @@ const AccordionItem = ({ title, children, isOpen, onClick }: AccordionItemProps)
   </div>
 )
 
-export function ProductLuxuryDetailView({ product, category, initialReviews }: ProductLuxuryDetailViewProps) {
+export function ProductCabinetDetailView({ product, category, initialReviews }: ProductCabinetDetailViewProps) {
   // Gallery images from real product data (main_image_url, images array, gallery relations)
   const images = useMemo(() => {
     const list: string[] = []
@@ -125,9 +104,9 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
     }
 
     if (list.length === 0) {
-      list.push("https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/products/katlanir-dusakabin-05/katlanir-dusakabin-05-eraydus-1.jpg")
-      list.push("https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/products/katlanir-dusakabin-05/katlanir-dusakabin-05-eraydus-2.jpg")
-      list.push("https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/products/katlanir-dusakabin-05/katlanir-dusakabin-05-eraydus-3.jpg")
+      list.push("https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/products/banyo-dolabi-05/banyo-dolabi-05-eraydus-1.jpg")
+      list.push("https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/products/banyo-dolabi-05/banyo-dolabi-05-eraydus-2.jpg")
+      list.push("https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/products/banyo-dolabi-05/banyo-dolabi-05-eraydus-3.jpg")
     }
 
     return list
@@ -140,7 +119,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
         id: v.id,
         label: v.name,
         price: v.sale_price ?? v.price,
-        desc: v.sku ? `Kod: ${v.sku}` : 'Montaj ölçüsü'
+        desc: v.sku ? `Kod: ${v.sku}` : 'Modül Ölçüsü'
       }))
     }
     return []
@@ -148,33 +127,9 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
 
   const hasSizeVariants = sizeOptions.length > 0
 
-  // Glass Options with real images (Strictly matching Material Showcase)
-  const glassOptions = useMemo(() => {
-    return DEFAULT_GLASS_OPTIONS.map(g => ({
-      id: g.id,
-      name: g.name,
-      desc: g.desc,
-      imageUrl: getGlassImageUrl(g.id, g.name),
-      price: g.price
-    }))
-  }, [])
-
-  // Profile Color Options with real images (Strictly matching Material Showcase)
-  const profileOptions = useMemo(() => {
-    return DEFAULT_PROFILE_OPTIONS.map(p => ({
-      id: p.id,
-      name: p.name,
-      desc: p.desc,
-      imageUrl: getProfileImageUrl(p.id, p.name),
-      price: 0
-    }))
-  }, [])
-
   // State Management
   const [selectedSize, setSelectedSize] = useState(hasSizeVariants ? sizeOptions[0] : null)
-  const [selectedGlass, setSelectedGlass] = useState(glassOptions[0])
-  const [selectedKumlamaModel, setSelectedKumlamaModel] = useState(KUMLAMA_MODELS[0])
-  const [selectedProfile, setSelectedProfile] = useState(profileOptions[0])
+  
   const [activeImage, setActiveImage] = useState(0)
   const [showBottomStickyBar, setShowBottomStickyBar] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -238,14 +193,8 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
     if (selectedSize && selectedSize.price) {
       base = selectedSize.price
     }
-    if (selectedGlass && selectedGlass.price) {
-      base += selectedGlass.price
-    }
-    if (selectedProfile && selectedProfile.price) {
-      base += selectedProfile.price
-    }
     return base
-  }, [product, selectedSize, selectedGlass, selectedProfile])
+  }, [product, selectedSize])
 
   // Keyboard Navigation for Gallery (Main View & Lightbox Modal)
   useEffect(() => {
@@ -278,39 +227,16 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
     imgPrev.src = images[prevIdx]
   }, [activeImage, images])
 
-  // Copy Image Link Handler
-  const handleCopyImageLink = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation()
-    const currentImg = images[activeImage] || images[0]
-    navigator.clipboard.writeText(currentImg).then(() => {
-      setToastMessage("Yüksek çözünürlüklü ürün görsel bağlantısı kopyalandı.")
-      setTimeout(() => setToastMessage(null), 3000)
-    }).catch(() => {
-      setToastMessage("Görsel bağlantısı kopyalanamadı.")
-      setTimeout(() => setToastMessage(null), 3000)
-    })
-  }
-
   // WhatsApp Action Handler
   const handleWhatsApp = (e?: React.MouseEvent) => {
     if (e) e.preventDefault()
-    setToastMessage("Sipariş ve keşif detaylarınız WhatsApp'a aktarılıyor...")
+    setToastMessage("Sipariş ve detaylarınız WhatsApp'a aktarılıyor...")
     setTimeout(() => setToastMessage(null), 3500)
 
-    const text = `Merhaba ERAYDUŞ,\n\n*Özel Sipariş & Keşif Talebi:*\nÜrün: ${product.name}\nKoleksiyon: ${category.name}\nÖlçü: ${selectedSize?.label || 'Özel Ölçü'}\nCam: ${selectedGlass?.name || '6mm Temperli Cam'}\nProfil Rengi: ${selectedProfile?.name || 'Mat Siyah'}\nHesaplanan Tutar: ₺${totalPrice.toLocaleString('tr-TR')}\n\nDetayları görüşmek ve Ankara içi keşif randevusu oluşturmak istiyorum.`
+    const text = `Merhaba ERAYDUŞ,\n\n*Banyo Dolabı Sipariş & Keşif Talebi:*\nÜrün: ${product.name}\nKoleksiyon: ${category.name}\nÖlçü/Model: ${selectedSize?.label || 'Standart'}\nHesaplanan Tutar: ₺${totalPrice.toLocaleString('tr-TR')}\n\nÜrün detaylarını görüşmek ve sipariş oluşturmak istiyorum.`
 
     const url = `https://wa.me/905548830071?text=${encodeURIComponent(text)}`
     window.open(url, '_blank', 'noopener,noreferrer')
-  }
-
-  const handleNextModalImage = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setModalImageIndex((prev) => (prev + 1) % images.length)
-  }
-
-  const handlePrevModalImage = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setModalImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }
 
   // Handle Review Submit
@@ -408,8 +334,8 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
             </li>
             <li className="text-neutral-300">/</li>
             <li>
-              <Link href={`/urunler/${category?.slug || 'dusakabin'}`} className="hover:text-[#050505] transition-colors">
-                {category?.name || 'Duşakabin Modelleri'}
+              <Link href={`/urunler/${category?.slug || 'banyo-dolabi'}`} className="hover:text-[#050505] transition-colors">
+                {category?.name || 'Banyo Dolapları'}
               </Link>
             </li>
             <li className="text-neutral-300">/</li>
@@ -450,7 +376,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                   isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 } shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)]`}
               >
-                {/* TIKLANABİLİR BÜYÜTME ALANI (Sadece Görsel Katmanı) */}
+                {/* TIKLANABİLİR BÜYÜTME ALANI */}
                 <div
                   className="w-full h-full cursor-pointer"
                   onClick={() => {
@@ -518,7 +444,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                   </button>
                 </div>
 
-                {/* MASAÜSTÜ BAĞIMSIZ SAĞ VE SOL OK BUTONLARI (z-50) */}
+                {/* MASAÜSTÜ OK BUTONLARI */}
                 {images.length > 1 && (
                   <>
                     <button
@@ -549,20 +475,20 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                   </>
                 )}
 
-              {/* MOBİL NOKTA GÖSTERGELERİ */}
-              <div className="lg:hidden absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full pointer-events-none">
-                {images.map((_, idx) => (
-                  <div
-                    key={idx}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                      activeImage === idx ? 'bg-white w-5' : 'bg-white/50'
-                    }`}
-                  />
-                ))}
+                {/* MOBİL NOKTA GÖSTERGELERİ */}
+                <div className="lg:hidden absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full pointer-events-none">
+                  {images.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                        activeImage === idx ? 'bg-white w-5' : 'bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
           {/* SAĞ: KONFİGÜRATÖR (5 Col) */}
           <div className="lg:col-span-5 pb-12 relative z-20">
@@ -572,13 +498,13 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
               }`}
             >
               <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.3em] text-black/40 uppercase block mb-2">
-                ERAYDUŞ ÖZEL KOLEKSİYON · {category.name}
+                ERAYDUŞ BANYO MOBİLYASI · {category.name}
               </span>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight text-black mb-3">
                 {product.name}
               </h1>
               <p className="text-black/60 text-base font-light leading-relaxed">
-                {product.short_description || 'Görsel engelleri ortadan kaldıran pürüzsüz tasarım. Banyonuzu ferah bir yaşam alanına dönüştürün.'}
+                {product.short_description || 'Modern mimarinin banyonuzdaki yansıması. Suya dayanıklı gövde, frenli raylar ve şık depolama modülleri.'}
               </p>
             </header>
 
@@ -598,14 +524,14 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
               </div>
             </div>
 
-            {/* ADIM 1: KABİN ÖLÇÜSÜ (Yalnızca Admin Varyasyonu Eklenmişse Gösterilir) */}
+            {/* ADIM 1: MODEL & ÖLÇÜ SEÇENEĞİ */}
             {hasSizeVariants && (
               <section className="mb-10 relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-px bg-black" />
                     <h3 className="text-lg md:text-xl font-medium text-black tracking-tight">
-                      1. Kabin Ölçüsü
+                      Model & Ölçü Seçeneği
                     </h3>
                   </div>
                   <span className="text-xs text-black/50 font-light">
@@ -649,190 +575,39 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
               </section>
             )}
 
-            {/* ADIM 2: CAM SEÇENEĞİ - /urunler sayfasıyla birebir aynı stil */}
-            <section className="mb-10">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-px bg-black" />
-                  <h3 className="text-lg md:text-xl font-medium text-black tracking-tight">
-                    {hasSizeVariants ? '2.' : '1.'} Cam Seçeneği
-                  </h3>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                {glassOptions.map((g) => {
-                  const isSelected = selectedGlass?.id === g.id
-                  return (
-                    <button
-                      key={g.id}
-                      type="button"
-                      onClick={() => setSelectedGlass(g)}
-                      className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 active:scale-[0.98] focus:outline-none ${
-                        isSelected
-                          ? 'border-[#050505] ring-2 ring-[#050505] shadow-[0_10px_25px_rgba(0,0,0,0.1)] scale-[1.02]'
-                          : 'border-black/10 bg-neutral-50 shadow-sm hover:shadow-md'
-                      }`}
-                    >
-                      <div className="relative w-full aspect-[4/5] overflow-hidden bg-neutral-200">
-                        <img
-                          src={g.imageUrl}
-                          alt={g.name}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-
-                        {/* Seçili Rozeti (Sağ Üst) */}
-                        {isSelected && (
-                          <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-white text-[#050505] flex items-center justify-center shadow-lg">
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          </div>
-                        )}
-
-                        {/* Başlık (Görselin içinde sol alt) */}
-                        <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
-                          <h4 className="text-white font-semibold text-[11px] leading-tight line-clamp-2">
-                            {g.name}
-                          </h4>
-                        </div>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
-            </section>
-
-            {/* KUMLAMA CAM MODELLERİ (Eğer Kumlama seçildiyse göster) */}
-            <AnimatePresence>
-              {selectedGlass?.id === 'kumlama' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, y: -10 }}
-                  animate={{ opacity: 1, height: 'auto', y: 0 }}
-                  exit={{ opacity: 0, height: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="mb-10 overflow-hidden"
-                >
-                  <div className="p-4 sm:p-5 rounded-[24px] bg-neutral-50 border border-black/5">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Sparkles className="w-4 h-4 text-black" />
-                      <h4 className="text-[14px] font-semibold text-black">
-                        Kumlama (Buzlu) Cam Modeli Seçin
-                      </h4>
-                    </div>
-                    
-                    {/* Yatay Slider */}
-                    <div className="flex gap-3 overflow-x-auto pb-4 snap-x hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                      {KUMLAMA_MODELS.map((model) => {
-                        const isSelectedModel = selectedKumlamaModel?.id === model.id;
-                        return (
-                          <button
-                            key={model.id}
-                            type="button"
-                            onClick={() => setSelectedKumlamaModel(model)}
-                            className={`snap-start shrink-0 group relative flex flex-col w-[110px] rounded-[16px] overflow-hidden border transition-all duration-300 active:scale-95 ${
-                              isSelectedModel
-                                ? 'border-[#050505] ring-2 ring-[#050505] shadow-[0_10px_20px_rgba(0,0,0,0.1)] scale-105 z-10'
-                                : 'border-black/10 bg-white hover:border-black/30 hover:shadow-md'
-                            }`}
-                          >
-                            <div className="relative w-full aspect-[4/5] bg-neutral-200">
-                              <img 
-                                src={`https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/kumlama-models/cam-models/kumlamali.jpeg`}
-                                alt={model.name}
-                                className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
-                              {isSelectedModel && (
-                                <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-white text-[#050505] flex items-center justify-center shadow-md">
-                                  <Check className="w-3 h-3 stroke-[3]" />
-                                </div>
-                              )}
-                            </div>
-                            <div className={`p-2 text-center border-t transition-colors ${isSelectedModel ? 'bg-[#050505] text-white border-transparent' : 'bg-white border-black/5 text-black'}`}>
-                              <span className="text-[11px] font-semibold leading-tight block">{model.name}</span>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* ADIM 3: PROFİL RENKLERİ - BÜYÜK KARE GÖRSELLER */}
-            <section className="mb-10">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-px bg-black" />
-                  <h3 className="text-lg md:text-xl font-medium text-black tracking-tight">
-                    {hasSizeVariants ? '3.' : '2.'} Profil Renkleri
-                  </h3>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
-                {profileOptions.map((p) => {
-                  const isSelected = selectedProfile?.id === p.id
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => setSelectedProfile(p)}
-                      className={`group relative flex flex-col p-1.5 rounded-[20px] border text-center transition-all duration-300 active:scale-[0.98] focus:outline-none ${
-                        isSelected
-                          ? 'border-[#050505] bg-white ring-2 ring-[#050505] shadow-[0_8px_20px_rgba(0,0,0,0.1)] scale-[1.02]'
-                          : 'border-black/10 bg-neutral-50 hover:bg-white shadow-sm hover:shadow-md'
-                      }`}
-                    >
-                      {/* Büyük Net Profil Görseli */}
-                      <div className="relative w-full aspect-square rounded-[14px] overflow-hidden bg-neutral-200 border border-black/10 shadow-inner">
-                        <img
-                          src={p.imageUrl}
-                          alt={p.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          loading="lazy"
-                        />
-                        {isSelected && (
-                          <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#050505] text-white flex items-center justify-center shadow-lg">
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="p-1.5 pt-2">
-                        <h4 className={`text-[11px] sm:text-[12px] font-semibold leading-tight line-clamp-2 ${
-                          isSelected ? 'text-[#050505]' : 'text-neutral-800'
-                        }`}>
-                          {p.name}
-                        </h4>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
-            </section>
-
-            {/* BENTO GRID (Güven Rozetleri) */}
+            {/* BENTO GRID (Banyo Dolabı Güven Rozetleri) */}
             <div className="grid grid-cols-2 gap-3 mb-10">
               <div className="bg-white p-5 rounded-2xl shadow-sm border border-black/5 flex flex-col gap-2">
                 <ShieldCheck className="w-5 h-5 text-[#050505]" strokeWidth={1.5} />
                 <div>
                   <div className="text-[13px] font-semibold text-[#050505]">2 Yıl Tam Garanti</div>
-                  <div className="text-[12px] text-neutral-500">Profillerde renk atmaz</div>
+                  <div className="text-[12px] text-neutral-500">Gövde ve mekanizma garantisi</div>
                 </div>
               </div>
               <div className="bg-white p-5 rounded-2xl shadow-sm border border-black/5 flex flex-col gap-2">
-                <Droplets className="w-5 h-5 text-[#050505]" strokeWidth={1.5} />
+                <Layers className="w-5 h-5 text-[#050505]" strokeWidth={1.5} />
                 <div>
-                  <div className="text-[13px] font-semibold text-[#050505]">6mm Şişecam Temperli</div>
-                  <div className="text-[12px] text-neutral-500">5 kat darbe direnci</div>
+                  <div className="text-[13px] font-semibold text-[#050505]">Neme Dayanıklı Gövde</div>
+                  <div className="text-[12px] text-neutral-500">Şişme ve kabarma yapmaz</div>
+                </div>
+              </div>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-black/5 flex flex-col gap-2">
+                <Box className="w-5 h-5 text-[#050505]" strokeWidth={1.5} />
+                <div>
+                  <div className="text-[13px] font-semibold text-[#050505]">Frenli Mekanizma</div>
+                  <div className="text-[12px] text-neutral-500">Sessiz yavaş kapanma</div>
+                </div>
+              </div>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-black/5 flex flex-col gap-2">
+                <Sparkles className="w-5 h-5 text-[#050505]" strokeWidth={1.5} />
+                <div>
+                  <div className="text-[13px] font-semibold text-[#050505]">Flotal Ayna Modülü</div>
+                  <div className="text-[12px] text-neutral-500">Buharda kararma yapmaz</div>
                 </div>
               </div>
             </div>
 
-            {/* WHATSAPP SİPARİŞ & GÖRÜŞME BUTONU (SABİT / NON-STICKY) */}
+            {/* WHATSAPP SİPARİŞ & GÖRÜŞME BUTONU */}
             <div className="flex flex-col sm:flex-row gap-3 pt-6 pb-2 border-t border-black/5">
               <button
                 type="button"
@@ -840,7 +615,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                 className={`flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 px-6 rounded-2xl text-[16px] font-semibold flex items-center justify-center gap-3 ${SPRING_FAST} shadow-[0_10px_25px_rgba(37,211,102,0.25)] ${ACTIVE_PRESS}`}
               >
                 <MessageCircle className="w-5 h-5 fill-current text-white" />
-                <span>WhatsApp ile Proje Görüş & Sipariş Ver</span>
+                <span>WhatsApp ile Sipariş & Keşif</span>
               </button>
               <a
                 href="tel:+905548830071"
@@ -854,7 +629,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
         </div>
       </div>
 
-      {/* TEKNİK DETAYLAR & FABRİKA ÖZELLİKLERİ (Admin & DB Verileriyle Dinamik) */}
+      {/* TEKNİK DETAYLAR & MOBİLYA STANDARTLARI */}
       <section className="py-20 lg:py-28 bg-[#F5F5F3] border-t border-black/5 relative z-10">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
@@ -862,55 +637,57 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
             <div className="lg:w-1/3">
               <div className="inline-flex items-center gap-2 mb-4 px-3.5 py-1.5 bg-white rounded-full text-[11px] font-bold uppercase tracking-wider text-neutral-600 border border-black/5 shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-                Ürün Özellikleri & Standartlar
+                Banyo Mobilyası Standartları
               </div>
               <h2 className="text-[32px] lg:text-[48px] font-light tracking-tight text-[#050505] leading-tight mb-4">
-                Teknik Detaylar & Özellikler
+                Teknik Detaylar & Malzeme Kalitesi
               </h2>
               <p className="text-[16px] lg:text-[18px] text-neutral-500 font-light leading-relaxed">
-                {product.name} modelimize ait fabrika üretim standartları, malzeme kalitesi ve teknik özellikler.
+                {product.name} modelimize ait gövde yapısı, frenli ray mekanizmaları, ayna standartları ve fabrika üretim kalitesi.
               </p>
             </div>
 
             {/* Sağ Izgara & Detay Kartları */}
             <div className="lg:w-2/3 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white p-6 rounded-[24px] border border-black/5 shadow-sm">
-                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Cam Standardı</div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Gövde & Kapak Malzemesi</div>
                 <div className="text-[17px] font-semibold text-[#050505]">
-                  {Array.isArray(product.technical_specs?.glass_thickness)
-                    ? product.technical_specs.glass_thickness.join(', ')
-                    : (product.technical_specs?.glass_thickness || '6mm Temperli Şişecam Güvenlik Camı')}
+                  1. Sınıf Suya ve Neme Dayanıklı Banyo Gövdesi
                 </div>
               </div>
 
               <div className="bg-white p-6 rounded-[24px] border border-black/5 shadow-sm">
-                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Profil & Kaplama</div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Mekanizma & Ray Sistemi</div>
                 <div className="text-[17px] font-semibold text-[#050505]">
-                  Paslanmaz & Solmaz Alüminyum Gövde
+                  Frenli Teleskopik / Yavaş Kapanan Ray
                 </div>
               </div>
 
               <div className="bg-white p-6 rounded-[24px] border border-black/5 shadow-sm">
-                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Yükseklik Seçeneği</div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Ayna & Üst Modül</div>
                 <div className="text-[17px] font-semibold text-[#050505]">
-                  {product.technical_specs?.height || 'Standart (190cm) veya Özel Tavana Kadar'}
+                  Kararmaya Dirençli Flotal Ayna Modülü
                 </div>
               </div>
 
               <div className="bg-white p-6 rounded-[24px] border border-black/5 shadow-sm">
-                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Montaj / Ölçü Tipi</div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Montaj / Kurulum Tipi</div>
                 <div className="text-[17px] font-semibold text-[#050505]">
-                  {product.technical_specs?.installation || 'Milimetrik Özel İmalat / Keşifli'}
+                  {product.technical_specs?.installation || 'Duvara Asma (Asılı) veya Ayaklı Montaj'}
                 </div>
               </div>
 
               <div className="bg-white p-6 rounded-[24px] border border-black/5 shadow-sm sm:col-span-2">
                 <div className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-3">Öne Çıkan Standartlar</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {(product.features && product.features.length > 0
-                    ? product.features
-                    : ['2 Yıl Üretici Garantisi', 'Profesyonel Kurulum & Montaj Desteği', '%100 Su Sızdırmaz Mıknatıslı Fitil', 'Sessiz ve Yağ Gibi Kayan Kapılar']
-                  ).map((feat, i) => (
+                  {[
+                    'Banyo Nemine Karşı PUR Kenar Bantlama',
+                    'Frenli Menteşe ve Sessiz Ray Mekanizması',
+                    'Leke Tutmayan Kolay Temizlenen Gövde',
+                    'Geniş Hacimli ve Ergonomik İç Çekmeceler',
+                    '2 Yıl Üretici Garantisi & Servis Desteği',
+                    'Ankara İçi Profesyonel Kurulum Desteği'
+                  ].map((feat, i) => (
                     <div key={i} className="flex items-center gap-2.5 text-[14px] font-medium text-neutral-800">
                       <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0">
                         <Check className="w-3 h-3" />
@@ -1054,38 +831,38 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
         </div>
       </section>
 
-      {/* MÜHENDİSLİK DETAYLARI (Sitedeki Gerçek Standartlar) */}
+      {/* MÜHENDİSLİK DETAYLARI (Banyo Mobilyası Özel Kartları) */}
       <section className="py-24 lg:py-32 max-w-[1600px] mx-auto px-4 md:px-8">
         <div className="text-center mb-16 lg:mb-24">
           <h2 className="text-[32px] lg:text-[48px] font-light tracking-tight text-[#050505] mb-6">
-            Görünmeyen Mühendislik
+            Görünmeyen Mobilya Mühendisliği
           </h2>
           <p className="text-[18px] lg:text-[22px] text-neutral-500 font-light max-w-2xl mx-auto">
-            Her bir detay, banyonuzda kusursuz bir sessizlik ve pürüzsüz bir deneyim yaratmak için tasarlandı.
+            Banyonuzun nemli koşullarına meydan okuyan, sessiz ve ergonomik detaylarla geliştirilmiş üretim standartları.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {[
             {
-              icon: <Wind />,
-              title: "Sessiz ve Yağ Gibi Kayan Kapılar",
-              desc: "Zamanla takılma ve ses yapmayan özel kapı tekerlekleri sayesinde her gün sessiz ve pürüzsüz kullanım."
+              icon: <Box />,
+              title: "Frenli Teleskopik Ray",
+              desc: "Hızlı kapatsanız dahi çarpmayan, yavaşlayarak sessizce kapanan yüksek taşıma kapasiteli ray mekanizması."
             },
             {
               icon: <ShieldCheck />,
-              title: "Paslanmaz ve Solmaz Metal Çerçeve",
-              desc: "Banyonun neminden, suyundan ve buharından etkilenmeyen, rengi atmayan sağlam profil gövdesi."
+              title: "PUR Kenar Bantlama",
+              desc: "Sıcak su buharı ve neme karşı kenarlardan su almasını engelleyen ileri teknoloji neme dayanıklı PUR yapıştırma."
             },
             {
-              icon: <Zap />,
-              title: "Darbeye Dayanıklı Güvenli Cam",
-              desc: "Normal camlara göre 5 kat daha sağlam Şişecam temperli camlar. Olası darbelere karşı ekstra emniyetli."
+              icon: <Ruler />,
+              title: "Akıllı İç Hacim & Düzen",
+              desc: "Sifon boşluğuna özel tasarlanmış ergonomik çekmeceler ve geniş kullanım alanı sunan iç bölmeler."
             },
             {
               icon: <Droplets />,
-              title: "Dışarıya Su Kaçırmayan Tam Yalıtım",
-              desc: "Kapılar kapandığında birbirine kenetlenen mıknatıslar ve su bariyeri ile banyonuzun zemini daima kuru kalır."
+              title: "Anti-Bakteriyel Yüzey",
+              desc: "Su tutmayan, leke ve parmak izi bırakmayan, kolay silinebilir pürüzsüz lake ve laminat kaplama."
             }
           ].map((feature, idx) => (
             <div
@@ -1102,7 +879,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
         </div>
       </section>
 
-      {/* SIKÇA SORULAN SORULAR (Sitedeki Gerçek SSS Verileri) */}
+      {/* SIKÇA SORULAN SORULAR (Banyo Dolabı SSS Verileri) */}
       <section className="py-24 lg:py-32 max-w-[1000px] mx-auto px-4 md:px-8 border-t border-black/5">
         <div className="text-center mb-12 lg:mb-16">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 bg-neutral-100 rounded-full text-[12px] font-semibold tracking-wide text-neutral-600">
@@ -1113,35 +890,35 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
             Sıkça Sorulan Sorular
           </h2>
           <p className="text-[16px] lg:text-[18px] text-neutral-500 font-light mt-3">
-            Erayduş duşakabin ürünleri, sipariş, teslimat, montaj ve garanti süreçleri hakkında merak edilenler.
+            Erayduş banyo dolabı modelleri, malzeme kalitesi, teslimat, montaj ve garanti süreçleri hakkında merak edilenler.
           </p>
         </div>
 
         <div className="flex flex-col divide-y divide-black/5 bg-white p-6 sm:p-10 rounded-[32px] border border-black/5 shadow-sm">
           {[
             {
-              question: "Duşakabinleriniz özel ölçüye göre üretiliyor mu?",
-              answer: "Evet. Tüm duşakabin sistemlerimiz banyonuzun ölçülerine göre özel olarak üretilir. Standart ölçülerin dışında, milimetrik hassasiyetle projenize uygun çözümler sunuyoruz."
+              question: "Banyo dolaplarınız özel ölçüye göre üretiliyor mu?",
+              answer: "Evet. Banyonuzun mimari planına ve tesisat çıkışlarına uygun özel ölçü ve model seçenekleriyle üretim yapıyoruz. Standart ebatların (65, 80, 100, 120 cm) yanı sıra banyonuza özel milimetrik çözümler sunmaktayız."
             },
             {
-              question: "Hangi cam türlerini kullanıyorsunuz?",
-              answer: "Şeffaf, füme (siyah), bronz ve buzlu (kumlama) cam seçeneklerimiz mevcuttur. Tüm camlarımız temperli güvenlik camıdır ve nano yüzey kaplama ile su lekesine karşı korunur."
+              question: "Dolap gövdesinde ve kapaklarında hangi malzemeler kullanılıyor?",
+              answer: "Tüm modellerimizde neme, sıcaklığa ve banyo buharına karşı maksimum dayanıklılık sağlayan 1. sınıf suya dayanıklı banyo mobilyası gövdesi ve özel kapaklar kullanılmaktadır. Kenar kısımlarında ise su sızdırmaz PUR kenar yapıştırma uygulanır."
             },
             {
-              question: "Üretim ve teslimat süresi ne kadar?",
-              answer: "Özel üretim duşakabinlerimizin imalatı 3-5 iş günü içerisindedir (özel tasarım ve istisnai kabin modellerinde bu süre değişiklik gösterebilir). Ürün imalatı tamamlandığında montaj randevusu için sizinle iletişime geçilir."
+              question: "Lavabo ve ayna modülü fiyata dahil mi?",
+              answer: "Ürünlerimiz genel olarak alt modül, uyumlu seramik/monoblok lavabo ve aynalı üst modül olarak takım halinde veya isteğinize göre tekil modül olarak konfigüre edilebilir."
             },
             {
-              question: "Montaj hizmeti veriyor musunuz?",
-              answer: "Evet, uzman teknik ekibimiz profesyonel kurulum ve montaj desteği sunmaktadır. Randevul teslimat ile ürününüz adresinizde titizlikle monte edilir."
+              question: "Üretim ve montaj süreci nasıl işliyor?",
+              answer: "Siparişiniz onaylandıktan sonra imalat 3-7 iş günü içerisinde tamamlanır. Ankara içi uzman montaj ekibimiz adresinize randevulu gelerek profesyonel kurulumu gerçekleştirir."
+            },
+            {
+              question: "Banyo dolabı neme ve suya karşı nasıl korunmalı?",
+              answer: "Dolaplarımız suya ve buhara ekstra dayanıklı PUR kenar bantlama ve lake boya ile üretilmektedir. Uzun ömürlü kullanım için doğrudan su birikintisi bırakılmaması ve yumuşak mikrofiber bezle kurulanması tavsiye edilir."
             },
             {
               question: "Ürünleriniz garantili mi ve garanti kapsamı neleri içerir?",
-              answer: "Tüm ürünlerimiz 2 Yıl Üretici Garantisi altındadır. İmalat ve malzeme kaynaklı (bizden kaynaklı) tüm arızalar garanti kapsamında ücretsiz giderilir. Sert çarpma veya hatalı kullanım sonucu oluşan (kullanıcı kaynaklı) kırılma ve yıpranmalarda ise makul ücret karşılığı parça değişimi yapılır. Ağır kimyasal temizliği ve yetkisiz müdahaleler garanti kapsamı dışındadır."
-            },
-            {
-              question: "Yedek parça temin ediyor musunuz?",
-              answer: "Evet. Üretim ve imalat kaynaklı sorunlarda garanti kapsamında ücretsiz parça değişimi yapıyoruz. Kullanıcı hatası veya kaza sonucu oluşan durumlarda ise makul bir ücret karşılığında orijinal yedek parça temini ve servis desteği sağlıyoruz."
+              answer: "Tüm banyo dolaplarımız 2 Yıl Üretici Garantisi altındadır. Ray, menteşe, kapak ve gövde gibi tüm bileşenler için imalat ve malzeme kaynaklı arızalara karşı tam destek verilmektedir."
             }
           ].map((item, idx) => (
             <AccordionItem
@@ -1174,7 +951,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                 Mükemmelliğe <br />Dokunun
               </h2>
               <p className="text-[18px] text-neutral-500 font-light mb-10 max-w-md leading-relaxed">
-                {product.name} ve tüm Erayduş koleksiyonlarını yakından incelemek için Ankara Showroomumuzu ziyaret edin.
+                {product.name} ve tüm Erayduş banyo mobilyası koleksiyonlarını yakından incelemek için Ankara Showroomumuzu ziyaret edin.
               </p>
 
               <div className="space-y-6 mb-10">
@@ -1232,7 +1009,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
         </div>
       </section>
 
-      {/* FLOATING BOTTOM STICKY BAR (HERO BİTİNCE ÇIKAN VE FOOTER ÖNCESİ BİTEN BAR) */}
+      {/* FLOATING BOTTOM STICKY BAR */}
       <div
         className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[94%] max-w-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           showBottomStickyBar
@@ -1259,7 +1036,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse hidden sm:inline-block" />
               </div>
               <div className="text-[11px] sm:text-[12px] text-neutral-500 truncate">
-                {selectedSize?.label ? `${selectedSize.label} · ` : ''}{selectedGlass?.name} · {selectedProfile?.name}
+                {selectedSize?.label || "Standart Model"}
               </div>
             </div>
           </div>
@@ -1286,11 +1063,10 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
         </div>
       </div>
 
-      {/* YORUM YAZMA ALANI (Masaüstü Lüks Modal + Mobilde Sürüklenebilir Bottom Sheet) */}
+      {/* YORUM YAZMA ALANI */}
       <AnimatePresence>
         {isReviewModalOpen && (
           <div className="fixed inset-0 z-[200] flex flex-col justify-end md:justify-center md:items-center bg-black/80 backdrop-blur-md p-0 md:p-4">
-            {/* Arka Plan Tıklama / Kapatma */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -1299,7 +1075,6 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
               onClick={() => setIsReviewModalOpen(false)}
             />
 
-            {/* MASAÜSTÜ & MOBİL KAPSAYICI */}
             <motion.div
               initial={{ opacity: 0, y: 60, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -1309,10 +1084,8 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
               onClick={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
             >
-              {/* Mobilde Sürükleme Çubuğu (Drag Handle) */}
               <div className="md:hidden w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6" />
 
-              {/* Kapat Butonu (Min 48x48px Touch Target) */}
               <button
                 type="button"
                 onClick={() => setIsReviewModalOpen(false)}
@@ -1330,7 +1103,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                   {product.name}
                 </h3>
                 <p className="text-[13px] text-white/50 font-light mt-1">
-                  Deneyiminizi ve ürün kalitesine dair düşüncelerinizi paylaşın.
+                  Deneyiminizi ve mobilya kalitesine dair düşüncelerinizi paylaşın.
                 </p>
               </div>
 
@@ -1402,7 +1175,7 @@ export function ProductLuxuryDetailView({ product, category, initialReviews }: P
                     required
                     rows={4}
                     className="relative z-50 w-full rounded-2xl bg-white/5 border border-white/10 p-4 text-[16px] text-white focus:outline-none focus:border-[#D4AF37] transition-colors resize-none leading-relaxed pointer-events-auto"
-                    placeholder="Tasarım, montaj, cam kalitesi ve rulman sessizliği hakkındaki izlenimleriniz..."
+                    placeholder="Tasarım, malzeme kalitesi, çekmece ve kapak frenleme performansı hakkındaki izlenimleriniz..."
                   />
                 </div>
 

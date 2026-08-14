@@ -1,6 +1,21 @@
 'use server'
 
-import { createClient } from '@/services/supabase/server'
+import { createClient as createLocalClient } from '@/services/supabase/server'
+import { createAdminClient } from '@/services/supabase/server'
+
+async function getAdminSupabase() {
+  let supabase: any
+  try {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      supabase = createAdminClient()
+    } else {
+      supabase = await createLocalClient()
+    }
+  } catch {
+    supabase = await createLocalClient()
+  }
+  return supabase
+}
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 
@@ -16,7 +31,7 @@ const testimonialSchema = z.object({
 export type TestimonialInput = z.infer<typeof testimonialSchema>
 
 export async function getTestimonialsList() {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   
   const { data, error } = await supabase
     .from('testimonials')
@@ -32,7 +47,7 @@ export async function getTestimonialsList() {
 }
 
 export async function createTestimonial(input: TestimonialInput) {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   
   const parsed = testimonialSchema.safeParse(input)
   if (!parsed.success) {
@@ -58,14 +73,14 @@ export async function createTestimonial(input: TestimonialInput) {
 }
 
 export async function updateTestimonial(id: string, input: Partial<TestimonialInput>) {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   
   const { data, error } = await supabase
     .from('testimonials')
     .update(input)
     .eq('id', id)
     .select()
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error('Error updating testimonial:', error)
@@ -80,7 +95,7 @@ export async function updateTestimonial(id: string, input: Partial<TestimonialIn
 }
 
 export async function deleteTestimonial(id: string) {
-  const supabase = await createClient()
+  const supabase = await getAdminSupabase()
   
   const { error } = await supabase
     .from('testimonials')

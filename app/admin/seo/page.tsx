@@ -6,7 +6,17 @@ export const metadata = {
 }
 
 export default async function SeoAdminPage() {
-  const supabase = await createClient()
+  let supabase: any
+  try {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const { createAdminClient } = await import('@/services/supabase/server')
+      supabase = createAdminClient()
+    } else {
+      supabase = await createClient()
+    }
+  } catch {
+    supabase = await createClient()
+  }
 
   // Fetch all SEO pages
   const { data: pages, error: pagesError } = await supabase

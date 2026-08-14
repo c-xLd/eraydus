@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
       'es-toolkit',
       'sonner',
     ],
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
   },
   // @ts-ignore - To silence the workspace root warning in Turbopack
   turbopack: {

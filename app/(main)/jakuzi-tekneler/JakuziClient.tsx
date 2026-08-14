@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -9,6 +9,7 @@ import {
   Waves, Ruler, ThermometerSun, Layers,
   Phone, ArrowDown, CheckCircle2, MessageCircle
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface JakuziClientProps {
   content?: any
@@ -104,47 +105,73 @@ const REAL_KUVET_MODELS = [
   {
     name: 'Oval Küvet',
     dims: '140×140 / 150×150 cm',
-    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597482452-oval-oturmali-dus-teknesi.webp',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718440153-oval-kuvet.webp',
     specs: ['Ergonomik Oval Form', '1. Sınıf Dökme Akrilik', 'Isı Muhafazalı Gövde', 'Taşmalı Sifon Sistemi']
   },
   {
     name: 'Dikdörtgen Küvet',
     dims: '150×70 / 160×70 / 170×70 / 180×80 cm',
-    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597481667-dikdortgen-dus-teknesi.webp',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718437681-dikd-rtgen-kuvet.webp',
     specs: ['Klasik Dikdörtgen Tasarım', 'Ekstra Derinlik', 'Fiberglas Takviyeli', 'Kolay Temizlik']
   },
   {
     name: 'Asimetrik Oval Küvet',
     dims: '150×100 / 160×105 cm',
-    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597480708-asimetrik-oval-dus-teknesi.webp',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718439933-oval-asimetrik-kuvet.webp',
     specs: ['Asimetrik Köşe Yerleşimi', 'Geniş İç Hacim', 'Antibakteriyel Akrilik', 'Sağ / Sol Açılı']
   },
   {
     name: 'Dikdörtgen Oturmalı Küvet',
     dims: '120×70 / 130×70 / 140×70 cm',
-    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597481092-asimetrik-oval-oturmali-dus-teknesi.webp',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718437923-dikd-rtgen-oturmali-kuvet.webp',
     specs: ['Entegre Oturma Basamağı', 'Kompakt Banyo Çözümü', 'Esnemez Gövde', '1. Sınıf Akrilik']
   }
 ]
 
 const REAL_JAKUZI_MODELS = [
   {
-    name: 'Sistem 1 Jakuzi',
-    dims: 'Her Ölçüye Uygulanabilir',
-    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/projects/projects/karma-galeri-rezidans-projesi-10-1785169082032.jpg',
-    specs: ['Akrilik Malzeme', 'Yanlardan 6 Adet Jakuzi Jeti', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider & Su Basınç Ayarı', 'Paslanmaz Metal Destekli Gövde']
+    name: 'Lumina',
+    dims: 'Sistem 1',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717846272-jakuzi-1.webp',
+    specs: ['Akrilik Malzeme', 'Yanlardan 6 Adet Jakuzi Jeti', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider Bağlantısı', 'Su Basınç Ayarlama Düğmesi', '2,5 x 2,5 Paslanmaz Metal Gövde', 'Yükseklik Ayarlı Vidalı Ayaklar']
   },
   {
-    name: 'Sistem 2 Jakuzi',
-    dims: 'Her Ölçüye Uygulanabilir',
-    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/projects/projects/karma-galeri-otel-projesi-1-1785169039271.jpg',
-    specs: ['Akrilik Malzeme', 'Yanlardan 6, Tabandan 10 Adet Jet', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider & Su Basınç Ayarı', 'Paslanmaz Metal Destekli Gövde']
+    name: 'Aero',
+    dims: 'Sistem 2',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717846546-jakuzi-2.webp',
+    specs: ['Akrilik Malzeme', 'Yanlardan 6, Tabandan 10 Jet', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider Bağlantısı', 'Su Basınç Ayarlama Düğmesi', '2,5 x 2,5 Paslanmaz Metal Gövde', 'Yükseklik Ayarlı Vidalı Ayaklar']
+  },
+  {
+    name: 'Oasis',
+    dims: 'Sistem 1',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717846972-jakuzi-3.webp',
+    specs: ['Akrilik Malzeme', 'Yanlardan 6 Adet Jakuzi Jeti', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider Bağlantısı', 'Su Basınç Ayarlama Düğmesi', '2,5 x 2,5 Paslanmaz Metal Gövde', 'Yükseklik Ayarlı Vidalı Ayaklar']
+  },
+  {
+    name: 'Prestige',
+    dims: 'Sistem 2',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717847272-jakuzi-4.webp',
+    specs: ['Akrilik Malzeme', 'Yanlardan 6, Tabandan 10 Jet', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider Bağlantısı', 'Su Basınç Ayarlama Düğmesi', '2,5 x 2,5 Paslanmaz Metal Gövde', 'Yükseklik Ayarlı Vidalı Ayaklar']
+  },
+  {
+    name: 'Zen',
+    dims: 'Sistem 1',
+    image: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717847509-jakuzi-5.webp',
+    specs: ['Akrilik Malzeme', 'Yanlardan 6 Adet Jakuzi Jeti', '0,90 hp Jakuzi Motoru', 'Kumandalı Gider Bağlantısı', 'Su Basınç Ayarlama Düğmesi', '2,5 x 2,5 Paslanmaz Metal Gövde', 'Yükseklik Ayarlı Vidalı Ayaklar']
   }
 ]
 
 export function JakuziClient({ content = {}, products = [] }: JakuziClientProps) {
   const [activeTab, setActiveTab] = useState<'tekne' | 'kuvet' | 'jakuzi'>('tekne')
   const contentRef = useRef<HTMLDivElement>(null)
+  
+  const { scrollY } = useScroll()
+  const [showBottomNav, setShowBottomNav] = useState(false)
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    // 350px is approximately when the user starts scrolling past the Hero text
+    setShowBottomNav(latest > 350)
+  })
 
   const scrollToContent = () => {
     contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -210,45 +237,45 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
   ]
 
   const infoTitles = {
-    tekne: { normal: '1. Sınıf Kalite', bold: 'Akrilik Duş Tekneleri' },
-    kuvet: { normal: 'Klasik & Estetik', bold: 'Banyo Küvetleri' },
-    jakuzi: { normal: 'Lüks & Rahatlık', bold: 'Hidromasajlı Jakuziler' }
+    tekne: { normal: 'Zemin Eğimine Göre', bold: 'Ayarlanabilir Tekneler' },
+    kuvet: { normal: 'Dar Alanlara Çözüm', bold: 'Asimetrik Küvetler' },
+    jakuzi: { normal: 'Güçlü & Sessiz', bold: '0.90 hp Masaj Motoru' }
   }
 
   const infoParagraphs = {
     tekne: [
-      '1. sınıf kalite akrilik malzemeden üretilen, ayarlanabilir ayak sistemli, yerli üretim, banyo alanlarında kullanışlı ve sade bir çözüm sunar.',
-      'Zemine göre ayarlanabilen pratik ayak sistemi ve destekleyici metal ayak karkası sayesinde esneme yapmaz, sağlam kullanım sunar.',
-      'Pürüzsüz akrilik yüzeyi sayesinde günlük temizlikte pratik kullanım sağlar. Tüm duş teknelerimizde sızdırmaz tahliye sifonu ürünle birlikte hediyedir.'
+      'Duş teknesi montajında en çok karşılaşılan sorun, zemin eğiminden kaynaklı dengesizlik ve esnemelerdir. Akrilik teknelerimiz, altındaki paslanmaz ayak sistemi sayesinde eğimli banyolarda bile teraziye tam oturur.',
+      'Seramik üstü uygulamalara kıyasla duş tekneleri su kaçağı riskini sıfıra indirir. Alt kısımdaki fiberglas karkas desteği, tekneye bastığınızda oluşan esnemeyi ve buna bağlı silikon çatlamalarını tamamen önler.',
+      'Zamanla sararan ABS plastik yerine, %100 dökme akrilik kullanıyoruz. Bu sayede yüzey her zaman pürüzsüz kalır ve leke tutmaz. Sızdırmaz tahliye sifonu ise montaj setiyle birlikte ücretsiz teslim edilir.'
     ],
     kuvet: [
-      '1. sınıf dökme akrilikten üretilen banyo küvetleri, ısıyı uzun süre muhafaza eder, leke tutmaz ve estetik görünümüyle dinlendirici banyo keyfi sunar.',
-      'Vücut anatomisine uygun ergonomik yatış yüzeyi ve ekstra güçlendirilmiş fiberglas karkası ile güvenli kullanım sağlar.',
-      'Özel antibakteriyel yapısı sayesinde banyo sonrası temizliği pratikleştirir, sızdırmaz taşma ve tahliye sifonu sistemlerine sahiptir.'
+      'Bir küvetin kalitesi dış görünüşüyle değil, suyu ne kadar sıcak tutabildiğiyle ölçülür. 1. sınıf dökme akrilik küvetlerimiz, sac veya emaye küvetlere göre ısıyı çok daha uzun süre hapseder.',
+      'Özellikle asimetrik ve dar banyolarda uygun ölçü bulmak zordur. Sağ veya sol yönlü asimetrik modellerimiz, banyonuzu daraltmadan maksimum iç hacim sunacak şekilde tasarlanmıştır.',
+      'Küvet kurulumunda yapılan en ufak bir hata suyun tahliye olmamasına yol açar. Beraberinde gelen taşmalı ve kokusuz tahliye sifonu sayesinde su birikmesi veya kötü koku problemleri yaşamazsınız.'
     ],
     jakuzi: [
-      'Günün yorgunluğunu banyonuzda spa konforuyla atın. Özel tasarlanmış hidromasaj jetleri ve sessiz motor teknolojimiz ile bedeninizi tazeleyin.',
-      '1. sınıf dökme antibakteriyel akrilikten üretilen jakuzilerimiz, ısıyı uzun süre muhafaza eder ve sararma yapmaz.',
-      'Kromoterapi LED aydınlatma, dokunmatik dijital kontrol paneli ve ozon dezenfeksiyon sistemleri ile kişiselleştirilebilir.'
+      'Jakuzi alırken genellikle sadece jet sayısına bakılır, ancak asıl önemli olan motor gücü ve borulama sistemidir. 0.90 hp gücündeki sessiz motorumuz, suyu tam basınçla ulaştırırken banyoda rahatsız edici bir gürültü yaratmaz.',
+      'İçerisinde su kalan jakuzi boruları zamanla bakteri üretir. Erayduş sistemlerinde, kullanım sonrası suyun tamamen tahliye edileceği eğimli bir altyapı kullanılır. Bu sayede tesisatta kötü koku oluşumu engellenir.',
+      'Kurulumu sadece geniş banyolara özel sanılsa da, standart bir küvetin (150x70) sığdığı her alana masaj sistemi entegre edebiliyoruz. Paslanmaz metal karkas gövdesi, nemli ortamda korozyonu önleyerek uzun yıllar güvenli kullanım sunar.'
     ]
   }
 
   const heroTitles = {
-    tekne: { normal: 'Banyonuz İçin Kullanışlı &', bold: 'Akrilik Duş Tekneleri', desc: '1. sınıf kalite akrilik malzemeden üretilen, ayarlanabilir ayak sistemli, yerli üretim, banyo alanlarında kullanışlı ve sade bir çözüm sunar.' },
-    kuvet: { normal: 'Banyonuzda Dinlendirici &', bold: 'Banyo Küvetleri', desc: '1. sınıf dökme akrilikten üretilen, ısı muhafazalı, ergonomik ve şık tasarımlı banyo küvetleri.' },
-    jakuzi: { normal: 'Banyonuzda Lüks &', bold: 'Hidromasajlı Jakuziler', desc: 'Günlük stresi unutturan hidromasaj teknolojisi, 1. sınıf antibakteriyel akrilik gövde ve şık tasarımlar.' }
+    tekne: { normal: 'Esnemeyen, Sararmayan &', bold: 'Akrilik Duş Tekneleri', desc: 'Altındaki ayarlanabilir paslanmaz karkas ile eğimli zeminlere tam oturan, silikon çatlamalarını bitiren %100 dökme akrilik duş tekneleri.' },
+    kuvet: { normal: 'Suyu Sıcak Tutan &', bold: 'Dökme Akrilik Küvetler', desc: 'Dar alanlar için asimetrik, geniş banyolar için oval tasarımlar. Emaye küvetlere göre ısıyı hapseden ve sararma yapmayan ergonomik yapı.' },
+    jakuzi: { normal: 'Sessiz Motorlu &', bold: 'Güçlü Hidromasaj Sistemleri', desc: 'Su biriktirmeyen hijyenik borulama sistemi, 0.90 hp sessiz masaj motoru ve paslanmaz karkas gövde ile banyonuzda gerçek SPA deneyimi.' }
   }
 
   const heroBackgrounds = {
     tekne: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785599951282-dus-teknesi-hero.webp',
-    kuvet: content?.hero?.kuvet_bg || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80',
-    jakuzi: content?.hero?.jakuzi_bg || 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80'
+    kuvet: content?.hero?.kuvet_bg || 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718438852-kuvet-walpaper.webp',
+    jakuzi: content?.hero?.jakuzi_bg || 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717847750-jakuzi-walpaper.webp'
   }
 
   const infoImages: Record<string, string | null> = {
     tekne: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785601700432-shower-tray-in-luxury-bathroom-202608011927.webp',
-    kuvet: activeData?.info_image || null,
-    jakuzi: activeData?.info_image || null
+    kuvet: activeData?.info_image || 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718438157-kuvet.webp',
+    jakuzi: activeData?.info_image || 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717845904-jakuzi.webp'
   }
 
   const currentHero = content?.hero?.[activeTab] || heroTitles[activeTab]
@@ -546,6 +573,47 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
           </div>
         </div>
       </section>
+
+      {/* FLOATING BOTTOM NAV */}
+      <AnimatePresence>
+        {showBottomNav && (
+          <motion.div
+            initial={{ y: 120, opacity: 0, scale: 0.95 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 120, opacity: 0, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30, mass: 0.8 }}
+            className="fixed bottom-6 z-[100] flex justify-center pointer-events-none px-4 inset-x-0"
+            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+          >
+            <div className="pointer-events-auto inline-flex items-center gap-1 bg-[#111111]/80 backdrop-blur-2xl p-1.5 rounded-full border border-white/10 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.8)] supports-[backdrop-filter]:bg-[#111111]/60">
+              {(['tekne', 'kuvet', 'jakuzi'] as const).map(tab => {
+                const labelMap = { tekne: 'Duş Tekneleri', kuvet: 'Küvetler', jakuzi: 'Jakuziler' }
+                const isActive = activeTab === tab
+                return (
+                  <button
+                    key={`bottom-${tab}`}
+                    type="button"
+                    onClick={() => setActiveTab(tab)}
+                    className={cn(
+                      "relative min-h-[48px] px-5 md:px-7 flex items-center justify-center text-[13px] md:text-sm font-medium tracking-wide transition-colors duration-300 rounded-full z-10 select-none outline-none [-webkit-tap-highlight-color:transparent]",
+                      isActive ? "text-black" : "text-white/65 hover:text-white"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="bottom-tab-pill"
+                        className="absolute inset-0 bg-white rounded-full shadow-sm"
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{labelMap[tab]}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

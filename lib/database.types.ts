@@ -532,46 +532,31 @@ export interface Database {
       projects: {
         Row: {
           id: string
-          slug: string
-          title: string
+          name: string
           location: string | null
           category: string | null
           description: string | null
-          main_image_url: string | null
-          gallery: Json | null
-          features: Json | null
-          status: string | null
-          sort_order: number | null
+          image_url: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
-          slug: string
-          title: string
+          name: string
           location?: string | null
           category?: string | null
           description?: string | null
-          main_image_url?: string | null
-          gallery?: Json | null
-          features?: Json | null
-          status?: string | null
-          sort_order?: number | null
+          image_url?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
-          slug?: string
-          title?: string
+          name?: string
           location?: string | null
           category?: string | null
           description?: string | null
-          main_image_url?: string | null
-          gallery?: Json | null
-          features?: Json | null
-          status?: string | null
-          sort_order?: number | null
+          image_url?: string | null
           created_at?: string
           updated_at?: string
         }

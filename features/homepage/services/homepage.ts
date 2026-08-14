@@ -1,4 +1,18 @@
-import { createPublicClient } from '@/services/supabase/server'
+import { createPublicClient, createAdminClient } from '@/services/supabase/server'
+
+async function getSupabase() {
+  let supabase: any
+  try {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      supabase = createAdminClient()
+    } else {
+      supabase = createPublicClient()
+    }
+  } catch {
+    supabase = createPublicClient()
+  }
+  return supabase
+}
 
 export interface FAQ {
   id: string
@@ -18,7 +32,7 @@ export interface Testimonial {
 
 export async function getHomepageFaqs(): Promise<FAQ[]> {
   try {
-    const supabase = createPublicClient()
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('homepage_faqs')
       .select('*')
@@ -38,7 +52,7 @@ export async function getHomepageFaqs(): Promise<FAQ[]> {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   try {
-    const supabase = createPublicClient()
+    const supabase = await getSupabase()
     const { data, error } = await supabase
       .from('testimonials')
       .select('*')
@@ -68,7 +82,7 @@ export interface FeaturedCategory {
 
 export async function getFeaturedCategories(): Promise<FeaturedCategory[]> {
   try {
-    const supabase = createPublicClient()
+    const supabase = await getSupabase()
 
     // Üst düzey (ana) aktif kategoriler, sıralamaya göre ilk 4
     const { data: cats, error } = await supabase
@@ -87,7 +101,7 @@ export async function getFeaturedCategories(): Promise<FeaturedCategory[]> {
 
     // Bu kategorilere ait ürünleri en yeniden eskiye getir; her kategori için
     // en son ürünün ilk görselini kullanacağız.
-    const categoryIds = cats.map(c => c.id)
+    const categoryIds = cats.map((c: any) => c.id)
     const { data: products } = await supabase
       .from('products')
       .select('category_id, images, name, created_at')
@@ -110,7 +124,7 @@ export async function getFeaturedCategories(): Promise<FeaturedCategory[]> {
       luxury: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=800&auto=format&fit=crop',
     }
 
-    return cats.map(cat => {
+    return cats.map((cat: any) => {
       const latest = latestByCategory.get(cat.id)
       const firstImage = latest?.images?.[0] || defaultImages[cat.slug] || defaultImages.dusakabin
       return {

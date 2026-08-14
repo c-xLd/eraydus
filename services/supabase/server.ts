@@ -37,7 +37,7 @@ export { createPublicClient } from './public'
 // Admin client with service_role key to bypass RLS.
 // Prefer createClient() with authenticated RLS policies when possible.
 export function createAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co'
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!url || !serviceRoleKey) {

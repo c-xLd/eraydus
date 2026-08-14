@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { FramerMotionFix } from "./FramerMotionFix";
 import { AIGraphSchema } from "@/components/seo/AIGraphSchema";
 import { globalSeoData } from "@/lib/data/seo";
+import { ImageProtection } from "@/components/ImageProtection";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -103,6 +104,7 @@ export default async function RootLayout({
           <FramerMotionFix />
           <AIGraphSchema />
           <ServerFAQSchema />
+          <ImageProtection />
 
           {/* Google Analytics (GA4) - Lazy loaded to protect FCP/LCP */}
           {geoData?.analytics?.googleAnalyticsId && (
