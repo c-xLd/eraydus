@@ -2,7 +2,7 @@
 echo ==============================================
 echo 1/3: GITHUB'DAN EN GUNCEL KODLARI CEK (PULL)
 echo ==============================================
-git remote set-url origin https://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@github.com/c-xLd/eraydus.git
+git remote set-url origin https://github.com/c-xLd/eraydus.git
 git fetch origin
 git pull origin main || git pull origin master
 

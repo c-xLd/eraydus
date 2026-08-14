@@ -8,7 +8,7 @@ git commit -m "feat: Next.js migration and configurator implementation"
 
 echo.
 echo Updating remote URL with provided token...
-git remote set-url origin https://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@github.com/c-xLd/eraydus.git
+git remote set-url origin https://github.com/c-xLd/eraydus.git
 
 echo.
 echo Pushing to GitHub...

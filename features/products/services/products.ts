@@ -83,7 +83,7 @@ function mapDatabaseProduct(dbRow: any): UIProduct {
     })(),
     layoutType: isBanyoDolabi ? 'Banyo Dolabı' : (dbRow.technical_specs?.layoutType || 'Standart'),
     cabinShape: dbRow.technical_specs?.cabinShape || '',
-    isNew: dbRow.new_product || true,
+    isNew: dbRow.new_product || false,
     variants
   }
 }

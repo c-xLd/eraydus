@@ -163,13 +163,13 @@ export function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
         )}
 
         {/* Hover Overlay & Action */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors duration-500 flex items-end p-3 sm:p-6">
-          <div className="w-full flex justify-end overflow-hidden">
-            <div className="hidden sm:flex items-center gap-2 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black">
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors duration-500 flex items-end justify-end p-4 sm:p-6">
+          <div className="overflow-hidden">
+            <div className="hidden sm:flex items-center gap-2.5 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-black/5 hover:scale-105">
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-black">
                 İNCELE
               </span>
-              <ArrowRight className="size-3 text-black" />
+              <ArrowRight className="size-3.5 text-black" />
             </div>
           </div>
         </div>
