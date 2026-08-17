@@ -3,6 +3,8 @@ import { SessionTimeout } from "@/components/admin/SessionTimeout"
 import { RealtimeNotifications } from "@/components/admin/RealtimeNotifications"
 import { Toaster } from 'sonner'
 
+export const dynamic = 'force-dynamic'
+
 export default function AdminLayout({
   children,
 }: {
