@@ -1,12 +1,25 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/services/supabase/server'
 
-export async function GET() {
-  const supabase = createAdminClient()
-  const { data: settings } = await supabase.from('seo_settings').select('robots_txt_content, canonical_base_url').single()
+export const dynamic = 'force-dynamic'
 
-  let content = settings?.robots_txt_content || 'User-agent: *\nAllow: /\nDisallow: /admin/'
-  const baseUrl = settings?.canonical_base_url || 'https://www.eraydus.net'
+export async function GET() {
+  let content = 'User-agent: *\nAllow: /\nDisallow: /admin/'
+  let baseUrl = 'https://www.eraydus.net'
+
+  try {
+    const supabase = createAdminClient()
+    const { data: settings } = await supabase.from('seo_settings').select('robots_txt_content, canonical_base_url').single()
+
+    if (settings?.robots_txt_content) {
+      content = settings.robots_txt_content
+    }
+    if (settings?.canonical_base_url) {
+      baseUrl = settings.canonical_base_url
+    }
+  } catch {
+    // Fallback to defaults if Supabase is unreachable
+  }
 
   // Ensure sitemap is present
   if (!content.includes('Sitemap:')) {
