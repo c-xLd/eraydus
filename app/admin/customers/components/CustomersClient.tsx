@@ -1,320 +1,238 @@
-"use client"
+'use client'
 
-import { useState } from 'react'
-import { Search, Plus, Mail, Phone, MapPin, Edit, Trash2 } from 'lucide-react'
-import { createCustomer, updateCustomer, deleteCustomer } from '../actions'
-import { toast } from 'sonner'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogDescription
-} from "@/components/ui/dialog"
+import { useState, useEffect, useCallback } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import { Plus, Search, Filter, Mail, Phone, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
+import type { CustomerWithRelations } from '@/features/crm/types'
+import { deleteCustomer } from '@/features/crm/actions'
+import CustomerForm from './CustomerForm'
+import CustomerDrawer from './CustomerDrawer'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
-export default function CustomersClient({ initialCustomers }: { initialCustomers: any[] }) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState('all')
-  const [customers, setCustomers] = useState(initialCustomers)
-  const [loadingId, setLoadingId] = useState<string | null>(null)
 
-  // Dialog State
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingCustomer, setEditingCustomer] = useState<any>(null)
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    city: '',
-    customer_type: 'individual',
-    status: 'active'
-  })
+interface CustomersClientProps {
+  customers: CustomerWithRelations[]
+  totalCount: number
+  currentPage: number
+  limit: number
+}
 
-  const filteredCustomers = customers.filter(customer => {
-    const searchString = `${customer.first_name} ${customer.last_name} ${customer.email}`.toLowerCase()
-    const matchesSearch = searchString.includes(searchTerm.toLowerCase())
-    const matchesStatus = selectedStatus === 'all' || customer.status === selectedStatus
-    return matchesSearch && matchesStatus
-  })
+export default function CustomersClient({ customers, totalCount, currentPage, limit }: CustomersClientProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
-  const handleOpenNewDialog = () => {
-    setEditingCustomer(null)
-    setFormData({
-      first_name: '',
-      last_name: '',
-      email: '',
-      phone: '',
-      city: '',
-      customer_type: 'individual',
-      status: 'active'
-    })
-    setIsDialogOpen(true)
-  }
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerWithRelations | null>(null)
+  
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
-  const handleOpenEditDialog = (customer: any) => {
-    setEditingCustomer(customer)
-    setFormData({
-      first_name: customer.first_name || '',
-      last_name: customer.last_name || '',
-      email: customer.email || '',
-      phone: customer.phone || '',
-      city: customer.city || '',
-      customer_type: customer.customer_type || 'individual',
-      status: customer.status || 'active'
-    })
-    setIsDialogOpen(true)
-  }
-
-  const handleSaveCustomer = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.email) {
-      toast.error("Lütfen bir e-posta adresi giriniz.")
-      return
-    }
-
-    setLoadingId(editingCustomer ? editingCustomer.id : 'new')
-    
-    try {
-      if (editingCustomer) {
-        const result = await updateCustomer(editingCustomer.id, formData)
-        if (result.success && result.customer) {
-          toast.success("Müşteri başarıyla güncellendi.")
-          setCustomers(prev => prev.map(c => c.id === result.customer.id ? result.customer : c))
-          setIsDialogOpen(false)
-        } else {
-          toast.error("Güncelleme hatası: " + result.error)
-        }
+  // Debounced Search using URL params (Antigravity UX Server-Side approach)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (searchQuery) {
+        params.set('search', searchQuery)
+        params.set('page', '1') // Reset page on search
       } else {
-        const result = await createCustomer(formData)
-        if (result.success && result.customer) {
-          toast.success("Yeni müşteri başarıyla eklendi.")
-          setCustomers(prev => [result.customer, ...prev])
-          setIsDialogOpen(false)
-        } else {
-          toast.error("Ekleme hatası: " + result.error)
-        }
+        params.delete('search')
       }
-    } finally {
-      setLoadingId(null)
-    }
+      router.push(`${pathname}?${params.toString()}`)
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery, pathname, router, searchParams])
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('page', newPage.toString())
+    router.push(`${pathname}?${params.toString()}`)
   }
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Bu müşteriyi silmek istediğinize emin misiniz? Müşteriye ait tüm geçmiş kalıcı olarak silinecektir.")) return
-
-    setLoadingId(id)
-    const result = await deleteCustomer(id)
-    setLoadingId(null)
-
-    if (result.success) {
-      toast.success("Müşteri başarıyla silindi.")
-      setCustomers(prev => prev.filter(c => c.id !== id))
-    } else {
-      toast.error("Silme işlemi başarısız: " + result.error)
+    if (!confirm('Bu müşteriyi silmek istediğinize emin misiniz?')) return
+    setDeletingId(id)
+    try {
+      const res = await deleteCustomer(id)
+      if (res.error) {
+        alert(res.error)
+      } else {
+        setIsDrawerOpen(false)
+      }
+    } finally {
+      setDeletingId(null)
     }
   }
 
+  const openDrawer = (customer: CustomerWithRelations) => {
+    setSelectedCustomer(customer)
+    setIsDrawerOpen(true)
+  }
+
+  const openEdit = (customer: CustomerWithRelations) => {
+    setSelectedCustomer(customer)
+    setIsFormOpen(true)
+  }
+
+  const totalPages = Math.ceil(totalCount / limit)
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Müşteri Yönetimi</h1>
-          <p className="text-sm text-gray-500 mt-1">Tüm müşterilerinizi yönetin, segmentleyin ve analiz edin.</p>
+          <h1 className="text-2xl font-light tracking-tight text-gray-900">Müşteriler</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Toplam {totalCount} müşteri bulundu
+          </p>
         </div>
-        <button onClick={handleOpenNewDialog} className="px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-black/90 transition-colors shadow-sm flex items-center gap-2">
+        <Button onClick={() => { setSelectedCustomer(null); setIsFormOpen(true) }} className="bg-black text-white hover:bg-black/90 flex gap-2">
           <Plus className="size-4" />
           Yeni Müşteri
-        </button>
+        </Button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[
-          { title: 'Toplam Müşteri', value: customers.length, trend: '' },
-          { title: 'VIP Müşteriler', value: customers.filter(c => c.status === 'vip').length, trend: '' },
-          { title: 'Bireysel Müşteriler', value: customers.filter(c => c.customer_type === 'individual').length, trend: '' },
-          { title: 'Aktif Müşteriler', value: customers.filter(c => c.status === 'active' || c.status === 'vip').length, trend: '' },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <p className="text-sm text-gray-500 font-medium">{stat.title}</p>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
-            {stat.trend && <p className="text-xs text-green-600 mt-2">{stat.trend}</p>}
-          </div>
-        ))}
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-        <div className="flex gap-4 flex-wrap">
-          <div className="flex-1 min-w-[250px] relative">
-            <Search className="absolute left-3 top-2.5 size-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Müşteri adı veya e-posta ara..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5 text-black"
+      <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
+        {/* Toolbar */}
+        <div className="p-4 border-b bg-gray-50/50 flex gap-4 items-center justify-between">
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
+            <Input 
+              placeholder="İsim, e-posta veya telefon ile ara..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-white"
             />
           </div>
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5 text-black"
-          >
-            <option value="all">Tüm Durumlar</option>
-            <option value="active">Aktif</option>
-            <option value="vip">VIP</option>
-            <option value="inactive">Pasif</option>
-          </select>
+          <div className="flex gap-2">
+            <Button variant="outline" className="flex gap-2 text-gray-600">
+              <Filter className="size-4" /> Filtrele
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Customers Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Ad / E-posta</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">İletişim</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Şehir</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Tür</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Durum</th>
-                <th className="px-6 py-3 text-center text-sm font-semibold text-gray-900">İşlemler</th>
+              <tr className="border-b bg-gray-50/50">
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Müşteri</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">İletişim</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tür</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Durum</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Oluşturulma</th>
+                <th className="px-6 py-4"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
-              {filteredCustomers.length === 0 ? (
-                 <tr>
-                   <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                     Görüntülenecek müşteri bulunamadı.
-                   </td>
-                 </tr>
-              ) : filteredCustomers.map((customer) => {
-                const isUpdating = loadingId === customer.id
-                const fullName = `${customer.first_name || ''} ${customer.last_name || ''}`.trim() || 'İsimsiz Müşteri'
-
-                return (
-                  <tr key={customer.id} className={`hover:bg-gray-50 transition-colors ${isUpdating ? 'opacity-50' : ''}`}>
-                    <td className="px-6 py-4">
-                      <div>
-                        <p className="font-medium text-gray-900">{fullName}</p>
-                        <p className="text-sm text-gray-500">{customer.email}</p>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <a href={`mailto:${customer.email}`} className="text-sm text-blue-600 hover:underline flex items-center gap-1">
-                          <Mail className="size-3" />
-                          E-posta
-                        </a>
-                        {customer.phone && (
-                          <a href={`tel:${customer.phone}`} className="text-sm text-blue-600 hover:underline flex items-center gap-1">
-                            <Phone className="size-3" />
-                            {customer.phone}
-                          </a>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1 text-sm text-gray-600">
-                        <MapPin className="size-4 text-gray-400" />
-                        {customer.city || '-'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className="text-gray-600 capitalize">{customer.customer_type === 'business' ? 'Kurumsal' : 'Bireysel'}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                        customer.status === 'vip' ? 'bg-purple-100 text-purple-700' :
-                        customer.status === 'active' ? 'bg-green-100 text-green-700' :
-                        'bg-gray-100 text-gray-700'
-                      }`}>
-                        {customer.status === 'vip' ? 'VIP' : customer.status === 'active' ? 'Aktif' : 'Pasif'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 flex justify-center gap-2">
-                      <button disabled={isUpdating} onClick={() => handleOpenEditDialog(customer)} className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Düzenle">
-                        <Edit className="size-4" />
-                      </button>
-                      <button disabled={isUpdating} onClick={() => handleDelete(customer.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
-                        <Trash2 className="size-4" />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
+            <tbody className="divide-y">
+              {customers.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    Arama kriterlerine uygun müşteri bulunamadı.
+                  </td>
+                </tr>
+              ) : (
+                customers.map(customer => {
+                  const fullName = customer.customer_type === 'individual' 
+                    ? `${customer.first_name || ''} ${customer.last_name || ''}`.trim() || 'İsimsiz'
+                    : customer.company_name || 'İsimsiz Firma'
+                  
+                  return (
+                    <tr key={customer.id} className="hover:bg-gray-50/50 transition-colors group cursor-pointer" onClick={() => openDrawer(customer)}>
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{fullName}</div>
+                        {customer.district && <div className="text-xs text-gray-500 mt-1">{customer.district}{customer.city ? `, ${customer.city}` : ''}</div>}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-600">{customer.email}</div>
+                        {customer.phone && <div className="text-sm text-gray-500 mt-0.5">{customer.phone}</div>}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs rounded-md uppercase font-medium tracking-wide">
+                          {customer.customer_type === 'business' ? 'Kurumsal' : 'Bireysel'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2.5 py-1 text-xs rounded-md font-medium tracking-wide ${
+                          customer.status === 'customer' ? 'bg-green-100 text-green-700' :
+                          customer.status === 'lead' ? 'bg-blue-100 text-blue-700' :
+                          customer.status === 'quote_sent' ? 'bg-amber-100 text-amber-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {customer.status.replace('_', ' ').toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {new Date(customer.created_at).toLocaleDateString('tr-TR')}
+                      </td>
+                      <td className="px-6 py-4 text-right flex gap-2 justify-end" onClick={e => e.stopPropagation()}>
+                        <Button variant="ghost" size="sm" onClick={() => openEdit(customer)} className="h-8 px-2 text-gray-500 hover:text-gray-900">
+                          Düzenle
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDelete(customer.id)} className="h-8 px-2 text-red-500 hover:text-red-600 hover:bg-red-50">
+                          {deletingId === customer.id ? '...' : 'Sil'}
+                        </Button>
+                      </td>
+                    </tr>
+                  )
+                })
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="p-4 border-t bg-gray-50/50 flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Sayfa {currentPage} / {totalPages}
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage <= 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                <ChevronLeft className="size-4 mr-1" /> Önceki
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage >= totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                Sonraki <ChevronRight className="size-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editingCustomer ? 'Müşteriyi Düzenle' : 'Yeni Müşteri Ekle'}</DialogTitle>
-            <DialogDescription>
-              Müşteri bilgilerini girerek veritabanına kaydedin.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleSaveCustomer} className="space-y-4 pt-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Ad</label>
-                <input required value={formData.first_name} onChange={e => setFormData({...formData, first_name: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Soyad</label>
-                <input required value={formData.last_name} onChange={e => setFormData({...formData, last_name: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">E-posta</label>
-              <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />
-            </div>
+      <CustomerForm 
+        open={isFormOpen} 
+        onOpenChange={setIsFormOpen} 
+        customer={selectedCustomer || undefined}
+        onSuccess={() => {
+          if (isDrawerOpen && selectedCustomer) {
+            // Need to close drawer if we edited from inside it so it refreshes properly, or we rely on server action revalidatePath
+            setIsDrawerOpen(false)
+          }
+        }}
+      />
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Telefon</label>
-                <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Şehir</label>
-                <input value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Müşteri Türü</label>
-                <select value={formData.customer_type} onChange={e => setFormData({...formData, customer_type: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black">
-                  <option value="individual">Bireysel</option>
-                  <option value="business">Kurumsal</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Durum</label>
-                <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full p-2 border rounded-md text-sm text-black">
-                  <option value="active">Aktif</option>
-                  <option value="vip">VIP</option>
-                  <option value="inactive">Pasif</option>
-                </select>
-              </div>
-            </div>
-
-            <DialogFooter className="pt-4 border-t">
-              <button type="button" onClick={() => setIsDialogOpen(false)} className="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">İptal</button>
-              <button type="submit" disabled={loadingId === 'new' || (editingCustomer && loadingId === editingCustomer.id)} className="px-4 py-2 bg-black text-white rounded-lg text-sm hover:bg-black/90">
-                {editingCustomer ? 'Güncelle' : 'Kaydet'}
-              </button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <CustomerDrawer 
+        open={isDrawerOpen} 
+        onClose={() => setIsDrawerOpen(false)} 
+        customer={selectedCustomer}
+        onEdit={(c) => {
+          setSelectedCustomer(c)
+          setIsFormOpen(true)
+        }}
+      />
     </div>
   )
 }

@@ -1,26 +1,40 @@
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { GlobalFAQAccordion } from "@/components/seo/GlobalFAQAccordion"
-
 import { AdminEditProvider } from '@/features/content/components/AdminEditProvider'
+import { getGeneralSettings } from '@/lib/data/settings'
+import { MaintenanceScreen } from '@/components/layout/MaintenanceScreen'
+import { SettingsProvider } from '@/components/providers/SettingsProvider'
+import { LiveVisitorTracker } from "@/components/public/LiveVisitorTracker"
+import { LiveChatWidget } from "@/components/public/LiveChatWidget"
 
-// No server-side auth check here: admin status is resolved client-side inside
-// AdminEditProvider (supabase.auth.getUser in a useEffect). Keeping cookies()
-// out of the shared layout lets public pages render statically / via ISR,
-// which is critical for TTFB and the Real Experience Score.
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <AdminEditProvider>
-      <Header />
+  const settings = await getGeneralSettings()
+
+  if (settings.maintenanceMode) {
+    return (
       <main className="flex-1 flex flex-col">
-        {children}
+        <MaintenanceScreen />
       </main>
-      <GlobalFAQAccordion />
-      <Footer />
-    </AdminEditProvider>
+    )
+  }
+
+  return (
+    <SettingsProvider settings={settings}>
+      <AdminEditProvider>
+        <LiveVisitorTracker />
+        <LiveChatWidget />
+        <Header />
+        <main className="flex-1 flex flex-col">
+          {children}
+        </main>
+        <GlobalFAQAccordion />
+        <Footer />
+      </AdminEditProvider>
+    </SettingsProvider>
   )
 }

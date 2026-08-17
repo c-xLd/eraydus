@@ -1,8 +1,13 @@
 import Link from 'next/link'
 import { Mail, Phone, MapPin, ShieldCheck, Wrench } from 'lucide-react'
 import { NewsletterForm } from './NewsletterForm'
+import { getGeneralSettings } from '@/lib/data/settings'
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getGeneralSettings()
+  const cleanNumber = settings.whatsappNumber.replace(/[^0-9+]/g, '')
+  const formattedPhone = settings.whatsappNumber
+  const contactEmail = settings.contactEmail
   return (
     <footer className="bg-[#0A0A0A] text-white font-sans">
       {/* Newsletter Band */}
@@ -42,17 +47,17 @@ export function Footer() {
                 </div>
                 <span>(0312) 350 79 39</span>
               </a>
-              <a href="tel:+905548830071" className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
+              <a href={`tel:${cleanNumber}`} className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
                 <div className="p-2 rounded-lg bg-white/10 group-hover:bg-white/20 transition-colors">
                   <Phone className="size-4 text-white" />
                 </div>
-                <span>0554 883 00 71</span>
+                <span>{formattedPhone}</span>
               </a>
-              <a href="mailto:info@eraydus.net" className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
+              <a href={`mailto:${contactEmail}`} className="flex items-center gap-3 hover:text-white transition-colors w-fit group">
                 <div className="p-2 rounded-lg bg-white/10 group-hover:bg-white/20 transition-colors">
                   <Mail className="size-4 text-white" />
                 </div>
-                <span>info@eraydus.net</span>
+                <span>{contactEmail}</span>
               </a>
               <div className="flex items-center gap-3 w-fit text-white/80">
                 <div className="p-2 rounded-lg bg-white/10">

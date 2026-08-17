@@ -1,24 +1,27 @@
 import { createClient } from '@/lib/server'
-import AnalyticsClient from './components/AnalyticsClient'
+import RealtimeDashboard from './components/RealtimeDashboard'
 
 export const metadata = {
-  title: 'Analitikler | Erayduş Admin',
+  title: 'Gerçek Zamanlı Analitikler | Erayduş Admin',
 }
 
 export default async function AnalyticsPage() {
   const supabase = await createClient()
 
-  // Fetch all analytics records (we can filter in the client for this simple demo)
-  const { data: analyticsData, error } = await supabase
-    .from('page_analytics')
-    .select('*')
-    .order('date', { ascending: false })
+  // Fetch initial active users (unique sessions in last 60 seconds)
+  const sixtySecondsAgo = new Date(Date.now() - 60000).toISOString()
+  
+  const { data: recentEvents, error } = await supabase
+    .from('analytics_events')
+    .select('session_id, page_url, device_type, created_at, event_name')
+    .gte('created_at', sixtySecondsAgo)
+    .order('created_at', { ascending: false })
 
   if (error) {
     console.error('Error fetching analytics:', error)
   }
 
   return (
-    <AnalyticsClient initialData={analyticsData || []} />
+    <RealtimeDashboard initialEvents={recentEvents || []} />
   )
 }

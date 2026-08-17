@@ -26,7 +26,15 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600 // 1 hour ISR caching
 
+import { redirect } from 'next/navigation'
+import { getGeneralSettings } from '@/lib/data/settings'
+
 export default async function TasarlaPage() {
+  const settings = await getGeneralSettings()
+  if (!settings.enableOnlineQuotes) {
+    redirect('/')
+  }
+
   const supabase = await createClient()
 
   let modelsData: any[] | null = null

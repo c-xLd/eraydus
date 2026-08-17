@@ -1,17 +1,10 @@
 import { createPublicClient, createAdminClient } from '@/services/supabase/server'
 
 async function getSupabase() {
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      supabase = createAdminClient()
-    } else {
-      supabase = createPublicClient()
-    }
-  } catch {
-    supabase = createPublicClient()
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return createAdminClient()
   }
-  return supabase
+  return createPublicClient()
 }
 
 export interface FAQ {

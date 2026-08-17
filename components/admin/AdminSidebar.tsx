@@ -41,6 +41,8 @@ const navGroups: { title: string; items: NavItem[] }[] = [
     items: [
       { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
       { icon: Building2, label: "Proje Yönetimi", href: "/admin/projeler" },
+      { icon: Globe, label: "Canlı Radar", href: "/admin/live-radar" },
+      { icon: MessageSquareQuote, label: "Canlı Destek", href: "/admin/chat" },
     ],
   },
   {
@@ -192,7 +194,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                       {active && (
                         <motion.div 
                           layoutId="activeTab"
-                          className="absolute inset-0 bg-white/10 rounded-xl" 
+                          className="absolute inset-0 bg-white/10 rounded-xl pointer-events-none"
                           transition={{ type: "spring", stiffness: 350, damping: 30 }}
                         />
                       )}

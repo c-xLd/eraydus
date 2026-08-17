@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useSettings } from '@/components/providers/SettingsProvider'
 
 interface ProductCardProps {
   viewMode?: 'grid' | 'list'
@@ -27,6 +28,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
+  const { showPrices } = useSettings()
   const rawImages = (product as any).images
   const imageUrl = product.main_image_url || product.image || (Array.isArray(rawImages) && rawImages.length > 0 ? String(rawImages[0]) : '')
   const isNew = product.isNew || product.new_product
@@ -99,7 +101,7 @@ export function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
         {/* Right Side: Price & CTA Action */}
         <div className="flex flex-col items-end justify-center shrink-0 space-y-2 pl-2">
           <div className="text-xs sm:text-base md:text-lg text-right">
-            {currentPrice > 0 ? (
+            {(currentPrice > 0 && showPrices) ? (
               <div className="flex flex-col items-end">
                 <span className="font-semibold text-black">
                   {formatPrice(currentPrice)}
@@ -187,7 +189,7 @@ export function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
         
         {/* Price & Discount Display */}
         <div className="flex items-baseline gap-1.5 flex-wrap">
-          {currentPrice > 0 ? (
+          {(currentPrice > 0 && showPrices) ? (
             <>
               <span className="text-xs sm:text-[13px] font-semibold text-black">
                 {formatPrice(currentPrice)}

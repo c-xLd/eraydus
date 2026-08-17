@@ -101,32 +101,6 @@ export default function AboutClient({ content }: AboutClientProps) {
   const storyImage = resolveSiteImage(story?.image, '/images/eray_gold.jpg')
   const facilityImage = resolveSiteImage(facility?.image, '/images/eray_exploded.jpg')
 
-  const galleryShowcase = [
-    {
-      title: 'Gold PVD Lüks Seri',
-      tag: 'Özel Kaplama',
-      image: '/images/eray_gold.jpg',
-      desc: 'Paslanmaz altın PVD kaplama & 6mm Clear temperli cam',
-    },
-    {
-      title: 'Titanyum Gunmetal',
-      tag: 'Mimari Trend',
-      image: '/images/eray_gunmetal.jpg',
-      desc: 'Mat antrasit çizilmez gövde & soft-close sürgü sistemi',
-    },
-    {
-      title: 'Aura Mat Siyah',
-      tag: 'Minimalist Çizgi',
-      image: '/images/aura_black.jpg',
-      desc: 'Elektrostatik fırın boyalı siyah çerçevesiz profil',
-    },
-    {
-      title: 'Kristal Parlak Krom',
-      tag: 'Klasik Şıklık',
-      image: '/images/eray_chrome.jpg',
-      desc: 'Korozyona dayanıklı eloksallı ayna parlaklığında alüminyum',
-    },
-  ]
 
   return (
     <div className="flex flex-col w-full">
@@ -452,67 +426,6 @@ export default function AboutClient({ content }: AboutClientProps) {
         </div>
       </section>
 
-      {/* ───────────── Flagship Model Showcase ───────────── */}
-      <section className="py-28 md:py-36 bg-surface border-y border-border relative overflow-hidden">
-        <div className="container mx-auto px-6 max-w-[1440px]">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-champagne text-xs tracking-[0.3em] uppercase font-semibold">
-              Koleksiyonumuzdan İmzalar
-            </span>
-            <h2 className="text-3xl md:text-5xl font-light tracking-tight mt-4">
-              Özel Üretim <span className="font-semibold text-champagne">Profil ve Cam Çözümleri</span>
-            </h2>
-            <p className="text-muted-foreground text-sm md:text-base font-light mt-4 leading-relaxed">
-              Siteler tesisimizde ürettiğimiz tüm serilerde 1. sınıf paslanmaz alüminyum ve temperli güvenlik camı kullanıyoruz.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {galleryShowcase.map((item, idx) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0.01, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.8, delay: idx * 0.1, ease }}
-                className="group relative rounded-2xl overflow-hidden bg-card border border-border hover:border-champagne/40 transition-all duration-500 shadow-sm hover:shadow-xl flex flex-col"
-              >
-                <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className="text-[10px] font-semibold uppercase tracking-wider bg-black/70 backdrop-blur-md text-champagne px-2.5 py-1 rounded-full border border-champagne/20">
-                      {item.tag}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-base font-semibold text-foreground group-hover:text-champagne transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground font-light mt-1.5 leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </div>
-                  <Link
-                    href="/urunler"
-                    className="mt-4 pt-3 border-t border-border/50 text-xs font-medium text-champagne inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all"
-                  >
-                    <span>Koleksiyonu İncele</span>
-                    <ArrowRight className="size-3.5" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ───────────── CTA Section ───────────── */}
       <section className="py-32 md:py-44 bg-background">

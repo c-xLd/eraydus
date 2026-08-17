@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Plus, Edit, Trash2, Shield, Clock, User } from 'lucide-react'
-import { deleteTeamMember, updateTeamMemberStatus } from '../actions'
+import { deleteTeamMember, updateTeamMember } from '../actions'
 import { toast } from 'sonner'
 import {
   Dialog,
@@ -45,7 +45,7 @@ export default function TeamClient({ initialMembers, roles = defaultRoles }: { i
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     
     setLoadingId(id)
-    const result = await updateTeamMemberStatus(id, newStatus)
+    const result = await updateTeamMember(id, { status: newStatus })
     setLoadingId(null)
 
     if (result.success) {

@@ -149,10 +149,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // 3. Supabase'den Canlı Ürünler, Kategoriler ve Blog Yazılarını Paralel Çek
-    const [productsResponse, categoriesResponse, blogResponse] = await Promise.all([
+    const [productsResponse, categoriesResponse, blogResponse, seoResponse] = await Promise.all([
       supabase
         .from('products')
-        .select('slug, updated_at, categories(slug)')
+        .select('id, slug, updated_at, categories(slug)')
         .eq('status', 'active'),
 
       supabase
@@ -165,17 +165,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .select('slug, tags, updated_at, published_at')
         .eq('content_type', 'blog')
         .eq('status', 'published'),
+        
+      supabase
+        .from('seo_metadata')
+        .select('page_id, robots_index')
     ])
 
-    const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || []).map((product: any) => {
-      const catSlug = product.categories?.slug || 'genel'
-      return {
-        url: `${baseUrl}/urunler/${catSlug}/${product.slug}`,
-        lastModified: new Date(product.updated_at || new Date()),
-        changeFrequency: 'weekly',
-        priority: 0.85,
-      }
-    })
+    const seoMap = new Map((seoResponse.data || []).map(s => [s.page_id, s.robots_index]))
+
+    const productRoutes: MetadataRoute.Sitemap = (productsResponse.data || [])
+      .filter((product: any) => {
+        // Exclude products that are explicitly marked as noindex
+        const isIndexed = seoMap.get(product.id)
+        if (isIndexed === false) return false
+        return true
+      })
+      .map((product: any) => {
+        const catSlug = product.categories?.slug || 'genel'
+        return {
+          url: `${baseUrl}/urunler/${catSlug}/${product.slug}`,
+          lastModified: new Date(product.updated_at || new Date()),
+          changeFrequency: 'weekly',
+          priority: 0.85,
+        }
+      })
 
     const categoryRoutes: MetadataRoute.Sitemap = (categoriesResponse.data || []).map((category: any) => ({
       url: `${baseUrl}/urunler/${category.slug}`,

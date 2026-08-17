@@ -36,6 +36,7 @@ import {
 } from 'lucide-react'
 import { submitProductReview } from '@/features/products/actions/reviews'
 import type { ProductWithOptions } from '@/features/products/types/product'
+import { useSettings } from '@/components/providers/SettingsProvider'
 
 interface ProductCabinetDetailViewProps {
   product: ProductWithOptions
@@ -85,6 +86,7 @@ const AccordionItem = ({ title, children, isOpen, onClick }: AccordionItemProps)
 )
 
 export function ProductCabinetDetailView({ product, category, initialReviews }: ProductCabinetDetailViewProps) {
+  const { showPrices, whatsappNumber } = useSettings()
   // Gallery images from real product data (main_image_url, images array, gallery relations)
   const images = useMemo(() => {
     const list: string[] = []
@@ -233,9 +235,11 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
     setToastMessage("Sipariş ve detaylarınız WhatsApp'a aktarılıyor...")
     setTimeout(() => setToastMessage(null), 3500)
 
-    const text = `Merhaba ERAYDUŞ,\n\n*Banyo Dolabı Sipariş & Keşif Talebi:*\nÜrün: ${product.name}\nKoleksiyon: ${category.name}\nÖlçü/Model: ${selectedSize?.label || 'Standart'}\nHesaplanan Tutar: ₺${totalPrice.toLocaleString('tr-TR')}\n\nÜrün detaylarını görüşmek ve sipariş oluşturmak istiyorum.`
+    const text = `Merhaba ERAYDUŞ,\n\n*Banyo Dolabı Sipariş & Keşif Talebi:*\nÜrün: ${product.name}\nKoleksiyon: ${category.name}\nÖlçü/Model: ${selectedSize?.label || 'Standart'}\n${showPrices ? `Hesaplanan Tutar: ₺${totalPrice.toLocaleString('tr-TR')}\n\n` : ''}Ürün detaylarını görüşmek ve sipariş oluşturmak istiyorum.`
 
-    const url = `https://wa.me/905548830071?text=${encodeURIComponent(text)}`
+    // clean up + and spaces if necessary, but wa.me accepts +90...
+    const cleanNumber = whatsappNumber.replace(/[^0-9+]/g, '')
+    const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(text)}`
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 
@@ -509,20 +513,22 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
             </header>
 
             {/* Dinamik Fiyat Göstergesi */}
-            <div className="hidden lg:block mb-10">
-              <div className="text-[10px] font-bold tracking-[0.2em] text-black/40 uppercase mb-2">
-                Tutar + KDV
-              </div>
-              <div className="flex items-baseline gap-3 pb-6 border-b border-black/5 relative">
-                <span className="text-4xl lg:text-5xl font-medium tracking-tight text-black">
-                  ₺{totalPrice.toLocaleString('tr-TR')}
-                </span>
-                <span className="text-xs text-black/50 font-light">Kurulum & Montaj Desteği</span>
-                <div className="absolute right-0 bottom-6 opacity-20 pointer-events-none text-[#050505]">
-                  <BadgeCheck className="w-12 h-12" strokeWidth={1} />
+            {showPrices && (
+              <div className="hidden lg:block mb-10">
+                <div className="text-[10px] font-bold tracking-[0.2em] text-black/40 uppercase mb-2">
+                  Tutar + KDV
+                </div>
+                <div className="flex items-baseline gap-3 pb-6 border-b border-black/5 relative">
+                  <span className="text-4xl lg:text-5xl font-medium tracking-tight text-black">
+                    ₺{totalPrice.toLocaleString('tr-TR')}
+                  </span>
+                  <span className="text-xs text-black/50 font-light">Kurulum & Montaj Desteği</span>
+                  <div className="absolute right-0 bottom-6 opacity-20 pointer-events-none text-[#050505]">
+                    <BadgeCheck className="w-12 h-12" strokeWidth={1} />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* ADIM 1: MODEL & ÖLÇÜ SEÇENEĞİ */}
             {hasSizeVariants && (
@@ -563,7 +569,7 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
                           )}
                         </div>
                         <span className="text-[12px] text-neutral-500 block">{s.desc}</span>
-                        {s.price && s.price > 0 ? (
+                        {(showPrices && s.price && s.price > 0) ? (
                           <span className="text-[12px] font-semibold text-neutral-400 mt-2 block">
                             ₺{s.price.toLocaleString('tr-TR')}
                           </span>
@@ -618,7 +624,7 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
                 <span>WhatsApp ile Sipariş & Keşif</span>
               </button>
               <a
-                href="tel:+905548830071"
+                href={`tel:${whatsappNumber.replace(/[^0-9+]/g, '')}`}
                 className={`w-full sm:w-[70px] h-[56px] flex items-center justify-center bg-white border border-black/10 shadow-sm rounded-2xl hover:bg-neutral-50 transition-colors ${ACTIVE_PRESS}`}
                 title="Hemen Arayın"
               >
@@ -1043,14 +1049,16 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
 
           {/* Sağ: Fiyat ve Sipariş Butonu */}
           <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-            <div className="text-right pr-1 sm:pr-2">
-              <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                Tutar
+            {showPrices && (
+              <div className="text-right pr-1 sm:pr-2">
+                <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+                  Tutar
+                </div>
+                <div className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#050505] leading-tight">
+                  ₺{totalPrice.toLocaleString('tr-TR')}
+                </div>
               </div>
-              <div className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#050505] leading-tight">
-                ₺{totalPrice.toLocaleString('tr-TR')}
-              </div>
-            </div>
+            )}
 
             <button
               onClick={handleWhatsApp}

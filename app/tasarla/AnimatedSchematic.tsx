@@ -21,6 +21,7 @@ const glassColors = {
   smoke: 'rgba(30, 30, 35, 0.5)',
   bronze: 'rgba(130, 90, 60, 0.4)',
   frosted: 'rgba(255, 255, 255, 0.85)',
+  mirrored: 'rgba(180, 190, 200, 0.95)',
 }
 
 export function AnimatedSchematic({
@@ -33,20 +34,26 @@ export function AnimatedSchematic({
   
   // Parametric Scaling Math
   // Base heights (Y coordinate of the bottom of the glass)
-  const baseY = baseType === 'jacuzzi' ? 320 : baseType === 'tray' ? 360 : 365
+  const tHeight = baseType === 'jacuzzi' ? 65 : baseType === 'tub' ? 45 : baseType === 'tray' ? 15 : 0
+  const baseY = 370 - tHeight
   
   // Wall-to-Wall scale
-  const wallW = 120 + ((widthX - 60) / 190) * 200
+  // By raising the base value to 180, the cabin won't look extremely narrow at minimum sizes (60cm)
+  const wallRatio = Math.max(0, (widthX - 60) / 190)
+  const wallW = 180 + wallRatio * 140 // min 180, max 320
   const wL = 200 - wallW / 2
   const wR = 200 + wallW / 2
   
   // Corner scale
-  const cFrontW = 60 + ((widthX - 60) / 190) * 110
+  const widthRatio = Math.max(0, (widthX - 60) / 190)
+  const depthRatio = Math.max(0, (depthY - 60) / 190)
+  
+  // By raising the base value, the cabin won't look extremely narrow at minimum sizes (60cm)
+  const cFrontW = 100 + widthRatio * 50  // min 100, max 150
+  const cSideDx = -(100 + depthRatio * 40) // min -100, max -140
+  const cSideDy = -(28 + depthRatio * 12) // min -28, max -40
+  
   const cR = 150 + cFrontW
-  // depthY goes from 60 to 250. Max dx is -100, max dy is -20.
-  const depthRatio = depthY / 250
-  const cSideDx = -100 * depthRatio
-  const cSideDy = -20 * depthRatio
   const cLX = 150 + cSideDx
   const cLY = 90 + cSideDy
 
@@ -130,17 +137,16 @@ export function AnimatedSchematic({
   // We draw 3D blocks for the bases to make them look premium.
   const getBasePolygons = () => {
     let top = "", front = "", side = ""
-    const tHeight = baseType === 'jacuzzi' ? 60 : baseType === 'tray' ? 15 : 5
 
     if (layout === 'corner') {
       top = `M ${cLX} ${baseY + cSideDy} L 150 ${baseY} L ${cR} ${baseY} L ${cR + (cLX - 150)} ${baseY + cSideDy} Z`
       front = `M 150 ${baseY} L ${cR} ${baseY} L ${cR} ${baseY + tHeight} L 150 ${baseY + tHeight} Z`
       side = `M ${cLX} ${baseY + cSideDy} L 150 ${baseY} L 150 ${baseY + tHeight} L ${cLX} ${baseY + cSideDy + tHeight} Z`
     } else if (layout === 'wall-to-wall') {
-      top = `M ${wL} 250 L ${wR} 250 L ${wR} ${baseY} L ${wL} ${baseY} Z`
+      top = ""
       front = `M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} ${baseY + tHeight} L ${wL} ${baseY + tHeight} Z`
     } else if (layout === 'walk-in') {
-      top = `M ${wkL} ${baseY - 60} L ${wkR} ${baseY - 60} L ${wkR} ${baseY} L ${wkL} ${baseY} Z`
+      top = ""
       front = `M ${wkL} ${baseY} L ${wkR} ${baseY} L ${wkR} ${baseY + tHeight} L ${wkL} ${baseY + tHeight} Z`
     }
     return { top, front, side }
@@ -174,14 +180,30 @@ export function AnimatedSchematic({
         const midY = 90 + cSideDy / 2
         // Side Fixed
         panels.push({ id: 'side-fixed-wall', d: `M ${cLX} ${cLY} L ${midX} ${midY} L ${midX} ${baseY + cSideDy/2} L ${cLX} ${baseY + cSideDy} Z`, isSliding: false })
-        // Side Slider
-        panels.push({ id: 'side-slide-corner', d: `M ${midX-5} ${midY-1} L 150 90 L 150 ${baseY} L ${midX-5} ${baseY + cSideDy/2 - 1} Z`, isSliding: true, slideOffsetX: cSideDx * 0.45, slideOffsetY: cSideDy * 0.45 })
+        
+        // Side Slider (Shifted down by 2 pixels for depth, overlaps fixed by 4px)
+        const sTopY = midY + 2
+        const sBotY = baseY + cSideDy/2 + 2
+        panels.push({ 
+          id: 'side-slide-corner', 
+          d: `M ${midX-4} ${sTopY-1} L 150 92 L 150 ${baseY+2} L ${midX-4} ${sBotY-1} Z`, 
+          isSliding: true, 
+          slideOffsetX: cSideDx * 0.45, 
+          slideOffsetY: cSideDy * 0.45 
+        })
         
         // Front Fixed
         const fMidX = 150 + cFrontW / 2
         panels.push({ id: 'front-fixed-wall', d: `M ${fMidX} 90 L ${cR} 90 L ${cR} ${baseY} L ${fMidX} ${baseY} Z`, isSliding: false })
-        // Front Slider
-        panels.push({ id: 'front-slide-corner', d: `M 150 92 L ${fMidX+5} 92 L ${fMidX+5} ${baseY+2} L 150 ${baseY+2} Z`, isSliding: true, slideOffsetX: cFrontW * 0.45, slideOffsetY: 0 })
+        
+        // Front Slider (Shifted down by 2 pixels for depth, overlaps fixed by 4px)
+        panels.push({ 
+          id: 'front-slide-corner', 
+          d: `M 150 92 L ${fMidX+4} 92 L ${fMidX+4} ${baseY+2} L 150 ${baseY+2} Z`, 
+          isSliding: true, 
+          slideOffsetX: cFrontW * 0.45, 
+          slideOffsetY: 0 
+        })
       } else if (doorSystem === '1-sabit-1-kayar') {
         const fMidX = 150 + cFrontW / 2
         // Left fixed
@@ -236,8 +258,8 @@ export function AnimatedSchematic({
       handlePositions = biFoldHandles
     } else if (doorSystem === '2-sabit-2-kayar') {
       if (layout === 'corner') {
-        handlePositions.push({ x: 135, y: handleY + 20, slideOffsetX: cSideDx * 0.45, slideOffsetY: cSideDy * 0.45 }) 
-        handlePositions.push({ x: 165, y: handleY + 20, slideOffsetX: cFrontW * 0.45, slideOffsetY: 0 })
+        handlePositions.push({ x: 142, y: handleY - 2, slideOffsetX: cSideDx * 0.45, slideOffsetY: cSideDy * 0.45 }) 
+        handlePositions.push({ x: 158, y: handleY, slideOffsetX: cFrontW * 0.45, slideOffsetY: 0 })
       } else {
         handlePositions.push({ x: 185, y: handleY, slideOffsetX: -wallW * 0.22 })
         handlePositions.push({ x: 215, y: handleY, slideOffsetX: wallW * 0.22 })
@@ -260,13 +282,16 @@ export function AnimatedSchematic({
       let handleSvg = null
       if (handleType === 'nokta') {
         handleSvg = <circle cx={hx} cy={hy} r="4" fill={profileGrad} />
-      } else if (handleType === 'kare') {
-        handleSvg = <rect x={hx-4} y={hy-15} width="8" height="30" rx="1" fill={profileGrad} />
-      } else if (handleType === 'havlu') {
-        handleSvg = <path d={`M ${hx-25} ${hy-2} L ${hx+25} ${hy-2} L ${hx+25} ${hy+2} L ${hx-25} ${hy+2} Z`} fill={profileGrad} />
+      } else if (handleType === 'plastik-dik') {
+        // Plastik Dik Kulp: Simple solid color, slightly thicker, flat look
+        const color = profileColor === 'black' ? '#333333' : (profileColor === 'white' ? '#f3f4f6' : (profileColor === 'gold' ? '#ccb266' : '#d1d5db'))
+        handleSvg = <rect x={hx-2.5} y={hy-20} width="5" height="40" rx="1.5" fill={color} />
+      } else if (handleType === 'metal-dik') {
+        // Metal Dik Kulp: Metallic gradient, thinner profile
+        handleSvg = <path d={`M ${hx-2} ${hy-22} L ${hx+2} ${hy-22} L ${hx+2} ${hy+22} L ${hx-2} ${hy+22} Z`} fill={profileGrad} />
       } else {
-        // Standard
-        handleSvg = <path d={`M ${hx-2} ${hy-20} L ${hx+2} ${hy-20} L ${hx+2} ${hy+20} L ${hx-2} ${hy+20} Z`} fill={profileGrad} />
+        // Fallback for safety
+        handleSvg = <circle cx={hx} cy={hy} r="4" fill={profileGrad} />
       }
       
       return (
@@ -356,103 +381,34 @@ export function AnimatedSchematic({
             <motion.path d={`M ${wR} 40 L 400 40 L 400 400 L ${wR} 400 Z`} fill="#0a0a0a" animate={{ d: `M ${wR} 40 L 400 40 L 400 400 L ${wR} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             
             {/* Back Wall (Inside shower) */}
-            <motion.path d={`M ${wL} 40 L ${wR} 40 L ${wR} 250 L ${wL} 250 Z`} fill="url(#wall-right)" animate={{ d: `M ${wL} 40 L ${wR} 40 L ${wR} 250 L ${wL} 250 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
-            <motion.path d={`M ${wL} 40 L ${wR} 40 L ${wR} 250 L ${wL} 250 Z`} fill="url(#tile-grid)" animate={{ d: `M ${wL} 40 L ${wR} 40 L ${wR} 250 L ${wL} 250 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z`} fill="url(#wall-right)" animate={{ d: `M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z`} fill="url(#tile-grid)" animate={{ d: `M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             
             {/* Floor (Inside shower) */}
-            <motion.path d={`M ${wL} 250 L ${wR} 250 L ${wR} 400 L ${wL} 400 Z`} fill="#111" animate={{ d: `M ${wL} 250 L ${wR} 250 L ${wR} 400 L ${wL} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} 400 L ${wL} 400 Z`} fill="#111" animate={{ d: `M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} 400 L ${wL} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             
             {/* Wall corner seams */}
             <motion.line x1={wL} y1="40" x2={wL} y2="400" stroke="rgba(0,0,0,0.8)" strokeWidth="2" animate={{ x1: wL, x2: wL }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             <motion.line x1={wR} y1="40" x2={wR} y2="400" stroke="rgba(0,0,0,0.8)" strokeWidth="2" animate={{ x1: wR, x2: wR }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
-            <motion.line x1={wL} y1="250" x2={wR} y2="250" stroke="rgba(0,0,0,0.5)" strokeWidth="2" animate={{ x1: wL, x2: wR }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.line x1={wL} y1={baseY} x2={wR} y2={baseY} stroke="rgba(0,0,0,0.5)" strokeWidth="2" animate={{ x1: wL, x2: wR, y1: baseY, y2: baseY }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
           </g>
         ) : (
           <g>
             {/* Walk-in Room */}
-            <path d="M 0 40 L 400 40 L 400 250 L 0 250 Z" fill="url(#wall-right)" />
-            <path d="M 0 40 L 400 40 L 400 250 L 0 250 Z" fill="url(#tile-grid)" />
-            <path d="M 0 250 L 400 250 L 400 400 L 0 400 Z" fill="#111" />
-            <line x1="0" y1="250" x2="400" y2="250" stroke="rgba(0,0,0,0.5)" strokeWidth="2" />
+            <motion.path d={`M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z`} fill="url(#wall-right)" animate={{ d: `M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z`} fill="url(#tile-grid)" animate={{ d: `M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M 0 ${baseY} L 400 ${baseY} L 400 400 L 0 400 Z`} fill="#111" animate={{ d: `M 0 ${baseY} L 400 ${baseY} L 400 400 L 0 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.line x1="0" y1={baseY} x2="400" y2={baseY} stroke="rgba(0,0,0,0.5)" strokeWidth="2" animate={{ y1: baseY, y2: baseY }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
           </g>
         )}
 
-        {/* Dimension Lines Container */}
-
-        {/* ─── DIMENSION LINES (Architectural Style) ─── */}
-        <g stroke="#C9A86A" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.8">
-          {/* Width (X) Dimension */}
-          <motion.path 
-            d={
-              layout === 'wall-to-wall' ? `M ${wL} 25 L ${wR} 25` : 
-              layout === 'corner' ? `M 150 ${baseY + 25} L ${cR} ${baseY + 25}` : 
-              `M ${wkL} 25 L ${wkR} 25`
-            } 
-            markerStart="url(#arrow)" markerEnd="url(#arrow)" 
-            animate={{ 
-              d: layout === 'wall-to-wall' ? `M ${wL} 25 L ${wR} 25` : 
-                 layout === 'corner' ? `M 150 ${baseY + 25} L ${cR} ${baseY + 25}` : 
-                 `M ${wkL} 25 L ${wkR} 25`
-            }}
-            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
-          />
-          {/* X Value Text */}
-          <motion.text 
-            x={layout === 'walk-in' ? 200 : layout === 'corner' ? 150 + cFrontW / 2 : 200} 
-            y={layout === 'corner' ? baseY + 25 : 25} 
-            dy=".3em"
-            fill="#C9A86A" 
-            fontSize="12" 
-            fontWeight="bold" 
-            textAnchor="middle"
-            stroke="none"
-            animate={{ 
-              x: layout === 'walk-in' ? 200 : layout === 'corner' ? 150 + cFrontW / 2 : 200,
-              y: layout === 'corner' ? baseY + 25 : 25
-            }}
-          >
-            {widthX} cm
-          </motion.text>
-
-          {/* Depth (Y) Dimension (Only for Corner) */}
-          {layout === 'corner' && (
-             <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-               <motion.path 
-                 d={`M ${cLX - 15} ${baseY + cSideDy + 10} L ${150 - 15} ${baseY + 10}`} 
-                 markerStart="url(#arrow)" markerEnd="url(#arrow)" 
-                 animate={{ d: `M ${cLX - 15} ${baseY + cSideDy + 10} L ${150 - 15} ${baseY + 10}` }}
-                 transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
-               />
-               <motion.text 
-                 x={(cLX + 150) / 2 - 15} 
-                 y={baseY + cSideDy / 2 + 10} 
-                 dy=".3em"
-                 fill="#C9A86A" 
-                 fontSize="12" 
-                 fontWeight="bold" 
-                 textAnchor="middle" 
-                 stroke="none"
-                 animate={{ 
-                   x: (cLX + 150) / 2 - 15,
-                   y: baseY + cSideDy / 2 + 10
-                 }}
-               >
-                 {depthY} cm
-               </motion.text>
-             </motion.g>
-          )}
-
-          {/* Marker definition for arrows */}
-          <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#C9A86A" stroke="none" />
-          </marker>
-        </g>
+        {/* Dimension lines moved to end of file to prevent Z-index overlap */}
 
         {/* ─── BASE / TRAY ─── */}
-        {baseType === 'floor' ? (
+        {tHeight === 0 ? (
           /* KUTU PROFİL (Floor Box Profile) */
           /* Note: Walk-in floor has no bottom profile (direct to floor) */
-          layout !== 'walk-in' && (
+          layout !== 'walk-in' && baseType === 'floor-profile' && (
             <motion.path
               d={
                 layout === 'corner' 
@@ -475,16 +431,18 @@ export function AnimatedSchematic({
         ) : (
           /* TEKNE / JAKUZİ (Solid Tray) */
           <>
-            <motion.path
-              d={basePolys.top}
-              fill={baseType === 'jacuzzi' ? '#EAEAEA' : '#F5F5F5'}
-              animate={{ d: basePolys.top }}
-              transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }}
-            />
+            {basePolys.top && (
+              <motion.path
+                d={basePolys.top}
+                fill={baseType === 'jacuzzi' || baseType === 'tub' ? '#EAEAEA' : '#F5F5F5'}
+                animate={{ d: basePolys.top }}
+                transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }}
+              />
+            )}
             {basePolys.front && (
               <motion.path
                 d={basePolys.front}
-                fill={baseType === 'jacuzzi' ? '#D4D4D4' : '#E5E5E5'}
+                fill={baseType === 'jacuzzi' || baseType === 'tub' ? '#D4D4D4' : '#E5E5E5'}
                 animate={{ d: basePolys.front }}
                 transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }}
               />
@@ -492,7 +450,7 @@ export function AnimatedSchematic({
             {basePolys.side && (
               <motion.path
                 d={basePolys.side}
-                fill={baseType === 'jacuzzi' ? '#C0C0C0' : '#D4D4D4'}
+                fill={baseType === 'jacuzzi' || baseType === 'tub' ? '#C0C0C0' : '#D4D4D4'}
                 animate={{ d: basePolys.side }}
                 transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }}
               />
@@ -557,10 +515,7 @@ export function AnimatedSchematic({
           <motion.path
             d={
               layout === 'corner' 
-                ? (doorSystem === '2-sabit-2-kayar' 
-                    ? `M ${cLX} ${cLY} L 150 90 L ${cR} 90 L ${cR} ${baseY} L 150 ${baseY} L ${cLX} ${baseY + cSideDy} Z`
-                    : `M ${cLX} ${cLY} L 150 90 L ${cR} 90 L ${cR} ${baseY} L 150 ${baseY} L ${cLX} ${baseY + cSideDy} Z M 150 90 L 150 ${baseY}`
-                  )
+                ? `M ${cLX} ${cLY} L 150 90 L ${cR} 90 L ${cR} ${baseY} L 150 ${baseY} L ${cLX} ${baseY + cSideDy} Z`
                 : `M ${wL} 100 L ${wR} 100 L ${wR} ${baseY} L ${wL} ${baseY} Z`
             }
             fill="none"
@@ -570,10 +525,7 @@ export function AnimatedSchematic({
             strokeLinecap="round"
             animate={{ 
               d: layout === 'corner' 
-                ? (doorSystem === '2-sabit-2-kayar' 
-                    ? `M ${cLX} ${cLY} L 150 90 L ${cR} 90 L ${cR} ${baseY} L 150 ${baseY} L ${cLX} ${baseY + cSideDy} Z`
-                    : `M ${cLX} ${cLY} L 150 90 L ${cR} 90 L ${cR} ${baseY} L 150 ${baseY} L ${cLX} ${baseY + cSideDy} Z M 150 90 L 150 ${baseY}`
-                  )
+                ? `M ${cLX} ${cLY} L 150 90 L ${cR} 90 L ${cR} ${baseY} L 150 ${baseY} L ${cLX} ${baseY + cSideDy} Z`
                 : `M ${wL} 100 L ${wR} 100 L ${wR} ${baseY} L ${wL} ${baseY} Z`
             }}
             transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }}
@@ -582,6 +534,78 @@ export function AnimatedSchematic({
 
         {/* ─── HANDLES ─── */}
         {renderHandles()}
+
+        {/* ─── DIMENSION LINES (Architectural Style) ─── */}
+        <g stroke="#C9A86A" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.8">
+          {/* Width (X) Dimension */}
+          <motion.path 
+            d={
+              layout === 'wall-to-wall' ? `M ${wL} 25 L ${wR} 25` : 
+              layout === 'corner' ? `M 150 ${baseY + tHeight + 20} L ${cR} ${baseY + tHeight + 20}` : 
+              `M ${wkL} 25 L ${wkR} 25`
+            } 
+            markerStart="url(#arrow)" markerEnd="url(#arrow)" 
+            animate={{ 
+              d: layout === 'wall-to-wall' ? `M ${wL} 25 L ${wR} 25` : 
+                 layout === 'corner' ? `M 150 ${baseY + tHeight + 20} L ${cR} ${baseY + tHeight + 20}` : 
+                 `M ${wkL} 25 L ${wkR} 25`
+            }}
+            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
+          />
+          
+          {/* X Value Text */}
+          <motion.text 
+            x={layout === 'walk-in' ? 200 : layout === 'corner' ? 150 + cFrontW / 2 : 200} 
+            y={layout === 'corner' ? baseY + tHeight + 10 : 15} 
+            dy=".3em"
+            fill="#FFF" 
+            fontSize="15" 
+            fontWeight="bold" 
+            textAnchor="middle"
+            stroke="none"
+            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}
+            animate={{ 
+              x: layout === 'walk-in' ? 200 : layout === 'corner' ? 150 + cFrontW / 2 : 200,
+              y: layout === 'corner' ? baseY + tHeight + 10 : 15
+            }}
+          >
+            {widthX} cm
+          </motion.text>
+
+          {/* Depth (Y) Dimension (Only for Corner) */}
+          {layout === 'corner' && (
+             <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+               <motion.path 
+                 d={`M ${cLX - 15} ${baseY + cSideDy + tHeight + 20} L ${150 - 15} ${baseY + tHeight + 20}`} 
+                 markerStart="url(#arrow)" markerEnd="url(#arrow)" 
+                 animate={{ d: `M ${cLX - 15} ${baseY + cSideDy + tHeight + 20} L ${150 - 15} ${baseY + tHeight + 20}` }}
+                 transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
+               />
+               <motion.text 
+                 x={(cLX + 150) / 2 - 25} 
+                 y={baseY + cSideDy / 2 + tHeight + 10} 
+                 dy=".3em"
+                 fill="#FFF" 
+                 fontSize="15" 
+                 fontWeight="bold" 
+                 textAnchor="middle" 
+                 stroke="none"
+                 style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}
+                 animate={{ 
+                   x: (cLX + 150) / 2 - 25,
+                   y: baseY + cSideDy / 2 + tHeight + 10
+                 }}
+               >
+                 {depthY} cm
+               </motion.text>
+             </motion.g>
+          )}
+
+          {/* Marker definition for arrows */}
+          <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#C9A86A" stroke="none" />
+          </marker>
+        </g>
 
       </svg>
       

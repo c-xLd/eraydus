@@ -10,6 +10,7 @@ import { FramerMotionFix } from "./FramerMotionFix";
 import { AIGraphSchema } from "@/components/seo/AIGraphSchema";
 import { globalSeoData } from "@/lib/data/seo";
 import { ImageProtection } from "@/components/ImageProtection";
+import { Tracker } from "@/components/analytics/Tracker";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -105,6 +106,7 @@ export default async function RootLayout({
           <AIGraphSchema />
           <ServerFAQSchema />
           <ImageProtection />
+          <Tracker />
 
           {/* Google Analytics (GA4) - Lazy loaded to protect FCP/LCP */}
           {geoData?.analytics?.googleAnalyticsId && (

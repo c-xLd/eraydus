@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Bell, Trash2, CheckCircle2, AlertCircle, Info, Settings } from 'lucide-react'
 import { markNotificationAsRead, deleteNotification } from '../actions'
+import Link from 'next/link'
 import { toast } from 'sonner'
 
 export default function NotificationsClient({ initialNotifications }: { initialNotifications: any[] }) {
@@ -59,10 +60,13 @@ export default function NotificationsClient({ initialNotifications }: { initialN
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">Bildirimler</h1>
           <p className="text-sm text-gray-500 mt-1">Tüm sistem ve iş bildirimlerini yönetin.</p>
         </div>
-        <button className="px-4 py-2 bg-white border border-gray-200 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 text-black">
+        <Link
+          href="/admin/settings"
+          className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors gap-2 text-black"
+        >
           <Settings className="size-4" />
           Bildirim Ayarları
-        </button>
+        </Link>
       </div>
 
       {/* Stats */}

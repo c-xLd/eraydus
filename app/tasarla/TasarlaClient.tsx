@@ -1,18 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Check, Layers, Box, MessageCircle, ChevronRight, ChevronLeft } from 'lucide-react'
+import { ArrowLeft, Check, Layers, Box, MessageCircle, ChevronRight, ChevronLeft, RefreshCcw } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { AnimatedSchematic } from './AnimatedSchematic'
+import { cn } from '@/lib/utils'
 
 interface Model {
   id: string
   title: string
   image_url: string
 }
+
+import { useSettings } from '@/components/providers/SettingsProvider'
 
 interface TasarlaClientProps {
   sandblastedModels: Model[]
@@ -50,23 +53,46 @@ const GLASS_TYPES = [
   { id: 'smoke', label: 'Füme' },
   { id: 'bronze', label: 'Bronz' },
   { id: 'frosted', label: 'Kumlama' },
+  { id: 'mirrored', label: 'Aynalı' },
 ]
 
 const BASES = [
-  { id: 'floor', label: 'Yerden (Sıfır Zemin)' },
+  { id: 'floor-profile', label: 'Yerden (Altında Profil)' },
   { id: 'tray', label: 'Duş Teknesi' },
+  { id: 'tub', label: 'Küvet Üstü' },
   { id: 'jacuzzi', label: 'Jakuzi Üstü' }
 ]
 
+const TEKNE_MODELS = [
+  { id: 't-oval', name: 'Oval Duş Teknesi', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597482175-oval-dus-teknesi.webp', type: 'corner-sym' },
+  { id: 't-oval-oturmali', name: 'Oval Oturmalı Duş Teknesi', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597482452-oval-oturmali-dus-teknesi.webp', type: 'corner-sym' },
+  { id: 't-asimetrik', name: 'Asimetrik Oval Duş Teknesi', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597480708-asimetrik-oval-dus-teknesi.webp', type: 'corner-asym' },
+  { id: 't-asimetrik-oturmali', name: 'Asimetrik Oval Oturmalı Duş Teknesi', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597481092-asimetrik-oval-oturmali-dus-teknesi.webp', type: 'corner-asym' },
+  { id: 't-dikdortgen', name: 'Dikdörtgen Duş Teknesi', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785597481667-dikdortgen-dus-teknesi.webp', type: 'flat' }
+]
+
+const KUVET_MODELS = [
+  { id: 'k-oval', name: 'Oval Küvet', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718440153-oval-kuvet.webp', type: 'corner-sym' },
+  { id: 'k-asimetrik', name: 'Asimetrik Oval Küvet', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718439933-oval-asimetrik-kuvet.webp', type: 'corner-asym' },
+  { id: 'k-dikdortgen', name: 'Dikdörtgen Küvet', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718437681-dikd-rtgen-kuvet.webp', type: 'flat' },
+  { id: 'k-dikdortgen-oturmali', name: 'Dikdörtgen Oturmalı Küvet', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718437923-dikd-rtgen-oturmali-kuvet.webp', type: 'flat' }
+]
+
+const JAKUZI_MODELS = [
+  { id: 'j-lumina', name: 'Lumina', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717846272-jakuzi-1.webp' },
+  { id: 'j-aero', name: 'Aero', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717846546-jakuzi-2.webp' },
+  { id: 'j-oasis', name: 'Oasis', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717846972-jakuzi-3.webp' },
+  { id: 'j-prestige', name: 'Prestige', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717847272-jakuzi-4.webp' },
+  { id: 'j-zen', name: 'Zen', src: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717847509-jakuzi-5.webp' }
+]
 const HANDLES = [
-  { id: 'standard', label: 'Standart (Dik)' },
-  { id: 'nokta', label: 'Nokta Kulp' },
-  { id: 'kare', label: 'Kare Kulp' },
-  { id: 'havlu', label: 'Havlu Askılı' }
+  { id: 'nokta', label: 'Standart Nokta Kulp' },
+  { id: 'plastik-dik', label: 'Plastik Dik Kulp' },
+  { id: 'metal-dik', label: 'Metal Dik Kulp' }
 ]
 
 const DELIVERIES = [
-  { id: 'montaj', label: 'Ücretsiz Montaj (5-7 Gün)' },
+  { id: 'montaj', label: 'Ücretsiz Montaj (3-5 İş Günü)' },
   { id: 'kargo', label: 'Kargo / Elden Teslim' }
 ]
 
@@ -82,16 +108,18 @@ function LayoutGridIcon(props: any) {
 }
 
 export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
+  const { whatsappNumber, enableOnlineQuotes, showPrices } = useSettings()
   // STATE
   const [layout, setLayout] = useState('wall-to-wall')
-  const [widthX, setWidthX] = useState(120)
-  const [depthY, setDepthY] = useState(90)
-  const [doorSystem, setDoorSystem] = useState('1-sabit-1-kayar')
+  const [widthX, setWidthX] = useState<number>(120)
+  const [depthY, setDepthY] = useState<number>(90)
+  const [doorSystem, setDoorSystem] = useState('2-sabit-2-kayar')
   const [glass, setGlass] = useState('clear')
   const [patternId, setPatternId] = useState<string | null>(sandblastedModels.length > 0 ? sandblastedModels[0].id : null)
   const [profile, setProfile] = useState('chrome')
-  const [base, setBase] = useState('floor')
-  const [handle, setHandle] = useState('standard')
+  const [base, setBase] = useState('floor-profile')
+  const [baseModelId, setBaseModelId] = useState<string | null>(null)
+  const [handle, setHandle] = useState('nokta')
   const [delivery, setDelivery] = useState('montaj')
   const [notes, setNotes] = useState('')
 
@@ -99,6 +127,45 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
   const [direction, setDirection] = useState(1)
 
   const selectedPattern = sandblastedModels.find(m => m.id === patternId)
+
+  const getAvailableBaseModels = () => {
+    if (base === 'tray') {
+      if (layout === 'wall-to-wall' || layout === 'walk-in') {
+        return TEKNE_MODELS.filter(m => m.type === 'flat')
+      } else {
+        if (widthX === depthY) {
+          return TEKNE_MODELS.filter(m => m.type === 'corner-sym' || m.type === 'flat')
+        } else {
+          return TEKNE_MODELS.filter(m => m.type === 'corner-asym' || m.type === 'flat')
+        }
+      }
+    } else if (base === 'tub') {
+      if (layout === 'wall-to-wall' || layout === 'walk-in') {
+        return KUVET_MODELS.filter(m => m.type === 'flat')
+      } else {
+        if (widthX === depthY) {
+          return KUVET_MODELS.filter(m => m.type === 'corner-sym' || m.type === 'flat')
+        } else {
+          return KUVET_MODELS.filter(m => m.type === 'corner-asym' || m.type === 'flat')
+        }
+      }
+    } else if (base === 'jacuzzi') {
+      return JAKUZI_MODELS
+    }
+    return []
+  }
+
+  const availableBaseModels = getAvailableBaseModels()
+
+  useEffect(() => {
+    if (availableBaseModels.length > 0) {
+      if (!baseModelId || !availableBaseModels.find(m => m.id === baseModelId)) {
+        setBaseModelId(availableBaseModels[0].id)
+      }
+    } else {
+      setBaseModelId(null)
+    }
+  }, [base, layout, widthX, depthY, availableBaseModels, baseModelId])
 
   // Handlers
   const handleLayoutChange = (l: string) => {
@@ -173,7 +240,29 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
       text += `\n📝 *Ek Notlar:* ${notes.trim()}\n`
     }
 
-    return `https://wa.me/905548830071?text=${encodeURIComponent(text)}`
+    const cleanNumber = whatsappNumber.replace(/[^0-9+]/g, '')
+    return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(text)}`
+  }
+
+  const resetDesign = () => {
+    if (!confirm('Tasarımı sıfırlamak istediğinize emin misiniz?')) return;
+    
+    // Reset all state to initial values
+    setLayout('wall-to-wall')
+    setWidthX(120)
+    setDepthY(90)
+    setDoorSystem('2-sabit-2-kayar')
+    setGlass('clear')
+    setPatternId(sandblastedModels.length > 0 ? sandblastedModels[0].id : null)
+    setProfile('chrome')
+    setBase('floor-profile')
+    setBaseModelId(null)
+    setHandle('nokta')
+    setDelivery('montaj')
+    setNotes('')
+    setCurrentStepIndex(0)
+    setDirection(-1)
+    toast.success('Tasarım sıfırlandı.')
   }
 
   // Animation variants
@@ -185,13 +274,10 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
 
   return (
     <div className="flex flex-col md:flex-row w-full h-[100dvh] bg-[#0A0A0A] text-white overflow-hidden selection:bg-champagne/20">
-      {/* ── SEO & Accessibility Headers ── */}
       <h1 className="sr-only">Özel Ölçü Duşakabin Tasarım Aracı ve Fiyat Hesaplama</h1>
       <h2 className="sr-only">Kendi özel ölçü duşakabininizi (kare, oval, iki duvar arası) tasarlayın, cam tipini ve profil rengini seçip anında online fiyat hesaplayın.</h2>
 
-      {/* ── Left Area: 2D Animated Schematic (Visualizer) ── */}
       <div className="relative w-full md:flex-1 shrink-0 bg-gradient-to-br from-[#0F0F0F] to-[#050505] h-[65dvh] md:h-full flex items-center justify-center p-2 md:p-6">
-        {/* Back Button */}
         <Link
           href="/"
           className="absolute top-4 left-4 md:top-6 md:left-6 z-50 flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-white transition-colors bg-black/20 md:bg-transparent px-3 py-1.5 md:p-0 rounded-full backdrop-blur-md md:backdrop-blur-none"
@@ -199,7 +285,15 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
           <ArrowLeft className="w-4 h-4" /> Ana Sayfa
         </Link>
 
-        {/* Decorative Grid */}
+        {currentStepIndex > 0 && (
+          <button
+            onClick={resetDesign}
+            className="md:hidden absolute top-4 right-4 z-50 flex items-center gap-1.5 text-xs text-white/50 hover:text-champagne transition-colors bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/5 hover:border-champagne/30"
+          >
+            <RefreshCcw className="w-3.5 h-3.5" /> <span>Sıfırla</span>
+          </button>
+        )}
+
         <div
           className="absolute inset-0 opacity-[0.02] pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}
@@ -222,15 +316,12 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
         </div>
       </div>
 
-      {/* ── Right Area: Multi-Step Controls ── */}
-      <div className="w-full flex-1 md:flex-none md:w-[360px] lg:w-[400px] shrink-0 bg-[#111111] md:border-l border-white/5 md:h-full flex flex-col relative z-20 rounded-t-[24px] md:rounded-none -mt-6 md:mt-0 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] md:shadow-none overflow-hidden">
+      <div className="w-full flex-1 md:flex-none md:w-[clamp(320px,30vw,480px)] shrink-0 bg-[#111111] md:border-l border-white/5 md:h-full flex flex-col relative z-20 rounded-t-[24px] md:rounded-none -mt-6 md:mt-0 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] md:shadow-none overflow-hidden">
         
-        {/* Mobile Drag Handle (Visual only) */}
         <div className="w-full flex justify-center pt-2 pb-1 md:hidden absolute top-0 left-0 z-30">
           <div className="w-10 h-1 bg-white/15 rounded-full" />
         </div>
 
-        {/* Header / Progress Indicator */}
         <div className="pt-6 px-4 pb-3 md:p-6 md:pb-5 border-b border-white/5 shrink-0 relative">
           <div className="hidden md:block">
             <span className="text-champagne text-[10px] font-semibold uppercase tracking-[0.3em]">Erayduş Konfigüratör</span>
@@ -254,7 +345,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
           </div>
         </div>
 
-        {/* Step Content Area */}
         <div className="relative flex-1 overflow-x-hidden overflow-y-auto custom-scrollbar p-4 md:p-8">
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
@@ -267,7 +357,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className="w-full"
             >
-              {/* STEP 1: LAYOUT */}
               {currentStep.id === 'layout' && (
                 <div className="space-y-5">
                   <h3 className="text-lg font-light text-white">Yerleşim tipini seçin</h3>
@@ -294,7 +383,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 2: DIMENSIONS */}
               {currentStep.id === 'dimensions' && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                   <h3 className="text-lg font-light text-white">Ölçüleri Belirleyin</h3>
@@ -312,14 +400,15 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                         const newW = Number(e.target.value)
                         setWidthX(newW)
 
-                        // Auto-correct door system based on physical limits
-                        let valid = true
-                        if (newW < 100 && doorSystem === '2-sabit-2-kayar') valid = false
-                        if (newW > 100 && (doorSystem === '1-sabit-1-kayar' || doorSystem === 'katlanir')) valid = false
+                        if (layout !== 'corner') {
+                          let valid = true
+                          if (newW < 100 && doorSystem === '2-sabit-2-kayar') valid = false
+                          if (newW > 100 && (doorSystem === '1-sabit-1-kayar' || doorSystem === 'katlanir')) valid = false
 
-                        if (!valid) {
-                          if (newW < 100) setDoorSystem('1-sabit-1-kayar')
-                          if (newW > 100) setDoorSystem('2-sabit-2-kayar')
+                          if (!valid) {
+                            if (newW < 100) setDoorSystem('1-sabit-1-kayar')
+                            if (newW > 100) setDoorSystem('2-sabit-2-kayar')
+                          }
                         }
                       }}
                       className="w-full accent-champagne h-1.5 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-champagne [&::-webkit-slider-thumb]:rounded-full cursor-pointer"
@@ -356,7 +445,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 3: MODEL */}
               {currentStep.id === 'model' && (
                 <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
                   <h3 className="text-lg font-light text-white">Kapı Modelini Seçin</h3>
@@ -396,7 +484,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 4: GLASS */}
               {currentStep.id === 'glass' && (
                 <div className="space-y-5">
                   <h3 className="text-lg font-light text-white">Cam tipini seçin</h3>
@@ -422,7 +509,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 5: PATTERN (Conditional) */}
               {currentStep.id === 'pattern' && (
                 <div className="space-y-5">
                   <h3 className="text-lg font-light text-white">Kumlama desenini seçin</h3>
@@ -452,7 +538,6 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 6: PROFILE */}
               {currentStep.id === 'profile' && (
                 <div className="space-y-5">
                   <h3 className="text-lg font-light text-white">Profil rengini seçin</h3>
@@ -479,18 +564,17 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 7: BASE */}
               {currentStep.id === 'base' && (
-                <div className="space-y-5">
+                <div className="space-y-6">
                   <h3 className="text-lg font-light text-white">Zemin tipini seçin</h3>
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-1 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <div className="grid grid-cols-2 lg:grid-cols-2 gap-3">
                     {BASES.map(b => (
                       <button
                         key={b.id}
                         onClick={() => setBase(b.id)}
-                        className={`shrink-0 w-[200px] md:w-auto snap-center relative p-5 rounded-2xl border text-sm font-medium transition-all text-left whitespace-normal ${base === b.id
-                            ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
+                        className={`relative p-4 rounded-xl border text-sm font-medium transition-all text-left ${base === b.id
+                          ? 'bg-champagne/10 border-champagne/50 text-champagne'
+                          : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
                           }`}
                       >
                         {b.label}
@@ -502,6 +586,41 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                       </button>
                     ))}
                   </div>
+
+                  {/* Zemin Modeli Seçimi */}
+                  {availableBaseModels.length > 0 && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      className="space-y-4 pt-6 border-t border-white/10"
+                    >
+                      <h4 className="text-sm font-medium text-white/70">Ölçünüze Uygun Model Seçimi</h4>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {availableBaseModels.map(model => (
+                          <button
+                            key={model.id}
+                            onClick={() => setBaseModelId(model.id)}
+                            className={cn(
+                              "relative flex flex-col items-center gap-2 rounded-xl border p-2 transition-all",
+                              baseModelId === model.id 
+                                ? "border-eraydus-gold bg-eraydus-gold/10" 
+                                : "border-white/10 hover:border-white/30 hover:bg-white/5"
+                            )}
+                          >
+                            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-black/40">
+                              <Image src={model.src} alt={model.name} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover" />
+                            </div>
+                            <span className={cn(
+                              "text-xs font-medium text-center",
+                              baseModelId === model.id ? "text-eraydus-gold" : "text-white/70"
+                            )}>
+                              {model.name}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
               )}
 
@@ -621,7 +740,7 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => toast.success('Tasarım detaylarınız WhatsApp sipariş hattımıza aktarılıyor...')}
-              className="w-full flex items-center justify-center gap-2 bg-champagne text-black px-4 py-2.5 md:px-6 md:py-3.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)] cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 bg-champagne text-black px-4 py-2.5 md:px-6 md:py-3.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)] cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
               Siparişi İlet
@@ -633,6 +752,17 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
             >
               Devam Et
               <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
+          )}
+
+          {/* Reset Button (Desktop Only) */}
+          {currentStepIndex > 0 && (
+            <button
+              onClick={resetDesign}
+              title="Tasarımı Sıfırla"
+              className="hidden md:flex items-center justify-center size-12 shrink-0 rounded-full border border-white/10 transition-colors hover:bg-white/10 text-white/50 hover:text-white"
+            >
+              <RefreshCcw className="w-5 h-5" />
             </button>
           )}
         </div>

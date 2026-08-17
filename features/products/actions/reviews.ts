@@ -1,7 +1,15 @@
 'use server'
 
 import { createClient } from '@/services/supabase/server'
+import { createAdminClient } from '@/services/supabase/server'
 import { revalidatePath } from 'next/cache'
+
+async function getAdminSupabase() {
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return createAdminClient()
+  }
+  return await createClient()
+}
 
 export async function getApprovedReviews(productId: string) {
   const supabase = await createClient()
@@ -22,17 +30,7 @@ export async function getApprovedReviews(productId: string) {
 }
 
 export async function getAllReviews() {
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { createAdminClient } = await import('@/services/supabase/server')
-      supabase = createAdminClient()
-    } else {
-      supabase = await createClient()
-    }
-  } catch {
-    supabase = await createClient()
-  }
+  const supabase = await getAdminSupabase()
 
   const { data, error } = await supabase
     .from('product_reviews')
@@ -71,17 +69,7 @@ export async function submitProductReview(formData: FormData) {
     return { success: false, error: 'Lütfen tüm zorunlu alanları doldurun.' }
   }
 
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { createAdminClient } = await import('@/services/supabase/server')
-      supabase = createAdminClient()
-    } else {
-      supabase = await createClient()
-    }
-  } catch {
-    supabase = await createClient()
-  }
+  const supabase = await getAdminSupabase()
 
   const imageUrlsStr = formData.get('images') as string
   let images: string[] = []
@@ -124,17 +112,7 @@ export async function submitProductReview(formData: FormData) {
 }
 
 export async function updateReviewStatus(reviewId: string, isApproved: boolean) {
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { createAdminClient } = await import('@/services/supabase/server')
-      supabase = createAdminClient()
-    } else {
-      supabase = await createClient()
-    }
-  } catch {
-    supabase = await createClient()
-  }
+  const supabase = await getAdminSupabase()
 
   const { error } = await supabase
     .from('product_reviews')
@@ -150,17 +128,7 @@ export async function updateReviewStatus(reviewId: string, isApproved: boolean) 
 }
 
 export async function deleteReview(reviewId: string) {
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { createAdminClient } = await import('@/services/supabase/server')
-      supabase = createAdminClient()
-    } else {
-      supabase = await createClient()
-    }
-  } catch {
-    supabase = await createClient()
-  }
+  const supabase = await getAdminSupabase()
 
   const { error } = await supabase
     .from('product_reviews')

@@ -1,122 +1,110 @@
 "use client"
 
 import { useState } from "react"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Save, Globe, MapPin, Building2, BrainCircuit, Activity } from "lucide-react"
+import { Save, Settings2, Bell, Mail, Phone, ShoppingBag, ShieldAlert } from "lucide-react"
 import { toast } from "sonner"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { updateSiteSettings } from "../actions"
 
-const seoSettingsSchema = z.object({
-  siteName: z.string().min(2, "Site adı en az 2 karakter olmalıdır"),
-  titleSeparator: z.string().min(1, "Ayraç gerekli"),
-  defaultDescription: z.string().min(10, "Açıklama çok kısa").max(160, "SEO için 160 karakteri aşmayın"),
-  defaultOgImage: z.string().url("Geçerli bir URL girin veya yolu belirtin").or(z.string().startsWith("/")),
-  twitterHandle: z.string().startsWith("@", "Twitter handle @ ile başlamalıdır"),
-  contact: z.object({
-    phone: z.string().min(10, "Geçerli bir telefon girin"),
-    email: z.string().email("Geçerli bir e-posta girin"),
-    address: z.object({
-      streetAddress: z.string().min(5, "Adres çok kısa"),
-      addressLocality: z.string().min(2, "İlçe zorunlu"),
-      addressRegion: z.string().min(2, "İl zorunlu"),
-      postalCode: z.string().min(4, "Posta kodu gerekli"),
-      addressCountry: z.string().min(2, "Ülke zorunlu")
-    })
-  }),
-  geo: z.object({
-    region: z.string().min(2, "Bölge kodu gerekli (Örn: TR-06)"),
-    placename: z.string().min(2, "Yer adı zorunlu"),
-    position: z.string().min(5, "Koordinat gerekli (Örn: 39.9334;32.8597)")
-  }),
-  localBusiness: z.object({
-    openingHours: z.string().min(5, "Çalışma saatleri gerekli"),
-    priceRange: z.string().min(1, "Fiyat aralığı (₺₺) gerekli"),
-    areaServed: z.string().min(2, "Hizmet verilen bölgeleri virgülle ayırarak yazın")
-  }),
-  aiSeo: z.object({
-    brandGuidelines: z.string().min(10, "Yapay zeka için marka kılavuzu gerekli"),
-    targetAudience: z.string().min(5, "Hedef kitle tanımı gerekli")
-  }).optional()
+const generalSettingsSchema = z.object({
+  maintenanceMode: z.boolean(),
+  contactEmail: z.string().email("Geçerli bir e-posta adresi girin"),
+  whatsappNumber: z.string().min(10, "Geçerli bir WhatsApp numarası girin"),
+  showPrices: z.boolean(),
+  enableOnlineQuotes: z.boolean(),
+  orderNotificationEmail: z.string().email("Geçerli bir e-posta adresi girin"),
+  autoReplyMessage: z.string().optional()
 })
 
-type SeoSettingsValues = z.infer<typeof seoSettingsSchema>
+type GeneralSettingsValues = z.infer<typeof generalSettingsSchema>
 
-export function SettingsClient({ initialData: rawData }: { initialData: Record<string, unknown> | null | undefined }) {
-  const [activeTab, setActiveTab] = useState('general')
+export function SettingsClient({ initialData }: { initialData: any }) {
   const [isSaving, setIsSaving] = useState(false)
 
-  const initialData = rawData as any;
-
-  // Parse areaServed from array to string for the form
   const defaultValues = {
-    ...initialData,
-    localBusiness: {
-      ...(initialData?.localBusiness || {}),
-      areaServed: Array.isArray(initialData?.localBusiness?.areaServed) 
-        ? initialData.localBusiness.areaServed.join(', ')
-        : initialData?.localBusiness?.areaServed || ''
-    },
-    aiSeo: initialData?.aiSeo || {
-      brandGuidelines: "Erayduş, lüks ve premium segmentte yer alan modern bir duşakabin markasıdır.",
-      targetAudience: "Mimarlar, iç mimarlar ve lüks yaşam alanları arayan son kullanıcılar."
-    }
+    maintenanceMode: initialData?.maintenanceMode || false,
+    contactEmail: initialData?.contactEmail || "info@eraydus.net",
+    whatsappNumber: initialData?.whatsappNumber || "+905551234567",
+    showPrices: initialData?.showPrices ?? true,
+    enableOnlineQuotes: initialData?.enableOnlineQuotes ?? true,
+    orderNotificationEmail: initialData?.orderNotificationEmail || "satis@eraydus.net",
+    autoReplyMessage: initialData?.autoReplyMessage || "Talebiniz alınmıştır, en kısa sürede dönüş yapılacaktır."
   }
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm<SeoSettingsValues>({
-    resolver: zodResolver(seoSettingsSchema),
+  const { register, handleSubmit, formState: { errors, isDirty }, watch, setValue } = useForm<GeneralSettingsValues>({
+    resolver: zodResolver(generalSettingsSchema),
     defaultValues
   })
 
-  const onSubmit = async (data: SeoSettingsValues) => {
-    setIsSaving(true)
-    
-    // Transform areaServed back to array
-    const formattedData = {
-      ...data,
-      localBusiness: {
-        ...data.localBusiness,
-        areaServed: data.localBusiness.areaServed.split(',').map(s => s.trim()).filter(Boolean)
-      }
-    }
+  // Watch for toggles
+  const maintenanceMode = watch("maintenanceMode")
+  const showPrices = watch("showPrices")
+  const enableOnlineQuotes = watch("enableOnlineQuotes")
 
-    const result = await updateSiteSettings(formattedData)
-    
+  const onSubmit = async (data: GeneralSettingsValues) => {
+    setIsSaving(true)
+    const result = await updateSiteSettings(data)
     setIsSaving(false)
+    
     if (result.success) {
-      toast.success("SEO ve Sistem Ayarları başarıyla güncellendi!")
+      toast.success("Platform Ayarları başarıyla güncellendi", {
+        description: "Değişiklikler tüm sisteme uygulandı.",
+      })
     } else {
-      toast.error("Kaydedilirken hata oluştu: " + result.error)
+      toast.error("Hata", {
+        description: "Kaydedilirken hata oluştu: " + result.error,
+      })
     }
   }
 
-  const tabs = [
-    { id: 'general', label: 'Genel SEO & Meta', icon: Globe, desc: 'Site ismi, açıklama ve meta etiketleri' },
-    { id: 'local', label: 'Local Business & Schema', icon: Building2, desc: 'İletişim ve işletme schema verileri' },
-    { id: 'geo', label: 'Coğrafi (Geo) SEO', icon: MapPin, desc: 'Bölgesel arama optimizasyonu' },
-    { id: 'ai', label: 'AI & Semantic SEO', icon: BrainCircuit, desc: 'LLM\'ler için marka yönergeleri' },
-  ]
+  // Custom Toggle Component to keep code clean
+  const Toggle = ({ checked, onChange, danger = false }: { checked: boolean, onChange: (val: boolean) => void, danger?: boolean }) => (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onChange(!checked)}
+      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
+        checked ? (danger ? 'bg-red-500' : 'bg-black') : 'bg-neutral-200'
+      }`}
+    >
+      <span className="sr-only">Ayar Değiştir</span>
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-300 ease-in-out ${
+          checked ? 'translate-x-5' : 'translate-x-0'
+        }`}
+      />
+    </button>
+  )
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-6xl mx-auto pb-20">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm sticky top-4 z-10">
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto pb-32">
+      
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-black/5 pb-4 pt-6 mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-            <Activity className="size-6 text-emerald-500" />
-            Gelişmiş SEO Ayarları
+          <h1 className="text-2xl font-semibold tracking-tight text-black">
+            Platform Ayarları
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Google ve Yapay Zeka botları için sistem yapılandırması.</p>
+          <p className="text-sm text-black/50 mt-1 font-light">
+            Sistemin temel çalışma dinamiklerini ve operasyonel tercihlerini yönetin.
+          </p>
         </div>
         <button 
           type="submit"
-          disabled={isSaving} 
-          className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-black text-white text-sm font-medium rounded-xl hover:bg-black/90 transition-all disabled:opacity-50 shadow-xl shadow-black/10 hover:shadow-black/20"
+          disabled={isSaving || !isDirty} 
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-black text-white text-sm font-medium rounded-xl hover:bg-neutral-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:hover:translate-y-0"
         >
           {isSaving ? (
-            <div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+              className="size-4 border-[1.5px] border-white/30 border-t-white rounded-full" 
+            />
           ) : (
             <Save className="size-4" />
           )}
@@ -124,196 +112,160 @@ export function SettingsClient({ initialData: rawData }: { initialData: Record<s
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar Nav */}
-        <div className="w-full lg:w-72 shrink-0">
-          <nav className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
-            {tabs.map((tab) => {
-              const Icon = tab.icon
-              const isActive = activeTab === tab.id
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`relative flex flex-col items-start gap-1 p-4 rounded-xl text-left transition-all min-w-[200px] lg:min-w-0 ${
-                    isActive 
-                      ? "bg-white shadow-md border border-gray-100" 
-                      : "hover:bg-white/60 border border-transparent"
-                  }`}
-                >
-                  <div className={`flex items-center gap-2 text-sm font-semibold ${isActive ? 'text-black' : 'text-gray-600'}`}>
-                    <Icon className={`size-4 ${isActive ? 'text-emerald-500' : 'text-gray-400'}`} />
-                    {tab.label}
-                  </div>
-                  <p className="text-xs text-gray-500 line-clamp-1">{tab.desc}</p>
-                </button>
-              )
-            })}
-          </nav>
-        </div>
-
-        {/* Content Area */}
-        <div className="flex-1">
-          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[500px]">
-            <AnimatePresence mode="wait">
-              {activeTab === 'general' && (
-                <motion.div key="general" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-4">Genel SEO & Meta Yapılandırması</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Site Adı (Brand Name)</label>
-                      <input {...register("siteName")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.siteName ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 text-sm`} />
-                      {errors.siteName && <p className="text-red-500 text-xs">{errors.siteName.message}</p>}
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Başlık Ayracı (Title Separator)</label>
-                      <input {...register("titleSeparator")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.titleSeparator ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 text-sm`} />
-                      {errors.titleSeparator && <p className="text-red-500 text-xs">{errors.titleSeparator.message}</p>}
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Twitter Handle</label>
-                      <input {...register("twitterHandle")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.twitterHandle ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 text-sm`} />
-                      {errors.twitterHandle && <p className="text-red-500 text-xs">{errors.twitterHandle.message}</p>}
-                    </div>
-
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Varsayılan Meta Açıklama (Default Description)</label>
-                      <textarea rows={3} {...register("defaultDescription")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.defaultDescription ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 text-sm resize-none`} />
-                      <div className="flex justify-between items-center mt-1">
-                        {errors.defaultDescription ? <p className="text-red-500 text-xs">{errors.defaultDescription.message}</p> : <span />}
-                      </div>
-                    </div>
-
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Varsayılan Sosyal Medya Görseli (OG Image URL)</label>
-                      <input {...register("defaultOgImage")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.defaultOgImage ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 text-sm`} />
-                      {errors.defaultOgImage && <p className="text-red-500 text-xs">{errors.defaultOgImage.message}</p>}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeTab === 'local' && (
-                <motion.div key="local" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-4">İletişim & Local Business Schema</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Telefon</label>
-                      <input {...register("contact.phone")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.contact?.phone ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm`} />
-                      {errors.contact?.phone && <p className="text-red-500 text-xs">{errors.contact.phone.message}</p>}
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">E-posta</label>
-                      <input {...register("contact.email")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.contact?.email ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm`} />
-                      {errors.contact?.email && <p className="text-red-500 text-xs">{errors.contact.email.message}</p>}
-                    </div>
-
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Açık Adres (Street Address)</label>
-                      <input {...register("contact.address.streetAddress")} className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.contact?.address?.streetAddress ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">İlçe (Locality)</label>
-                      <input {...register("contact.address.addressLocality")} className={`w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">İl (Region)</label>
-                      <input {...register("contact.address.addressRegion")} className={`w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Posta Kodu</label>
-                      <input {...register("contact.address.postalCode")} className={`w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Ülke (Country Code)</label>
-                      <input {...register("contact.address.addressCountry")} className={`w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1 md:col-span-2 pt-4 border-t border-gray-100">
-                      <h4 className="text-sm font-semibold text-gray-900 mb-4">Schema Verileri</h4>
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Çalışma Saatleri (ISO 8601)</label>
-                      <input {...register("localBusiness.openingHours")} placeholder="Mo,Tu,We,Th,Fr,Sa 09:00-19:00" className={`w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Fiyat Aralığı Segmenti</label>
-                      <input {...register("localBusiness.priceRange")} placeholder="₺₺" className={`w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Hizmet Verilen Bölgeler (Virgülle ayırın)</label>
-                      <textarea rows={2} {...register("localBusiness.areaServed")} placeholder="Ankara, Çankaya, Yenimahalle" className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.localBusiness?.areaServed ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm resize-none`} />
-                      {errors.localBusiness?.areaServed && <p className="text-red-500 text-xs">{errors.localBusiness.areaServed.message}</p>}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeTab === 'geo' && (
-                <motion.div key="geo" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-4">Coğrafi (Geo) Meta Verileri</h3>
-                  <p className="text-sm text-gray-500">Google ve diğer arama motorlarına fiziksel konumunuzu tam olarak bildirir. Yerel aramalarda (Local SEO) üst sıralara çıkmak için kritiktir.</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Bölge (geo.region)</label>
-                      <input {...register("geo.region")} placeholder="TR-06" className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.geo?.region ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm`} />
-                      {errors.geo?.region && <p className="text-red-500 text-xs">{errors.geo.region.message}</p>}
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Yer Adı (geo.placename)</label>
-                      <input {...register("geo.placename")} placeholder="Ankara" className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.geo?.placename ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm`} />
-                    </div>
-
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-700">Koordinatlar (geo.position)</label>
-                      <input {...register("geo.position")} placeholder="39.9334;32.8597" className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.geo?.position ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm`} />
-                      <p className="text-xs text-gray-500 mt-1">Enlem ve boylamı noktalı virgül ile ayırın (Örn: 39.9334;32.8597)</p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeTab === 'ai' && (
-                <motion.div key="ai" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-4">Yapay Zeka & Semantik SEO Optimizasyonu</h3>
-                  <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl mb-6">
-                    <p className="text-sm text-emerald-800 font-medium">Bu veriler, ChatGPT, Claude ve Gemini gibi büyük dil modellerine şirketinizin kurumsal kimliğini ve hedef kitlesini öğretmek için kullanılır (AI Search Optimization).</p>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Marka Kılavuzu & Konumlandırma (AI Prompt)</label>
-                      <textarea rows={4} {...register("aiSeo.brandGuidelines")} placeholder="Erayduş, lüks segmentte..." className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.aiSeo?.brandGuidelines ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm resize-none`} />
-                      <p className="text-xs text-gray-500 mt-1">AI botları bu markayı nasıl tanımalı?</p>
-                      {errors.aiSeo?.brandGuidelines && <p className="text-red-500 text-xs">{errors.aiSeo.brandGuidelines.message}</p>}
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Hedef Kitle Tanımı</label>
-                      <textarea rows={3} {...register("aiSeo.targetAudience")} placeholder="Mimarlar ve lüks konut sahipleri..." className={`w-full px-4 py-3 bg-[#F9F9F9] border ${errors.aiSeo?.targetAudience ? 'border-red-500' : 'border-gray-200'} rounded-xl text-sm resize-none`} />
-                      {errors.aiSeo?.targetAudience && <p className="text-red-500 text-xs">{errors.aiSeo.targetAudience.message}</p>}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+      <div className="space-y-12">
+        
+        {/* Section 1: Sistem Durumu */}
+        <section className="scroll-mt-32" id="general">
+          <div className="mb-6">
+            <h3 className="text-base font-semibold text-black flex items-center gap-2">
+              <Settings2 className="size-4 text-black/50" />
+              Sistem Durumu
+            </h3>
+            <p className="text-sm text-black/50 mt-1 font-light">Sitenin genel erişilebilirliğini yönetin.</p>
           </div>
-        </div>
+          
+          <div className="bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
+            <div className={`p-6 rounded-xl border transition-colors duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-6 ${maintenanceMode ? 'bg-red-50/50 border-red-100' : 'bg-neutral-50/50 border-neutral-200'}`}>
+              <div className="flex gap-4 items-start">
+                <div className={`p-3 rounded-full shrink-0 ${maintenanceMode ? 'bg-red-100/80 text-red-600' : 'bg-white text-black/60 shadow-sm'}`}>
+                  <ShieldAlert className="size-5" />
+                </div>
+                <div>
+                  <h4 className={`text-sm font-semibold ${maintenanceMode ? 'text-red-900' : 'text-black'}`}>Site Bakım Modu</h4>
+                  <p className={`text-sm mt-1.5 font-light ${maintenanceMode ? 'text-red-700' : 'text-black/60'}`}>
+                    Aktif edildiğinde sistem dışarıya kapanır. Yalnızca yönetim paneli erişilebilir kalır.
+                  </p>
+                </div>
+              </div>
+              <Toggle 
+                checked={maintenanceMode} 
+                onChange={(val) => setValue("maintenanceMode", val, { shouldDirty: true })} 
+                danger={true}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2: İletişim */}
+        <section className="scroll-mt-32" id="contact">
+          <div className="mb-6">
+            <h3 className="text-base font-semibold text-black flex items-center gap-2">
+              <Mail className="size-4 text-black/50" />
+              İletişim & Bildirimler
+            </h3>
+            <p className="text-sm text-black/50 mt-1 font-light">Müşterilerle iletişim kanallarını ve sistem bildirimlerini yapılandırın.</p>
+          </div>
+          
+          <div className="bg-white rounded-2xl border border-black/5 p-6 md:p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+              
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-black flex items-center gap-2">
+                  Genel İletişim E-postası
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="size-4 text-black/40" />
+                  </div>
+                  <input 
+                    {...register("contactEmail")} 
+                    className={`w-full pl-11 pr-4 py-3 bg-neutral-50/50 border ${errors.contactEmail ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-neutral-200 focus:border-black focus:ring-black/5'} rounded-xl outline-none transition-all text-sm`} 
+                    placeholder="info@eraydus.net"
+                  />
+                </div>
+                {errors.contactEmail && <p className="text-red-500 text-xs">{errors.contactEmail.message}</p>}
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-black flex items-center gap-2">
+                  Sipariş Bildirim E-postası
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Bell className="size-4 text-black/40" />
+                  </div>
+                  <input 
+                    {...register("orderNotificationEmail")} 
+                    className={`w-full pl-11 pr-4 py-3 bg-neutral-50/50 border ${errors.orderNotificationEmail ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-neutral-200 focus:border-black focus:ring-black/5'} rounded-xl outline-none transition-all text-sm`} 
+                    placeholder="satis@eraydus.net"
+                  />
+                </div>
+                {errors.orderNotificationEmail && <p className="text-red-500 text-xs">{errors.orderNotificationEmail.message}</p>}
+              </div>
+
+              <div className="space-y-3 md:col-span-2 pt-4 border-t border-black/5">
+                <label className="text-sm font-semibold text-black flex items-center gap-2">
+                  WhatsApp İletişim Numarası
+                </label>
+                <div className="relative max-w-md">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Phone className="size-4 text-black/40" />
+                  </div>
+                  <input 
+                    {...register("whatsappNumber")} 
+                    className={`w-full pl-11 pr-4 py-3 bg-neutral-50/50 border ${errors.whatsappNumber ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-neutral-200 focus:border-black focus:ring-black/5'} rounded-xl outline-none transition-all text-sm`} 
+                    placeholder="+905551234567"
+                  />
+                </div>
+                <p className="text-xs text-black/50 font-light mt-2">Müşterilerin hızlı iletişim butonlarından ulaşacağı numara. Ülke kodu ile giriniz (örn: +90).</p>
+                {errors.whatsappNumber && <p className="text-red-500 text-xs">{errors.whatsappNumber.message}</p>}
+              </div>
+
+              <div className="space-y-3 md:col-span-2 pt-4 border-t border-black/5">
+                <label className="text-sm font-semibold text-black">Form Otomatik Yanıt Metni</label>
+                <textarea 
+                  rows={3} 
+                  {...register("autoReplyMessage")} 
+                  className="w-full px-4 py-3 bg-neutral-50/50 border border-neutral-200 rounded-xl outline-none focus:border-black focus:ring-4 focus:ring-black/5 transition-all text-sm resize-none" 
+                  placeholder="Talebiniz alınmıştır..."
+                />
+                <p className="text-xs text-black/50 font-light mt-2">İletişim formunu dolduran müşteriye ekranda gösterilecek başarı mesajı.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: Katalog */}
+        <section className="scroll-mt-32" id="catalog">
+          <div className="mb-6">
+            <h3 className="text-base font-semibold text-black flex items-center gap-2">
+              <ShoppingBag className="size-4 text-black/50" />
+              Katalog Yönetimi
+            </h3>
+            <p className="text-sm text-black/50 mt-1 font-light">Ürünlerin sunumu ve satış/teklif politikalarını yapılandırın.</p>
+          </div>
+          
+          <div className="bg-white rounded-2xl border border-black/5 p-2 shadow-sm divide-y divide-black/5">
+            {/* Setting Row */}
+            <div className="p-6 bg-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-neutral-50/50 transition-colors">
+              <div>
+                <h4 className="text-sm font-semibold text-black">Fiyatları Herkese Göster</h4>
+                <p className="text-sm text-black/50 mt-1.5 font-light">
+                  Aktif ise site ziyaretçileri ürün fiyatlarını görebilir. Kapalıysa fiyatlar yerine "Teklif İsteyin" butonu yer alır.
+                </p>
+              </div>
+              <Toggle 
+                checked={showPrices} 
+                onChange={(val) => setValue("showPrices", val, { shouldDirty: true })} 
+              />
+            </div>
+
+            {/* Setting Row */}
+            <div className="p-6 bg-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-neutral-50/50 transition-colors">
+              <div>
+                <h4 className="text-sm font-semibold text-black">Online Teklif İsteme (Tasarla) Modülü</h4>
+                <p className="text-sm text-black/50 mt-1.5 font-light">
+                  Kullanıcıların kendi ölçüleriyle ürünleri konfigüre edip online teklif almasına olanak tanır.
+                </p>
+              </div>
+              <Toggle 
+                checked={enableOnlineQuotes} 
+                onChange={(val) => setValue("enableOnlineQuotes", val, { shouldDirty: true })} 
+              />
+            </div>
+          </div>
+        </section>
+
       </div>
     </form>
   )

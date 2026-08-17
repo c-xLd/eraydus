@@ -24,8 +24,7 @@ const NAV_LINKS = [
   { href: '/iletisim', label: 'İletişim', desc: 'Konum, telefon ve teklif al' },
 ]
 
-const WHATSAPP_URL = 'https://wa.me/905548830071'
-const PHONE_NUMBER = '0554 883 00 71'
+import { useSettings } from '@/components/providers/SettingsProvider'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -74,6 +73,10 @@ function NavLink({ href, label, lightText }: { href: string; label: string; ligh
 }
 
 export function Header() {
+  const { whatsappNumber } = useSettings()
+  const cleanNumber = whatsappNumber.replace(/[^0-9+]/g, '')
+  const formattedPhone = whatsappNumber
+  const whatsappUrl = `https://wa.me/${cleanNumber}`
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [megaOpen, setMegaOpen] = useState(false)
@@ -197,7 +200,7 @@ export function Header() {
           {/* Desktop actions */}
           <div className="hidden items-center gap-2 lg:flex">
             <a
-              href={WHATSAPP_URL}
+              href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
               aria-label="WhatsApp ile iletişim"
@@ -379,7 +382,7 @@ export function Header() {
               {/* Drawer Bottom Contact Footer */}
               <div className="p-6 border-t border-white/10 bg-[#09090b] space-y-3 shrink-0">
                 <a
-                  href={WHATSAPP_URL}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setMenuOpen(false)}
@@ -394,12 +397,12 @@ export function Header() {
                 </a>
 
                 <a
-                  href={`tel:${PHONE_NUMBER.replace(/\s/g, '')}`}
+                  href={`tel:${cleanNumber}`}
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center justify-center gap-2 h-11 w-full rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-medium transition-colors"
                 >
                   <Phone className="size-3.5 text-white/70" />
-                  <span>{PHONE_NUMBER}</span>
+                  <span>{formattedPhone}</span>
                 </a>
               </div>
             </motion.div>

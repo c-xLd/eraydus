@@ -1,6 +1,7 @@
 "use client"
 
 import { Bell, Search, User } from "lucide-react"
+import { NotificationBell } from "./NotificationBell"
 
 interface AdminHeaderProps {
   isCollapsed: boolean
@@ -24,12 +25,7 @@ export function AdminHeader({ isCollapsed, setIsCollapsed }: AdminHeaderProps) {
 
       {/* Right Actions */}
       <div className="flex items-center gap-2 sm:gap-4 ml-4">
-        <button
-          className="relative p-2 text-black/50 hover:text-black hover:bg-black/5 rounded-full transition-all"
-        >
-          <Bell className="size-5" strokeWidth={2} />
-          <span className="absolute top-2 right-2.5 size-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+        <NotificationBell />
 
         <div className="hidden sm:block h-5 w-[1px] bg-black/10 mx-1"></div>
 

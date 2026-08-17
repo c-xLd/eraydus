@@ -44,7 +44,7 @@ export async function signIn(formData: FormData): Promise<SignInState> {
   const ip = await getClientIp()
   const rlKey = `${ip}:${normalizedEmail}`
 
-  const gate = checkRateLimit(rlKey)
+  const gate = await checkRateLimit(rlKey)
   if (!gate.allowed) {
     const minutes = Math.max(1, Math.ceil(gate.retryAfterSeconds / 60))
     return {
@@ -60,18 +60,12 @@ export async function signIn(formData: FormData): Promise<SignInState> {
   })
 
   if (error) {
-    const failure = registerFailure(rlKey)
-    if (!failure.allowed) {
-      const minutes = Math.max(1, Math.ceil(failure.retryAfterSeconds / 60))
-      return {
-        error: `Çok fazla başarısız deneme. Lütfen ${minutes} dakika sonra tekrar deneyin.`,
-      }
-    }
+    await registerFailure(rlKey)
     return { error: GENERIC_AUTH_ERROR }
   }
 
   // 5) Success — clear the rate-limit bucket and enter the admin area.
-  reset(rlKey)
+  await reset(rlKey)
   revalidatePath('/admin', 'layout')
   redirect('/admin')
 }

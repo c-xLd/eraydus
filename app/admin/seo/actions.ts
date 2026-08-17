@@ -3,19 +3,13 @@
 import { createClient as createLocalClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 
+import { createAdminClient } from '@/services/supabase/server'
+
 async function getAdminSupabase() {
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { createAdminClient } = await import('@/services/supabase/server')
-      supabase = createAdminClient()
-    } else {
-      supabase = await createLocalClient()
-    }
-  } catch {
-    supabase = await createLocalClient()
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return createAdminClient()
   }
-  return supabase
+  return await createLocalClient()
 }
 
 export async function saveGlobalSeo(data: any) {

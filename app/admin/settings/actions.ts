@@ -2,20 +2,13 @@
 
 import { createClient as createLocalClient } from "@/lib/server"
 import { revalidatePath } from "next/cache"
+import { createAdminClient } from '@/services/supabase/server'
 
 async function getAdminSupabase() {
-  let supabase: any
-  try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { createAdminClient } = await import('@/services/supabase/server')
-      supabase = createAdminClient()
-    } else {
-      supabase = await createLocalClient()
-    }
-  } catch {
-    supabase = await createLocalClient()
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return createAdminClient()
   }
-  return supabase
+  return await createLocalClient()
 }
 
 export async function getSiteSettings() {
@@ -25,14 +18,14 @@ export async function getSiteSettings() {
       .from('site_settings')
       .select('value')
       .eq('key', 'general_settings')
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Error fetching site settings:', error)
       return { success: false, error: error.message }
     }
 
-    return { success: true, data: data.value }
+    return { success: true, data: data?.value || null }
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : String(err) }
   }
@@ -47,20 +40,20 @@ export async function updateSiteSettings(settings: Record<string, unknown>) {
       .from('site_settings')
       .select('key')
       .eq('key', 'general_settings')
-      .single()
+      .maybeSingle()
 
     let error;
 
     if (existing) {
       const { error: updateError } = await supabase
         .from('site_settings')
-        .update({ value: settings })
+        .update({ value: settings as any })
         .eq('key', 'general_settings')
       error = updateError;
     } else {
       const { error: insertError } = await supabase
         .from('site_settings')
-        .insert({ key: 'general_settings', value: settings })
+        .insert({ key: 'general_settings', value: settings as any })
       error = insertError;
     }
 
