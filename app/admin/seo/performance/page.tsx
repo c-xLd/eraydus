@@ -1,5 +1,5 @@
 import ComingSoon from '../components/ComingSoon'
-export const metadata = { title: 'Performance & Core Web Vitals | Erayduþ' }
+export const metadata = { title: 'Performance & Core Web Vitals | ErayduÅŸ' }
 export default function Page() {
-  return <ComingSoon title="Performance & Core Web Vitals" description="PageSpeed Insights API baðlanarak hýz metrikleri doðrudan buradan izlenecektir." integrationRequired={true} />
+  return <ComingSoon title="Performance & Core Web Vitals" description="PageSpeed Insights API baÄŸlanarak hÄ±z metrikleri doÄŸrudan buradan izlenecektir." integrationRequired={true} />
 }

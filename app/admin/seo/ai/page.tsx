@@ -1,5 +1,5 @@
 import ComingSoon from '../components/ComingSoon'
-export const metadata = { title: 'SEO AI Assistant | Erayduþ' }
+export const metadata = { title: 'SEO AI Assistant | ErayduÅŸ' }
 export default function Page() {
-  return <ComingSoon title="SEO AI Assistant" description="Yapay zeka destekli Title, Description ve Ýçerik önerileri yakýnda aktif edilecek." integrationRequired={false} />
+  return <ComingSoon title="SEO AI Assistant" description="Yapay zeka destekli Title, Description ve Ä°Ã§erik Ã¶nerileri yakÄ±nda aktif edilecek." integrationRequired={false} />
 }

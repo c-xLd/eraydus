@@ -1,5 +1,5 @@
 import ComingSoon from '../components/ComingSoon'
-export const metadata = { title: 'Google Search Console | Erayduþ' }
+export const metadata = { title: 'Google Search Console | ErayduÅŸ' }
 export default function Page() {
-  return <ComingSoon title="Google Search Console" description="Týklama, gösterim, CTR ve pozisyon verilerini görmek için GSC API baðlantýsý kurulmalýdýr." integrationRequired={true} />
+  return <ComingSoon title="Google Search Console" description="TÄ±klama, gÃ¶sterim, CTR ve pozisyon verilerini gÃ¶rmek iÃ§in GSC API baÄŸlantÄ±sÄ± kurulmalÄ±dÄ±r." integrationRequired={true} />
 }
