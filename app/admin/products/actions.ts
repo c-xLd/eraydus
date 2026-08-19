@@ -2,71 +2,115 @@
 
 import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
-import { callOpenRouter, type AIResult } from '@/lib/ai'
+import { callAI, type AIResult } from '@/lib/ai'
 
 // ============================================================
-// AI Content Generation — paylaşılan istemci (@/lib/ai) üzerinden.
+// AI Content Generation — Ollama Cloud Motoru (@/lib/ai)
 // ============================================================
 
-const SYSTEM_TR =
-  "Sen Erayduş adlı lüks duşakabin markası için uzman bir Türkçe içerik ve SEO uzmanısın. Sadece istenen içeriği döndür, açıklama veya ek not ekleme."
+const SYSTEM_TR = `
+Sen Erayduş adlı lüks duşakabin ve banyo sistemleri markası için uzman bir Türkçe içerik ve SEO uzmanısın.
+Ton: Lüks, mimari, estetik, net ve ikna edici.
+Klişelerden ("Bu kapsamlı rehberde", "Sonuç olarak", "Özetle") kaçın.
+Sadece istenen içeriği döndür, açıklama veya ek tırnak işareti ekleme.
+`
 
 export async function generateProductDescription(req: {
   productName: string
   features?: string
+  modelOverride?: string
 }): Promise<AIResult> {
-  const { productName, features = "" } = req
-  return callOpenRouter(
+  const { productName, features = "", modelOverride } = req
+  return callAI(
     SYSTEM_TR,
-    `"${productName}" ürünü için detaylı, profesyonel bir Türkçe ürün açıklaması yaz. Özellikler: ${features}. Lüks, kalite ve kullanım avantajlarını vurgula. 2-3 paragraf olsun.`,
-    ""
+    `"${productName}" ürünü için detaylı, mimari ve lüks bir Türkçe ürün açıklaması yaz. Özellikler/Detaylar: ${features || '6-8mm temperli cam, paslanmaz profil, kusursuz sızdırmazlık'}. Kalite, suyun akışı ve modern banyo estetiğini vurgula. 2-3 paragraf olsun.`,
+    modelOverride || 'gemma4:31b',
+    600
   )
 }
 
 export async function generateSEOTitle(req: {
   productName: string
   mainFeature?: string
+  modelOverride?: string
 }): Promise<AIResult> {
-  const { productName, mainFeature = "" } = req
-  return callOpenRouter(
+  const { productName, mainFeature = "", modelOverride } = req
+  return callAI(
     SYSTEM_TR,
-    `"${productName}" ürünü için SEO uyumlu, en fazla 60 karakterlik tek bir başlık üret. Ana özellik: ${mainFeature}. Türkçe anahtar kelimeler içersin. Sadece başlığı döndür, tırnak kullanma.`,
-    `${productName} - Kaliteli Duşakabin Çözümleri`
+    `"${productName}" ürünü için Google SEO standartlarına uygun, en fazla 60 karakterlik tek bir başlık üret. Ana özellik: ${mainFeature || 'Lüks Duşakabin'}. Sadece başlığı döndür.`,
+    modelOverride || 'gemma4:31b',
+    100
   )
 }
 
 export async function generateMetaDescription(req: {
   productDescription?: string
+  modelOverride?: string
 }): Promise<AIResult> {
-  const { productDescription = "" } = req
-  return callOpenRouter(
+  const { productDescription = "", modelOverride } = req
+  return callAI(
     SYSTEM_TR,
-    `Aşağıdaki ürün için 160 karakteri geçmeyen, ikna edici bir Türkçe meta açıklaması yaz. Anahtar kelimeler ve bir çağrı (call-to-action) içersin. Sadece metni döndür.\n\nÜrün: ${productDescription}`,
-    "Erayduş ile kaliteli duşakabin sistemleri. Özel üretim, lüks tasarım ve özel çözümler."
+    `Aşağıdaki ürün için 160 karakteri geçmeyen, tıklanma oranını artıracak ikna edici bir Türkçe meta açıklaması yaz. Sadece metni döndür.\n\nÜrün Bilgisi: ${productDescription}`,
+    modelOverride || 'gemma4:31b',
+    150
   )
 }
 
 export async function generateBlogIntro(req: {
   productDescription?: string
+  modelOverride?: string
 }): Promise<AIResult> {
-  const { productDescription = "" } = req
-  return callOpenRouter(
+  const { productDescription = "", modelOverride } = req
+  return callAI(
     SYSTEM_TR,
-    `Aşağıdaki ürün/konu hakkında ilgi çekici bir Türkçe blog giriş paragrafı yaz. Banyo yenilemek isteyen ev sahiplerine hitap etsin, uzmanlık ve faydaları öne çıkarsın.\n\nKonu: ${productDescription}`,
-    "Erayduş ile hayalinizdeki banyo deneyimi artık gerçek. Her detay özenle tasarlanır, uzmanlıkla uygulanır."
+    `Aşağıdaki ürün/konu hakkında ilgi çekici, mimari bir Türkçe blog giriş paragrafı yaz. Banyo yenileyen ev sahiplerine ve tasarım meraklılarına hitap etsin.\n\nKonu: ${productDescription}`,
+    modelOverride || 'gemma4:31b',
+    300
   )
 }
 
 export async function generateWhatsAppText(req: {
   productName: string
+  modelOverride?: string
 }): Promise<AIResult> {
-  const { productName } = req
-  return callOpenRouter(
+  const { productName, modelOverride } = req
+  return callAI(
     SYSTEM_TR,
-    `"${productName}" ürünü için samimi, kısa bir WhatsApp teklif/tanıtım mesajı yaz. Ana faydaları, bir çağrı (call-to-action) ve müşteri hizmeti bilgisini içersin. Emojileri ölçülü kullan. Sadece mesajı döndür.`,
-    `Merhaba! Erayduş ${productName} ile banyonuzu yenileyin. Özel üretim, lüks ve kalite. Detaylı bilgi için bize WhatsApp'tan yazın.`
+    `"${productName}" ürünü için samimi, kibar ve kurumsal bir WhatsApp müşteri bilgilendirme/teklif mesajı yaz. Detayları, özel ölçü imkanını ve müşteri temsilcisine yönlendirmeyi içersin. Sadece mesajı döndür.`,
+    modelOverride || 'gemma4:31b',
+    250
   )
 }
+
+export async function generateProductFAQs(req: {
+  productName: string
+  productDescription?: string
+  modelOverride?: string
+}): Promise<AIResult> {
+  const { productName, productDescription = "", modelOverride } = req
+  return callAI(
+    SYSTEM_TR,
+    `"${productName}" adlı lüks duşakabin modeli için müşterilerin montaj, cam kalınlığı, temizlik ve su sızdırmazlığı ile ilgili en çok merak ettiği 3 adet Sıkça Sorulan Soru (SSS) ve uzman yanıtları hazırla. Doğrudan ve net olsun.\n\nÜrün Detayı: ${productDescription}`,
+    modelOverride || 'gemma4:31b',
+    400
+  )
+}
+
+export async function generateProductHighlights(req: {
+  productName: string
+  features?: string
+  modelOverride?: string
+}): Promise<AIResult> {
+  const { productName, features = "", modelOverride } = req
+  return callAI(
+    SYSTEM_TR,
+    `"${productName}" için ürün kartında ve detay sayfasında listelenecek 4 adet vurucu, mimari ve teknik özellik maddesi yaz (Örn: 8mm Temperli Emniyet Camı, Eloksal Paslanmaz Alüminyum Profil vb.). Sadece tire (-) ile başlayan maddeleri döndür.`,
+    modelOverride || 'gemma4:31b',
+    200
+  )
+}
+
+
 
 export async function deleteProduct(id: string) {
   const supabase = (await createClient()) as any

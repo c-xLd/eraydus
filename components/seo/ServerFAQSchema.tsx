@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/services/supabase/client';
 import { FAQSchema } from './FAQSchema';
 
 export function ServerFAQSchema() {
@@ -12,10 +12,7 @@ export function ServerFAQSchema() {
   useEffect(() => {
     async function fetchFaqs() {
       try {
-        const supabase = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-        );
+        const supabase = createClient();
         const { data: pageSeo } = await supabase
           .from('seo_metadata')
           .select('faq_data, faq_schema_enabled')

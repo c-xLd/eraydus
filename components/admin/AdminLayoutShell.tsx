@@ -29,8 +29,18 @@ export function AdminLayoutShell({ children }: { children: React.ReactNode }) {
           <span className="font-bold text-[15px] tracking-wide text-black font-sans">
             ERAYDUŞ
           </span>
-          <div className="size-8 bg-black/5 rounded-full flex items-center justify-center text-black text-xs font-bold border border-black/5">
-            A
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                import('@/features/auth/actions/auth').then(m => m.signOut())
+              }}
+              className="text-xs font-semibold text-red-500 bg-red-50 px-3 py-1.5 rounded-lg border border-red-100"
+            >
+              ÇIKIŞ
+            </button>
+            <div className="size-8 bg-black/5 rounded-full flex items-center justify-center text-black text-xs font-bold border border-black/5">
+              A
+            </div>
           </div>
         </div>
 

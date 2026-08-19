@@ -2,14 +2,12 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { Upload, X, Image as ImageIcon, Loader2, Link as LinkIcon } from 'lucide-react'
-import { createClient } from '@/services/supabase/client'
+import { uploadBlogCoverImage } from '@/app/admin/blog/actions'
 
 interface FeaturedImageUploadProps {
   value: string
   onChange: (url: string) => void
 }
-
-const BUCKET = 'blog-images'
 
 export default function FeaturedImageUpload({ value, onChange }: FeaturedImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
@@ -27,25 +25,22 @@ export default function FeaturedImageUpload({ value, onChange }: FeaturedImageUp
       return
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Dosya boyutu 5 MB\'dan küçük olmalıdır')
+    if (file.size > 10 * 1024 * 1024) {
+      setError('Dosya boyutu 10 MB\'dan küçük olmalıdır')
       return
     }
 
     setIsUploading(true)
     try {
-      const supabase = createClient()
-      const ext = file.name.split('.').pop() ?? 'jpg'
-      const path = `covers/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+      const formData = new FormData()
+      formData.append('file', file)
 
-      const { error: uploadError } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, file, { upsert: false, contentType: file.type })
+      const res = await uploadBlogCoverImage(formData)
+      if (!res.success || !res.url) {
+        throw new Error(res.error || 'Görsel yüklenemedi')
+      }
 
-      if (uploadError) throw uploadError
-
-      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
-      onChange(data.publicUrl)
+      onChange(res.url)
     } catch (err: any) {
       setError(err?.message ?? 'Görsel yüklenirken bir hata oluştu')
     } finally {

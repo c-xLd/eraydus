@@ -1,9 +1,8 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { updateSeoMetadata } from '@/features/seo/actions'
+import { generateSeoMeta } from '@/app/admin/actions/ai'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Globe, Save, Loader2, Info } from 'lucide-react'
+import { X, Globe, Save, Loader2, Info, Sparkles, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -21,6 +20,7 @@ export default function CategorySeoDrawer({ category, open, onClose }: CategoryS
   const meta = category?.seo_metadata || {}
   
   const [isSaving, setIsSaving] = useState(false)
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false)
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -42,6 +42,29 @@ export default function CategorySeoDrawer({ category, open, onClose }: CategoryS
       })
     }
   }, [category])
+
+  const handleAiGenerate = async () => {
+    if (!category?.name) return
+    setIsGeneratingAi(true)
+    try {
+      const res = await generateSeoMeta(category.slug || 'kategori', category.name)
+      if (res.success) {
+        setForm(prev => ({
+          ...prev,
+          title: res.title || prev.title,
+          description: res.description || prev.description
+        }))
+        toast.success(`Ollama Cloud (${res.model || 'gemma4:31b'}) ile Kategori SEO üretildi!`)
+      } else {
+        toast.error(res.error || 'SEO üretilemedi')
+      }
+    } catch (e: any) {
+      toast.error('AI hatası: ' + e.message)
+    } finally {
+      setIsGeneratingAi(false)
+    }
+  }
+
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -110,6 +133,37 @@ export default function CategorySeoDrawer({ category, open, onClose }: CategoryS
 
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               <SERPPreview />
+
+              {/* AI Quick Generator */}
+              <div className="flex items-center justify-between p-3.5 bg-gradient-to-r from-blue-50/70 to-indigo-50/70 border border-blue-100 rounded-2xl">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="size-4 text-blue-600 animate-pulse" />
+                  <div>
+                    <p className="text-xs font-semibold text-blue-950">Ollama Cloud AI</p>
+                    <p className="text-[11px] text-blue-700">Kategoriye özel SEO başlığı ve açıklaması üretir</p>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleAiGenerate}
+                  disabled={isGeneratingAi}
+                  className="h-8 text-xs bg-white hover:bg-blue-600 hover:text-white border-blue-200 shadow-sm transition-all"
+                >
+                  {isGeneratingAi ? (
+                    <>
+                      <Loader2 className="size-3.5 mr-1.5 animate-spin text-blue-600" />
+                      Üretiliyor...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="size-3.5 mr-1.5 text-blue-600 group-hover:text-white" />
+                      AI ile Oluştur
+                    </>
+                  )}
+                </Button>
+              </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">

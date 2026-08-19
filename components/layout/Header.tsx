@@ -84,7 +84,9 @@ export function Header() {
   const reduceMotion = useReducedMotion()
 
   // Pages with a dark, full-bleed hero where the bar sits transparent with white text when at top.
-  const isDarkHeroPage = !pathname || pathname === '/' || pathname === '' || pathname === '/jakuzi-tekneler' || pathname.startsWith('/jakuzi-tekneler')
+  const isDarkHeroPage = !pathname || 
+    pathname === '/' || 
+    pathname.startsWith('/jakuzi-tekneler');
 
   // Header background is frosted glass only when scrolled or mobile menu is open.
   const hasBackdrop = isScrolled || menuOpen

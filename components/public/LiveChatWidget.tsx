@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageSquare, X, Send, Minimize2, Sparkles, PowerOff } from 'lucide-react'
+import { MessageSquare, X, Send, Minimize2, Sparkles, PowerOff, MessageCircle } from 'lucide-react'
 import { createClient } from '@/services/supabase/client'
 
 interface Message {
@@ -12,6 +12,29 @@ interface Message {
   created_at: string
 }
 
+const checkIsOnline = () => {
+  try {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Istanbul',
+      hour: 'numeric',
+      hour12: false,
+      weekday: 'short'
+    })
+    const parts = formatter.formatToParts(new Date())
+    const hourPart = parts.find(p => p.type === 'hour')?.value
+    const weekdayPart = parts.find(p => p.type === 'weekday')?.value
+    
+    if (!hourPart || !weekdayPart) return true // fallback
+    
+    const hour = parseInt(hourPart, 10)
+    const isSunday = weekdayPart === 'Sun'
+    
+    return !isSunday && hour >= 9 && hour < 19
+  } catch (e) {
+    return true // fallback on error
+  }
+}
+
 export function LiveChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
@@ -19,7 +42,14 @@ export function LiveChatWidget() {
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [sessionStatus, setSessionStatus] = useState<string>('bot')
   const [isTyping, setIsTyping] = useState(false)
+  const [isOnline, setIsOnline] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setIsOnline(checkIsOnline())
+    const interval = setInterval(() => setIsOnline(checkIsOnline()), 60000)
+    return () => clearInterval(interval)
+  }, [])
 
   // Pre-chat form states
   const [name, setName] = useState('')
@@ -103,7 +133,7 @@ export function LiveChatWidget() {
 
   const startChat = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || !phone.trim() || !visitorId) return
+    if (!name.trim() || !visitorId) return
 
     setIsFormSubmitting(true)
     const { data: newSession } = await supabase
@@ -111,8 +141,8 @@ export function LiveChatWidget() {
       .insert([{ 
         visitor_id: visitorId, 
         visitor_name: name.trim(),
-        visitor_phone: phone.trim(),
-        status: 'bot' 
+        visitor_phone: phone.trim() || null,
+        status: 'active' 
       }])
       .select()
       .single()
@@ -120,6 +150,18 @@ export function LiveChatWidget() {
     if (newSession) {
       setSessionId(newSession.id)
       setSessionStatus(newSession.status)
+      
+      // Auto-reply for waiting
+      const replyContent = isOnline 
+        ? 'Merhaba! Destek ekibimize hoş geldiniz. Müşteri temsilcilerimiz şu an yoğun olabilir. Ortalama bekleme süremiz 2-3 dakikadır. Lütfen sorunuzu veya talebinizi yazın, en kısa sürede sizinle iletişime geçeceğiz.'
+        : 'Merhaba, şu an mesai saatleri dışındayız (Çalışma saatleri: 09:00 - 19:00). Bize mesajınızı veya talebinizi bırakabilirsiniz, mesai başladığında ilk iş olarak size dönüş yapacağız.'
+
+      await supabase.from('chat_messages').insert([{
+        session_id: newSession.id,
+        sender_type: 'admin',
+        sender_id: 'system',
+        content: replyContent
+      }])
     }
     setIsFormSubmitting(false)
   }
@@ -148,19 +190,6 @@ export function LiveChatWidget() {
       sender_id: visitorId,
       content: msg
     }])
-
-    if (sessionStatus === 'bot') {
-      setIsTyping(true)
-      try {
-        await fetch('/api/chat/bot', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId, visitorId, message: msg })
-        })
-      } finally {
-        setIsTyping(false)
-      }
-    }
   }
 
   const connectToHuman = async () => {
@@ -187,18 +216,29 @@ export function LiveChatWidget() {
                   <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center">
                     <Sparkles className="size-5 text-emerald-400" />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
+                  {isOnline ? (
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" title="Aktif" />
+                  ) : (
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-red-400 border-2 border-slate-900 rounded-full" title="Mesai Dışı" />
+                  )}
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm">
-                    {!sessionId ? 'Canlı Destek' : sessionStatus === 'bot' ? 'Yapay Zeka Asistanı' : 'Canlı Destek'}
+                    Erayduş Canlı Destek
                   </h3>
                   <p className="text-xs text-slate-300">
-                    {!sessionId ? 'Size nasıl yardımcı olabiliriz?' : sessionStatus === 'bot' ? 'Size nasıl yardımcı olabilirim?' : 'Müşteri temsilcisiyle görüşüyorsunuz'}
+                    {isOnline ? 'Size nasıl yardımcı olabiliriz?' : 'Şu an mesai dışındayız.'}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
+                <button 
+                  onClick={() => window.open('https://wa.me/905548830071?text=Merhaba, web sitenizden ulaşıyorum.', '_blank')}
+                  className="p-1.5 text-slate-300 hover:text-green-400 hover:bg-slate-800 rounded-lg transition-colors"
+                  title="WhatsApp'tan Yaz"
+                >
+                  <MessageCircle className="size-4" />
+                </button>
                 {sessionId && (
                   <button 
                     onClick={endChat}
@@ -238,9 +278,8 @@ export function LiveChatWidget() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-medium text-gray-700">Telefon Numaranız</label>
+                      <label className="text-xs font-medium text-gray-700">Telefon Numaranız <span className="text-gray-400 font-normal">(Opsiyonel)</span></label>
                       <input 
-                        required
                         type="tel" 
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
@@ -265,21 +304,25 @@ export function LiveChatWidget() {
                   {messages.length === 0 && (
                     <div className="text-center text-gray-500 text-sm mt-10">
                       <p>Hoş geldiniz! İhtiyacınız olan ürün veya hizmetle ilgili sorularınızı buraya yazabilirsiniz.</p>
-                      <p className="mt-2 text-xs text-gray-400">Şu an yapay zeka asistanı ile görüşüyorsunuz.</p>
+                      <p className="mt-2 text-xs text-gray-400">Canlı destek ekibimiz size en kısa sürede dönecektir.</p>
                     </div>
                   )}
                   {messages.map((msg, i) => {
                     const isVisitor = msg.sender_type === 'visitor'
+                    const time = new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
                     return (
                       <div key={msg.id || i} className={`flex ${isVisitor ? 'justify-end' : 'justify-start'}`}>
                         <div 
-                          className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
+                          className={`max-w-[85%] min-w-[70px] rounded-2xl px-4 pt-2 pb-5 text-sm relative ${
                             isVisitor 
                               ? 'bg-emerald-600 text-white rounded-br-sm' 
                               : 'bg-white border border-gray-200 text-gray-800 rounded-bl-sm shadow-sm'
                           }`}
                         >
-                          {msg.content}
+                          <div>{msg.content}</div>
+                          <div className={`text-[10px] absolute bottom-1 right-3 ${isVisitor ? 'text-emerald-100' : 'text-gray-400'}`}>
+                            {time}
+                          </div>
                         </div>
                       </div>
                     )
@@ -299,14 +342,6 @@ export function LiveChatWidget() {
 
                 {/* Input Area */}
                 <div className="bg-white border-t border-gray-100 flex flex-col">
-                  {sessionStatus === 'bot' && messages.length > 0 && (
-                    <button 
-                      onClick={connectToHuman}
-                      className="w-full text-xs text-emerald-600 font-medium py-2 border-b border-gray-50 hover:bg-emerald-50 transition-colors"
-                    >
-                      Müşteri Temsilcisine Bağlan
-                    </button>
-                  )}
                   <div className="p-3">
                     <form onSubmit={sendMessage} className="flex gap-2">
                       <input

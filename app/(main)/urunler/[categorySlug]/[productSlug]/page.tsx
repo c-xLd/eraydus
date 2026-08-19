@@ -8,6 +8,7 @@ import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/features/prod
 import { ProductLuxuryDetailView } from "@/features/products/components/product-luxury-detail-view"
 import { ProductCabinetDetailView } from "@/features/products/components/product-cabinet-detail-view"
 import { ProductRelated } from "@/features/products/components/product-related"
+import { ProductTracker } from "@/components/analytics/ProductTracker"
 
 interface Props {
   params: Promise<{ categorySlug: string; productSlug: string }>
@@ -85,6 +86,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <article className="min-h-screen bg-[#FBFBFA]">
+      <ProductTracker productId={product.id} categoryId={activeCategory.id} title={product.name} />
       {/* ─── SEO JSON-LD ─── */}
       <script
         type="application/ld+json"
@@ -121,4 +123,5 @@ export default async function ProductDetailPage({ params }: Props) {
     </article>
   )
 }
+
 

@@ -14,7 +14,7 @@ export interface MediaItem {
   mime_type: string
 }
 
-const BUCKETS = ['products', 'projects', 'uploads', 'kumlama-models']
+const BUCKETS = ['products', 'projects', 'uploads', 'kumlama-models', 'blog-images', 'images']
 
 async function listBucketFilesRecursively(supabase: any, bucket: string, folderPath: string = ''): Promise<MediaItem[]> {
   const items: MediaItem[] = []

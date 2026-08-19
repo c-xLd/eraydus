@@ -25,7 +25,7 @@ export default function DashboardHeader() {
         <h1 className="text-2xl font-light text-gray-900 tracking-tight">İşletme Özeti</h1>
         <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
           <Clock className="size-4" />
-          <span>Son güncelleme: {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+          <span suppressHydrationWarning>Son güncelleme: {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
         </div>
       </div>
       

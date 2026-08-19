@@ -21,12 +21,35 @@ interface Check {
   maxPoints: number
 }
 
-function stripHtml(html: string) {
-  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+function getCleanPlainText(raw: string | null | undefined): string {
+  if (!raw) return ''
+  return raw
+    // HTML etiketlerini boşlukla değiştir
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    // HTML Entities
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    // Markdown link ve resimleri
+    .replace(/!\[.*?\]\(.*?\)/g, ' ')
+    .replace(/\[.*?\]\(.*?\)/g, ' ')
+    // Markdown başlık ve format işaretleri (#, *, _, `, ~)
+    .replace(/[#*_`~>]/g, ' ')
+    // Fazla boşlukları teke indir
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
-function wordCount(text: string) {
-  return text.trim() ? text.trim().split(/\s+/).length : 0
+function countWords(text: string): number {
+  if (!text) return 0
+  // Sadece harf veya rakam içeren geçerli kelimeleri ayıkla
+  const words = text.match(/[\p{L}\p{N}]+(?:[-'][\p{L}\p{N}]+)*/gu)
+  return words ? words.length : 0
 }
 
 function slugIsClean(slug: string) {
@@ -35,35 +58,37 @@ function slugIsClean(slug: string) {
 
 export default function SeoScorePanel({ data }: { data: SeoData }) {
   const checks = useMemo<Check[]>(() => {
-    const titleLen = (data.seo_title || data.title).length
-    const descLen = (data.seo_description || data.description).length
-    const bodyText = stripHtml(data.body)
-    const words = wordCount(bodyText)
-    const slug = data.slug
+    const titleLen = (data.seo_title || data.title || '').trim().length
+    const descLen = (data.seo_description || data.description || '').trim().length
+    const bodyText = getCleanPlainText(data.body)
+    const words = countWords(bodyText)
+    const chars = bodyText.length
+    const readingMinutes = Math.max(1, Math.ceil(words / 180))
+    const slug = (data.slug || '').trim()
 
     return [
       // SEO Title
       (() => {
         if (titleLen === 0) return { label: 'SEO Başlığı', status: 'bad', detail: 'Başlık girilmemiş', points: 0, maxPoints: 20 }
-        if (titleLen < 30) return { label: 'SEO Başlığı', status: 'warn', detail: `${titleLen} karakter — 50-60 arası ideal`, points: 10, maxPoints: 20 }
-        if (titleLen > 70) return { label: 'SEO Başlığı', status: 'warn', detail: `${titleLen} karakter — 60'tan kısa olmalı`, points: 10, maxPoints: 20 }
-        return { label: 'SEO Başlığı', status: 'good', detail: `${titleLen} karakter ✓`, points: 20, maxPoints: 20 }
+        if (titleLen < 30) return { label: 'SEO Başlığı', status: 'warn', detail: `${titleLen} karakter (kısa) — 50-65 ideal`, points: 10, maxPoints: 20 }
+        if (titleLen > 70) return { label: 'SEO Başlığı', status: 'warn', detail: `${titleLen} karakter (uzun) — 65'ten kısa olmalı`, points: 10, maxPoints: 20 }
+        return { label: 'SEO Başlığı', status: 'good', detail: `${titleLen} karakter ✓ (İdeal)`, points: 20, maxPoints: 20 }
       })() as Check,
 
       // Meta Description
       (() => {
         if (descLen === 0) return { label: 'Meta Description', status: 'bad', detail: 'Açıklama girilmemiş', points: 0, maxPoints: 20 }
-        if (descLen < 80) return { label: 'Meta Description', status: 'warn', detail: `${descLen} karakter — 120-160 arası ideal`, points: 10, maxPoints: 20 }
-        if (descLen > 170) return { label: 'Meta Description', status: 'warn', detail: `${descLen} karakter — 160'tan kısa olmalı`, points: 10, maxPoints: 20 }
-        return { label: 'Meta Description', status: 'good', detail: `${descLen} karakter ✓`, points: 20, maxPoints: 20 }
+        if (descLen < 80) return { label: 'Meta Description', status: 'warn', detail: `${descLen} karakter (kısa) — 120-160 ideal`, points: 10, maxPoints: 20 }
+        if (descLen > 170) return { label: 'Meta Description', status: 'warn', detail: `${descLen} karakter (uzun) — 160'tan kısa olmalı`, points: 10, maxPoints: 20 }
+        return { label: 'Meta Description', status: 'good', detail: `${descLen} karakter ✓ (İdeal)`, points: 20, maxPoints: 20 }
       })() as Check,
 
       // İçerik uzunluğu
       (() => {
-        if (words === 0) return { label: 'İçerik Uzunluğu', status: 'bad', detail: 'İçerik yok', points: 0, maxPoints: 25 }
-        if (words < 300) return { label: 'İçerik Uzunluğu', status: 'bad', detail: `${words} kelime — minimum 300 gerekli`, points: 5, maxPoints: 25 }
-        if (words < 600) return { label: 'İçerik Uzunluğu', status: 'warn', detail: `${words} kelime — 600+ daha iyi`, points: 15, maxPoints: 25 }
-        return { label: 'İçerik Uzunluğu', status: 'good', detail: `${words} kelime ✓`, points: 25, maxPoints: 25 }
+        if (words === 0) return { label: 'İçerik Uzunluğu', status: 'bad', detail: 'İçerik henüz girilmemiş', points: 0, maxPoints: 25 }
+        if (words < 150) return { label: 'İçerik Uzunluğu', status: 'warn', detail: `${words} kelime (${chars.toLocaleString('tr-TR')} harf) — 250+ önerilir`, points: 12, maxPoints: 25 }
+        if (words < 300) return { label: 'İçerik Uzunluğu', status: 'good', detail: `${words} kelime (${chars.toLocaleString('tr-TR')} harf, ~${readingMinutes} dk) ✓`, points: 20, maxPoints: 25 }
+        return { label: 'İçerik Uzunluğu', status: 'good', detail: `${words} kelime (${chars.toLocaleString('tr-TR')} harf, ~${readingMinutes} dk) ✓`, points: 25, maxPoints: 25 }
       })() as Check,
 
       // Kapak görseli
@@ -76,15 +101,16 @@ export default function SeoScorePanel({ data }: { data: SeoData }) {
       (() => {
         if (!slug) return { label: 'URL Slug', status: 'bad', detail: 'Slug girilmemiş', points: 0, maxPoints: 10 }
         if (!slugIsClean(slug)) return { label: 'URL Slug', status: 'warn', detail: 'Türkçe karakter veya boşluk var', points: 5, maxPoints: 10 }
-        if (slug.length > 60) return { label: 'URL Slug', status: 'warn', detail: `${slug.length} karakter — 60'tan kısa olmalı`, points: 7, maxPoints: 10 }
-        return { label: 'URL Slug', status: 'good', detail: 'Temiz ve kısa ✓', points: 10, maxPoints: 10 }
+        if (slug.length > 70) return { label: 'URL Slug', status: 'warn', detail: `${slug.length} karakter — 60'tan kısa olmalı`, points: 7, maxPoints: 10 }
+        return { label: 'URL Slug', status: 'good', detail: 'Temiz ve SEO uyumlu ✓', points: 10, maxPoints: 10 }
       })() as Check,
 
       // H2 başlık kullanımı
       (() => {
-        const hasH2 = /<h2/i.test(data.body)
+        const rawBody = data.body || ''
+        const hasH2 = /<h2/i.test(rawBody) || /^##\s+/m.test(rawBody)
         if (!hasH2) return { label: 'Alt Başlık (H2)', status: 'warn', detail: 'H2 başlık yok — içerik yapısı zayıf', points: 5, maxPoints: 10 }
-        return { label: 'Alt Başlık (H2)', status: 'good', detail: 'H2 başlık kullanılmış ✓', points: 10, maxPoints: 10 }
+        return { label: 'Alt Başlık (H2)', status: 'good', detail: 'H2 alt başlıklar mevcut ✓', points: 10, maxPoints: 10 }
       })() as Check,
     ]
   }, [data])

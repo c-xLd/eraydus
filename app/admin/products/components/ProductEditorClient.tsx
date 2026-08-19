@@ -3,12 +3,22 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Save, Image as ImageIcon, Plus, Trash2, RefreshCw, Sparkles } from "lucide-react"
+import { ArrowLeft, Save, Image as ImageIcon, Plus, Trash2, RefreshCw, Sparkles, User, Users } from "lucide-react"
 import { createClient } from '@/services/supabase/client'
 import { toast } from 'sonner'
 import { generateSlug } from '@/lib/utils'
-import { X, UploadCloud } from "lucide-react"
-import { revalidateProductPaths, generateProductDescription, generateSEOTitle, generateMetaDescription, generateBlogIntro, generateWhatsAppText } from "../actions"
+import { X, UploadCloud, HelpCircle, ListPlus, MessageSquare } from "lucide-react"
+import {
+  revalidateProductPaths,
+  generateProductDescription,
+  generateSEOTitle,
+  generateMetaDescription,
+  generateBlogIntro,
+  generateWhatsAppText,
+  generateProductFAQs,
+  generateProductHighlights
+} from "../actions"
+import { useRecordPresence } from '@/hooks/useRecordPresence'
 
 interface ProductFormData {
   title: string
@@ -41,6 +51,8 @@ export default function ProductEditorClient({
   const [isSaving, setIsSaving] = useState(false)
 
   const isEdit = !!initialData
+  
+  const { activeEditors, isCoEditing } = useRecordPresence('products', initialData?.id || 'new')
 
   const formatPrice = (val: string) => {
     const numeric = val.replace(/\D/g, '')
@@ -73,6 +85,8 @@ export default function ProductEditorClient({
   const [isGeneratingMetaDescription, setIsGeneratingMetaDescription] = useState(false)
   const [isGeneratingBlogIntro, setIsGeneratingBlogIntro] = useState(false)
   const [isGeneratingWhatsAppText, setIsGeneratingWhatsAppText] = useState(false)
+  const [isGeneratingFAQs, setIsGeneratingFAQs] = useState(false)
+  const [isGeneratingHighlights, setIsGeneratingHighlights] = useState(false)
 
   // Reverse engineer active attributes and variations from initialData
   const { initialVariations, initialActiveAttributes } = useMemo(() => {
@@ -443,6 +457,63 @@ export default function ProductEditorClient({
     }
   }
 
+  const handleGenerateFAQs = async () => {
+    if (!formData.title) {
+      toast.error("Lütfen önce ürün adını giriniz.")
+      return
+    }
+
+    setIsGeneratingFAQs(true)
+    try {
+      const result = await generateProductFAQs({
+        productName: formData.title,
+        productDescription: formData.description
+      })
+
+      if ('error' in result && result.error) {
+        throw new Error(result.error)
+      }
+
+      const appendText = formData.description
+        ? `${formData.description}\n\n### Sıkça Sorulan Sorular\n${result.content || ''}`
+        : (result.content || '')
+
+      setFormData({ ...formData, description: appendText })
+      toast.success("Ürün SSS (FAQ) bölümü başarıyla eklendi!")
+    } catch (err: any) {
+      toast.error('SSS üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingFAQs(false)
+    }
+  }
+
+  const handleGenerateHighlights = async () => {
+    if (!formData.title) {
+      toast.error("Lütfen önce ürün adını giriniz.")
+      return
+    }
+
+    setIsGeneratingHighlights(true)
+    try {
+      const result = await generateProductHighlights({
+        productName: formData.title,
+        features: formData.description
+      })
+
+      if ('error' in result && result.error) {
+        throw new Error(result.error)
+      }
+
+      setFormData({ ...formData, short_description: result.content || '' })
+      toast.success("Teknik özellik listesi AI tarafından üretildi!")
+    } catch (err: any) {
+      toast.error('Özellikler üretilirken hata: ' + err.message)
+    } finally {
+      setIsGeneratingHighlights(false)
+    }
+  }
+
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     
@@ -496,6 +567,22 @@ export default function ProductEditorClient({
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-12">
+      {isCoEditing && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-top-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+              <Users className="size-5" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-amber-900 text-sm">Çakışma Uyarısı</h4>
+              <p className="text-sm text-amber-700">
+                Şu anda bu ürünü {activeEditors.map(e => <strong key={e.id}>{e.name}</strong>).reduce((prev, curr) => [prev, ', ', curr] as any)} düzenliyor. Yaptığınız değişiklikler çakışabilir.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/products" className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
@@ -548,22 +635,45 @@ export default function ProductEditorClient({
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="space-y-2 mb-2">
                 <textarea
                   rows={4}
                   value={formData.description}
                   onChange={e => setFormData({...formData, description: e.target.value})}
                   placeholder="Detaylı ürün açıklaması..."
-                  className="flex-1 w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black/5 outline-none resize-y text-black"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black/5 outline-none resize-y text-black"
                 />
-                <button
-                  onClick={handleGenerateDescription}
-                  disabled={isGeneratingDescription}
-                  className="px-3 py-2 bg-purple-50 border border-purple-200 text-sm font-medium rounded-lg text-purple-700 hover:bg-purple-100 disabled:opacity-50 flex items-center gap-1"
-                >
-                  {isGeneratingDescription ? <RefreshCw className="size-3 animate-spin" /> : <Sparkles className="size-3" />}
-                  AI Açıklama
-                </button>
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleGenerateDescription}
+                    disabled={isGeneratingDescription}
+                    className="px-3 py-1.5 bg-purple-50 border border-purple-200 text-xs font-medium rounded-lg text-purple-700 hover:bg-purple-100 disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                  >
+                    {isGeneratingDescription ? <RefreshCw className="size-3 animate-spin" /> : <Sparkles className="size-3 text-purple-600" />}
+                    AI Lüks Açıklama
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleGenerateFAQs}
+                    disabled={isGeneratingFAQs}
+                    className="px-3 py-1.5 bg-blue-50 border border-blue-200 text-xs font-medium rounded-lg text-blue-700 hover:bg-blue-100 disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                  >
+                    {isGeneratingFAQs ? <RefreshCw className="size-3 animate-spin" /> : <HelpCircle className="size-3 text-blue-600" />}
+                    + AI Sıkça Sorulan Sorular (SSS)
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleGenerateWhatsAppText}
+                    disabled={isGeneratingWhatsAppText}
+                    className="px-3 py-1.5 bg-emerald-50 border border-emerald-200 text-xs font-medium rounded-lg text-emerald-700 hover:bg-emerald-100 disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                  >
+                    {isGeneratingWhatsAppText ? <RefreshCw className="size-3 animate-spin" /> : <MessageSquare className="size-3 text-emerald-600" />}
+                    AI WhatsApp Teklifi
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -797,14 +907,26 @@ export default function ProductEditorClient({
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-semibold text-gray-900 border-b border-gray-100 pb-2">Ürün Kısa Açıklaması</h3>
-              <button
-                onClick={handleGenerateMetaDescription}
-                disabled={isGeneratingMetaDescription}
-                className="px-3 py-1.5 bg-green-50 border border-green-200 text-xs font-medium rounded-lg text-green-700 hover:bg-green-100 disabled:opacity-50 flex items-center gap-1"
-              >
-                {isGeneratingMetaDescription ? <RefreshCw className="size-3 animate-spin" /> : <Sparkles className="size-3" />}
-                AI Meta
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleGenerateHighlights}
+                  disabled={isGeneratingHighlights}
+                  className="px-2.5 py-1.5 bg-indigo-50 border border-indigo-200 text-xs font-medium rounded-lg text-indigo-700 hover:bg-indigo-100 disabled:opacity-50 flex items-center gap-1 shadow-sm"
+                >
+                  {isGeneratingHighlights ? <RefreshCw className="size-3 animate-spin" /> : <ListPlus className="size-3 text-indigo-600" />}
+                  AI Teknik Vurgular
+                </button>
+                <button
+                  type="button"
+                  onClick={handleGenerateMetaDescription}
+                  disabled={isGeneratingMetaDescription}
+                  className="px-2.5 py-1.5 bg-green-50 border border-green-200 text-xs font-medium rounded-lg text-green-700 hover:bg-green-100 disabled:opacity-50 flex items-center gap-1 shadow-sm"
+                >
+                  {isGeneratingMetaDescription ? <RefreshCw className="size-3 animate-spin" /> : <Sparkles className="size-3 text-green-600" />}
+                  AI Meta
+                </button>
+              </div>
             </div>
             <textarea
               rows={3}

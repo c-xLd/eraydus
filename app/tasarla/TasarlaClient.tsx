@@ -273,24 +273,28 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-[100dvh] bg-[#0A0A0A] text-white overflow-hidden selection:bg-champagne/20">
+    <div className="relative md:flex md:flex-row w-full h-[100dvh] bg-[#0A0A0A] text-white overflow-hidden selection:bg-champagne/20" style={{ WebkitTapHighlightColor: 'transparent' }}>
       <h1 className="sr-only">Özel Ölçü Duşakabin Tasarım Aracı ve Fiyat Hesaplama</h1>
       <h2 className="sr-only">Kendi özel ölçü duşakabininizi (kare, oval, iki duvar arası) tasarlayın, cam tipini ve profil rengini seçip anında online fiyat hesaplayın.</h2>
 
-      <div className="relative w-full md:flex-1 shrink-0 bg-gradient-to-br from-[#0F0F0F] to-[#050505] h-[65dvh] md:h-full flex items-center justify-center p-2 md:p-6">
+      {/* ─── 2D VISUALIZER — full screen background on mobile, left side on desktop ─── */}
+      <div className="absolute inset-0 md:relative md:flex-1 bg-gradient-to-br from-[#0F0F0F] to-[#050505] flex items-center justify-center p-2 md:p-6">
         <Link
           href="/"
-          className="absolute top-4 left-4 md:top-6 md:left-6 z-50 flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-white transition-colors bg-black/20 md:bg-transparent px-3 py-1.5 md:p-0 rounded-full backdrop-blur-md md:backdrop-blur-none"
+          className="absolute top-3 left-3 md:top-6 md:left-6 z-50 flex items-center justify-center size-9 md:size-auto md:gap-2 text-xs md:text-sm text-white/50 hover:text-white transition-colors bg-black/30 md:bg-transparent rounded-full backdrop-blur-md md:backdrop-blur-none md:px-0 md:py-0"
+          aria-label="Ana Sayfa"
         >
-          <ArrowLeft className="w-4 h-4" /> Ana Sayfa
+          <ArrowLeft className="w-4 h-4" />
+          <span className="hidden md:inline">Ana Sayfa</span>
         </Link>
 
         {currentStepIndex > 0 && (
           <button
             onClick={resetDesign}
-            className="md:hidden absolute top-4 right-4 z-50 flex items-center gap-1.5 text-xs text-white/50 hover:text-champagne transition-colors bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/5 hover:border-champagne/30"
+            className="md:hidden absolute top-3 right-3 z-50 flex items-center justify-center size-9 text-white/50 hover:text-champagne transition-colors bg-black/30 rounded-full backdrop-blur-md"
+            aria-label="Tasarımı Sıfırla"
           >
-            <RefreshCcw className="w-3.5 h-3.5" /> <span>Sıfırla</span>
+            <RefreshCcw className="w-4 h-4" />
           </button>
         )}
 
@@ -301,7 +305,8 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] md:w-[40vw] h-[80vw] md:h-[40vw] bg-champagne/5 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="relative z-10 w-full h-full flex items-center justify-center p-0 md:p-2">
+        {/* Schematic container — on mobile, shift upward so it's visible above the bottom sheet */}
+        <div className="relative z-10 w-full h-full flex items-start md:items-center justify-center pt-10 pb-[52dvh] md:pt-0 md:pb-0">
           <AnimatedSchematic
             layout={layout}
             widthX={widthX}
@@ -316,13 +321,17 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
         </div>
       </div>
 
-      <div className="w-full flex-1 md:flex-none md:w-[clamp(320px,30vw,480px)] shrink-0 bg-[#111111] md:border-l border-white/5 md:h-full flex flex-col relative z-20 rounded-t-[24px] md:rounded-none -mt-6 md:mt-0 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] md:shadow-none overflow-hidden">
+      {/* ─── OPTIONS PANEL — floating bottom sheet on mobile, sidebar on desktop ─── */}
+      <div className="absolute bottom-0 left-0 right-0 h-[52dvh] md:relative md:bottom-auto md:left-auto md:right-auto md:h-full md:w-[clamp(320px,30vw,480px)] shrink-0 bg-[#111111]/95 backdrop-blur-xl md:bg-[#111111] md:backdrop-blur-none md:border-l border-white/5 flex flex-col z-20 rounded-t-[20px] md:rounded-none shadow-[0_-8px_40px_rgba(0,0,0,0.7)] md:shadow-none overflow-hidden">
         
-        <div className="w-full flex justify-center pt-2 pb-1 md:hidden absolute top-0 left-0 z-30">
-          <div className="w-10 h-1 bg-white/15 rounded-full" />
+        {/* Drag handle indicator */}
+        <div className="w-full flex justify-center pt-2 pb-0 md:hidden shrink-0">
+          <div className="w-10 h-1 bg-white/25 rounded-full" />
         </div>
 
-        <div className="pt-6 px-4 pb-3 md:p-6 md:pb-5 border-b border-white/5 shrink-0 relative">
+        {/* ─── HEADER ─── */}
+        <div className="px-5 pt-2 pb-2 md:pt-6 md:px-6 md:pb-5 border-b border-white/5 shrink-0">
+          {/* Desktop title */}
           <div className="hidden md:block">
             <span className="text-champagne text-[10px] font-semibold uppercase tracking-[0.3em]">Erayduş Konfigüratör</span>
             <div className="text-2xl font-light tracking-tight mt-1">
@@ -330,22 +339,32 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1 md:mt-5">
+          {/* Mobile: step title + counter */}
+          <div className="flex items-center justify-between mb-2 md:hidden">
+            <h3 className="text-[15px] font-semibold text-white">{currentStep.title}</h3>
+            <span className="text-[11px] text-white/40 font-medium tabular-nums">{currentStepIndex + 1}/{steps.length}</span>
+          </div>
+
+          {/* Progress bar */}
+          <div className="flex items-center gap-1 md:gap-1.5 md:mt-5">
             {steps.map((step, idx) => (
-              <div key={step.id} className="flex-1 flex flex-col gap-2">
-                <div
-                  className={`h-1 rounded-full transition-all duration-300 ${idx <= currentStepIndex ? 'bg-champagne' : 'bg-white/10'
-                    }`}
-                />
-              </div>
+               <div key={step.id} className="flex-1">
+                 <div
+                   className={`h-[3px] md:h-1 rounded-full transition-all duration-300 ${idx <= currentStepIndex ? 'bg-champagne' : 'bg-white/10'
+                     }`}
+                 />
+               </div>
             ))}
           </div>
-          <div className="mt-2 md:mt-3 text-[10px] md:text-[11px] uppercase tracking-widest text-white/50 font-medium">
+
+          {/* Desktop step indicator */}
+          <div className="hidden md:block mt-3 text-[11px] uppercase tracking-widest text-white/50 font-medium">
             Adım {currentStepIndex + 1} / {steps.length}: <span className="text-champagne">{currentStep.title}</span>
           </div>
         </div>
 
-        <div className="relative flex-1 overflow-x-hidden overflow-y-auto custom-scrollbar p-4 md:p-8">
+        {/* ─── SCROLLABLE CONTENT ─── */}
+        <div className="relative flex-1 overflow-x-hidden overflow-y-auto overscroll-contain custom-scrollbar px-5 py-3 md:p-8">
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={currentStep.id}
@@ -357,23 +376,24 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className="w-full"
             >
+              {/* STEP: Layout */}
               {currentStep.id === 'layout' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Yerleşim tipini seçin</h3>
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-2 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {LAYOUTS.map(l => (
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Yerleşim tipini seçin</h3>
+                  <div className="grid grid-cols-2 gap-2.5 md:gap-3">
+                    {LAYOUTS.map((l, index) => (
                       <button
                         key={l.id}
                         onClick={() => handleLayoutChange(l.id)}
-                        className={`shrink-0 w-[140px] md:w-auto snap-center flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border transition-all ${layout === l.id
+                        className={`relative flex flex-col items-center justify-center gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl border transition-all min-h-[80px] ${layout === l.id
                             ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
-                          }`}
+                            : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
+                          } ${index === 2 ? 'col-span-2' : ''}`}
                       >
-                        <l.icon className="w-8 h-8" strokeWidth={1.5} />
-                        <span className="text-xs font-medium text-center">{l.label}</span>
+                        <l.icon className="w-7 h-7 md:w-8 md:h-8" strokeWidth={1.5} />
+                        <span className="text-xs font-medium text-center leading-tight">{l.label}</span>
                         {layout === l.id && (
-                          <div className="absolute top-3 right-3">
+                          <div className="absolute top-2.5 right-2.5">
                             <Check className="w-4 h-4 text-champagne" />
                           </div>
                         )}
@@ -383,14 +403,15 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
+              {/* STEP: Dimensions */}
               {currentStep.id === 'dimensions' && (
-                <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
-                  <h3 className="text-lg font-light text-white">Ölçüleri Belirleyin</h3>
+                <div className="space-y-6 md:space-y-8">
+                  <h3 className="text-lg font-light text-white hidden md:block">Ölçüleri Belirleyin</h3>
 
                   <div>
-                    <div className="flex justify-between text-sm mb-4">
-                      <span className="text-white/70">Kabin Genişliği (X)</span>
-                      <span className="text-champagne font-bold">{widthX} cm</span>
+                    <div className="flex justify-between items-baseline mb-3 md:mb-4">
+                      <span className="text-sm text-white/70">Kabin Genişliği (X)</span>
+                      <span className="text-champagne font-bold text-xl md:text-lg tabular-nums">{widthX} cm</span>
                     </div>
                     <input
                       type="range"
@@ -411,9 +432,9 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                           }
                         }
                       }}
-                      className="w-full accent-champagne h-1.5 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-champagne [&::-webkit-slider-thumb]:rounded-full cursor-pointer"
+                      className="w-full accent-champagne h-2 md:h-1.5 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:md:w-5 [&::-webkit-slider-thumb]:md:h-5 [&::-webkit-slider-thumb]:bg-champagne [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(201,168,106,0.4)] cursor-pointer"
                     />
-                    <div className="flex justify-between text-xs text-white/30 mt-2">
+                    <div className="flex justify-between text-[11px] text-white/30 mt-2">
                       <span>60 cm</span>
                       <span>250 cm</span>
                     </div>
@@ -421,35 +442,36 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
 
                   {layout === 'corner' && (
                     <div>
-                      <div className="flex justify-between text-sm mb-4">
-                        <span className="text-white/70">Kabin Derinliği (Y)</span>
-                        <span className="text-champagne font-bold">{depthY} cm</span>
+                      <div className="flex justify-between items-baseline mb-3 md:mb-4">
+                        <span className="text-sm text-white/70">Kabin Derinliği (Y)</span>
+                        <span className="text-champagne font-bold text-xl md:text-lg tabular-nums">{depthY} cm</span>
                       </div>
                       <input
                         type="range"
                         min="60" max="250" step="5"
                         value={depthY}
                         onChange={(e) => setDepthY(Number(e.target.value))}
-                        className="w-full accent-champagne h-1.5 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-champagne [&::-webkit-slider-thumb]:rounded-full cursor-pointer"
+                        className="w-full accent-champagne h-2 md:h-1.5 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:md:w-5 [&::-webkit-slider-thumb]:md:h-5 [&::-webkit-slider-thumb]:bg-champagne [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(201,168,106,0.4)] cursor-pointer"
                       />
-                      <div className="flex justify-between text-xs text-white/30 mt-2">
+                      <div className="flex justify-between text-[11px] text-white/30 mt-2">
                         <span>60 cm</span>
                         <span>250 cm</span>
                       </div>
                     </div>
                   )}
 
-                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-xs text-white/50 leading-relaxed">
-                    Ölçüleriniz milimetrik olmak zorunda değil. Sipariş onayı sonrası ekiplerimiz ücretsiz röleve (ölçü alım) işlemi için adresinize gelecektir.
+                  <div className="p-3.5 bg-white/5 rounded-xl border border-white/10 text-xs text-white/50 leading-relaxed text-center">
+                    Ölçüleriniz milimetrik olmak zorunda değil. Sipariş onayı sonrası ekiplerimiz ücretsiz röleve işlemi için adresinize gelecektir.
                   </div>
                 </div>
               )}
 
+              {/* STEP: Door Model */}
               {currentStep.id === 'model' && (
-                <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
-                  <h3 className="text-lg font-light text-white">Kapı Modelini Seçin</h3>
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Kapı Modelini Seçin</h3>
 
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-1 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <div className="flex flex-col gap-2.5 md:gap-3">
                     {DOOR_SYSTEMS[layout as keyof typeof DOOR_SYSTEMS].filter(d => {
                       if (widthX < 100 && d.id === '2-sabit-2-kayar') return false
                       if (widthX > 100 && (d.id === '1-sabit-1-kayar' || d.id === 'katlanir')) return false
@@ -458,9 +480,9 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                       <button
                         key={d.id}
                         onClick={() => setDoorSystem(d.id)}
-                        className={`shrink-0 w-[220px] md:w-auto snap-center relative p-5 rounded-2xl border text-sm font-medium transition-all text-left whitespace-normal ${doorSystem === d.id
+                        className={`relative p-4 md:p-5 rounded-2xl border text-sm font-medium transition-all text-left whitespace-normal min-h-[52px] ${doorSystem === d.id
                             ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
+                            : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
                           }`}
                       >
                         {d.label}
@@ -473,32 +495,93 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                     ))}
                   </div>
 
-                  <div className="mt-4 text-xs text-champagne/70 bg-champagne/5 p-4 rounded-xl border border-champagne/10 leading-relaxed">
+                  <div className="text-xs text-champagne/70 bg-champagne/5 p-3.5 rounded-xl border border-champagne/10 leading-relaxed text-center">
                     {widthX < 100
-                      ? `Not: ${widthX} cm gibi dar alanlar için en verimli sistem "1 Sabit 1 Kayar" veya "Katlanır" kapılardır.`
+                      ? `${widthX} cm gibi dar alanlar için en verimli sistem "1 Sabit 1 Kayar" veya "Katlanır" kapılardır.`
                       : widthX > 100
-                        ? `Not: ${widthX} cm gibi geniş alanlar için en konforlu sistem "2 Sabit 2 Kayar" kapılardır.`
-                        : `Not: 100 cm genişlik için tüm sistemleri tercih edebilirsiniz.`
+                        ? `${widthX} cm gibi geniş alanlar için en konforlu sistem "2 Sabit 2 Kayar" kapılardır.`
+                        : `100 cm genişlik için tüm sistemleri tercih edebilirsiniz.`
                     }
                   </div>
                 </div>
               )}
 
+              {/* STEP: Glass Type */}
               {currentStep.id === 'glass' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Cam tipini seçin</h3>
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-2 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Cam tipini seçin</h3>
+                  <div className="grid grid-cols-2 gap-2.5 md:gap-3">
                     {GLASS_TYPES.map(g => (
                       <button
                         key={g.id}
                         onClick={() => handleGlassChange(g.id)}
-                        className={`shrink-0 w-[140px] md:w-auto snap-center relative p-5 rounded-2xl border text-sm font-medium transition-all ${glass === g.id
+                        className={`relative p-4 md:p-5 rounded-2xl border text-sm font-medium transition-all min-h-[52px] ${glass === g.id
                             ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
+                            : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
                           }`}
                       >
                         {g.label}
                         {glass === g.id && (
+                          <div className="absolute top-2.5 right-2.5">
+                            <Check className="w-4 h-4 text-champagne" />
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* STEP: Pattern */}
+              {currentStep.id === 'pattern' && (
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Kumlama desenini seçin</h3>
+                  {sandblastedModels.length === 0 ? (
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 text-sm text-white/50 text-center">
+                      Model bulunamadı.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-3 md:grid-cols-2 gap-2.5 md:gap-3">
+                      {sandblastedModels.map(pattern => (
+                        <button
+                          key={pattern.id}
+                          onClick={() => setPatternId(pattern.id)}
+                          className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-all ${patternId === pattern.id ? 'border-champagne ring-1 ring-champagne/30' : 'border-transparent active:border-white/20 md:hover:border-white/20'
+                            }`}
+                        >
+                          <Image src={pattern.image_url} alt={pattern.title} fill className="object-cover" sizes="(max-width: 768px) 33vw, 150px" />
+                          {patternId === pattern.id && (
+                            <div className="absolute inset-0 bg-champagne/20 flex items-center justify-center">
+                              <Check className="w-7 h-7 text-white drop-shadow-md bg-champagne/60 rounded-full p-1" />
+                            </div>
+                          )}
+                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-1.5 pt-4">
+                            <span className="text-[10px] text-white/90 font-medium leading-tight line-clamp-1">{pattern.title}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* STEP: Profile Color */}
+              {currentStep.id === 'profile' && (
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Profil rengini seçin</h3>
+                  <div className="grid grid-cols-2 gap-2.5 md:gap-3">
+                    {PROFILES.map(p => (
+                      <button
+                        key={p.id}
+                        onClick={() => setProfile(p.id)}
+                        className={`relative flex items-center gap-3 p-3.5 md:p-4 rounded-2xl border transition-all min-h-[52px] ${profile === p.id
+                            ? 'bg-champagne/10 border-champagne/50 text-champagne'
+                            : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
+                          }`}
+                      >
+                        <div className={`w-8 h-8 rounded-full border border-white/10 ${p.color} shadow-inner shrink-0`} />
+                        <span className="text-sm font-medium">{p.label}</span>
+                        {profile === p.id && (
                           <div className="absolute top-3 right-3">
                             <Check className="w-4 h-4 text-champagne" />
                           </div>
@@ -509,110 +592,55 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {currentStep.id === 'pattern' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Kumlama desenini seçin</h3>
-                  {sandblastedModels.length === 0 ? (
-                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 text-sm text-white/50 text-center">
-                      Model bulunamadı.
-                    </div>
-                  ) : (
-                    <div className="flex overflow-x-auto md:grid md:grid-cols-2 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                      {sandblastedModels.map(pattern => (
-                        <button
-                          key={pattern.id}
-                          onClick={() => setPatternId(pattern.id)}
-                          className={`shrink-0 w-[120px] md:w-auto snap-center relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-all ${patternId === pattern.id ? 'border-champagne' : 'border-transparent hover:border-white/20'
-                            }`}
-                        >
-                          <Image src={pattern.image_url} alt={pattern.title} fill className="object-cover" sizes="150px" />
-                          {patternId === pattern.id && (
-                            <div className="absolute inset-0 bg-champagne/20 flex items-center justify-center">
-                              <Check className="w-6 h-6 text-white drop-shadow-md" />
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {currentStep.id === 'profile' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Profil rengini seçin</h3>
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-2 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {PROFILES.map(p => (
+              {/* STEP: Base */}
+              {currentStep.id === 'base' && (
+                <div className="space-y-4 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Zemin tipini seçin</h3>
+                  <div className="grid grid-cols-2 gap-2.5 md:gap-3">
+                    {BASES.map(b => (
                       <button
-                        key={p.id}
-                        onClick={() => setProfile(p.id)}
-                        className={`shrink-0 w-[140px] md:w-auto snap-center relative flex items-center gap-3 p-4 rounded-2xl border transition-all ${profile === p.id
-                            ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
+                        key={b.id}
+                        onClick={() => setBase(b.id)}
+                        className={`relative p-3.5 md:p-4 rounded-xl border text-sm font-medium transition-all text-left min-h-[48px] ${base === b.id
+                          ? 'bg-champagne/10 border-champagne/50 text-champagne'
+                          : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
                           }`}
                       >
-                        <div className={`w-8 h-8 rounded-full border border-white/10 ${p.color} shadow-inner shrink-0`} />
-                        <span className="text-sm font-medium">{p.label}</span>
-                        {profile === p.id && (
-                          <div className="absolute top-4 right-4">
+                        {b.label}
+                        {base === b.id && (
+                          <div className="absolute top-2 right-2">
                             <Check className="w-4 h-4 text-champagne" />
                           </div>
                         )}
                       </button>
                     ))}
                   </div>
-                </div>
-              )}
 
-              {currentStep.id === 'base' && (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-light text-white">Zemin tipini seçin</h3>
-                  <div className="grid grid-cols-2 lg:grid-cols-2 gap-3">
-                    {BASES.map(b => (
-                      <button
-                        key={b.id}
-                        onClick={() => setBase(b.id)}
-                        className={`relative p-4 rounded-xl border text-sm font-medium transition-all text-left ${base === b.id
-                          ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                          : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
-                          }`}
-                      >
-                        {b.label}
-                        {base === b.id && (
-                          <div className="absolute top-1/2 -translate-y-1/2 right-4">
-                            <Check className="w-5 h-5 text-champagne" />
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Zemin Modeli Seçimi */}
                   {availableBaseModels.length > 0 && (
                     <motion.div 
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
-                      className="space-y-4 pt-6 border-t border-white/10"
+                      className="space-y-3 pt-4 border-t border-white/10"
                     >
-                      <h4 className="text-sm font-medium text-white/70">Ölçünüze Uygun Model Seçimi</h4>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <h4 className="text-sm font-medium text-white/70">Model Seçimi</h4>
+                      <div className="grid grid-cols-2 gap-2.5 md:gap-3">
                         {availableBaseModels.map(model => (
                           <button
                             key={model.id}
                             onClick={() => setBaseModelId(model.id)}
                             className={cn(
-                              "relative flex flex-col items-center gap-2 rounded-xl border p-2 transition-all",
+                              "relative flex flex-col items-center gap-1.5 rounded-xl border p-2 transition-all",
                               baseModelId === model.id 
-                                ? "border-eraydus-gold bg-eraydus-gold/10" 
-                                : "border-white/10 hover:border-white/30 hover:bg-white/5"
+                                ? "border-champagne bg-champagne/10" 
+                                : "border-white/10 active:border-white/30 active:bg-white/5 md:hover:border-white/30 md:hover:bg-white/5"
                             )}
                           >
                             <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-black/40">
-                              <Image src={model.src} alt={model.name} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover" />
+                              <Image src={model.src} alt={model.name} fill sizes="(max-width: 768px) 45vw, 33vw" className="object-cover" />
                             </div>
                             <span className={cn(
-                              "text-xs font-medium text-center",
-                              baseModelId === model.id ? "text-eraydus-gold" : "text-white/70"
+                              "text-[11px] font-medium text-center leading-tight",
+                              baseModelId === model.id ? "text-champagne" : "text-white/70"
                             )}>
                               {model.name}
                             </span>
@@ -624,24 +652,24 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 8: HANDLE */}
+              {/* STEP: Handle */}
               {currentStep.id === 'handle' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Kulp tipini seçin</h3>
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-2 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Kulp tipini seçin</h3>
+                  <div className="flex flex-col gap-2.5 md:gap-3">
                     {HANDLES.map(h => (
                       <button
                         key={h.id}
                         onClick={() => setHandle(h.id)}
-                        className={`shrink-0 w-[140px] md:w-auto snap-center relative p-5 rounded-2xl border text-sm font-medium transition-all ${handle === h.id
+                        className={`relative p-4 md:p-5 rounded-2xl border text-sm font-medium transition-all text-left min-h-[52px] ${handle === h.id
                             ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
+                            : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
                           }`}
                       >
                         {h.label}
                         {handle === h.id && (
-                          <div className="absolute top-3 right-3">
-                            <Check className="w-4 h-4 text-champagne" />
+                          <div className="absolute top-1/2 -translate-y-1/2 right-4">
+                            <Check className="w-5 h-5 text-champagne" />
                           </div>
                         )}
                       </button>
@@ -650,18 +678,18 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 9: DELIVERY */}
+              {/* STEP: Delivery */}
               {currentStep.id === 'delivery' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Teslimat Yöntemi</h3>
-                  <div className="flex overflow-x-auto md:grid md:grid-cols-1 gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="space-y-3 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Teslimat Yöntemi</h3>
+                  <div className="flex flex-col gap-2.5 md:gap-3">
                     {DELIVERIES.map(d => (
                       <button
                         key={d.id}
                         onClick={() => setDelivery(d.id)}
-                        className={`shrink-0 w-[240px] md:w-auto snap-center relative p-5 rounded-2xl border text-sm font-medium transition-all text-left whitespace-normal ${delivery === d.id
+                        className={`relative p-4 md:p-5 rounded-2xl border text-sm font-medium transition-all text-left min-h-[52px] ${delivery === d.id
                             ? 'bg-champagne/10 border-champagne/50 text-champagne'
-                            : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10'
+                            : 'bg-white/5 border-white/5 text-white/60 active:bg-white/10 md:hover:bg-white/10'
                           }`}
                       >
                         {d.label}
@@ -676,31 +704,31 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                 </div>
               )}
 
-              {/* STEP 10: SUMMARY */}
+              {/* STEP: Summary */}
               {currentStep.id === 'summary' && (
-                <div className="space-y-5">
-                  <h3 className="text-lg font-light text-white">Konfigürasyon Özetiniz</h3>
+                <div className="space-y-4 md:space-y-5">
+                  <h3 className="text-lg font-light text-white hidden md:block">Konfigürasyon Özetiniz</h3>
 
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/5 space-y-4">
-                    <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                  <div className="p-4 md:p-5 rounded-2xl bg-white/5 border border-white/5 space-y-3 md:space-y-4">
+                    <div className="flex justify-between items-center border-b border-white/10 pb-2.5 md:pb-3">
                       <span className="text-white/50 text-xs">Yerleşim</span>
-                      <span className="text-white text-sm font-medium">{LAYOUTS.find(l => l.id === layout)?.label}</span>
+                      <span className="text-white text-sm font-medium text-right ml-4">{LAYOUTS.find(l => l.id === layout)?.label}</span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                    <div className="flex justify-between items-center border-b border-white/10 pb-2.5 md:pb-3">
                       <span className="text-white/50 text-xs">Ölçü</span>
-                      <span className="text-white text-sm font-medium">{widthX} {layout === 'corner' ? `x ${depthY}` : ''} cm</span>
+                      <span className="text-white text-sm font-medium text-right ml-4 tabular-nums">{widthX} {layout === 'corner' ? `x ${depthY}` : ''} cm</span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                      <span className="text-white/50 text-xs">Zemin & Kapı</span>
-                      <span className="text-white text-sm font-medium">{BASES.find(b => b.id === base)?.label} - {DOOR_SYSTEMS[layout as keyof typeof DOOR_SYSTEMS].find(d => d.id === doorSystem)?.label}</span>
+                    <div className="flex justify-between items-center border-b border-white/10 pb-2.5 md:pb-3">
+                      <span className="text-white/50 text-xs shrink-0">Zemin & Kapı</span>
+                      <span className="text-white text-xs md:text-sm font-medium text-right ml-3">{BASES.find(b => b.id === base)?.label} · {DOOR_SYSTEMS[layout as keyof typeof DOOR_SYSTEMS].find(d => d.id === doorSystem)?.label}</span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                      <span className="text-white/50 text-xs">Cam & Kumlama</span>
-                      <span className="text-white text-sm font-medium">{GLASS_TYPES.find(g => g.id === glass)?.label} {glass === 'frosted' && selectedPattern ? `(${selectedPattern.title})` : ''}</span>
+                    <div className="flex justify-between items-center border-b border-white/10 pb-2.5 md:pb-3">
+                      <span className="text-white/50 text-xs">Cam</span>
+                      <span className="text-white text-sm font-medium text-right ml-4">{GLASS_TYPES.find(g => g.id === glass)?.label} {glass === 'frosted' && selectedPattern ? `(${selectedPattern.title})` : ''}</span>
                     </div>
                     <div className="flex justify-between items-center pb-1">
                       <span className="text-white/50 text-xs">Profil & Kulp</span>
-                      <span className="text-white text-sm font-medium">{PROFILES.find(p => p.id === profile)?.label} - {layout !== 'walk-in' ? HANDLES.find(h => h.id === handle)?.label : '-'}</span>
+                      <span className="text-white text-sm font-medium text-right ml-4">{PROFILES.find(p => p.id === profile)?.label} · {layout !== 'walk-in' ? HANDLES.find(h => h.id === handle)?.label : '-'}</span>
                     </div>
                   </div>
 
@@ -709,13 +737,13 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
                     <textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Özel bir isteğiniz veya eklemek istediğiniz not varsa buraya yazabilirsiniz..."
-                      className="w-full h-24 bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-champagne resize-none transition-colors"
+                      placeholder="Özel bir isteğiniz varsa buraya yazabilirsiniz..."
+                      className="w-full h-20 md:h-24 bg-white/5 border border-white/10 rounded-xl p-3.5 md:p-4 text-[16px] md:text-sm text-white focus:outline-none focus:border-champagne resize-none transition-colors"
                     />
                   </div>
 
-                  <p className="text-xs text-white/40 leading-relaxed text-center pb-8">
-                    Girdiğiniz özellikler doğrudan satış ekibimize iletilir. Size en uygun fiyat teklifiyle hızlıca dönüş yapacağız.
+                  <p className="text-xs text-white/40 leading-relaxed text-center pb-2">
+                    Girdiğiniz özellikler doğrudan satış ekibimize iletilir.
                   </p>
                 </div>
               )}
@@ -723,15 +751,16 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
           </AnimatePresence>
         </div>
 
-        {/* Footer Navigation */}
-        <div className="p-4 md:p-8 border-t border-white/5 shrink-0 flex items-center justify-between gap-3">
+        {/* ─── FOOTER NAVIGATION ─── */}
+        <div className="px-4 pt-2.5 md:px-6 md:pt-4 border-t border-white/5 shrink-0 flex items-center justify-between gap-3 bg-[#111111]/95 md:bg-[#111111]" style={{ paddingBottom: 'max(10px, env(safe-area-inset-bottom, 10px))' }}>
           <button
             onClick={prevStep}
             disabled={currentStepIndex === 0}
-            className={`flex items-center justify-center size-10 md:size-12 shrink-0 rounded-full border border-white/10 transition-colors ${currentStepIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/10 text-white'
+            aria-label="Önceki adım"
+            className={`flex items-center justify-center size-11 md:size-12 shrink-0 rounded-full border border-white/10 transition-colors ${currentStepIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'active:bg-white/10 md:hover:bg-white/10 text-white'
               }`}
           >
-            <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           {isLastStep ? (
@@ -740,18 +769,18 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => toast.success('Tasarım detaylarınız WhatsApp sipariş hattımıza aktarılıyor...')}
-              className="flex-1 flex items-center justify-center gap-2 bg-champagne text-black px-4 py-2.5 md:px-6 md:py-3.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)] cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 bg-champagne text-black h-11 md:h-12 px-4 md:px-6 rounded-full text-sm font-bold uppercase tracking-wider active:bg-white md:hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)] cursor-pointer"
             >
-              <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
+              <MessageCircle className="w-5 h-5" />
               Siparişi İlet
             </a>
           ) : (
             <button
               onClick={nextStep}
-              className="flex-1 flex items-center justify-center gap-2 bg-white text-black px-4 py-2.5 md:px-6 md:py-3.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-champagne hover:text-black transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-white text-black h-11 md:h-12 px-4 md:px-6 rounded-full text-sm font-bold uppercase tracking-wider active:bg-champagne md:hover:bg-champagne active:text-black md:hover:text-black transition-colors"
             >
               Devam Et
-              <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           )}
 

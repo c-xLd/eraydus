@@ -1,10 +1,14 @@
 import { createClient } from '@/lib/server'
-import SecurityDashboard from './components/SecurityDashboard'
+import { createAdminClient } from '@/services/supabase/server'
 import { authorize } from '@/lib/auth-utils'
 import { redirect } from 'next/navigation'
+import SecurityDashboard from './components/SecurityDashboard'
+import { Lock } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'Güvenlik Merkezi | Erayduş Admin',
+  title: 'Güvenlik Kontrol Merkezi | Erayduş Admin',
 }
 
 export default async function SecurityPage() {

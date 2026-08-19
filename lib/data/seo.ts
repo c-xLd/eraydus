@@ -145,14 +145,15 @@ export const getGlobalSeoData = cache(
           .single();
 
         if (data) {
+          const dbAnalytics = data.geo_data?.analytics || {};
           return {
             ...globalSeoData,
             siteName: data.title || globalSeoData.siteName,
             defaultDescription: data.description || globalSeoData.defaultDescription,
             analytics: {
-              googleAnalyticsId: '',
-              googleTagManagerId: 'GTM-WXPSP6B8', 
-              ...data.geo_data?.analytics
+              ...dbAnalytics,
+              googleAnalyticsId: dbAnalytics.googleAnalyticsId || 'G-C4H96ZVE9F',
+              googleTagManagerId: dbAnalytics.googleTagManagerId || 'GTM-WXPSP6B8',
             },
             ...data.geo_data
           };
@@ -164,7 +165,7 @@ export const getGlobalSeoData = cache(
       return {
         ...globalSeoData,
         analytics: {
-          googleAnalyticsId: '',
+          googleAnalyticsId: 'G-C4H96ZVE9F',
           googleTagManagerId: 'GTM-WXPSP6B8'
         }
       };

@@ -86,6 +86,7 @@ export default async function RootLayout({
       <html
         lang="tr"
         className={`${plusJakarta.variable} ${spaceMono.variable} antialiased`}
+        data-scroll-behavior="smooth"
       >
         <head>
           {supabaseUrl && (

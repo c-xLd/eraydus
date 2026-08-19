@@ -1,10 +1,9 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import type { ProductSeoInfo } from '@/features/seo/types'
 import { updateSeoMetadata } from '@/features/seo/actions'
+import { generateSeoMeta } from '@/app/admin/actions/ai'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Globe, Save, Loader2, Info } from 'lucide-react'
+import { X, Globe, Save, Loader2, Info, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -27,6 +26,7 @@ export default function SeoEditorDrawer({ product, open, onClose }: SeoEditorDra
   const [isIndex, setIsIndex] = useState(seo ? seo.robots_index : true)
   const [isFollow, setIsFollow] = useState(seo ? seo.robots_follow : true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false)
 
   // Update state when product changes
   useEffect(() => {
@@ -36,6 +36,25 @@ export default function SeoEditorDrawer({ product, open, onClose }: SeoEditorDra
     setIsIndex(product.seo_metadata ? product.seo_metadata.robots_index : true)
     setIsFollow(product.seo_metadata ? product.seo_metadata.robots_follow : true)
   }, [product])
+
+  const handleAiGenerate = async () => {
+    setIsGeneratingAi(true)
+    try {
+      const res = await generateSeoMeta(product.slug, title || product.name)
+      if (res.success) {
+        if (res.title) setTitle(res.title)
+        if (res.description) setDescription(res.description)
+        toast.success(`Ollama Cloud (${res.model || 'gemma4:31b'}) ile SEO metinleri üretildi!`)
+      } else {
+        toast.error(res.error || 'SEO metinleri üretilemedi')
+      }
+    } catch (err: any) {
+      toast.error('AI hatası: ' + err.message)
+    } finally {
+      setIsGeneratingAi(false)
+    }
+  }
+
 
   const handleSave = async () => {
     if (!isIndex && !confirm('Bu sayfa indekslenmeyecek (NOINDEX). Google arama sonuçlarından düşebilir. Emin misiniz?')) {
@@ -117,6 +136,37 @@ export default function SeoEditorDrawer({ product, open, onClose }: SeoEditorDra
                 <p className="text-xs text-gray-400 flex items-center gap-1">
                   <Info className="size-3" /> Bu bir simülasyondur, Google sonuçları farklı gösterebilir.
                 </p>
+              </div>
+
+              {/* AI Quick Generator */}
+              <div className="flex items-center justify-between p-3.5 bg-gradient-to-r from-blue-50/70 to-indigo-50/70 border border-blue-100 rounded-2xl">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="size-4 text-blue-600 animate-pulse" />
+                  <div>
+                    <p className="text-xs font-semibold text-blue-950">Ollama Cloud AI</p>
+                    <p className="text-[11px] text-blue-700">Ürüne özel lüks SEO başlığı ve açıklaması üretir</p>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleAiGenerate}
+                  disabled={isGeneratingAi}
+                  className="h-8 text-xs bg-white hover:bg-blue-600 hover:text-white border-blue-200 shadow-sm transition-all"
+                >
+                  {isGeneratingAi ? (
+                    <>
+                      <Loader2 className="size-3.5 mr-1.5 animate-spin text-blue-600" />
+                      Üretiliyor...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="size-3.5 mr-1.5 text-blue-600 group-hover:text-white" />
+                      AI ile Oluştur
+                    </>
+                  )}
+                </Button>
               </div>
 
               {/* Form Fields */}

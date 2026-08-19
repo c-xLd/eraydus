@@ -26,6 +26,7 @@ import {
   Star,
   Mail,
   FileText,
+  Sparkles,
   Image as ImageIcon
 } from "lucide-react"
 
@@ -72,6 +73,7 @@ const navGroups: { title: string; items: NavItem[] }[] = [
     items: [
       { icon: BarChart3, label: "Performans Raporu", href: "/admin/reports" },
       { icon: TrendingUp, label: "Analitikler", href: "/admin/analytics" },
+      { icon: Sparkles, label: "AI & Limit Ayarları", href: "/admin/settings/ai" },
       { icon: Users2, label: "Yetkili Ekip", href: "/admin/team" },
       { icon: Settings, label: "Platform Ayarları", href: "/admin/settings" },
     ],

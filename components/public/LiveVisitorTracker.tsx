@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { createClient } from '@/services/supabase/client'
 
-export function LiveVisitorTracker() {
+export function LiveVisitorTracker({ ip = 'Bilinmiyor', location = 'Bilinmiyor' }: { ip?: string, location?: string }) {
   const pathname = usePathname()
   const visitorIdRef = useRef<string>('')
   
@@ -40,6 +40,8 @@ export function LiveVisitorTracker() {
           title,
           timestamp: new Date().toISOString(),
           userAgent: navigator.userAgent,
+          ip,
+          location
         })
       }
     })

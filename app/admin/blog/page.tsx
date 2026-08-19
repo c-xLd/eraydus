@@ -1,22 +1,14 @@
-import { createClient } from '@/lib/server'
 import BlogClient from './components/BlogClient'
+import { getAdminBlogPosts } from './actions'
 
 export const metadata = {
   title: 'Blog Yönetimi | Erayduş Admin',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminBlogPage() {
-  const supabase = await createClient()
-
-  const { data: posts, error } = await supabase
-    .from('blog')
-    .select('*')
-    .eq('content_type', 'blog')
-    .order('published_at', { ascending: false })
-
-  if (error) {
-    console.error('Error fetching blog posts for admin:', error)
-  }
+  const posts = await getAdminBlogPosts()
 
   return (
     <BlogClient initialPosts={(posts as any[]) || []} />

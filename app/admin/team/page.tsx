@@ -3,6 +3,8 @@ import TeamDashboard from './components/TeamDashboard'
 import { authorize } from '@/lib/auth-utils'
 import { redirect } from 'next/navigation'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Ekip Yönetimi | Erayduş Admin',
 }

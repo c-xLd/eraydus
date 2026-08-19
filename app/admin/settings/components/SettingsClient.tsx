@@ -4,7 +4,8 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Save, Settings2, Bell, Mail, Phone, ShoppingBag, ShieldAlert } from "lucide-react"
+import { Save, Settings2, Bell, Mail, Phone, ShoppingBag, ShieldAlert, Sparkles, Cpu, ArrowRight } from "lucide-react"
+import Link from "next/link"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
 import { updateSiteSettings } from "../actions"
@@ -113,7 +114,32 @@ export function SettingsClient({ initialData }: { initialData: any }) {
       </div>
 
       <div className="space-y-12">
-        
+        {/* AI & Cloud Limits Banner Card */}
+        <Link href="/admin/settings/ai" className="block group">
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border border-slate-800 shadow-xl transition-all hover:shadow-indigo-500/10 hover:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="flex items-center gap-4">
+              <div className="size-12 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
+                <Cpu className="size-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-semibold text-white">Ollama Cloud AI & Limit Kontrol Paneli</h3>
+                  <span className="text-[10px] uppercase font-bold tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                    Ücretsiz Modeller
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 mt-1 font-light">
+                  Oturum limitleri (%0.2), haftalık kotalar, model havuzu ve Humanizer kurallarını yönetin.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-indigo-300 group-hover:text-white transition-colors shrink-0">
+              <span>Limitleri İncele</span>
+              <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+        </Link>
+
         {/* Section 1: Sistem Durumu */}
         <section className="scroll-mt-32" id="general">
           <div className="mb-6">

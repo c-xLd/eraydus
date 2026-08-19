@@ -16,7 +16,7 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <html lang="tr">
+    <html lang="tr" data-scroll-behavior="smooth">
       <body className="min-h-screen flex flex-col items-center justify-center bg-[#09090b] text-[#fafafa] font-sans px-6 py-20">
         <div className="text-center max-w-lg mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold tracking-widest uppercase mb-6">

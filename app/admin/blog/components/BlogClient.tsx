@@ -15,7 +15,7 @@ type BlogPost = {
   id: string
   title: string
   slug: string | null
-  content_type: string
+  content_type?: string | null
   description: string | null
   body: string | null
   status: string
@@ -48,8 +48,11 @@ export default function BlogClient({ initialPosts }: { initialPosts: BlogPost[] 
     return matchesTag && matchesStatus && matchesQuery
   })
 
-  const formatDate = (d: string | null) =>
-    d ? new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(d)) : 'Tarih Yok'
+  const formatDate = (publishedAt: string | null, createdAt?: string | null) => {
+    const target = publishedAt || createdAt
+    if (!target) return 'Tarih Yok'
+    return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(target))
+  }
 
   const handleDelete = async () => {
     if (!deletePost) return
@@ -247,7 +250,7 @@ export default function BlogClient({ initialPosts }: { initialPosts: BlogPost[] 
 
                   {/* Date */}
                   <td className="py-3 px-6 text-xs text-gray-500 whitespace-nowrap">
-                    {formatDate(post.published_at)}
+                    {formatDate(post.published_at, post.created_at)}
                   </td>
 
                   {/* Actions */}

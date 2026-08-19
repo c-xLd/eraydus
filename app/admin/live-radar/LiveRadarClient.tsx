@@ -37,6 +37,8 @@ interface VisitorPresence {
   title: string
   timestamp: string
   userAgent: string
+  ip?: string
+  location?: string
 }
 
 export function LiveRadarClient() {
@@ -64,6 +66,8 @@ export function LiveRadarClient() {
             title: presences[0].title,
             timestamp: presences[0].timestamp,
             userAgent: presences[0].userAgent,
+            ip: presences[0].ip,
+            location: presences[0].location
           })
         }
       })
@@ -133,14 +137,20 @@ export function LiveRadarClient() {
                 <tr key={v.visitorId} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs uppercase">
+                      <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs uppercase shrink-0">
                         {v.visitorId.substring(0, 2)}
                       </div>
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-900 font-mono text-xs">
                           {v.visitorId.split('-')[0] || v.visitorId.substring(0, 8)}
                         </span>
-                        <span className="text-xs text-emerald-500">Çevrimiçi</span>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                          <span className="text-[11px] text-emerald-500 font-medium">Çevrimiçi</span>
+                          <span className="text-[11px] font-mono text-gray-500">{v.ip || 'Bilinmiyor'}</span>
+                          {v.location && v.location !== 'Bilinmiyor' && (
+                            <span className="text-[10px] bg-gray-100 px-1.5 rounded text-gray-600">{v.location}</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </td>

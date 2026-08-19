@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic'
 import { createClient } from '@/lib/server'
 import RealtimeDashboard from './components/RealtimeDashboard'
+import { AnalyticsDashboardClient } from './components/AnalyticsDashboardClient'
 
 export const metadata = {
-  title: 'Gerçek Zamanlı Analitikler | Erayduş Admin',
+  title: 'Analitik Merkezi | Erayduş Admin',
 }
 
 export default async function AnalyticsPage() {
@@ -22,6 +24,13 @@ export default async function AnalyticsPage() {
   }
 
   return (
-    <RealtimeDashboard initialEvents={recentEvents || []} />
+    <div className="space-y-12">
+      <AnalyticsDashboardClient />
+      
+      <div className="pt-12 border-t border-gray-100">
+        <RealtimeDashboard initialEvents={recentEvents || []} />
+      </div>
+    </div>
   )
 }
+

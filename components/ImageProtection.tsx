@@ -1,9 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export function ImageProtection() {
+  const pathname = usePathname();
+
   useEffect(() => {
+    // Admin panelinde bu korumaları devre dışı bırak
+    if (pathname && pathname.startsWith('/admin')) {
+      return;
+    }
+
     // 1. Tüm sitede sağ tıklamayı tamamen engelle (İncele seçeneğini kapatır)
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
@@ -73,7 +81,7 @@ export function ImageProtection() {
       document.removeEventListener('keydown', handleKeyDown);
       if (devToolsTrap) clearInterval(devToolsTrap);
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }
