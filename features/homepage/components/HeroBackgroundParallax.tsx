@@ -37,7 +37,7 @@ export function HeroBackgroundParallax() {
           fill
           priority
           fetchPriority="high"
-          quality={80}
+          quality={85}
           sizes="100vw"
           className="object-cover object-center pointer-events-none"
         />
