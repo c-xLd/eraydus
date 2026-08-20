@@ -18,7 +18,7 @@ export function HeroBackgroundParallax() {
       {/* Mobile Optimized Hero Image (<768px) */}
       <div className="block md:hidden absolute inset-0">
         <Image
-          src={storageUrl('uploads', 'homepage/hero-mobile.jpg')}
+          src={storageUrl('uploads', 'homepage/hero-mobile.webp')}
           alt="Lüks banyo duşakabin"
           fill
           priority
