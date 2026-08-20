@@ -355,6 +355,7 @@ export function LiveChatWidget() {
                       <button 
                         type="submit"
                         disabled={!input.trim() || isTyping}
+                        aria-label="Mesaj Gönder"
                         className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-emerald-700 transition-colors"
                       >
                         <Send className="size-4 ml-1" />
@@ -372,6 +373,8 @@ export function LiveChatWidget() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Canlı Destek ve WhatsApp İletişimi"
+        aria-expanded={isOpen}
         className="w-14 h-14 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 flex items-center justify-center relative"
       >
         <AnimatePresence mode="wait">

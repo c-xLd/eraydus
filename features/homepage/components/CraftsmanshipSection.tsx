@@ -83,10 +83,10 @@ export function CraftsmanshipSection() {
           {/* Left Column — Interactive Blueprint Image Showcase */}
           <div className="lg:col-span-6 flex justify-center w-full">
             <motion.div
-              initial={{ opacity: 0.01, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ x: -30 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 1.2, ease }}
+              transition={{ duration: 1, ease }}
               className="group relative aspect-[4/5] lg:aspect-[3/4] w-full max-w-md bg-zinc-900/30 border border-zinc-800/60 p-3 rounded-[2.5rem] shadow-3xl hover:border-zinc-700/50 transition-all duration-700"
             >
               {/* Corner Brackets */}
@@ -107,7 +107,7 @@ export function CraftsmanshipSection() {
                   alt="Erayduş Lüks Duşakabin Detayı"
                   fill
                   loading="lazy"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 540px"
                   className="object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
                 />
                 
@@ -123,14 +123,14 @@ export function CraftsmanshipSection() {
                       className="absolute z-20"
                       style={{ top: hotspot.y, left: hotspot.x }}
                     >
-                      {/* Pulse Circle */}
+                      {/* Pulse Circle with 48x48 minimum touch area */}
                       <button
                         type="button"
                         aria-label={`Özellik: ${hotspot.title}`}
                         onMouseEnter={() => setActiveHotspot(hotspot.id)}
                         onMouseLeave={() => setActiveHotspot(null)}
                         onClick={() => setActiveHotspot(isActive ? null : hotspot.id)}
-                        className="relative flex items-center justify-center h-8 w-8 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none"
+                        className="relative flex items-center justify-center min-w-[48px] min-h-[48px] -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none"
                       >
                         {/* Glow ring */}
                         <span className="absolute inline-flex h-6 w-6 rounded-full bg-champagne/30 animate-ping" />
@@ -154,10 +154,10 @@ export function CraftsmanshipSection() {
                             `}
                             style={{ top: '0%' }}
                           >
-                            <h4 className="text-sm font-semibold text-champagne mb-1.5 flex items-center gap-2">
+                            <p className="text-sm font-semibold text-champagne mb-1.5 flex items-center gap-2">
                               <span className="h-1 w-1 rounded-full bg-champagne" />
                               {hotspot.title}
-                            </h4>
+                            </p>
                             <p className="text-xs text-zinc-300 leading-relaxed font-light">
                               {hotspot.description}
                             </p>
@@ -174,8 +174,8 @@ export function CraftsmanshipSection() {
           {/* Right Column — Narrative & Specifications */}
           <div className="lg:col-span-6 flex flex-col justify-center">
             <motion.span
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, ease }}
               className="text-champagne text-xs font-semibold tracking-[0.2em] font-mono uppercase mb-3 block"
@@ -184,8 +184,8 @@ export function CraftsmanshipSection() {
             </motion.span>
 
             <motion.h2
-              initial={{ opacity: 0.01, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 1, delay: 0.1, ease }}
               className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-white mb-4 leading-tight"
@@ -194,8 +194,8 @@ export function CraftsmanshipSection() {
             </motion.h2>
 
             <motion.div
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.2, ease }}
               className="space-y-4 mb-8 text-zinc-400 font-light text-sm md:text-base leading-relaxed"
@@ -214,8 +214,8 @@ export function CraftsmanshipSection() {
 
             {/* Technical Specifications Grid */}
             <motion.div
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.3, ease }}
               className="grid grid-cols-3 border border-zinc-800/80 rounded-2xl overflow-hidden divide-x divide-zinc-800/80 bg-zinc-900/10 backdrop-blur-sm mb-8"
@@ -244,8 +244,8 @@ export function CraftsmanshipSection() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.4, ease }}
             >

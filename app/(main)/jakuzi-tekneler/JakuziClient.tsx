@@ -310,9 +310,9 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0.01, y: 15 }}
+              initial={{ y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0.01, y: -10 }}
+              exit={{ y: -10 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight text-white tracking-tight mb-3 leading-[1.1]">
@@ -358,7 +358,7 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
           {/* Compact Stats Bar */}
           <motion.div
             key={`stats-${activeTab}`}
-            initial={{ opacity: 0.01, y: 10 }}
+            initial={{ y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
             className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto border-t border-white/10 pt-6"
@@ -378,9 +378,8 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0.01 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0.01 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
           >
             {/* Architectural Info Section */}
@@ -494,7 +493,7 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
                   {displayModels.map((m: any, i: number) => (
                     <motion.div
                       key={m.name || m.id || i}
-                      initial={{ opacity: 0.01, y: 20 }}
+                      initial={{ y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: i * 0.1 }}

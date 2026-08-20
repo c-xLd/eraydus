@@ -12,8 +12,8 @@ export function StatementSection() {
 
       <div className="container mx-auto px-6 max-w-[1200px] text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0.01, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 10 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-6"
@@ -22,10 +22,10 @@ export function StatementSection() {
         </motion.div>
 
         <motion.h2 
-          initial={{ opacity: 0.01, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 30 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-[clamp(1.75rem,4vw,3.5rem)] font-light tracking-[-0.02em] text-foreground leading-[1.1] max-w-4xl mx-auto"
         >
           Banyonuzun Ölçüsüne Tam Uyan,{' '}

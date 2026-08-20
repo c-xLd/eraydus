@@ -3,6 +3,7 @@
 import { useMemo, useState, useEffect } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, CalendarDays, Search, Sparkles, Tag } from "lucide-react"
 
 import type { BlogPost } from "@/lib/data/blog"
@@ -64,10 +65,13 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
           >
             <div className="relative min-h-[360px] overflow-hidden lg:min-h-[520px]">
               {featured.featured_image ? (
-                <img
+                <Image
                   src={featured.featured_image}
                   alt={featured.title}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition duration-700 group-hover:scale-105"
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center bg-surface-dark">
@@ -89,72 +93,59 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
               <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-white/65 sm:text-lg">
                 {featured.description}
               </p>
-              {featured.tags?.length ? (
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {featured.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/70"
-                    >
-                      <Tag className="size-3 text-champagne" /> {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-              <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-champagne">
-                Yazıyı keşfet <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </span>
+              <div className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-champagne">
+                Devamını Oku <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </div>
             </div>
           </Link>
         </div>
       </section>
 
-      {/* ── Filter + Grid ── */}
-      <section className="pb-32 md:pb-44">
-        <div className="container mx-auto max-w-[1440px] px-6">
-          <div className="flex flex-col justify-between gap-4 border-t border-border py-8 lg:flex-row lg:items-center">
-            {/* Tag chips */}
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-              {tags.map((tag) => (
+      {/* ── Filter Bar & Search ── */}
+      <section className="sticky top-20 z-30 border-y border-border/40 bg-background/80 backdrop-blur-xl">
+        <div className="container mx-auto flex max-w-[1440px] flex-col gap-4 px-6 py-4 md:flex-row md:items-center md:justify-between">
+          {/* Tags */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none md:pb-0">
+            {allTags.map((tag) => {
+              const active = activeTag === tag
+              return (
                 <button
                   key={tag}
                   onClick={() => handleTagClick(tag)}
-                  className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-medium transition ${
-                    activeTag === tag
-                      ? "bg-foreground text-background"
-                      : "bg-surface text-foreground hover:bg-foreground hover:text-background"
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ${
+                    active
+                      ? "bg-foreground text-background shadow-sm"
+                      : "bg-surface text-muted-foreground hover:bg-surface/80 hover:text-foreground"
                   }`}
                 >
-                  {tag}
+                  <Tag className="size-3 opacity-60" /> {tag}
                 </button>
-              ))}
-            </div>
-
-            {/* Search */}
-            <label className="flex h-11 w-full max-w-sm items-center gap-3 rounded-full border border-border bg-background px-4 text-muted-foreground focus-within:border-foreground">
-              <Search className="size-4" />
-              <span className="sr-only">Yazılarda ara</span>
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Yazılarda ara"
-                className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-              />
-            </label>
+              )
+            })}
           </div>
 
-          {/* Active tag badge + clear */}
+          {/* Search */}
+          <div className="relative w-full md:w-72 shrink-0">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Yazılarda ara..."
+              className="h-10 w-full rounded-full border border-border/60 bg-surface/50 pl-9 pr-4 text-xs font-light text-foreground placeholder:text-muted-foreground focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Grid ── */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto max-w-[1440px] px-6">
           {activeTag !== "Tümü" && (
-            <div className="flex items-center gap-2 mb-6">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-champagne/10 border border-champagne/25 px-3.5 py-1.5 text-sm font-medium text-champagne">
-                <Tag className="size-3.5" /> {activeTag}
-              </span>
-              <button
-                onClick={() => handleTagClick("Tümü")}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                × Temizle
-              </button>
+            <div className="mb-8 flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">“{activeTag}”</span> etiketine ait yazılar ({filteredPosts.length})
+              </p>
               <Link
                 href={`/blog/tag/${slugifyTag(activeTag)}`}
                 className="text-xs text-champagne hover:underline ml-1"
@@ -169,12 +160,14 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
               {filteredPosts.map((post) => (
                 <article key={post.id} className="group flex flex-col">
                   <Link href={`/blog/${post.slug}`} className="block overflow-hidden rounded-2xl bg-surface">
-                    <div className="aspect-[4/3] overflow-hidden">
+                    <div className="relative aspect-[4/3] overflow-hidden">
                       {post.featured_image ? (
-                        <img
+                        <Image
                           src={post.featured_image}
                           alt={post.title}
-                          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover transition duration-700 group-hover:scale-105"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-surface">

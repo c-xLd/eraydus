@@ -14,7 +14,7 @@ export async function Footer() {
       <div className="border-b border-white/[0.06]">
         <div className="container mx-auto px-6 max-w-[1440px] py-10 lg:py-16 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8">
           <div>
-            <h3 className="text-xl lg:text-2xl font-light tracking-wide mb-2">Banyo mekânınızı fark yaratan detaylarla şekillendirin</h3>
+            <p className="text-xl lg:text-2xl font-light tracking-wide mb-2 text-white">Banyo mekânınızı fark yaratan detaylarla şekillendirin</p>
             <p className="text-white/75 text-sm">Özel duşakabin tasarımları ve çözümlerimizden ilk haberdar olan siz olun.</p>
           </div>
           <div className="w-full lg:w-auto">
@@ -72,7 +72,7 @@ export async function Footer() {
           <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-4">
             {/* Kategoriler */}
             <div>
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Kategoriler</h4>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Kategoriler</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link href="/urunler" className="text-white/80 hover:text-white transition-colors font-medium">Tüm Ürünler</Link></li>
                 <li><Link href="/tasarla" className="text-white/80 hover:text-white transition-colors flex items-center gap-2"><Wrench className="size-3.5 opacity-80" /> Kendin Tasarla</Link></li>
@@ -84,7 +84,7 @@ export async function Footer() {
 
             {/* Kurumsal */}
             <div>
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Kurumsal</h4>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Kurumsal</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link href="/hakkimizda" className="text-white/80 hover:text-white transition-colors">Hakkımızda</Link></li>
                 <li><Link href="/bayi-basvurusu" className="text-white/80 hover:text-white transition-colors">Bayi Başvurusu</Link></li>
@@ -96,7 +96,7 @@ export async function Footer() {
 
             {/* Destek & Müşteri */}
             <div>
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Destek</h4>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Destek</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link href="/sss" className="text-white/80 hover:text-white transition-colors">Sıkça Sorulan Sorular</Link></li>
                 <li><Link href="/iletisim" className="text-white/80 hover:text-white transition-colors">İletişim & Showroom</Link></li>
@@ -107,7 +107,7 @@ export async function Footer() {
 
             {/* Hizmet Bölgeleri (SEO) */}
             <div>
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Hizmet Bölgeleri</h4>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 text-white/75">Hizmet Bölgeleri</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link href="/ankara-cankaya-dusakabin" className="text-white/80 hover:text-white transition-colors">Çankaya Duşakabin</Link></li>
                 <li><Link href="/cayyolu-dusakabin" className="text-white/80 hover:text-white transition-colors">Çayyolu Duşakabin</Link></li>

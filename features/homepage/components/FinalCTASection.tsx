@@ -37,8 +37,8 @@ export function FinalCTASection() {
 
         {/* Pre-heading */}
         <motion.span
-          initial={{ opacity: 0.01, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 15 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, ease }}
           className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
@@ -48,8 +48,8 @@ export function FinalCTASection() {
 
         {/* Headline */}
         <motion.h2
-          initial={{ opacity: 0.01, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 25 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.1, ease }}
           className="text-white text-2xl md:text-3xl lg:text-4xl font-light tracking-tight max-w-3xl leading-[1.1] mb-6"
@@ -60,8 +60,8 @@ export function FinalCTASection() {
 
         {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0.01, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 15 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.2, ease }}
           className="text-white/70 text-sm md:text-base max-w-xl mb-10 leading-relaxed"
@@ -71,8 +71,8 @@ export function FinalCTASection() {
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0.01, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.3, ease }}
           className="flex flex-col sm:flex-row gap-4"
@@ -97,8 +97,8 @@ export function FinalCTASection() {
 
         {/* Trust line */}
         <motion.p
-          initial={{ opacity: 0.01 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ y: 10 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.5, ease }}
           className="text-white/40 text-xs sm:text-sm mt-16 tracking-wide"

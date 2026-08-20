@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronRight,
@@ -366,10 +367,12 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
                           : 'opacity-60 hover:opacity-100 hover:scale-[1.01]'
                       }`}
                     >
-                      <img
+                      <Image
                         src={img}
                         alt={`Detay ${idx + 1}`}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover/thumb:scale-110"
+                        fill
+                        sizes="120px"
+                        className="object-cover object-center transition-transform duration-500 group-hover/thumb:scale-110"
                       />
                     </button>
                   ))}
@@ -403,21 +406,28 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
                     }}
                   >
                     {images.map((img, idx) => (
-                      <img
-                        key={idx}
-                        src={img}
-                        alt={`${product.name} Görseli ${idx + 1}`}
-                        className="w-full h-full object-cover object-center flex-shrink-0 snap-center pointer-events-none"
-                      />
+                      <div key={idx} className="relative w-full h-full flex-shrink-0 snap-center">
+                        <Image
+                          src={img}
+                          alt={`${product.name} Görseli ${idx + 1}`}
+                          fill
+                          priority={idx === 0}
+                          sizes="(max-width: 1024px) 100vw, 600px"
+                          className="object-cover object-center pointer-events-none"
+                        />
+                      </div>
                     ))}
                   </div>
 
                   {/* MASAÜSTÜ ANA GÖRSEL */}
                   <div className="hidden lg:block relative z-10 w-full h-full overflow-hidden">
-                    <img
+                    <Image
                       src={images[activeImage] || images[0]}
                       alt={`${product.name} Görünümü`}
-                      className="w-full h-full object-cover object-center transition-all duration-500 group-hover:scale-[1.03]"
+                      fill
+                      priority
+                      sizes="(max-width: 1200px) 50vw, 650px"
+                      className="object-cover object-center transition-all duration-500 group-hover:scale-[1.03]"
                     />
                   </div>
 
@@ -1003,10 +1013,12 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
 
             <div className="lg:w-1/2 w-full relative z-10">
               <div className="w-full aspect-square md:aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl relative group bg-neutral-900">
-                <img
+                <Image
                   src={images[images.length > 2 ? 2 : 0]}
                   alt={`${product.name} Showroom Sergileme`}
-                  className={`w-full h-full object-cover ${SPRING_ULTRA} group-hover:scale-105`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                  className={`object-cover ${SPRING_ULTRA} group-hover:scale-105`}
                 />
                 <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[32px] pointer-events-none" />
               </div>
@@ -1030,10 +1042,12 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl sm:rounded-full overflow-hidden bg-neutral-100 border border-black/10 flex-shrink-0 relative shadow-inner">
-              <img
+              <Image
                 src={images[0]}
                 alt={product.name}
-                className="w-full h-full object-cover object-center"
+                fill
+                sizes="48px"
+                className="object-cover"
               />
             </div>
             <div className="min-w-0 pr-1">

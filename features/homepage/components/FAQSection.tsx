@@ -20,14 +20,15 @@ function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0.01, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ y: 15 }}
+      whileInView={{ y: 0 }}
       viewport={{ once: true, margin: "200px" }}
       transition={{ duration: 0.6, delay: index * 0.08, ease }}
       className="border-b border-border last:border-b-0"
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
         className="w-full flex items-center justify-between gap-6 py-7 md:py-8 text-left group"
       >
         <span className="text-lg md:text-xl font-medium tracking-tight group-hover:text-champagne transition-colors">
@@ -45,9 +46,9 @@ function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0.01 }}
+            initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0.01 }}
+            exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease }}
             className=""
           >
@@ -69,8 +70,8 @@ export function FAQSection({ faqs }: FAQSectionProps) {
           {/* Left — Header */}
           <div className="lg:col-span-4">
             <motion.span
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 15 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, ease }}
               className="text-champagne text-xs font-semibold tracking-widest uppercase mb-4 block"
@@ -78,8 +79,8 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               Merak Edilenler
             </motion.span>
             <motion.h2
-              initial={{ opacity: 0.01, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 25 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 1, delay: 0.1, ease }}
               className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight mb-4 leading-[1.1]"
@@ -88,8 +89,8 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               <span className="font-semibold">Sorular</span>
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 15 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.2, ease }}
               className="text-muted-foreground leading-relaxed mb-8"
@@ -98,8 +99,8 @@ export function FAQSection({ faqs }: FAQSectionProps) {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0.01, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 15 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.3, ease }}
               className="p-5 rounded-2xl bg-background/70 border border-border/60"

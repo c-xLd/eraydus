@@ -90,8 +90,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           
           {/* Google 5-Star Header Badge */}
           <motion.div
-            initial={{ opacity: 0.01, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease }}
             className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-xl"
@@ -111,8 +111,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           </motion.div>
 
           <motion.span
-            initial={{ opacity: 0.01, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 15 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.1, ease }}
             className="text-champagne text-xs font-semibold tracking-widest uppercase mb-3 block"
@@ -121,8 +121,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           </motion.span>
 
           <motion.h2
-            initial={{ opacity: 0.01, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 25 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.15, ease }}
             className="text-3xl md:text-5xl font-light tracking-tight text-white leading-tight"
@@ -139,8 +139,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           {activeReviews.slice(0, 3).map((review, index) => (
             <motion.div
               key={review.id || index}
-              initial={{ opacity: 0.01, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 25 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "150px" }}
               transition={{ duration: 0.8, delay: index * 0.15, ease }}
               whileHover={{ y: -6 }}
@@ -169,9 +169,9 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
               {/* Author Footer */}
               <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-semibold text-white group-hover:text-champagne transition-colors">
+                  <h3 className="text-sm font-semibold text-white group-hover:text-champagne transition-colors">
                     {review.name}
-                  </h4>
+                  </h3>
                   <p className="text-xs text-white/50 font-light mt-0.5">
                     {review.role || review.district}
                   </p>
@@ -187,8 +187,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
         {/* Google Reviews Link Button */}
         <motion.div
-          initial={{ opacity: 0.01, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "150px" }}
           transition={{ duration: 0.8, delay: 0.4, ease }}
           className="mt-14 text-center"

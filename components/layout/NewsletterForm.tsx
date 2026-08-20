@@ -54,6 +54,7 @@ export function NewsletterForm() {
         <input 
           type="email" 
           placeholder="E-posta adresiniz"
+          aria-label="E-posta adresiniz"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'loading' || status === 'success'}
@@ -62,6 +63,7 @@ export function NewsletterForm() {
         />
         <button 
           type="submit"
+          aria-label="E-bültene abone ol"
           disabled={status === 'loading' || status === 'success'}
           className="w-full sm:w-auto px-6 py-3.5 sm:py-3 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors shrink-0 flex items-center justify-center sm:min-w-[110px] disabled:opacity-50"
         >

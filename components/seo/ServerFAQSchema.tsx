@@ -11,6 +11,10 @@ export function ServerFAQSchema() {
 
   useEffect(() => {
     async function fetchFaqs() {
+      if (!pathname || pathname === '/') {
+        setFaqs([]);
+        return;
+      }
       try {
         const supabase = createClient();
         const { data: pageSeo } = await supabase

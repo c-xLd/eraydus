@@ -108,7 +108,7 @@ export default function AboutClient({ content }: AboutClientProps) {
       <section className="pt-40 pb-16 md:pt-48 md:pb-20 bg-background">
         <div className="container mx-auto px-6 max-w-[1440px]">
           <motion.div
-            initial={{ opacity: 0.01, y: 20 }}
+            initial={{ y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease }}
             className="text-champagne text-sm tracking-[0.3em] uppercase font-medium mb-6"
@@ -116,7 +116,7 @@ export default function AboutClient({ content }: AboutClientProps) {
             <InlineEditable path="hero.subtitle" value={hero.subtitle}>{hero.subtitle}</InlineEditable>
           </motion.div>
           <motion.h1
-            initial={{ opacity: 0.01, y: 30 }}
+            initial={{ y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.1, ease }}
             className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight max-w-4xl leading-[1.1]"
@@ -125,7 +125,7 @@ export default function AboutClient({ content }: AboutClientProps) {
             <span className="font-semibold"><InlineEditable path="hero.title_bold" value={hero.title_bold}>{hero.title_bold}</InlineEditable></span>
           </motion.h1>
           <motion.div
-            initial={{ opacity: 0.01, y: 20 }}
+            initial={{ y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.25, ease }}
             className="text-muted-foreground text-lg md:text-xl font-light mt-6 max-w-2xl"
@@ -142,7 +142,7 @@ export default function AboutClient({ content }: AboutClientProps) {
         <div className="container mx-auto px-6 max-w-[1440px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <motion.div
-              initial={{ opacity: 0.01, x: -40 }}
+              initial={{ x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 1.2, ease }}
@@ -169,7 +169,7 @@ export default function AboutClient({ content }: AboutClientProps) {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0.01, x: 40 }}
+              initial={{ x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 1.2, ease }}
@@ -205,7 +205,7 @@ export default function AboutClient({ content }: AboutClientProps) {
 
         <div className="container mx-auto px-6 max-w-[1440px] relative z-10">
           <motion.div
-            initial={{ opacity: 0.01, y: 30 }}
+            initial={{ y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease }}
@@ -225,7 +225,7 @@ export default function AboutClient({ content }: AboutClientProps) {
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0.01, y: 40 }}
+                  initial={{ y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ duration: 1, delay: index * 0.15, ease }}
@@ -254,7 +254,7 @@ export default function AboutClient({ content }: AboutClientProps) {
       <section className="py-32 md:py-44 bg-background ">
         <div className="container mx-auto px-6 max-w-[1440px]">
           <motion.div
-            initial={{ opacity: 0.01, y: 30 }}
+            initial={{ y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease }}
@@ -283,7 +283,7 @@ export default function AboutClient({ content }: AboutClientProps) {
                 {(Array.isArray(process?.steps) ? process.steps : []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0.01, y: 30 }}
+                    initial={{ y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{
@@ -325,7 +325,7 @@ export default function AboutClient({ content }: AboutClientProps) {
                 {(Array.isArray(process?.steps) ? process.steps : []).map((step: any, index: number) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0.01, x: -20 }}
+                    initial={{ x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: '-30px' }}
                     transition={{
@@ -361,7 +361,7 @@ export default function AboutClient({ content }: AboutClientProps) {
         <div className="container mx-auto px-6 max-w-[1440px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <motion.div
-              initial={{ opacity: 0.01, y: 40 }}
+              initial={{ y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 1.2, ease }}
@@ -404,7 +404,7 @@ export default function AboutClient({ content }: AboutClientProps) {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0.01, scale: 0.95 }}
+              initial={{ scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 1.2, ease }}
@@ -431,7 +431,7 @@ export default function AboutClient({ content }: AboutClientProps) {
       <section className="py-32 md:py-44 bg-background">
         <div className="container mx-auto px-6 max-w-[1440px] text-center">
           <motion.div
-            initial={{ opacity: 0.01, y: 30 }}
+            initial={{ y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease }}

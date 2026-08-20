@@ -19,6 +19,11 @@ export function GlobalFAQAccordion() {
 
   useEffect(() => {
     async function fetchFaqs() {
+      if (!pathname || pathname === '/') {
+        setFaqs([]);
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
         const supabase = createClient();
@@ -33,7 +38,7 @@ export function GlobalFAQAccordion() {
         } else {
           setFaqs([]);
         }
-      } catch (err) {
+      } catch {
         // Silently fail if no data
         setFaqs([]);
       } finally {
@@ -44,7 +49,7 @@ export function GlobalFAQAccordion() {
     fetchFaqs();
   }, [pathname]);
 
-  if (loading || faqs.length === 0) {
+  if (loading || faqs.length === 0 || pathname === '/') {
     return null;
   }
 
@@ -56,8 +61,8 @@ export function GlobalFAQAccordion() {
       <div className="container mx-auto px-6 max-w-4xl relative z-10">
         <div className="text-center mb-16 md:mb-20">
           <motion.div
-            initial={{ opacity: 0.01, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 15 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center justify-center gap-2 text-champagne mb-4"
@@ -66,8 +71,8 @@ export function GlobalFAQAccordion() {
             <span className="text-xs tracking-[0.2em] font-medium uppercase">Bilgi Merkezi</span>
           </motion.div>
           <motion.h2
-            initial={{ opacity: 0.01, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 25 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-3xl md:text-5xl font-light tracking-tight text-foreground"
@@ -82,8 +87,8 @@ export function GlobalFAQAccordion() {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0.01, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 15 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true, margin: "200px" }}
                 transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className={`border rounded-3xl overflow-hidden transition-colors duration-500 ${

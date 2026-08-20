@@ -28,7 +28,7 @@ export function Tracker() {
             referrer: document.referrer || '',
             device_type: getDeviceType()
           }),
-        }).catch((err) => console.error('Tracking failed', err))
+        }).catch(() => {})
       }, 500)
       
       return () => clearTimeout(timer)

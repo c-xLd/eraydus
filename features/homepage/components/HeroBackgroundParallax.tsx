@@ -14,16 +14,34 @@ export function HeroBackgroundParallax() {
   return (
     <motion.div style={{ y, scale }} className="absolute inset-0 z-0 will-change-transform">
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/85 z-10" />
-      <Image
-        src={storageUrl('uploads', 'homepage/hero.jpg')}
-        alt="Lüks banyo duşakabin"
-        fill
-        priority
-        fetchPriority="high"
-        quality={75}
-        sizes="(max-width: 640px) 640px, 1200px"
-        className="object-cover object-center pointer-events-none"
-      />
+      
+      {/* Mobile Optimized Hero Image (<768px) */}
+      <div className="block md:hidden absolute inset-0">
+        <Image
+          src={storageUrl('uploads', 'homepage/hero-mobile.jpg')}
+          alt="Lüks banyo duşakabin"
+          fill
+          priority
+          fetchPriority="high"
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center pointer-events-none"
+        />
+      </div>
+
+      {/* Desktop Hero Image (>=768px) */}
+      <div className="hidden md:block absolute inset-0">
+        <Image
+          src={storageUrl('uploads', 'homepage/hero.jpg')}
+          alt="Lüks banyo duşakabin"
+          fill
+          priority
+          fetchPriority="high"
+          quality={80}
+          sizes="100vw"
+          className="object-cover object-center pointer-events-none"
+        />
+      </div>
     </motion.div>
   )
 }

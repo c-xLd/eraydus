@@ -38,7 +38,7 @@
   --color-popover-foreground: var(--popover-foreground);
 
   /* Eraydus Custom Colors */
-  --color-champagne: #C9A86A;
+  --color-champagne: var(--champagne);
   --color-platinum: #BFC5CB;
   --color-bronze: #8F6B4F;
   --color-glass: rgba(255,255,255,0.55);
@@ -99,6 +99,8 @@ html {
 }
 
 :root {
+  --champagne: #7A5718; /* Accessible WCAG AA gold on white/surface backgrounds (4.5+:1) */
+
   /* Eraydus Neutral Tokens */
   --background: #FFFFFF;
   --background-secondary: #F8F8F6;
@@ -150,6 +152,8 @@ html {
 }
 
 .dark {
+  --champagne: #D4B275; /* Luminous Champagne gold on dark surfaces (9+:1) */
+
   --background: #090909;
   --background-secondary: #121212;
   --surface: #1E1E1E;
@@ -194,6 +198,10 @@ html {
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: #333333;
   --sidebar-ring: #FFFFFF;
+}
+
+.dark, [data-theme="dark"], .bg-black, .bg-zinc-950, .bg-zinc-900, [class*="bg-[#0"] {
+  --champagne: #D4B275;
 }
 
 @layer base {

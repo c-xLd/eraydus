@@ -22,8 +22,8 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 border-b border-border/40 pb-8 relative z-10">
           <div>
             <motion.span
-              initial={{ opacity: 0.01, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 15 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.6, ease }}
               className="text-champagne text-xs font-semibold tracking-[0.2em] font-mono uppercase block mb-3"
@@ -31,8 +31,8 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
               [ ÜRÜNLERİMİZ ]
             </motion.span>
             <motion.h2
-              initial={{ opacity: 0.01, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 25 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.8, delay: 0.1, ease }}
               className="text-3xl md:text-4xl font-light tracking-tight text-foreground leading-none"
@@ -41,8 +41,8 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
             </motion.h2>
           </div>
           <motion.div
-            initial={{ opacity: 0.01, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 15 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.2, ease }}
           >
@@ -64,8 +64,8 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
           {categories.map((model, i) => (
             <motion.div
               key={model.id}
-              initial={{ opacity: 0.01, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: i * 0.12, ease }}
             >
@@ -90,7 +90,7 @@ export function ProductShowcase({ categories }: ProductShowcaseProps) {
                     alt={model.name}
                     fill
                     loading="lazy"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 320px"
                     className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
                   />
                 ) : (

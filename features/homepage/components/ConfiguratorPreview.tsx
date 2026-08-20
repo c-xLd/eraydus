@@ -19,8 +19,8 @@ export function ConfiguratorPreview() {
         {/* Header */}
         <div className="text-center mb-10">
           <motion.span
-            initial={{ opacity: 0.01, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 10 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             className="text-champagne text-xs font-semibold tracking-[0.2em] uppercase block mb-3"
           >
@@ -28,8 +28,8 @@ export function ConfiguratorPreview() {
           </motion.span>
 
           <motion.h2
-            initial={{ opacity: 0.01, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 25 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight max-w-2xl mx-auto"
@@ -39,8 +39,8 @@ export function ConfiguratorPreview() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0.01, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 15 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "200px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-white/70 text-sm md:text-base max-w-xl mx-auto mt-4 leading-relaxed"
@@ -51,8 +51,8 @@ export function ConfiguratorPreview() {
 
         {/* Preview Card */}
         <motion.div
-          initial={{ opacity: 0.01, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 30 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 1, delay: 0.3 }}
           className="w-full max-w-5xl mx-auto aspect-[16/9] overflow-hidden bg-white/[0.03] border border-white/[0.06] rounded-3xl relative group shadow-2xl shadow-black/40"
@@ -62,7 +62,7 @@ export function ConfiguratorPreview() {
             alt="Duşakabin konfigüratör önizlemesi"
             fill
             loading="lazy"
-            sizes="(max-width: 1024px) 100vw, 1024px"
+            sizes="(max-width: 768px) 95vw, (max-width: 1200px) 85vw, 1000px"
             className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-[2s]"
           />
 
@@ -104,8 +104,8 @@ export function ConfiguratorPreview() {
 
         {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0.01, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "200px" }}
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
