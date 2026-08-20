@@ -29,6 +29,8 @@ async function listBucketFilesRecursively(supabase: any, bucket: string, folderP
 
     if (error || !files) return items
 
+    const subFolderPromises: Promise<MediaItem[]>[] = []
+
     for (const file of files) {
       if (file.name === '.emptyFolderPlaceholder' || file.name.startsWith('.')) continue
 
@@ -36,8 +38,7 @@ async function listBucketFilesRecursively(supabase: any, bucket: string, folderP
 
       // Directory check: if file has no metadata or no id, or size is 0 and no mimetype
       if (!file.metadata || !file.id || (file.metadata && Object.keys(file.metadata).length === 0)) {
-        const subFolderItems = await listBucketFilesRecursively(supabase, bucket, fullPath)
-        items.push(...subFolderItems)
+        subFolderPromises.push(listBucketFilesRecursively(supabase, bucket, fullPath))
       } else {
         const { data: { publicUrl } } = supabase.storage
           .from(bucket)
@@ -62,6 +63,11 @@ async function listBucketFilesRecursively(supabase: any, bucket: string, folderP
         })
       }
     }
+
+    // Await all subfolder scans in parallel
+    const subFolderResults = await Promise.all(subFolderPromises)
+    subFolderResults.forEach(subItems => items.push(...subItems))
+    
   } catch (e) {
     console.warn(`Error scanning bucket ${bucket} at path ${folderPath}:`, e)
   }
@@ -74,11 +80,13 @@ export async function getMediaFiles(selectedBucket?: string): Promise<{ success:
     const targetBuckets = selectedBucket && selectedBucket !== 'all' ? [selectedBucket] : BUCKETS
     const itemMap = new Map<string, MediaItem>()
 
-    // 1. Recursively scan Supabase Storage buckets
-    for (const bucket of targetBuckets) {
-      const bucketItems = await listBucketFilesRecursively(supabase, bucket, '')
+    // 1. Recursively scan Supabase Storage buckets in parallel
+    const bucketPromises = targetBuckets.map(bucket => listBucketFilesRecursively(supabase, bucket, ''))
+    const bucketsResults = await Promise.all(bucketPromises)
+    
+    bucketsResults.forEach(bucketItems => {
       bucketItems.forEach((item) => itemMap.set(item.publicUrl, item))
-    }
+    })
 
     const items = Array.from(itemMap.values())
     items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
