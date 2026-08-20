@@ -12,16 +12,16 @@ export interface SeoData {
 export async function getPageSeo(slug: string) {
   const supabase = await createClient()
   const { data, error } = await supabase
-    .from('site_pages')
-    .select('seo')
-    .eq('slug', slug)
+    .from('seo_settings')
+    .select('value')
+    .eq('key', `page_seo_${slug}`)
     .single()
     
-  if (error || !data) {
+  if (error || !data || !data.value) {
     return { success: false, data: null }
   }
   
-  return { success: true, data: data.seo as SeoData }
+  return { success: true, data: data.value as SeoData }
 }
 
 export async function updatePageSeo(slug: string, seoData: SeoData) {
@@ -34,9 +34,11 @@ export async function updatePageSeo(slug: string, seoData: SeoData) {
 
   try {
     const { error } = await supabase
-      .from('site_pages')
-      .update({ seo: seoData })
-      .eq('slug', slug)
+      .from('seo_settings')
+      .upsert({ 
+        key: `page_seo_${slug}`, 
+        value: seoData 
+      }, { onConflict: 'key' })
 
     if (error) throw error
 

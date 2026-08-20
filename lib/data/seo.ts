@@ -139,23 +139,24 @@ export const getGlobalSeoData = cache(
           }
         );
         const { data } = await supabase
-          .from('seo_metadata')
-          .select('*')
-          .eq('page_type', 'global')
+          .from('seo_settings')
+          .select('value')
+          .eq('key', 'global_seo')
           .single();
 
-        if (data) {
-          const dbAnalytics = data.geo_data?.analytics || {};
+        if (data && data.value) {
+          const globalData = data.value as any;
+          const dbAnalytics = globalData.geo_data?.analytics || {};
           return {
             ...globalSeoData,
-            siteName: data.title || globalSeoData.siteName,
-            defaultDescription: data.description || globalSeoData.defaultDescription,
+            siteName: globalData.title || globalSeoData.siteName,
+            defaultDescription: globalData.description || globalSeoData.defaultDescription,
             analytics: {
               ...dbAnalytics,
               googleAnalyticsId: dbAnalytics.googleAnalyticsId || 'G-C4H96ZVE9F',
               googleTagManagerId: dbAnalytics.googleTagManagerId || 'GTM-WXPSP6B8',
             },
-            ...data.geo_data
+            ...globalData.geo_data
           };
         }
       } catch (error) {
