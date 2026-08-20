@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import Image from 'next/image'
 import { 
   UploadCloud, 
@@ -46,6 +46,9 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
   const [isPending, startTransition] = useTransition()
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 50
+
   const handleImageError = (id: string) => {
     setFailedImages((prev) => ({ ...prev, [id]: true }))
   }
@@ -56,6 +59,15 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
     const matchesQuery = !searchQuery || item.name.toLowerCase().includes(searchQuery.toLowerCase())
     return matchesBucket && matchesQuery
   })
+
+  // Pagination logic
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerPage))
+  const paginatedItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedBucket, searchQuery])
 
   // Format bytes helper
   const formatBytes = (bytes: number, decimals = 1) => {
@@ -428,7 +440,7 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6"
         >
           <AnimatePresence>
-            {filteredItems.map((item, index) => {
+            {paginatedItems.map((item, index) => {
               const ext = item.name.split('.').pop()?.toUpperCase() || 'IMG'
               return (
                 <motion.div
@@ -507,7 +519,7 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
           </div>
 
           <div className="divide-y divide-black/5">
-            {filteredItems.map((item) => {
+            {paginatedItems.map((item) => {
               const ext = item.name.split('.').pop()?.toUpperCase() || 'IMG'
               const formattedDate = new Date(item.created_at).toLocaleDateString('tr-TR', {
                 day: 'numeric',
@@ -606,6 +618,38 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
             })}
           </div>
         </motion.div>
+      )}
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between py-6 px-4 sm:px-0">
+          <p className="text-sm text-black/50 font-medium">
+            Toplam <span className="font-bold text-black">{filteredItems.length}</span> görselden <span className="font-bold text-black">{paginatedItems.length}</span> tanesi gösteriliyor.
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="rounded-xl border-black/10 hover:bg-black/5"
+            >
+              Önceki
+            </Button>
+            <div className="flex items-center gap-1 px-2 text-sm font-bold text-black/70">
+              {currentPage} / {totalPages}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="rounded-xl border-black/10 hover:bg-black/5"
+            >
+              Sonraki
+            </Button>
+          </div>
+        </div>
       )}
 
       {/* WordPress Style Attachment Details Drawer */}
