@@ -27,10 +27,10 @@ const nextConfig: NextConfig = {
   compress: true,
   reactStrictMode: true,
   images: {
-    // Serve images using Supabase's image optimization service
-    // to bypass Vercel's metered /_next/image transformation service.
-    loader: 'custom',
-    loaderFile: './lib/supabase-image-loader.ts',
+    // Disable Next.js image optimization so images are served directly
+    // from origin (Supabase/Unsplash/public) without hitting Vercel limits (402)
+    // or requiring paid Supabase Image Transformation add-ons.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -58,6 +58,15 @@ const nextConfig: NextConfig = {
     ],
   },
   // Baseline security headers applied to every response.
+  async redirects() {
+    return [
+      {
+        source: '/blog/6-mm-mi-8-mm-dusakabin',
+        destination: '/blog/dusakabin-cam-kalinligi-ne-olmali',
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {
