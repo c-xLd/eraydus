@@ -47,7 +47,7 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
 
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 50
+  const itemsPerPage = 24
 
   const handleImageError = (id: string) => {
     setFailedImages((prev) => ({ ...prev, [id]: true }))
@@ -356,7 +356,7 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
       </AnimatePresence>
 
       {/* Filter and Control Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-2 sm:p-2.5 rounded-[1.25rem] bg-white/70 backdrop-blur-xl border border-white shadow-xl shadow-black/5 ring-1 ring-black/5 sticky top-24 z-30">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-2 sm:p-2.5 rounded-[1.25rem] bg-white/70 backdrop-blur-xl border border-white shadow-xl shadow-black/5 ring-1 ring-black/5 sticky top-16 z-30">
         <div className="flex flex-1 items-center gap-2">
           {/* Search Input */}
           <div className="relative flex-1 max-w-md">
@@ -504,11 +504,10 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
           </AnimatePresence>
         </motion.div>
       ) : (
-        /* WordPress-Style Enhanced List View */
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-5xl mx-auto rounded-[1.5rem] border border-black/10 bg-white overflow-hidden shadow-xl shadow-black/5"
+          className="w-full rounded-[1.5rem] border border-black/10 bg-white overflow-hidden shadow-xl shadow-black/5"
         >
           {/* List Table Header */}
           <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-black/[0.02] border-b border-black/5 text-[10px] font-mono font-bold uppercase tracking-widest text-black/40">
@@ -622,7 +621,7 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between py-6 px-4 sm:px-0">
+        <div className="sticky bottom-4 z-30 flex items-center justify-between py-4 px-6 bg-white/70 backdrop-blur-xl border border-white shadow-2xl rounded-2xl ring-1 ring-black/5 mt-6 w-full">
           <p className="text-sm text-black/50 font-medium">
             Toplam <span className="font-bold text-black">{filteredItems.length}</span> görselden <span className="font-bold text-black">{paginatedItems.length}</span> tanesi gösteriliyor.
           </p>
