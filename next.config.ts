@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
   compress: true,
   reactStrictMode: true,
   images: {
+    // Serve images using Supabase's image optimization service
+    // to bypass Vercel's metered /_next/image transformation service.
+    loader: 'custom',
+    loaderFile: './lib/supabase-image-loader.ts',
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
