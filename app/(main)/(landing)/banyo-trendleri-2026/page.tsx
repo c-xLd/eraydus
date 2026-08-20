@@ -70,7 +70,6 @@ export default function BanyoTrendleriReportPage() {
     image: `${SITE_URL}/images/og-default.jpg`,
     publishedAt: '2026-08-01T10:00:00+03:00',
     url: '/banyo-trendleri-2026',
-    authorName: 'ERAYDUŞ İmalat & Tasarım Ekibi',
   })
 
   const breadcrumbSchema = getBreadcrumbSchema([

@@ -9,6 +9,7 @@ export type BlogPost = {
   body: string | null
   featured_image: string | null
   published_at: string | null
+  updated_at?: string | null
   seo_title: string | null
   seo_description: string | null
   tags: string[] | null
@@ -730,7 +731,7 @@ export const fallbackBlogPosts: BlogPost[] = [
   }
 ]
 
-const postFields = "id, title, slug, description, body, featured_image, published_at, seo_title, seo_description, tags"
+const postFields = "id, title, slug, description, body, featured_image, published_at, updated_at, seo_title, seo_description, tags"
 
 export const getPublishedPosts = cache(async (): Promise<BlogPost[]> => {
   try {

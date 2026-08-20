@@ -5,7 +5,7 @@ import { ArrowLeft, CalendarDays, Share2, ShieldCheck, Tag, Clock } from "lucide
 import { notFound } from "next/navigation"
 
 import { getPublishedPostBySlug, getPublishedPosts, slugifyTag, getRelatedPosts } from "@/lib/data/blog"
-import { getArticleSchema, getBreadcrumbSchema, getHowToSchema, getGraphSchema } from "@/lib/seo/schemas"
+import { getArticleSchema, getBreadcrumbSchema, getHowToSchema, getGraphSchema, serializeJsonLd } from "@/lib/seo/schemas"
 import { parseHtmlForToc, calculateReadingTime } from "@/lib/blog-utils"
 import TableOfContents from "@/components/blog/TableOfContents"
 import ShareButtons from "@/components/blog/ShareButtons"
@@ -79,8 +79,8 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.description || post.title,
     image: post.featured_image || `${SITE_URL}/images/og-default.jpg`,
     publishedAt: post.published_at || new Date().toISOString(),
+    modifiedAt: post.updated_at || post.published_at || undefined,
     url: `/blog/${post.slug}`,
-    authorName: 'Erayduş Uzman Ekibi',
   })
 
   let howToSchema = null
@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(graphSchema) }} />
 
       <article className="bg-background pb-32 pt-32 md:pb-44 md:pt-40 min-h-screen">
         <div className="container mx-auto max-w-6xl px-6">
@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-muted-foreground uppercase tracking-widest">
               <span className="inline-flex items-center gap-1.5 text-champagne font-semibold">
                 <ShieldCheck className="size-4" />
-                ERAYDUŞ Uzman Makalesi
+                ERAYDUŞ Rehberi
               </span>
               <span className="hidden sm:inline">•</span>
               <span className="flex items-center gap-1">
@@ -199,8 +199,8 @@ export default async function BlogPostPage({ params }: Props) {
                     E
                   </div>
                   <div>
-                    <h4 className="text-base font-semibold text-foreground">ERAYDUŞ İmalat & Tasarım Ekibi</h4>
-                    <p className="text-xs text-muted-foreground">Ankara Siteler Fabrika Teknik Kadrosu</p>
+                    <h4 className="text-base font-semibold text-foreground">ERAYDUŞ Editoryal İçeriği</h4>
+                    <p className="text-xs text-muted-foreground">Ürün ve uygulama bilgileri temel alınarak hazırlanmıştır.</p>
                   </div>
                 </div>
 

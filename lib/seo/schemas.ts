@@ -39,7 +39,6 @@ export interface ArticleSchemaInput {
   image: string;
   publishedAt: string;
   modifiedAt?: string;
-  authorName?: string;
   url: string;
 }
 
@@ -307,9 +306,10 @@ export function getArticleSchema(input: ArticleSchemaInput) {
     'datePublished': input.publishedAt,
     'dateModified': input.modifiedAt || input.publishedAt,
     'author': {
-      '@type': 'Person',
-      'name': input.authorName || 'Erayduş Uzman Ekibi',
-      'jobTitle': 'Senior Bathroom Systems Specialist',
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      'name': 'ERAYDUŞ',
+      'url': SITE_URL,
     },
     'publisher': getOrganizationSchema(),
     'mainEntityOfPage': {
