@@ -9,6 +9,7 @@ import { ProductLuxuryDetailView } from "@/features/products/components/product-
 import { ProductCabinetDetailView } from "@/features/products/components/product-cabinet-detail-view"
 import { ProductRelated } from "@/features/products/components/product-related"
 import { ProductTracker } from "@/components/analytics/ProductTracker"
+import { serializeJsonLd } from "@/lib/seo/schemas"
 
 interface Props {
   params: Promise<{ categorySlug: string; productSlug: string }>
@@ -79,7 +80,7 @@ export default async function ProductDetailPage({ params }: Props) {
     { name: product.name }
   ]
 
-  const productJsonLd = generateProductJsonLd(product)
+  const productJsonLd = generateProductJsonLd({ ...product, category: activeCategory }, reviews)
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(breadcrumbItems)
 
   const isCabinet = activeCategory.slug === 'banyo-dolabi' || activeCategory.slug.includes('dolabi') || activeCategory.slug.includes('banyo-mobilyasi')
@@ -90,11 +91,11 @@ export default async function ProductDetailPage({ params }: Props) {
       {/* ─── SEO JSON-LD ─── */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(productJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
 
       {/* ─── DETAIL VIEW SWITCHER ─── */}

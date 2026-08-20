@@ -13,7 +13,7 @@ import {
   HelpCircle,
   Droplets
 } from 'lucide-react'
-import { getBreadcrumbSchema, getLocalBusinessSchema, getFAQSchema, getGraphSchema } from '@/lib/seo/schemas'
+import { getBreadcrumbSchema, getLocalBusinessSchema, getServiceSchema, getFAQSchema, getGraphSchema, serializeJsonLd } from '@/lib/seo/schemas'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eraydus.net'
 
@@ -148,6 +148,11 @@ export default function CankayaDusakabinPage() {
   }
 
   const localBusinessSchema = getLocalBusinessSchema(localGeoData)
+  const serviceSchema = getServiceSchema({
+    name: 'Ankara Çankaya Özel Ölçü Duşakabin İmalat ve Montaj Hizmeti',
+    description: metadata.description || 'Çankaya bölgesinde ücretsiz keşif, özel ölçü duşakabin imalatı ve profesyonel montaj hizmeti.',
+    url: '/ankara-cankaya-dusakabin',
+  }, localGeoData)
   const breadcrumbs = [
     { name: 'Ana Sayfa', url: '/' },
     { name: 'Koleksiyonlar', url: '/urunler' },
@@ -155,13 +160,13 @@ export default function CankayaDusakabinPage() {
   ]
   const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs)
   const faqSchema = getFAQSchema(cankayaFaqs)
-  const graphSchema = getGraphSchema([localBusinessSchema, breadcrumbSchema, faqSchema])
+  const graphSchema = getGraphSchema([localBusinessSchema, serviceSchema, breadcrumbSchema, faqSchema])
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(graphSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(graphSchema) }}
       />
 
       <div className="bg-background min-h-screen pt-32 pb-24 font-sans text-foreground">

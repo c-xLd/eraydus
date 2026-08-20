@@ -267,7 +267,7 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
   }
 
   const heroBackgrounds = {
-    tekne: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1785599951282-dus-teknesi-hero.webp',
+    tekne: 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1787247984489-dus-teknesi-hero.webp',
     kuvet: content?.hero?.kuvet_bg || 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786718438852-kuvet-walpaper.webp',
     jakuzi: content?.hero?.jakuzi_bg || 'https://xzxutzjzjdyjheivdxdl.supabase.co/storage/v1/object/public/uploads/1786717847750-jakuzi-walpaper.webp'
   }
@@ -529,7 +529,7 @@ export function JakuziClient({ content = {}, products = [] }: JakuziClientProps)
                         </ul>
 
                         <a
-                          href={`https://wa.me/905000000000?text=${encodeURIComponent(`Merhaba, ${m.name} modeli hakkında fiyat bilgisi almak istiyorum.`)}`}
+                          href={`https://wa.me/905548830071?text=${encodeURIComponent(`Merhaba, ${m.name} modeli hakkında fiyat bilgisi almak istiyorum.`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-full py-3 px-4 rounded-xl bg-black text-white text-xs font-semibold text-center flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors shadow-2xs"

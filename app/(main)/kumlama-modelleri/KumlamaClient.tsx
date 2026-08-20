@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { X, ZoomIn, Search, ChevronLeft, ChevronRight, MessageCircle, Sparkles, Shield, Layers } from 'lucide-react'
+import { X, ZoomIn, ZoomOut, RotateCcw, Search, ChevronLeft, ChevronRight, MessageCircle, Sparkles, Shield, Layers } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 
@@ -12,6 +12,13 @@ type Model = {
 }
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
+const MIN_ZOOM = 1
+const MAX_ZOOM = 3
+const ZOOM_STEP = 0.5
+
+function clampZoom(value: number) {
+  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value))
+}
 
 function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null)
@@ -35,10 +42,11 @@ const features = [
   { icon: Shield,   title: '2 Yıl Garanti',       desc: 'Kumlama deseni solma ve çizilmeye karşı' },
 ]
 
-export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
+export function KumlamaClient({ initialModels, loadError = false }: { initialModels: Model[]; loadError?: boolean }) {
   const [selectedModel, setSelectedModel] = useState<Model | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const [search, setSearch] = useState('')
+  const [zoom, setZoom] = useState(MIN_ZOOM)
 
   const filtered = (initialModels || []).filter(m =>
     (m.title || '').toLowerCase().includes(search.toLowerCase())
@@ -49,6 +57,10 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
     document.body.style.overflow = selectedModel ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [selectedModel])
+
+  useEffect(() => {
+    setZoom(MIN_ZOOM)
+  }, [selectedModel?.id])
 
   const openModel = (model: Model) => {
     const idx = filtered.findIndex(m => m.id === model.id)
@@ -69,6 +81,9 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
       if (e.key === 'Escape')      setSelectedModel(null)
       if (e.key === 'ArrowRight')  navigate(1)
       if (e.key === 'ArrowLeft')   navigate(-1)
+      if (e.key === '+' || e.key === '=') setZoom(current => clampZoom(current + ZOOM_STEP))
+      if (e.key === '-') setZoom(current => clampZoom(current - ZOOM_STEP))
+      if (e.key === '0') setZoom(MIN_ZOOM)
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
@@ -165,7 +180,15 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
 
       {/* ── Gallery Grid ── */}
       <section className="container mx-auto px-6 max-w-[1440px]" aria-label="Kumlama Modelleri Galerisi">
-        {filtered.length === 0 ? (
+        {loadError ? (
+          <div
+            role="alert"
+            className="flex flex-col items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/5 px-6 py-16 text-center"
+          >
+            <p className="text-base font-medium text-foreground">Kumlama modelleri şu anda yüklenemiyor.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Lütfen kısa bir süre sonra tekrar deneyin.</p>
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="py-24 text-center text-muted-foreground flex flex-col items-center justify-center">
             <Search className="size-10 mx-auto mb-4 opacity-30" />
             {search.trim() ? (
@@ -226,8 +249,10 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
                       </div>
                     </div>
                   </div>
-                  <div className="px-3 py-3 border-t border-border/50">
-                    <h2 className="font-medium text-xs md:text-sm text-foreground line-clamp-1 text-center">{model.title}</h2>
+                  <div className="flex min-h-14 items-center justify-center border-t border-border/50 px-3 py-3">
+                    <h2 className="line-clamp-2 text-center text-xs font-medium leading-snug text-foreground md:text-sm">
+                      {model.title}
+                    </h2>
                   </div>
                 </motion.article>
               ))}
@@ -301,7 +326,7 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
               transition={{ type: 'spring', damping: 28, stiffness: 340 }}
               className="relative flex flex-col md:flex-row w-full h-full md:h-auto md:max-w-5xl md:max-h-[88vh] md:rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
               onClick={(e) => e.stopPropagation()}
-              drag="y"
+              drag={zoom === MIN_ZOOM ? 'y' : false}
               dragConstraints={{ top: 0, bottom: 0 }}
               dragElastic={0.6}
               onDragEnd={(_, info) => {
@@ -309,15 +334,82 @@ export function KumlamaClient({ initialModels }: { initialModels: Model[] }) {
               }}
             >
               {/* Left — Image */}
-              <div className="relative w-full h-[60vh] md:h-auto md:flex-1 bg-zinc-950 select-none touch-none">
-                <Image
-                  src={selectedModel.image_url}
-                  alt={selectedModel.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 65vw"
-                  className="object-contain pointer-events-none"
-                  priority
-                />
+              <div
+                className="relative h-[60vh] w-full select-none overflow-hidden bg-zinc-950 md:h-auto md:flex-1"
+                onDoubleClick={() => setZoom(current => current === MIN_ZOOM ? 2 : MIN_ZOOM)}
+                onWheel={(event) => {
+                  event.preventDefault()
+                  setZoom(current => clampZoom(current + (event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP)))
+                }}
+              >
+                <motion.div
+                  className={zoom > MIN_ZOOM ? 'absolute inset-0 cursor-grab touch-none active:cursor-grabbing' : 'absolute inset-0 cursor-zoom-in'}
+                  animate={{ scale: zoom, x: 0, y: 0 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  drag={zoom > MIN_ZOOM}
+                  dragMomentum={false}
+                  dragElastic={0.08}
+                  dragConstraints={{
+                    left: -240 * (zoom - MIN_ZOOM),
+                    right: 240 * (zoom - MIN_ZOOM),
+                    top: -180 * (zoom - MIN_ZOOM),
+                    bottom: 180 * (zoom - MIN_ZOOM),
+                  }}
+                >
+                  <Image
+                    src={selectedModel.image_url}
+                    alt={selectedModel.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 65vw"
+                    className="pointer-events-none object-contain"
+                    priority
+                  />
+                </motion.div>
+
+                <div
+                  className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1 rounded-2xl border border-white/10 bg-black/55 p-1.5 text-white shadow-xl backdrop-blur-md"
+                  aria-label="Görsel yakınlaştırma kontrolleri"
+                >
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setZoom(current => clampZoom(current - ZOOM_STEP))
+                    }}
+                    disabled={zoom === MIN_ZOOM}
+                    className="flex size-12 items-center justify-center rounded-xl transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+                    aria-label="Uzaklaştır"
+                  >
+                    <ZoomOut className="size-5" />
+                  </button>
+                  <span className="min-w-14 text-center text-xs font-semibold tabular-nums" aria-live="polite">
+                    %{Math.round(zoom * 100)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setZoom(current => clampZoom(current + ZOOM_STEP))
+                    }}
+                    disabled={zoom === MAX_ZOOM}
+                    className="flex size-12 items-center justify-center rounded-xl transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+                    aria-label="Yakınlaştır"
+                  >
+                    <ZoomIn className="size-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setZoom(MIN_ZOOM)
+                    }}
+                    disabled={zoom === MIN_ZOOM}
+                    className="flex size-12 items-center justify-center rounded-xl transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+                    aria-label="Yakınlaştırmayı sıfırla"
+                  >
+                    <RotateCcw className="size-4" />
+                  </button>
+                </div>
 
                 {/* Prev / Next — over image */}
                 {filtered.length > 1 && (

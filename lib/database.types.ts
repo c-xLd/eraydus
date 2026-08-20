@@ -564,39 +564,27 @@ export interface Database {
       sandblasted_models: {
         Row: {
           id: string
-          model_code: string
-          name: string
-          category: string | null
-          image_url: string | null
-          description: string | null
-          is_active: boolean | null
-          sort_order: number | null
+          title: string
+          image_url: string
+          is_active: boolean
+          order_index: number
           created_at: string
-          updated_at: string
         }
         Insert: {
           id?: string
-          model_code: string
-          name: string
-          category?: string | null
-          image_url?: string | null
-          description?: string | null
-          is_active?: boolean | null
-          sort_order?: number | null
+          title: string
+          image_url: string
+          is_active?: boolean
+          order_index?: number
           created_at?: string
-          updated_at?: string
         }
         Update: {
           id?: string
-          model_code?: string
-          name?: string
-          category?: string | null
-          image_url?: string | null
-          description?: string | null
-          is_active?: boolean | null
-          sort_order?: number | null
+          title?: string
+          image_url?: string
+          is_active?: boolean
+          order_index?: number
           created_at?: string
-          updated_at?: string
         }
       }
       subscribers: {

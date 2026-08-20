@@ -1,76 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronDown, MessageCircle, Phone, Mail, MapPin, ShieldCheck } from 'lucide-react'
+import { faqGroups } from '@/lib/data/faqs'
 
 export const metadata: Metadata = {
   title: 'Sıkça Sorulan Sorular (SSS) | ERAYDUŞ Ankara',
   description:
     'Erayduş duşakabin modelleri, özel ölçü üretimi, Ankara içi ücretsiz keşif, 6mm temperli emniyet camları ve 2 yıl garanti süreçleri hakkında merak edilenler.',
 }
-
-interface FaqItem {
-  q: string
-  a: string
-}
-
-interface FaqGroup {
-  title: string
-  items: FaqItem[]
-}
-
-const faqGroups: FaqGroup[] = [
-  {
-    title: 'Ürünler & Özel Ölçü İmalat',
-    items: [
-      {
-        q: 'Duşakabinleriniz özel ölçüye göre üretiliyor mu?',
-        a: 'Evet. Tüm duşakabin sistemlerimiz banyonuzun net ölçülerine özel olarak Siteler / Ankara fabrikamızda üretilir. Ankara merkez ilçelerinde teknik ekibimiz adresinize gelerek ücretsiz ölçü almaktadır.',
-      },
-      {
-        q: 'Hangi cam kalınlığı ve türlerini kullanıyorsunuz?',
-        a: 'Tüm duşakabinlerimizde 6mm temperli emniyet camı kullanılmaktadır. Camlarımız darbelere 5 kat dayanıklıdır. Ürünler sayfamızda sunulan cam türleri: Şeffaf, Füme (Siyah) Cam, Bronz Cam, Aynalı Cam, Kumlama (Buzlu Özel Desenli) ve Buz Mat Cam.',
-      },
-      {
-        q: 'Sipariş öncesi net fiyat teklifi nasıl alabilirim?',
-        a: 'Web sitemizdeki 2D Konfigöratörü kullanarak, WhatsApp hattımızdan (0554 883 00 71) ölçü göndererek veya (0312) 350 79 39 nolu telefonumuzdan anında ücretsiz net fiyat teklifi alabilirsiniz.',
-      },
-    ],
-  },
-  {
-    title: 'Teslimat, Keşif & Montaj',
-    items: [
-      {
-        q: 'Ankara içi keşif ve ölçüm ücretli midir?',
-        a: 'Hayır, Ankara Çankaya, Çayyolu, İncek, Keçiören, Yenimahalle, Etimesgut, Batıkent ve tüm merkez ilçelerde yerinde ölçüm ve teknik keşif hizmetimiz tamamen ücretsizdir.',
-      },
-      {
-        q: 'İmalat ve montaj süresi ne kadar sürer?',
-        a: 'Ölçü onayının ardından 6mm temperli cam kesimi ve profil imalatı ortalama 3-5 iş günü içinde tamamlanır. Kendi uzman ekibimiz adresinizde montajı 1-2 saat içerisinde başarıyla tamamlayıp teslim eder.',
-      },
-      {
-        q: 'Duşakabinde su sızdırma sorunu yaşar mıyım?',
-        a: 'Kesinlikle hayır. Mıknatıslı suluk fitilleri, alüminyum su tutucu eşik profilleri ve antibakteriyel banyo silikonu uygulamamız sayesinde su sızdırmazlık garantisi veriyoruz.',
-      },
-    ],
-  },
-  {
-    title: 'Garanti, Servis & Temizlik',
-    items: [
-      {
-        q: 'Ürünleriniz garantili mi ve kapsam şartları nelerdir?',
-        a: 'Tüm Erayduş duşakabin modellerimiz 2 Yıl Resmi Üretici Garantisi altındadır. İmalat, malzeme ve montaj kaynaklı tüm kusurlar garanti kapsamında ücretsiz giderilir. Sert darbe veya kaza kaynaklı cam kırılmalarında ise makul ücret karşılığı orijinal parça temini sağlanır.',
-      },
-      {
-        q: 'Siyah ve Gold profillerde zamanla kararma veya soyulma olur mu?',
-        a: 'Hayır. Profillerimizde boya ve solmaz özel renk kaplama teknolojileri kullanılır. Banyo nemine ve sıcak suya karşı yüksek dirençlidir.',
-      },
-      {
-        q: 'Duşakabin temizliği nasıl yapılmalıdır?',
-        a: 'Tuz ruhu veya kezzap gibi asitli ağır kimyasallar yerine ılık sabunlu su ve yumuşak mikrofiber bez kullanılmalıdır. Duş sonrası camları çekçek ile sıyırmak kireç lekesi oluşumunu %90 engeller.',
-      },
-    ],
-  },
-]
 
 export default function FaqPage() {
   return (

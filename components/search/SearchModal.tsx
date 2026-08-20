@@ -107,7 +107,9 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     id: item.slug,
     title: item.h1.replace(' Duşakabin Sistemleri', '').replace(' Duşakabinler', ''),
     subtitle: item.subtitle,
-    href: `/urunler`,
+    href: item.category === 'size' && ['80x80', '90x90'].includes(item.slug)
+      ? `/dusakabin/${item.slug}`
+      : '/urunler',
     category: 'kategori',
     badge: item.badge,
   }))

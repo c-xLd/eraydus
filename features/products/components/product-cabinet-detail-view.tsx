@@ -224,9 +224,9 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
     const nextIdx = (activeImage + 1) % images.length
     const prevIdx = activeImage === 0 ? images.length - 1 : activeImage - 1
 
-    const imgNext = new Image()
+    const imgNext = new window.Image()
     imgNext.src = images[nextIdx]
-    const imgPrev = new Image()
+    const imgPrev = new window.Image()
     imgPrev.src = images[prevIdx]
   }, [activeImage, images])
 
@@ -1279,10 +1279,14 @@ export function ProductCabinetDetailView({ product, category, initialReviews }: 
 
             {/* Resim */}
             <div className="relative z-[255] w-full max-w-6xl px-4 lg:px-20 max-h-[100vh] flex flex-col items-center justify-center pointer-events-none">
-              <img
+              <Image
                 src={images[modalImageIndex] || images[0]}
-                alt="Büyük Görsel"
-                className="max-w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl transition-transform duration-500 pointer-events-auto"
+                alt={`${product.name} büyük ürün görseli`}
+                width={1600}
+                height={1200}
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                quality={85}
+                className="h-auto max-h-[80vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl transition-transform duration-500 pointer-events-auto"
                 onClick={(e) => e.stopPropagation()}
               />
 

@@ -118,7 +118,7 @@ export function ConfiguratorPreview() {
             <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <a
-            href="https://wa.me/905550000000"
+            href="https://wa.me/905548830071"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 text-white px-8 h-14 text-base font-medium hover:bg-white/10 hover:border-white/30 transition-all duration-300"

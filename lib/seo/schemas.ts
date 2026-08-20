@@ -43,6 +43,18 @@ export interface ArticleSchemaInput {
   url: string;
 }
 
+export interface ServiceSchemaInput {
+  name: string;
+  description: string;
+  url: string;
+  serviceType?: string;
+  areaServed?: string[];
+}
+
+export function serializeJsonLd(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
 // 1. Organization Schema (EEAT & Backlink Citation Engine)
 export function getOrganizationSchema(siteName?: string, description?: string, geoData?: any) {
   return {
@@ -93,15 +105,16 @@ export function getLocalBusinessSchema(geoData?: any) {
     'name': 'ERAYDUŞ Ankara Lüks Duşakabin Fabrikası',
     'image': `${SITE_URL}/images/og-default.jpg`,
     'url': SITE_URL,
-    'telephone': geoData?.phone || '',
+    'telephone': geoData?.phone || globalSeoData.contact.phone,
+    'email': geoData?.email || globalSeoData.contact.email,
     'priceRange': geoData?.localBusiness?.priceRange || '₺₺',
     'address': {
       '@type': 'PostalAddress',
-      'streetAddress': geoData?.address?.streetAddress || '',
-      'addressLocality': geoData?.address?.addressLocality || '',
-      'addressRegion': geoData?.address?.addressRegion || '',
-      'postalCode': geoData?.address?.postalCode || '',
-      'addressCountry': geoData?.address?.addressCountry || 'TR',
+      'streetAddress': geoData?.address?.streetAddress || globalSeoData.contact.address.streetAddress,
+      'addressLocality': geoData?.address?.addressLocality || globalSeoData.contact.address.addressLocality,
+      'addressRegion': geoData?.address?.addressRegion || globalSeoData.contact.address.addressRegion,
+      'postalCode': geoData?.address?.postalCode || globalSeoData.contact.address.postalCode,
+      'addressCountry': geoData?.address?.addressCountry || globalSeoData.contact.address.addressCountry,
     },
     'geo': latitude && longitude ? {
       '@type': 'GeoCoordinates',
@@ -120,13 +133,36 @@ export function getLocalBusinessSchema(geoData?: any) {
       { '@type': 'AdministrativeArea', 'name': 'Eryaman' },
       { '@type': 'AdministrativeArea', 'name': 'Gölbaşı' }
     ],
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'reviewCount': '128',
-      'bestRating': '5',
-      'worstRating': '1'
-    }
+  };
+}
+
+export function getServiceSchema(input: ServiceSchemaInput, geoData?: any) {
+  const serviceUrl = input.url.startsWith('http') ? input.url : `${SITE_URL}${input.url}`;
+  const configuredAreas = input.areaServed || geoData?.localBusiness?.areaServed || ['Ankara'];
+
+  return {
+    '@type': 'Service',
+    '@id': `${serviceUrl}#service`,
+    'name': input.name,
+    'description': input.description,
+    'serviceType': input.serviceType || 'Özel Ölçü Duşakabin İmalat ve Montajı',
+    'url': serviceUrl,
+    'provider': {
+      '@id': `${SITE_URL}/#localbusiness`,
+    },
+    'areaServed': configuredAreas.map((area: string) => ({
+      '@type': 'AdministrativeArea',
+      'name': area,
+    })),
+    'availableChannel': {
+      '@type': 'ServiceChannel',
+      'servicePhone': {
+        '@type': 'ContactPoint',
+        'telephone': geoData?.phone || globalSeoData.contact.phone,
+        'contactType': 'customer service',
+        'availableLanguage': ['tr'],
+      },
+    },
   };
 }
 
@@ -180,9 +216,10 @@ export function getHowToSchema(name: string, description: string, steps: HowToSt
 
 // 6. Product Schema
 export function getProductSchema(input: ProductSchemaInput) {
-  return {
+  const productUrl = input.url.startsWith('http') ? input.url : `${SITE_URL}${input.url}`;
+  const schema: Record<string, unknown> = {
     '@type': 'Product',
-    '@id': input.url.startsWith('http') ? input.url : `${SITE_URL}${input.url}`,
+    '@id': `${productUrl}#product`,
     'name': input.name,
     'description': input.description,
     'image': input.image.map((img) => (img.startsWith('http') ? img : `${SITE_URL}${img}`)),
@@ -193,11 +230,14 @@ export function getProductSchema(input: ProductSchemaInput) {
       'name': 'ERAYDUŞ',
     },
     'category': input.category || 'Duşakabin',
-    'offers': {
+  };
+
+  if (input.price && input.price > 0) {
+    schema.offers = {
       '@type': 'Offer',
-      'url': input.url.startsWith('http') ? input.url : `${SITE_URL}${input.url}`,
+      'url': productUrl,
       'priceCurrency': input.currency || 'TRY',
-      'price': input.price ? input.price.toString() : '9500',
+      'price': input.price.toString(),
       'priceValidUntil': '2027-12-31',
       'itemCondition': 'https://schema.org/NewCondition',
       'availability': input.inStock !== false ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
@@ -239,16 +279,21 @@ export function getProductSchema(input: ProductSchemaInput) {
         'merchantReturnDays': 14,
         'returnMethod': 'https://schema.org/ReturnByMail',
         'returnFees': 'https://schema.org/FreeReturn'
-      }
-    },
-    'aggregateRating': {
+      },
+    };
+  }
+
+  if (input.ratingValue && input.reviewCount && input.reviewCount > 0) {
+    schema.aggregateRating = {
       '@type': 'AggregateRating',
-      'ratingValue': input.ratingValue ? input.ratingValue.toString() : '4.9',
-      'reviewCount': input.reviewCount ? input.reviewCount.toString() : '34',
+      'ratingValue': input.ratingValue.toString(),
+      'reviewCount': input.reviewCount.toString(),
       'bestRating': '5',
       'worstRating': '1',
-    },
-  };
+    };
+  }
+
+  return schema;
 }
 
 // 7. Article / BlogPosting Schema

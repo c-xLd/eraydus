@@ -1,6 +1,7 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
+import { normalizeWhatsappNumber, WHATSAPP_E164 } from '@/lib/data/contact';
 
 export interface GeneralSettings {
   maintenanceMode: boolean;
@@ -15,7 +16,7 @@ export interface GeneralSettings {
 const defaultSettings: GeneralSettings = {
   maintenanceMode: false,
   contactEmail: 'info@eraydus.net',
-  whatsappNumber: '+905548830071',
+  whatsappNumber: WHATSAPP_E164,
   showPrices: true,
   enableOnlineQuotes: true,
   orderNotificationEmail: 'info@eraydus.net',
@@ -46,7 +47,12 @@ export const getGeneralSettings = cache(
           .single();
 
         if (data && data.value) {
-          return { ...defaultSettings, ...data.value };
+          const storedSettings = data.value as Partial<GeneralSettings>;
+          return {
+            ...defaultSettings,
+            ...storedSettings,
+            whatsappNumber: normalizeWhatsappNumber(storedSettings.whatsappNumber),
+          };
         }
       } catch (error) {
         console.error('Error fetching general settings:', error);

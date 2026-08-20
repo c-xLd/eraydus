@@ -1,37 +1,60 @@
 import { getDashboardData } from '@/features/dashboard/actions'
 import DashboardHeader from './components/dashboard/DashboardHeader'
-import BusinessOverview from './components/dashboard/BusinessOverview'
-import QuoteFunnel from './components/dashboard/QuoteFunnel'
-import ProductQuality from './components/dashboard/ProductQuality'
-import RecentActivityWidget from './components/dashboard/RecentActivityWidget'
-import IntegrationStatus from './components/dashboard/IntegrationStatus'
+import GlobalSiteStatus from './components/dashboard/GlobalSiteStatus'
+import ExecutiveSummary from './components/dashboard/ExecutiveSummary'
+import WhatsAppIntelligence from './components/dashboard/WhatsAppIntelligence'
+import AttentionCenter from './components/dashboard/AttentionCenter'
+import TrafficIntelligence from './components/dashboard/TrafficIntelligence'
+import { Suspense } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const metadata = {
-  title: 'Kontrol Merkezi | Erayduş Admin',
+  title: 'Admin Paneli | Erayduş Admin',
 }
 
-export default async function AdminDashboardPage() {
-  const dashboardData = await getDashboardData(30) // Last 30 days default
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <Skeleton className="h-[100px] w-full rounded-lg" />
+      <Skeleton className="h-[200px] w-full rounded-lg" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Skeleton className="h-[300px] rounded-lg" />
+        <Skeleton className="h-[300px] rounded-lg" />
+      </div>
+    </div>
+  )
+}
+
+async function DashboardContent({ searchParams }: { searchParams: { days?: string } }) {
+  const days = searchParams?.days ? parseInt(searchParams.days, 10) : 30
+  const dashboardData = await getDashboardData(days)
 
   return (
     <div className="space-y-6">
-      <DashboardHeader />
-      
-      <BusinessOverview data={dashboardData} />
+      <GlobalSiteStatus health={dashboardData.health} />
+
+      <ExecutiveSummary summary={dashboardData.summary} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <QuoteFunnel quotes={dashboardData.quotes} />
-        <ProductQuality products={dashboardData.products} />
+        <AttentionCenter items={dashboardData.attention} />
+        <div className="space-y-6">
+          <WhatsAppIntelligence data={dashboardData.whatsapp} />
+          <TrafficIntelligence data={dashboardData.traffic} />
+        </div>
       </div>
+    </div>
+  )
+}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <IntegrationStatus />
-        </div>
-        <div className="lg:col-span-1">
-          <RecentActivityWidget activities={dashboardData.activities} />
-        </div>
-      </div>
+export default async function AdminDashboardPage(props: { searchParams: Promise<{ days?: string }> }) {
+  const searchParams = await props.searchParams
+  return (
+    <div className="space-y-6 max-w-7xl mx-auto pb-10">
+      <DashboardHeader />
+
+      <Suspense fallback={<DashboardSkeleton />}>
+        <DashboardContent searchParams={searchParams} />
+      </Suspense>
     </div>
   )
 }

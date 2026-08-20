@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Check, Layers, Box, MessageCircle, ChevronRight, ChevronLeft, RefreshCcw } from 'lucide-react'
+import { ArrowLeft, Check, Layers, Box, MessageCircle, ChevronRight, ChevronLeft, RefreshCcw, Maximize2, X } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -96,7 +96,7 @@ const DELIVERIES = [
   { id: 'kargo', label: 'Kargo / Elden Teslim' }
 ]
 
-function LayoutGridIcon(props: any) {
+function LayoutGridIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <rect width="7" height="7" x="3" y="3" rx="1" />
@@ -108,7 +108,7 @@ function LayoutGridIcon(props: any) {
 }
 
 export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
-  const { whatsappNumber, enableOnlineQuotes, showPrices } = useSettings()
+  const { whatsappNumber } = useSettings()
   // STATE
   const [layout, setLayout] = useState('wall-to-wall')
   const [widthX, setWidthX] = useState<number>(120)
@@ -125,6 +125,8 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [direction, setDirection] = useState(1)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [hasRestoredState, setHasRestoredState] = useState(false)
 
   const selectedPattern = sandblastedModels.find(m => m.id === patternId)
 
@@ -194,6 +196,48 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
     { id: 'summary', title: 'Özet & Notlar' }
   ]
 
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('eraydus-configurator-v1')
+      if (saved) {
+        const state = JSON.parse(saved) as Partial<{
+          layout: string; widthX: number; depthY: number; doorSystem: string; glass: string
+          patternId: string | null; profile: string; base: string; baseModelId: string | null
+          handle: string; delivery: string; notes: string; currentStepIndex: number
+        }>
+        if (state.layout && state.layout in DOOR_SYSTEMS) setLayout(state.layout)
+        if (typeof state.widthX === 'number') setWidthX(state.widthX)
+        if (typeof state.depthY === 'number') setDepthY(state.depthY)
+        if (state.doorSystem) setDoorSystem(state.doorSystem)
+        if (state.glass) setGlass(state.glass)
+        if (state.patternId === null || typeof state.patternId === 'string') setPatternId(state.patternId)
+        if (state.profile) setProfile(state.profile)
+        if (state.base) setBase(state.base)
+        if (state.baseModelId === null || typeof state.baseModelId === 'string') setBaseModelId(state.baseModelId)
+        if (state.handle) setHandle(state.handle)
+        if (state.delivery) setDelivery(state.delivery)
+        if (typeof state.notes === 'string') setNotes(state.notes)
+        if (typeof state.currentStepIndex === 'number') setCurrentStepIndex(Math.max(0, state.currentStepIndex))
+      }
+    } catch {
+      sessionStorage.removeItem('eraydus-configurator-v1')
+    } finally {
+      setHasRestoredState(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!hasRestoredState) return
+    sessionStorage.setItem('eraydus-configurator-v1', JSON.stringify({
+      layout, widthX, depthY, doorSystem, glass, patternId, profile, base,
+      baseModelId, handle, delivery, notes, currentStepIndex,
+    }))
+  }, [base, baseModelId, currentStepIndex, delivery, depthY, doorSystem, glass, handle, hasRestoredState, layout, notes, patternId, profile, widthX])
+
+  useEffect(() => {
+    if (currentStepIndex > steps.length - 1) setCurrentStepIndex(steps.length - 1)
+  }, [currentStepIndex, steps.length])
+
   const currentStep = steps[currentStepIndex]
   const isLastStep = currentStepIndex === steps.length - 1
 
@@ -262,6 +306,7 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
     setNotes('')
     setCurrentStepIndex(0)
     setDirection(-1)
+    sessionStorage.removeItem('eraydus-configurator-v1')
     toast.success('Tasarım sıfırlandı.')
   }
 
@@ -273,15 +318,15 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
   }
 
   return (
-    <div className="relative md:flex md:flex-row w-full h-[100dvh] bg-[#0A0A0A] text-white overflow-hidden selection:bg-champagne/20" style={{ WebkitTapHighlightColor: 'transparent' }}>
+    <div className="relative md:flex md:flex-row w-full min-h-[100dvh] md:h-[100dvh] bg-[#0A0A0A] md:bg-[#0A0A0A] text-[#171717] md:text-white overflow-hidden selection:bg-champagne/20" style={{ WebkitTapHighlightColor: 'transparent' }}>
       <h1 className="sr-only">Özel Ölçü Duşakabin Tasarım Aracı ve Fiyat Hesaplama</h1>
       <h2 className="sr-only">Kendi özel ölçü duşakabininizi (kare, oval, iki duvar arası) tasarlayın, cam tipini ve profil rengini seçip anında online fiyat hesaplayın.</h2>
 
       {/* ─── 2D VISUALIZER — full screen background on mobile, left side on desktop ─── */}
-      <div className="absolute inset-0 md:relative md:flex-1 bg-gradient-to-br from-[#0F0F0F] to-[#050505] flex items-center justify-center p-2 md:p-6">
+      <div className="absolute inset-x-0 top-0 h-[52dvh] md:inset-auto md:relative md:h-full md:flex-1 bg-[#0A0A0A] flex items-center justify-center p-1 md:p-5">
         <Link
           href="/"
-          className="absolute top-3 left-3 md:top-6 md:left-6 z-50 flex items-center justify-center size-9 md:size-auto md:gap-2 text-xs md:text-sm text-white/50 hover:text-white transition-colors bg-black/30 md:bg-transparent rounded-full backdrop-blur-md md:backdrop-blur-none md:px-0 md:py-0"
+          className="absolute top-[max(12px,env(safe-area-inset-top))] left-3 md:top-6 md:left-6 z-50 flex items-center justify-center size-12 md:size-auto md:gap-2 text-xs md:text-sm text-black/70 md:text-white/50 hover:text-black md:hover:text-white transition-colors bg-white/75 md:bg-transparent rounded-full backdrop-blur-md md:backdrop-blur-none md:px-0 md:py-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8a6220]"
           aria-label="Ana Sayfa"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -291,7 +336,7 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
         {currentStepIndex > 0 && (
           <button
             onClick={resetDesign}
-            className="md:hidden absolute top-3 right-3 z-50 flex items-center justify-center size-9 text-white/50 hover:text-champagne transition-colors bg-black/30 rounded-full backdrop-blur-md"
+            className="md:hidden absolute top-[max(12px,env(safe-area-inset-top))] right-3 z-50 flex items-center justify-center size-12 text-black/70 transition-colors bg-white/75 rounded-full backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8a6220]"
             aria-label="Tasarımı Sıfırla"
           >
             <RefreshCcw className="w-4 h-4" />
@@ -306,7 +351,7 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] md:w-[40vw] h-[80vw] md:h-[40vw] bg-champagne/5 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Schematic container — on mobile, shift upward so it's visible above the bottom sheet */}
-        <div className="relative z-10 w-full h-full flex items-start md:items-center justify-center pt-10 pb-[52dvh] md:pt-0 md:pb-0">
+        <div className="relative z-10 w-full h-full flex items-center justify-center pt-12 pb-1 md:pt-0 md:pb-0">
           <AnimatedSchematic
             layout={layout}
             widthX={widthX}
@@ -319,10 +364,18 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
             handleType={handle}
           />
         </div>
+        <button
+          type="button"
+          onClick={() => setIsPreviewOpen(true)}
+          className="md:hidden absolute bottom-3 right-3 z-20 inline-flex min-h-12 items-center gap-2 rounded-full border border-black/10 bg-white/85 px-4 text-sm font-semibold text-black shadow-sm backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8a6220]"
+          aria-label="Duşakabin önizlemesini tam ekran aç"
+        >
+          <Maximize2 className="size-4" /> Tam Ekran
+        </button>
       </div>
 
       {/* ─── OPTIONS PANEL — floating bottom sheet on mobile, sidebar on desktop ─── */}
-      <div className="absolute bottom-0 left-0 right-0 h-[52dvh] md:relative md:bottom-auto md:left-auto md:right-auto md:h-full md:w-[clamp(320px,30vw,480px)] shrink-0 bg-[#111111]/95 backdrop-blur-xl md:bg-[#111111] md:backdrop-blur-none md:border-l border-white/5 flex flex-col z-20 rounded-t-[20px] md:rounded-none shadow-[0_-8px_40px_rgba(0,0,0,0.7)] md:shadow-none overflow-hidden">
+      <div className="absolute top-[52dvh] bottom-0 left-0 right-0 md:relative md:top-auto md:bottom-auto md:left-auto md:right-auto md:h-full md:w-[clamp(320px,30vw,480px)] shrink-0 bg-[#111111] md:border-l border-white/5 flex flex-col z-20 rounded-t-[24px] md:rounded-none shadow-[0_-10px_36px_rgba(38,31,22,0.18)] md:shadow-none overflow-hidden">
         
         {/* Drag handle indicator */}
         <div className="w-full flex justify-center pt-2 pb-0 md:hidden shrink-0">
@@ -341,8 +394,8 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
 
           {/* Mobile: step title + counter */}
           <div className="flex items-center justify-between mb-2 md:hidden">
-            <h3 className="text-[15px] font-semibold text-white">{currentStep.title}</h3>
-            <span className="text-[11px] text-white/40 font-medium tabular-nums">{currentStepIndex + 1}/{steps.length}</span>
+            <h3 className="text-[17px] font-semibold text-white">{currentStep.title}</h3>
+            <span className="text-xs text-white/60 font-medium tabular-nums">{currentStepIndex + 1} / {steps.length}</span>
           </div>
 
           {/* Progress bar */}
@@ -373,7 +426,7 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="w-full"
             >
               {/* STEP: Layout */}
@@ -752,12 +805,12 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
         </div>
 
         {/* ─── FOOTER NAVIGATION ─── */}
-        <div className="px-4 pt-2.5 md:px-6 md:pt-4 border-t border-white/5 shrink-0 flex items-center justify-between gap-3 bg-[#111111]/95 md:bg-[#111111]" style={{ paddingBottom: 'max(10px, env(safe-area-inset-bottom, 10px))' }}>
+        <div className="px-4 pt-2.5 md:px-6 md:pt-4 border-t border-white/10 shrink-0 flex items-center justify-between gap-3 bg-[#111111]" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom, 12px))' }}>
           <button
             onClick={prevStep}
             disabled={currentStepIndex === 0}
             aria-label="Önceki adım"
-            className={`flex items-center justify-center size-11 md:size-12 shrink-0 rounded-full border border-white/10 transition-colors ${currentStepIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'active:bg-white/10 md:hover:bg-white/10 text-white'
+            className={`flex items-center justify-center size-12 shrink-0 rounded-full border border-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne ${currentStepIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'active:bg-white/10 md:hover:bg-white/10 text-white'
               }`}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -772,12 +825,12 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
               className="flex-1 flex items-center justify-center gap-2 bg-champagne text-black h-11 md:h-12 px-4 md:px-6 rounded-full text-sm font-bold uppercase tracking-wider active:bg-white md:hover:bg-white transition-colors shadow-[0_0_30px_rgba(201,168,106,0.2)] cursor-pointer"
             >
               <MessageCircle className="w-5 h-5" />
-              Siparişi İlet
+              WhatsApp'tan Teklif Al
             </a>
           ) : (
             <button
               onClick={nextStep}
-              className="flex-1 flex items-center justify-center gap-2 bg-white text-black h-11 md:h-12 px-4 md:px-6 rounded-full text-sm font-bold uppercase tracking-wider active:bg-champagne md:hover:bg-champagne active:text-black md:hover:text-black transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-white text-black h-12 px-4 md:px-6 rounded-full text-sm font-bold uppercase tracking-wider active:bg-champagne md:hover:bg-champagne active:text-black md:hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
             >
               Devam Et
               <ChevronRight className="w-5 h-5" />
@@ -797,6 +850,28 @@ export function TasarlaClient({ sandblastedModels }: TasarlaClientProps) {
         </div>
 
       </div>
+
+      <AnimatePresence>
+        {isPreviewOpen && (
+          <motion.div
+            className="fixed inset-0 z-[100] bg-[#0A0A0A] p-3"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            role="dialog" aria-modal="true" aria-label="Tam ekran duşakabin önizlemesi"
+          >
+            <button
+              type="button" onClick={() => setIsPreviewOpen(false)} autoFocus
+              className="absolute top-[max(12px,env(safe-area-inset-top))] right-3 z-10 flex size-12 items-center justify-center rounded-full bg-white text-black shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8a6220]"
+              aria-label="Tam ekran önizlemeyi kapat"
+            ><X className="size-5" /></button>
+            <AnimatedSchematic
+              layout={layout} widthX={widthX} depthY={depthY} doorSystem={doorSystem}
+              glassType={glass} profileColor={profile}
+              patternUrl={glass === 'frosted' ? selectedPattern?.image_url || null : null}
+              baseType={base} handleType={handle}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   )

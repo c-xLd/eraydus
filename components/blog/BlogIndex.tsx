@@ -106,7 +106,7 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
         <div className="container mx-auto flex max-w-[1440px] flex-col gap-4 px-6 py-4 md:flex-row md:items-center md:justify-between">
           {/* Tags */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none md:pb-0">
-            {allTags.map((tag) => {
+            {tags.map((tag: string) => {
               const active = activeTag === tag
               return (
                 <button

@@ -303,13 +303,16 @@ export function AnimatedSchematic({
   }
 
   return (
-    <div 
-      className="w-full h-full flex items-center justify-center p-2 md:p-6 cursor-pointer group"
+    <button
+      type="button"
+      aria-pressed={isHovered}
+      aria-label={isHovered ? 'Duşakabin kapısını kapat' : 'Duşakabin kapısını aç'}
+      className="relative w-full h-full flex items-center justify-center p-0 md:p-3 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8a6220]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => setIsHovered(!isHovered)}
     >
-      <svg viewBox="0 0 400 440" className="w-full h-full overflow-visible">
+      <svg viewBox="0 0 400 420" className="w-full h-full overflow-visible drop-shadow-[0_20px_28px_rgba(54,45,32,0.14)] md:drop-shadow-none">
         <defs>
           {patternUrl && (
             <pattern id="kumlama-pattern" patternUnits="userSpaceOnUse" width="400" height="400">
@@ -350,17 +353,17 @@ export function AnimatedSchematic({
 
           {/* Walls and Room Setup */}
           <linearGradient id="wall-left" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#080808" />
-            <stop offset="100%" stopColor="#1a1a1a" />
+            <stop offset="0%" stopColor="#0A0A0A" />
+            <stop offset="100%" stopColor="#0A0A0A" />
           </linearGradient>
           <linearGradient id="wall-right" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#151515" />
-            <stop offset="100%" stopColor="#0a0a0a" />
+            <stop offset="0%" stopColor="#0A0A0A" />
+            <stop offset="100%" stopColor="#0A0A0A" />
           </linearGradient>
           
           {/* Architectural Tile Grid Pattern */}
           <pattern id="tile-grid" width="30" height="30" patternUnits="userSpaceOnUse">
-            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="1"/>
+            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.035)" strokeWidth="1"/>
           </pattern>
         </defs>
 
@@ -372,20 +375,20 @@ export function AnimatedSchematic({
             <path d="M 150 40 L 400 40 L 400 400 L 150 400 Z" fill="url(#wall-right)" />
             <path d="M 150 40 L 400 40 L 400 400 L 150 400 Z" fill="url(#tile-grid)" />
             {/* Corner seam */}
-            <line x1="150" y1="40" x2="150" y2="400" stroke="rgba(0,0,0,0.5)" strokeWidth="4" />
+            <line x1="150" y1="40" x2="150" y2="400" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
           </g>
         ) : layout === 'wall-to-wall' ? (
           <g>
             {/* Left & Right solid pillars (Outside the shower, scales with width) */}
-            <motion.path d={`M 0 40 L ${wL} 40 L ${wL} 400 L 0 400 Z`} fill="#0a0a0a" animate={{ d: `M 0 40 L ${wL} 40 L ${wL} 400 L 0 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
-            <motion.path d={`M ${wR} 40 L 400 40 L 400 400 L ${wR} 400 Z`} fill="#0a0a0a" animate={{ d: `M ${wR} 40 L 400 40 L 400 400 L ${wR} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M 0 40 L ${wL} 40 L ${wL} 400 L 0 400 Z`} fill="#0A0A0A" animate={{ d: `M 0 40 L ${wL} 40 L ${wL} 400 L 0 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M ${wR} 40 L 400 40 L 400 400 L ${wR} 400 Z`} fill="#0A0A0A" animate={{ d: `M ${wR} 40 L 400 40 L 400 400 L ${wR} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             
             {/* Back Wall (Inside shower) */}
             <motion.path d={`M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z`} fill="url(#wall-right)" animate={{ d: `M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             <motion.path d={`M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z`} fill="url(#tile-grid)" animate={{ d: `M ${wL} 40 L ${wR} 40 L ${wR} ${baseY} L ${wL} ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             
             {/* Floor (Inside shower) */}
-            <motion.path d={`M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} 400 L ${wL} 400 Z`} fill="#111" animate={{ d: `M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} 400 L ${wL} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} 400 L ${wL} 400 Z`} fill="#0A0A0A" animate={{ d: `M ${wL} ${baseY} L ${wR} ${baseY} L ${wR} 400 L ${wL} 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             
             {/* Wall corner seams */}
             <motion.line x1={wL} y1="40" x2={wL} y2="400" stroke="rgba(0,0,0,0.8)" strokeWidth="2" animate={{ x1: wL, x2: wL }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
@@ -397,7 +400,7 @@ export function AnimatedSchematic({
             {/* Walk-in Room */}
             <motion.path d={`M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z`} fill="url(#wall-right)" animate={{ d: `M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             <motion.path d={`M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z`} fill="url(#tile-grid)" animate={{ d: `M 0 40 L 400 40 L 400 ${baseY} L 0 ${baseY} Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
-            <motion.path d={`M 0 ${baseY} L 400 ${baseY} L 400 400 L 0 400 Z`} fill="#111" animate={{ d: `M 0 ${baseY} L 400 ${baseY} L 400 400 L 0 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
+            <motion.path d={`M 0 ${baseY} L 400 ${baseY} L 400 400 L 0 400 Z`} fill="#0A0A0A" animate={{ d: `M 0 ${baseY} L 400 ${baseY} L 400 400 L 0 400 Z` }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
             <motion.line x1="0" y1={baseY} x2="400" y2={baseY} stroke="rgba(0,0,0,0.5)" strokeWidth="2" animate={{ y1: baseY, y2: baseY }} transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }} />
           </g>
         )}
@@ -616,8 +619,9 @@ export function AnimatedSchematic({
         animate={{ opacity: isHovered ? 0 : 1, y: isHovered ? 10 : 0 }}
         transition={{ duration: 0.3 }}
       >
-        Kapıyı açmak için fareyle üzerine gelin
+        <span className="md:hidden">Kapıyı {isHovered ? 'kapatmak' : 'açmak'} için dokunun</span>
+        <span className="hidden md:inline">Kapıyı açmak için üzerine gelin</span>
       </motion.div>
-    </div>
+    </button>
   )
 }

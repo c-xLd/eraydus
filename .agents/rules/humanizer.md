@@ -78,10 +78,10 @@ GOOD:
 "Duşakabin ölçüsü alırken en sık yapılan hata..."
 
 BAD:
-"8 mm cam kullanımının her banyo için gerekli olmadığı söylenebilir."
+"6 mm cam kullanımının her banyo için gerekli olmadığı söylenebilir."
 
 GOOD:
-"8 mm cam her banyo için gerekli değildir."
+"6 mm cam her banyo için gerekli değildir."
 
 Write like a knowledgeable person, not like a corporate brochure.
 

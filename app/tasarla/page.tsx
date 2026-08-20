@@ -26,6 +26,13 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600 // 1 hour ISR caching
 
+interface SandblastedModelRow {
+  id: string | number
+  title: string | null
+  name: string | null
+  image_url: string | null
+}
+
 import { redirect } from 'next/navigation'
 import { getGeneralSettings } from '@/lib/data/settings'
 
@@ -37,33 +44,23 @@ export default async function TasarlaPage() {
 
   const supabase = await createClient()
 
-  let modelsData: any[] | null = null
+  let modelsData: SandblastedModelRow[] = []
   try {
     const { data } = await supabase
       .from('sandblasted_models')
       .select('*')
     if (data && data.length > 0) {
-      modelsData = data
+      modelsData = data as SandblastedModelRow[]
     }
   } catch (err) {
     console.error('Error fetching sandblasted_models for tasarla:', err)
   }
 
-  const DEFAULT_PATTERNS = [
-    { id: 'p1', title: 'Çizgili Modern Desen', image_url: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&auto=format&fit=crop' },
-    { id: 'p2', title: 'Dalgalı Klasik', image_url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop' },
-    { id: 'p3', title: 'Buzlu Geometrik', image_url: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=800&auto=format&fit=crop' },
-    { id: 'p4', title: 'Minimalist Mat', image_url: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=800&auto=format&fit=crop' },
-    { id: 'p5', title: 'Puslu Çizgi Desen', image_url: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=800&auto=format&fit=crop' },
-  ]
-
-  const mappedPatterns = (modelsData || []).map((m: any) => ({
+  const mappedPatterns = modelsData.filter((model) => Boolean(model.image_url)).map((m) => ({
     id: String(m.id),
     title: m.title || m.name || 'Kumlama Deseni',
-    image_url: m.image_url || DEFAULT_PATTERNS[0].image_url,
+    image_url: m.image_url as string,
   }))
-
-  const finalModels = mappedPatterns.length > 0 ? mappedPatterns : DEFAULT_PATTERNS
 
   // Structured Data for WebApplication
   const webAppLd = {
@@ -140,7 +137,7 @@ export default async function TasarlaPage() {
       />
       
       {/* Visualizer takes exactly 100dvh */}
-      <TasarlaClient sandblastedModels={finalModels} />
+      <TasarlaClient sandblastedModels={mappedPatterns} />
 
       {/* Semantic SEO Content Below Fold */}
       <article className="w-full bg-white text-[#333] pt-24 pb-32">

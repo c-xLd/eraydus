@@ -52,22 +52,40 @@ export async function updateSession(request: NextRequest) {
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = '/giris'
-      url.searchParams.delete('redirectedFrom')
+      url.searchParams.set('redirectedFrom', pathname)
       return NextResponse.redirect(url)
     }
 
     // [RBAC] Rol Tabanlı Erişim Kontrolü
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role_id')
+      .select('role_id, is_suspended')
       .eq('id', user.id)
       .single()
 
-    // Sadece role_id = 1 olanlar admin kabul ediliyor
-    if (!profile || profile.role_id !== 1) {
+    // 1=SUPER_ADMIN, 2=ADMIN, 3=EDITOR, 4=SALES, 5=SEO_MANAGER, 6=WAREHOUSE
+    const validRoleIds = [1, 2, 3, 4, 5, 6]
+    
+    if (!profile || !validRoleIds.includes(profile.role_id) || profile.is_suspended) {
       const url = request.nextUrl.clone()
       url.pathname = '/' // Yetkisizse anasayfaya at
       return NextResponse.redirect(url)
+    }
+
+    // [MFA Enforcement]
+    // AAL (Authenticator Assurance Level) kontrolü
+    const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    const currentLevel = aalData?.currentLevel
+    const nextLevel = aalData?.nextLevel
+    
+    // Eğer kullanıcının MFA'sı varsa (nextLevel === 'aal2') ama girmemişse (currentLevel === 'aal1')
+    if (nextLevel === 'aal2' && currentLevel === 'aal1') {
+      if (!pathname.startsWith('/admin/mfa')) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/admin/mfa'
+        url.searchParams.set('next', pathname)
+        return NextResponse.redirect(url)
+      }
     }
   }
 

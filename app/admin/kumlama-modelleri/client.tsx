@@ -74,7 +74,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     const orderedIds = newModels.map(model => model.id)
     updateOrderAction(orderedIds).then((res) => {
       if (!res.success) {
-        toast.error('Sıralama güncellenirken hata oluştu')
+        toast.error(res.error || 'Sıralama güncellenirken hata oluştu')
         setModels(previousModels)
       }
     })
@@ -99,7 +99,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     const orderedIds = newModels.map((model) => model.id)
     updateOrderAction(orderedIds).then((res) => {
       if (!res.success) {
-        toast.error('Sıralama güncellenirken hata oluştu')
+        toast.error(res.error || 'Sıralama güncellenirken hata oluştu')
         setModels(previousModels)
       } else {
         toast.success('Sıra güncellendi')
@@ -110,7 +110,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
   const openModal = (model?: Model) => {
     if (model) {
       setEditingId(model.id)
-      setTitle(model.title)
+      setTitle(model.title || '')
       setMode('gallery')
       setGalleryUrl(model.image_url)
       setPreview(model.image_url)
@@ -146,6 +146,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     }
 
     let finalImageUrl = galleryUrl
+    let uploadedPath: string | null = null
 
     setSaving(true)
 
@@ -153,6 +154,7 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
       const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg'
       const seoSlug = title.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase()
       const path = `${seoSlug}-${Date.now()}.${extension}`
+      uploadedPath = path
 
       const { error: upErr } = await supabase.storage
         .from(BUCKET)
@@ -178,9 +180,18 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
       const res: any = await updateModelAction(editingId, { title, imageUrl: finalImageUrl })
       if (res.success && res.data) {
         setModels(models.map(m => m.id === editingId ? { ...m, ...res.data } : m))
-        toast.success('Model güncellendi')
+        if (res.warning) {
+          toast.warning(res.warning)
+        } else if (res.previousImageRemoved) {
+          toast.success('Model güncellendi ve eski görsel temizlendi')
+        } else {
+          toast.success('Model güncellendi')
+        }
         closeModal()
       } else {
+        if (uploadedPath) {
+          await supabase.storage.from(BUCKET).remove([uploadedPath])
+        }
         toast.error(res.error || 'Güncellenirken hata oluştu')
       }
     } else {
@@ -190,6 +201,9 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
         toast.success('Yeni model eklendi')
         closeModal()
       } else {
+        if (uploadedPath) {
+          await supabase.storage.from(BUCKET).remove([uploadedPath])
+        }
         toast.error(res.error || 'Eklenirken hata oluştu')
       }
     }
@@ -204,7 +218,13 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     const res = await deleteModelAction(id)
     if (res.success) {
       setModels(models.filter(m => m.id !== id))
-      toast.success('Model silindi')
+      if (res.warning) {
+        toast.warning(res.warning)
+      } else if (res.imageRemoved) {
+        toast.success('Model ve Storage görseli silindi')
+      } else {
+        toast.success('Model silindi')
+      }
     } else {
       toast.error(res.error || 'Silinirken hata oluştu')
     }
@@ -227,7 +247,9 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
     setTogglingId(null)
   }
 
-  const galleryImages = Array.from(new Set((models || []).map(m => m?.image_url).filter(Boolean)))
+  const galleryImages = Array.from(
+    new Map((models || []).filter((model) => Boolean(model.image_url)).map((model) => [model.image_url, model])).values()
+  )
   const filteredModels = (models || []).filter(m => (m?.title || '').toLowerCase().includes(searchQuery.toLowerCase()))
 
   return (
@@ -377,7 +399,9 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
                         </div>
 
                         <div className="p-3.5 border-t border-black/5 bg-white">
-                          <h3 className="font-semibold text-xs sm:text-sm text-black truncate">{model.title}</h3>
+                          <h3 className="truncate text-xs font-semibold text-black sm:text-sm">
+                            {model.title || `Kumlama Modeli #${index + 1}`}
+                          </h3>
                         </div>
                       </div>
                     )}
@@ -479,22 +503,27 @@ export default function KumlamaModelleriClient({ initialModels }: { initialModel
                       <p className="text-sm text-muted-foreground text-center py-12">Galeride görsel yok.</p>
                     ) : (
                       <div className="grid grid-cols-3 gap-3 max-h-56 overflow-y-auto pr-2 custom-scrollbar">
-                        {galleryImages.map((url) => (
+                        {galleryImages.map((galleryModel) => (
                           <button
-                            key={url}
-                            onClick={() => { setGalleryUrl(url); setFile(null); if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview); setPreview(url) }}
-                            className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-                              galleryUrl === url ? 'border-foreground ring-4 ring-foreground/10' : 'border-transparent hover:border-border'
+                            key={galleryModel.image_url}
+                            onClick={() => { setGalleryUrl(galleryModel.image_url); setFile(null); if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview); setPreview(galleryModel.image_url) }}
+                            className={`overflow-hidden rounded-xl border-2 bg-background text-left transition-all ${
+                              galleryUrl === galleryModel.image_url ? 'border-foreground ring-4 ring-foreground/10' : 'border-transparent hover:border-border'
                             }`}
                           >
-                            <img src={url} alt="" className="w-full h-full object-cover" />
-                            {galleryUrl === url && (
-                              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                            <div className="relative aspect-square overflow-hidden">
+                              <img src={galleryModel.image_url} alt={galleryModel.title} className="h-full w-full object-cover" />
+                            {galleryUrl === galleryModel.image_url && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                                 <div className="bg-foreground text-background rounded-full p-1 shadow-md">
                                   <Check className="size-4" />
                                 </div>
                               </div>
                             )}
+                            </div>
+                            <span className="block truncate border-t border-border/60 px-2 py-1.5 text-[11px] font-medium text-foreground">
+                              {galleryModel.title}
+                            </span>
                           </button>
                         ))}
                       </div>

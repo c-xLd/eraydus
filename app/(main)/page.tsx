@@ -3,7 +3,9 @@ import { HeroSection } from '@/features/homepage/components/HeroSection'
 import { ProductShowcase } from '@/features/homepage/components/ProductShowcase'
 import { Metadata } from 'next'
 import { pagesSeoData } from '@/lib/data/seo'
-import { getHomepageFaqs, getTestimonials, getFeaturedCategories } from '@/features/homepage/services/homepage'
+import { getTestimonials, getFeaturedCategories } from '@/features/homepage/services/homepage'
+import { allFaqs } from '@/lib/data/faqs'
+import { serializeJsonLd } from '@/lib/seo/schemas'
 
 // Below-the-fold components dynamically imported for ultra-low TBT and instant initial load
 const StatementSection = dynamic(() => import('@/features/homepage/components/StatementSection').then(mod => mod.StatementSection))
@@ -34,52 +36,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [faqs, testimonials, categories] = await Promise.all([
-    getHomepageFaqs(),
+  const [testimonials, categories] = await Promise.all([
     getTestimonials(),
     getFeaturedCategories()
 
   ])
 
-  // Fallback to static if no faqs found
-  const safeFaqs = faqs.length > 0 ? faqs : [
-    {
-      id: '1',
-      question: 'Ankara içinde ücretsiz ölçü ve keşif hizmetiniz var mı?',
-      answer: 'Evet. Ankara genelinde (Çankaya, Çayyolu, Keçiören, Yenimahalle, Etimesgut, Batıkent ve tüm ilçelerde) adresinize gelerek banyonuzun net ölçüsünü tamamen ücretsiz alıyoruz.',
-      sort_order: 1
-    },
-    {
-      id: '2',
-      question: 'Hangi cam kalınlığı ve modellerini kullanıyorsunuz?',
-      answer: 'Tüm duşakabinlerimizde darbelere karşı 5 kat dayanıklı 6mm temperli emniyet camı kullanıyoruz.',
-      sort_order: 2
-    },
-    {
-      id: '3',
-      question: 'Siparişim ne kadar sürede üretilir ve montajı nasıl yapılır?',
-      answer: 'Ölçü onayının ardından Siteler / Ankara imalatımızda 3-5 iş günü içerisinde duşakabininiz hazırlanır. Kendi uzman montaj ekibimiz adresinize gelerek 1-2 saat içinde temiz, güvenli ve garantili montajı tamamlar.',
-      sort_order: 3
-    },
-    {
-      id: '4',
-      question: 'Duşakabinde banyoya su sızdırma problemi yaşar mıyım?',
-      answer: 'Kesinlikle hayır. Güçlü mıknatıslı fitiller, su tutucu alt eşik profilleri ve antibakteriyel banyo silikonu uygulamamız ile su sızdırmazlık garantisi veriyoruz.',
-      sort_order: 4
-    },
-    {
-      id: '5',
-      question: 'Garanti süreniz ne kadar ve neleri kapsıyor?',
-      answer: 'Tüm duşakabin sistemlerimiz 2 Yıl Resmi Üretici Garantisi altındadır. İmalat, montaj, profil veya sızdırmazlık kaynaklı sorunlar ücretsiz giderilir. İlerleyen dönemlerde olası kaza durumlarında fabrikamızdan uygun fiyatla birebir orijinal yedek parça temin edilir.',
-      sort_order: 5
-    },
-    {
-      id: '6',
-      question: 'Banyom standart ölçüde değil veya eğimli, özel üretim yapıyor musunuz?',
-      answer: 'Evet. Duşakabinlerimizin tamamı fabrikasyon hazır paket değil, banyonuzun ölçüsüne, tavan yüksekliğine ve varsa kolon/kiriş detaylarına göre özel olarak imal edilir.',
-      sort_order: 6
-    }
-  ];
+  const safeFaqs = allFaqs.slice(0, 4)
 
   const safeTestimonials = testimonials.length > 0 ? testimonials : [
     {
@@ -125,7 +88,7 @@ export default async function Home() {
     <div className="flex flex-col w-full overflow-hidden">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
       <HeroSection />
       <ProductShowcase categories={categories} />

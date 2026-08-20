@@ -9,6 +9,7 @@ import Link from "next/link"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
 import { updateSiteSettings } from "../actions"
+import { normalizeWhatsappNumber, WHATSAPP_E164 } from "@/lib/data/contact"
 
 const generalSettingsSchema = z.object({
   maintenanceMode: z.boolean(),
@@ -28,7 +29,7 @@ export function SettingsClient({ initialData }: { initialData: any }) {
   const defaultValues = {
     maintenanceMode: initialData?.maintenanceMode || false,
     contactEmail: initialData?.contactEmail || "info@eraydus.net",
-    whatsappNumber: initialData?.whatsappNumber || "+905551234567",
+    whatsappNumber: normalizeWhatsappNumber(initialData?.whatsappNumber),
     showPrices: initialData?.showPrices ?? true,
     enableOnlineQuotes: initialData?.enableOnlineQuotes ?? true,
     orderNotificationEmail: initialData?.orderNotificationEmail || "satis@eraydus.net",
@@ -230,7 +231,7 @@ export function SettingsClient({ initialData }: { initialData: any }) {
                   <input 
                     {...register("whatsappNumber")} 
                     className={`w-full pl-11 pr-4 py-3 bg-neutral-50/50 border ${errors.whatsappNumber ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-neutral-200 focus:border-black focus:ring-black/5'} rounded-xl outline-none transition-all text-sm`} 
-                    placeholder="+905551234567"
+                    placeholder={WHATSAPP_E164}
                   />
                 </div>
                 <p className="text-xs text-black/50 font-light mt-2">Müşterilerin hızlı iletişim butonlarından ulaşacağı numara. Ülke kodu ile giriniz (örn: +90).</p>

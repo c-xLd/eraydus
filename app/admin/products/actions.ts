@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/server'
 import { revalidatePath } from 'next/cache'
 import { callAI, type AIResult } from '@/lib/ai'
+import { checkPermission, logSecurityEvent } from '@/features/auth/server-utils'
 
 // ============================================================
 // AI Content Generation — Ollama Cloud Motoru (@/lib/ai)
@@ -113,23 +114,27 @@ export async function generateProductHighlights(req: {
 
 
 export async function deleteProduct(id: string) {
-  const supabase = (await createClient()) as any
+  try {
+    const { supabase, user } = await checkPermission('products.delete')
+    
+    // Müşterinin (product) varyasyonları vb. silinmesi gerekebilir ancak 
+    // schema'da product_id foreign key'leri ON DELETE CASCADE olabilir.
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id)
 
-  // Müşterinin (product) varyasyonları vb. silinmesi gerekebilir ancak 
-  // schema'da product_id foreign key'leri ON DELETE CASCADE olabilir.
-  const { error } = await supabase
-    .from('products')
-    .delete()
-    .eq('id', id)
+    if (error) throw error
 
-  if (error) {
+    await logSecurityEvent(supabase, user.id, 'PRODUCT_DELETED', 'INFO', { target_id: id })
+
+    revalidatePath('/admin/products')
+    revalidatePath('/urunler')
+
+    return { success: true }
+  } catch (error: any) {
     return { success: false, error: error.message }
   }
-
-  revalidatePath('/admin/products')
-  revalidatePath('/urunler')
-
-  return { success: true }
 }
 
 export async function createAttribute(data: { name: string, slug: string, type: string }) {

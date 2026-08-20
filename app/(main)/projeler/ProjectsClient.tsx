@@ -144,7 +144,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                         src={project.image_url}
                         alt={project.name}
                         fill
-                        priority={index < 4}
+                        loading="lazy"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                       />
@@ -247,7 +247,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                   src={selected.image_url}
                   alt={selected.name}
                   fill
-                  priority
+                  loading="eager"
                   className="object-contain drop-shadow-2xl"
                   sizes="(max-width: 768px) 100vw, 70vw"
                 />

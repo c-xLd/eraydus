@@ -2,6 +2,7 @@ import { AdminLayoutShell } from "@/components/admin/AdminLayoutShell"
 import { SessionTimeout } from "@/components/admin/SessionTimeout"
 import { RealtimeNotifications } from "@/components/admin/RealtimeNotifications"
 import { Toaster } from 'sonner'
+import { CommandPalette } from "./components/dashboard/CommandPalette"
 
 export const dynamic = 'force-dynamic'
 
@@ -14,6 +15,7 @@ export default function AdminLayout({
     <>
       <SessionTimeout timeoutMinutes={30} />
       <RealtimeNotifications />
+      <CommandPalette />
       <AdminLayoutShell>
         {children}
       </AdminLayoutShell>

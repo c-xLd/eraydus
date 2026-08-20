@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, ReactNode } from "react"
+import { WHATSAPP_E164 } from "@/lib/data/contact"
 
 export interface GeneralSettings {
   maintenanceMode: boolean
@@ -35,7 +36,7 @@ export function useSettings() {
     return {
       maintenanceMode: false,
       contactEmail: 'info@eraydus.net',
-      whatsappNumber: '+905548830071',
+      whatsappNumber: WHATSAPP_E164,
       showPrices: true,
       enableOnlineQuotes: true,
       orderNotificationEmail: 'info@eraydus.net',

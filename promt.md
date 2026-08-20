@@ -1,1248 +1,1548 @@
-Tabii. Senin yapına göre Analytics'i **CRM değil, tamamen otomatik çalışan “Erayduş Digital Analytics Center”** olarak kurmak en doğrusu.
+Görseldeki topbar mantığı **WordPress admin bar + modern SaaS control bar** karışımı. Erayduş için oldukça uygun; ama görseldeki haliyle kopyalamak yerine daha premium, daha işlevsel ve senin gerçek sistemlerine bağlı hale getirmek gerekir.
 
-Antigravity'ye direkt şu promptu ver:
+Görselde yaklaşık **46 px yüksekliğinde**, koyu arka planlı sabit bir bar var. Solda marka/admin paneli, ardından `Yeni Ekle`, cache temizleme, Performance ve SEO durumu; sağda ise **hangi sayfada olduğun**, düzenleme aksiyonu ve admin hesabı bulunuyor. Ben Erayduş'ta `Performance: 10` / `SEO: 0` gibi sürekli görünen sert rakamları biraz daha şık kullanırdım ve en önemlisi **gerçek veriye bağlardım**.
+
+Antigravity'ye aşağıdaki promptu ver:
 
 ```text
-ERAYDUŞ ADMIN — /admin/analytics
-ADVANCED REAL-WORLD ANALYTICS SYSTEM
+ERAYDUŞ — FRONTEND ADMIN TOPBAR
+PREMIUM WORDPRESS-STYLE LIVE SITE MANAGEMENT BAR
 PRODUCTION-READY IMPLEMENTATION
 
-/admin/analytics sayfasını tamamen gerçek verilerle çalışan gelişmiş bir analytics merkezi haline getir.
+Referans görseldeki koyu admin topbar mantığını ERAYDUŞ web sitesi için yeniden tasarla.
 
-ANA AMAÇ:
+AMA:
 
-Erayduş web sitesindeki kullanıcı davranışlarını otomatik olarak ölç.
+Referans tasarımı birebir kopyalama.
 
-Kullanıcıdan veya çalışanlardan hiçbir manuel işlem isteme.
+ERAYDUŞ markasına uygun:
 
-Özellikle Erayduş'un satış modeli WhatsApp üzerinden olduğu için:
+- daha premium
+- daha temiz
+- daha modern
+- daha fonksiyonel
+- daha minimal
+- daha profesyonel
 
-WEBSITE
-↓
-PRODUCT VIEW
-↓
-USER INTERACTION
-↓
-WHATSAPP CLICK
-↓
-ANALYTICS
+bir frontend admin toolbar oluştur.
 
-akışını doğru şekilde ölç.
+Bu toolbar:
 
-KESİNLİKLE CRM OLUŞTURMA.
+/admin paneli içinde kullanılan normal admin header DEĞİL.
 
-CUSTOMERS
-QUOTES
-SALES PIPELINE
-FOLLOW-UP
-MANUEL MÜŞTERİ TAKİBİ
+Bu toolbar sadece yetkili admin kullanıcı public ERAYDUŞ web sitesini görüntülerken görünmeli.
 
-BU SAYFANIN KAPSAMINDA DEĞİL.
+Örneğin admin giriş yaptıktan sonra:
 
-==================================================
-1. ÖNCE MEVCUT SİSTEMİ ANALİZ ET
-==================================================
-
-Kodlamaya başlamadan önce:
-
-- Next.js
-- Supabase
-- mevcut analytics sistemi
-- mevcut database schema
-- products
-- categories
-- collections
-- blog
-- users
-- mevcut event tracking
-- middleware
-- authentication
-- mevcut admin dashboard
-
-yapısını incele.
-
-Mevcut analytics altyapısı varsa yeniden oluşturma.
-
-Mevcut sistemi genişlet.
-
-Gereksiz tablo oluşturma.
-
-==================================================
-2. GERÇEK VERİ KURALI
-==================================================
-
-KESİNLİKLE MOCK DATA KULLANMA.
-
-Fake:
-
-Visitors
-Users
-Pageviews
-Sessions
-Clicks
-Conversions
-Revenue
-Traffic
-CTR
-Conversion Rate
-
-oluşturma.
-
-Gerçek veri yoksa:
-
-"Henüz yeterli veri yok"
-
-göster.
-
-Analytics sistemi kurulmamışsa:
-
-"Analytics tracking is not configured"
-
-göster.
-
-Fake grafik üretme.
-
-==================================================
-3. ANA ANALYTICS DASHBOARD
-==================================================
-
-Üst bölümde tarih filtresi:
-
-Today
-Yesterday
-Last 7 Days
-Last 30 Days
-Last 90 Days
-This Month
-Last Month
-This Year
-Custom Range
-
-göster.
-
-KPI:
-
-Visitors
-Page Views
-Sessions
-Product Views
-WhatsApp Clicks
-WhatsApp Conversion Rate
-
-göster.
-
-Her KPI gerçek event/database verisinden hesaplanmalı.
-
-==================================================
-4. PERIOD COMPARISON
-==================================================
-
-Seçilen dönemi önceki eşdeğer dönemle karşılaştır.
-
-Örneğin:
-
-Last 30 Days
-vs
-Previous 30 Days
-
-Göster:
-
-Visitors
-Page Views
-Product Views
-WhatsApp Clicks
-
-Değişim:
-
-+18.4%
-
-veya
-
--7.2%
-
-olarak hesaplanmalı.
-
-Karşılaştırma verisi yoksa:
-
-"No comparison data"
-
-göster.
-
-==================================================
-5. TRAFFIC OVERVIEW
-==================================================
-
-Gerçek analytics eventlerinden:
-
-Visitors
-Sessions
-Page Views
-
-grafiği oluştur.
-
-Zaman ekseni:
-
-Hour
-Day
-Week
-Month
-
-seçilebilir olsun.
-
-Grafik sadece gerçek verileri göstermeli.
-
-==================================================
-6. TRAFFIC SOURCES
-==================================================
-
-Kullanıcıların nereden geldiğini ölç.
-
-Kaynaklar:
-
-Google
-Direct
-Social
-Referral
-Other
-
-Mümkünse:
-
-source
-medium
-campaign
-
-kaydet.
-
-Göster:
-
-Traffic Source
-Visitors
-Sessions
-Product Views
-WhatsApp Clicks
-Conversion Rate
-
-==================================================
-7. GOOGLE ORGANIC TRAFFIC
-==================================================
-
-Organic traffic için:
-
-Organic Visitors
-Organic Sessions
-Organic Product Views
-Organic WhatsApp Clicks
-
-göster.
-
-Google Search Console entegrasyonu varsa ayrıca:
-
-Clicks
-Impressions
-CTR
-Average Position
-
-verilerini kullan.
-
-Search Console verisi yoksa fake değer gösterme.
-
-==================================================
-8. WHATSAPP ANALYTICS
-==================================================
-
-BU SİSTEMİN EN ÖNEMLİ BÖLÜMLERİNDEN BİRİ.
-
-Erayduş satışlarının WhatsApp üzerinden gerçekleştiğini dikkate al.
-
-Her WhatsApp CTA tıklamasını event olarak takip et.
-
-Event:
-
-whatsapp_click
-
-Örneğin:
-
-Product Page
-Category Page
-Homepage
-Contact Page
-
-kaynağını kaydet.
-
-Göster:
-
-Total WhatsApp Clicks
-Unique WhatsApp Clicks
-WhatsApp Conversion Rate
-
-==================================================
-9. WHATSAPP PRODUCT ANALYTICS
-==================================================
-
-Hangi ürünlerin WhatsApp'a daha fazla kullanıcı gönderdiğini göster.
-
-Örneğin:
-
-Katlanır Duşakabin 05
-
-Views:
-2,481
-
-WhatsApp Clicks:
-183
-
-Conversion:
-7.37%
-
-Başka ürün:
-
-Views:
-1,920
-
-WhatsApp:
-41
-
-Conversion:
-2.13%
-
-Tüm veriler gerçek olmalı.
-
-==================================================
-10. WHATSAPP CATEGORY ANALYTICS
-==================================================
-
-Kategori bazında:
-
-Category
-Views
-WhatsApp Clicks
-Conversion
-
-göster.
-
-Örneğin:
-
-Katlanır Duşakabin
-3,421 views
-248 WhatsApp clicks
-7.25%
-
-==================================================
-11. PRODUCT ANALYTICS
-==================================================
-
-Ürün bazında:
-
-Views
-Unique Views
-WhatsApp Clicks
-Conversion Rate
-
-göster.
-
-Sıralama:
-
-Most Viewed
-Most WhatsApp Clicked
-Highest Conversion
-
-olarak değiştirilebilir.
-
-==================================================
-12. PRODUCT PERFORMANCE
-==================================================
-
-Her ürün için performans skoru hesaplanabilir.
-
-Ancak skor:
-
-gerçek:
-
-Views
-Engagement
-WhatsApp Clicks
-Conversion
-
-verilerinden hesaplanmalı.
-
-Fake score oluşturma.
-
-==================================================
-13. PAGE ANALYTICS
-==================================================
-
-Public sayfaları analiz et:
-
-Homepage
-Products
-Categories
-Product Pages
-Blog
-Contact
-Other
-
-Göster:
-
-Views
-Unique Visitors
-Average Engagement
-WhatsApp Clicks
-
-==================================================
-14. BLOG ANALYTICS
-==================================================
-
-Blog varsa:
-
-Blog Views
-Unique Visitors
-Average Engagement
-Internal Clicks
-WhatsApp Clicks
-
-göster.
-
-En başarılı blog yazılarını listele.
-
-==================================================
-15. USER DEVICE
-==================================================
-
-Gerçek analytics verisine göre:
-
-Mobile
-Desktop
-Tablet
-
-göster.
-
-Örneğin:
-
-Mobile 74%
-Desktop 24%
-Tablet 2%
-
-Ancak gerçek veri olmadan oran oluşturma.
-
-==================================================
-16. BROWSER / OS
-==================================================
-
-Gerçek veri mevcutsa:
-
-Chrome
-Safari
-Edge
-Firefox
-
-ve:
-
-Android
-iOS
-Windows
-macOS
-
-göster.
-
-Gereksiz PII toplama.
-
-==================================================
-17. GEOGRAPHY
-==================================================
-
-Analytics altyapısı gerçekten sağlıyorsa:
-
-Country
-City
-Region
-
-göster.
-
-Türkiye özelinde:
-
-İstanbul
-Ankara
-İzmir
-Bursa
-
-gibi gerçek trafik dağılımını göster.
-
-Kesin konum toplama.
-
-IP adreslerini admin panelinde gösterme.
-
-==================================================
-18. USER JOURNEY
-==================================================
-
-Mümkün olduğunca anonim kullanıcı davranış akışını ölç.
-
-Örneğin:
-
-Google
-↓
-Category
-↓
-Product
-↓
-WhatsApp
+https://www.eraydus.net/
 
 veya:
 
-Direct
-↓
-Product
-↓
-WhatsApp
+https://www.eraydus.net/urunler/...
 
-gibi.
+sayfalarına girdiğinde üst tarafta görünmeli.
 
-Kullanıcı kimliğini belirlemeye çalışma.
+Normal ziyaretçiler bu toolbar'ın:
+
+HTML'ini
+JavaScript'ini
+CSS'ini
+verilerini
+
+gereksiz yere almamalı.
 
 ==================================================
-19. FUNNEL
+1. ANA TASARIM
 ==================================================
 
-Erayduş için gerçek conversion funnel:
+Topbar:
 
-VISIT
-↓
-PRODUCT VIEW
-↓
-PRODUCT ENGAGEMENT
-↓
-WHATSAPP CLICK
+position: fixed
 
-olarak oluştur.
+top: 0
+
+width: 100%
+
+height:
+
+44px – 48px
+
+arasında olabilir.
+
+Desktop için yaklaşık:
+
+46px
+
+tercih et.
+
+z-index çok yüksek olmalı.
+
+Site navbarının üzerinde bulunmalı.
+
+Arka plan:
+
+çok koyu charcoal / graphite
+
+örneğin ERAYDUŞ admin design system içindeki mevcut dark surface tokenlarını kullan.
+
+Hardcoded renk kullanmak yerine mevcut design tokens kullan.
+
+Visual style:
+
+Premium
+Minimal
+Architectural
+Modern SaaS
+Professional
+Compact
+
+WordPress admin bar hissi olabilir ancak daha modern görünmeli.
+
+==================================================
+2. LAYOUT
+==================================================
+
+Toolbar iki ana gruba ayrılmalı:
+
+LEFT SIDE
+
+ERAYDUŞ Yönetim
+Yeni Ekle
+Cache
+Performance
+SEO
+System status gerektiğinde
+
+RIGHT SIDE
+
+Current Page
+Edit
+Preview / Admin navigation gerektiğinde
+Admin Profile
+
+Yaklaşık yapı:
+
+[ ERAYDUŞ Yönetim ]
+
+|
+
+[ + Yeni Ekle ▾ ]
+
+[ ↻ Önbellek ]
+
+|
+
+[ ⚡ Performance 96 ]
+
+[ Search icon SEO 91 ]
+
+---------------------------------------------
+
+Sayfa:
+Anasayfa
+
+[ Düzenle ]
+
+|
+
+[ Admin Avatar ▾ ]
+
+==================================================
+3. ERAYDUŞ YÖNETİM
+==================================================
+
+Sol tarafta:
+
+ERAYDUŞ Yönetim
+
+bulunsun.
+
+Icon:
+
+minimal dashboard/grid icon.
+
+Tıklandığında:
+
+/admin/dashboard
+
+sayfasına gitmeli.
+
+Hover sırasında:
+
+"Yönetim Paneline Git"
+
+tooltip gösterilebilir.
+
+Toolbar içinde büyük logo kullanma.
+
+Compact text + icon yeterli.
+
+==================================================
+4. YENİ EKLE
+==================================================
+
+Referanstaki:
+
++ Yeni Ekle
+
+mantığını geliştir.
+
+Tıklandığında dropdown açılmalı.
+
+Dropdown seçenekleri mevcut ERAYDUŞ sistemine göre dinamik olsun.
 
 Örneğin:
 
-10,000 Visitors
+Ürün
+Kategori
+Blog Yazısı
+Sayfa
 
-↓ 42%
+Eğer Collections sistemi aktif olarak kullanılıyorsa:
 
-4,200 Product Views
+Koleksiyon
 
-↓ 6%
+eklenebilir.
 
-252 WhatsApp Clicks
+GEREKSİZ MENÜ EKLEME.
 
-Bu değerler gerçek eventlerden hesaplanmalı.
+Customers ve Quotes kaldırıldığı için:
 
-==================================================
-20. EVENT TRACKING
-==================================================
+Customer
+Quote
+Lead
 
-Aşağıdaki event sistemini oluştur:
-
-page_view
-product_view
-category_view
-blog_view
-search
-whatsapp_click
-phone_click
-email_click
-outbound_click
-image_view
-scroll_depth
-cta_click
-
-Ancak yalnızca gerçekten anlamlı eventleri kaydet.
-
-Her şeyi event olarak kaydetme.
+gibi seçenekler oluşturma.
 
 ==================================================
-21. EVENT DATA
+5. YENİ EKLE DROPDOWN DESIGN
 ==================================================
 
-Event mümkün olduğunca şu bilgileri içerebilir:
+Dropdown referanstaki gibi sade ama daha premium olsun.
 
-event_name
-timestamp
-page_url
-page_type
-product_id
-category_id
-session_id
-anonymous_id
-referrer
-source
-medium
-campaign
-device_type
+Örnek:
 
-PII toplama.
+┌─────────────────────────┐
+│ HIZLI OLUŞTUR           │
+│                         │
+│ □  Yeni Ürün             │
+│ ▱  Yeni Blog Yazısı      │
+│ ◇  Yeni Kategori         │
+│ ▤  Yeni Sayfa            │
+└─────────────────────────┘
 
-Telefon
-E-posta
-Şifre
-Adres
+Her item:
 
-analytics eventlerine kaydetme.
+icon
+label
+optional keyboard shortcut
 
-==================================================
-22. SESSION SYSTEM
-==================================================
+içerebilir.
 
-Analytics için anonim session sistemi oluştur.
+Dropdown:
 
-Session:
-
-UUID
-
-veya güvenli anonim ID ile takip edilebilir.
-
-Kullanıcı hesabına bağlamak zorunda değilsin.
-
-==================================================
-23. PRIVACY
-==================================================
-
-KVKK açısından gereksiz kişisel veri toplama.
-
-Analytics:
-
-privacy-conscious
+accessible
+keyboard navigable
+click outside close
+ESC close
 
 olmalı.
 
-IP adresini mümkünse saklama veya anonimleştir.
-
-Email / phone event metadata'ya koyma.
-
 ==================================================
-24. REALTIME ANALYTICS
+6. ROLE / PERMISSION
 ==================================================
 
-Mümkünse Supabase Realtime ile:
-
-Active Visitors
-Recent Events
-Live Page Views
-Live WhatsApp Clicks
-
-göster.
-
-Ancak realtime altyapı yoksa fake active users gösterme.
-
-==================================================
-25. RECENT EVENTS
-==================================================
-
-Son eventleri göster:
-
-18:42
-Product View
-Katlanır Duşakabin 05
-
-18:41
-WhatsApp Click
-Katlanır Duşakabin 05
-
-18:40
-Page View
-/urunler
-
-Tam kullanıcı kimliği gösterme.
-
-Anonim event.
-
-==================================================
-26. TOP LANDING PAGES
-==================================================
-
-Gerçek analytics verisinden:
-
-Landing Page
-Visitors
-Sessions
-WhatsApp Clicks
-Conversion
-
-göster.
-
-==================================================
-27. TOP EXIT PAGES
-==================================================
-
-Gerçek veri varsa:
-
-Exit Page
-Views
-Exit Rate
-
-göster.
-
-==================================================
-28. SEARCH ANALYTICS
-==================================================
-
-Site içinde arama varsa:
-
-Search Query
-Search Count
-Result Clicks
-No Result Searches
-
-göster.
-
-Özellikle:
-
-hangi ürünlerin aranıp bulunamadığını
-
-tespit et.
-
-==================================================
-29. INTERNAL SEARCH OPPORTUNITIES
-==================================================
-
-Çok aranan ama sonucu olmayan sorguları göster.
+Yeni Ekle seçenekleri kullanıcı yetkisine göre görünmeli.
 
 Örneğin:
 
-"oval duşakabin"
+EDITOR:
 
-Searches:
-42
+Product / Blog oluşturabilir.
 
-Results:
-0
+SEO_MANAGER:
 
-Bu bilgi yeni ürün/content fırsatı olarak gösterilebilir.
+Yeni ürün oluşturamıyorsa seçenek görünmemeli.
 
-==================================================
-30. PERFORMANCE ANALYTICS
-==================================================
+Ancak:
 
-Gerçek RUM / web performance verisi varsa:
+Sadece frontend'de gizlemek authorization değildir.
 
-LCP
-INP
-CLS
-FCP
-TTFB
-
-göster.
-
-PageSpeed API sonuçları ile gerçek kullanıcı verisini birbirine karıştırma.
-
-Lab Data
-Field Data
-
-ayrı göster.
+Route/action tarafında gerçek permission kontrolü yapılmalı.
 
 ==================================================
-31. PAGE SPEED
+7. CACHE CONTROL
 ==================================================
 
-PageSpeed Insights API entegrasyonu varsa:
+Referanstaki:
 
-Mobile
-Desktop
+Önbelleği Temizle
 
-ayrı göster.
+özelliğini daha profesyonel yap.
 
-Performance
-Accessibility
-Best Practices
+Toolbar'da:
+
+↻ Cache
+
+veya:
+
+↻ Önbellek
+
+gösterilebilir.
+
+Tıklandığında küçük dropdown:
+
+Current Page
+Products
 SEO
+Entire Site
 
-göster.
+gibi seçenekler olabilir.
 
-Fake score kullanma.
-
-==================================================
-32. SEO ANALYTICS
-==================================================
-
-SEO sisteminden gerçek verilerle:
-
-Organic Visitors
-Organic Product Views
-Organic WhatsApp Clicks
-
-göster.
-
-Search Console varsa:
-
-Clicks
-Impressions
-CTR
-Position
-
-ekle.
+ANCAK sadece mevcut sistem gerçekten destekliyorsa göster.
 
 ==================================================
-33. TOP SEO PRODUCTS
+8. CACHE GERÇEKTEN ÇALIŞMALI
 ==================================================
 
-Google'dan trafik alan ürünleri göster.
+Cache button sadece animasyon yapmamalı.
 
-Örneğin:
-
-Product
-Organic Clicks
-Impressions
-CTR
-Position
-WhatsApp Clicks
-
-Bu sayede:
-
-"Google'dan gelen kullanıcı hangi üründe WhatsApp'a gidiyor?"
-
-sorusunun cevabı görülebilir.
-
-==================================================
-34. UTM TRACKING
-==================================================
-
-Destekle:
-
-utm_source
-utm_medium
-utm_campaign
-utm_content
-utm_term
-
-Örneğin:
-
-Instagram
-Google Ads
-Facebook
-Campaign
-
-gibi kaynaklar analiz edilebilir.
-
-==================================================
-35. CAMPAIGN ANALYTICS
-==================================================
-
-Campaign:
-
-Visitors
-Sessions
-Product Views
-WhatsApp Clicks
-Conversion
-
-göster.
-
-==================================================
-36. EXPORT
-==================================================
-
-Analytics verileri:
-
-CSV
-
-olarak export edilebilir.
-
-Export gerçek database verisinden yapılmalı.
-
-Export yetkisi role göre kontrol edilmeli.
-
-==================================================
-37. FILTERS
-==================================================
-
-Filtreler:
-
-Date
-Source
-Medium
-Campaign
-Product
-Category
-Device
-Country
-Event
-
-olarak çalışmalı.
-
-Filtre değişince grafik ve tablolar gerçekten değişmeli.
-
-==================================================
-38. DATABASE PERFORMANCE
-==================================================
-
-Analytics yüksek event üretebilir.
-
-Her page view'da ağır Supabase query çalıştırma.
-
-N+1 query kullanma.
+Next.js 15 mimarisine göre mevcut caching sistemini analiz et.
 
 Gerekirse:
 
-aggregation tables
-database functions
-materialized views
-daily summaries
+revalidatePath()
 
-kullan.
+revalidateTag()
 
-Raw events ile dashboard sorgularını birbirinden ayır.
+ve mevcut proje cache architecture'ını kullan.
 
-==================================================
-39. DATA RETENTION
-==================================================
+Örneğin admin ürün değiştirdiğinde:
 
-Analytics eventleri sonsuza kadar saklamak zorunda değilsin.
+product tag
 
-Gelecekte:
+revalidate edilebilir.
 
-30 days
-90 days
-1 year
+Current Page seçilirse:
 
-retention ayarı desteklenebilir.
+mevcut path
 
-Ancak mevcut sistemde veri kaybına yol açacak otomatik deletion uygulama.
+revalidate edilmeli.
 
-==================================================
-40. CACHING
-==================================================
+Entire Site gibi ağır işlem:
 
-Dashboard her açıldığında milyonlarca event sorgulama.
+SUPER_ADMIN / ADMIN
 
-Analytics aggregation sonuçlarını cache'le.
-
-Realtime widget ayrı çalışabilir.
+permission gerektirebilir.
 
 ==================================================
-41. ADMIN DASHBOARD INTEGRATION
+9. CACHE CONFIRMATION
 ==================================================
 
-/admin/dashboard üzerinde kısa özet göster:
+Tüm site cache temizleme gibi ağır aksiyonlarda confirmation kullan.
 
-Visitors
-Product Views
-WhatsApp Clicks
-Organic Traffic
+Örneğin:
 
-"Detaylı Analytics"
+"Site genelindeki önbelleği yenilemek istediğinize emin misiniz?"
 
-butonu:
+[İptal]
+
+[Önbelleği Yenile]
+
+İşlem sonunda gerçek toast:
+
+"Önbellek başarıyla yenilendi."
+
+Hata:
+
+"Önbellek yenilenemedi."
+
+==================================================
+10. PERFORMANCE INDICATOR
+==================================================
+
+Toolbar içinde:
+
+⚡ Performance
+
+bulunsun.
+
+Ama referanstaki gibi:
+
+Performance: 10
+
+şeklinde fake değer gösterme.
+
+Gerçek performance sistemi varsa:
+
+⚡ 96
+
+veya:
+
+⚡ Performance 96
+
+göster.
+
+Renk / status:
+
+90–100
+Good
+
+50–89
+Needs Attention
+
+0–49
+Poor
+
+gibi olabilir.
+
+Ancak gerçek PageSpeed / performance engine değerlerine göre hesaplanmalı.
+
+==================================================
+11. PERFORMANCE DATA SOURCE
+==================================================
+
+Performance değeri:
+
+PageSpeed Insights
+CrUX
+RUM
+Vercel Speed Insights
+
+veya mevcut gerçek performance sisteminden gelebilir.
+
+LAB ve FIELD data birbirine karıştırılmamalı.
+
+Toolbar çok sık API çağırmamalı.
+
+Son cache edilmiş sonucu kullan.
+
+Hover tooltip:
+
+Performance
+96 / 100
+
+Mobile
+
+Last checked:
+14 min ago
+
+Source:
+PageSpeed Insights
+
+gibi gösterebilir.
+
+==================================================
+12. PERFORMANCE NOT CONFIGURED
+==================================================
+
+Performance sistemi bağlı değilse:
+
+Performance —
+
+veya:
+
+Performance
+Not configured
+
+göster.
+
+Fake:
+
+100
+
+gösterme.
+
+==================================================
+13. PERFORMANCE CLICK
+==================================================
+
+Performance göstergesine tıklanınca:
 
 /admin/analytics
+
+veya mevcut performance dashboard route'una git.
+
+Eğer ayrı bir performance sayfası varsa onu kullan.
+
+Gereksiz yeni route oluşturma.
+
+==================================================
+14. SEO INDICATOR
+==================================================
+
+Performance'ın yanında:
+
+SEO
+
+göstergesi bulunabilir.
+
+Örneğin:
+
+SEO 94
+
+veya:
+
+SEO
+● Healthy
+
+Gerçek SEO audit engine sonucundan gelmeli.
+
+==================================================
+15. SEO SCORE
+==================================================
+
+Fake SEO skoru YASAK.
+
+Score mevcut:
+
+/admin/seo
+
+sistemindeki gerçek SEO auditinden gelmeli.
+
+Örneğin:
+
+SEO 94
+
+tooltip:
+
+Technical SEO: 98
+On-Page: 91
+Indexability: 100
+Schema: 88
+
+3 warnings
+
+Last audit:
+20 min ago
+
+gibi olabilir.
+
+==================================================
+16. SEO PROBLEM INDICATOR
+==================================================
+
+SEO kritik problemi varsa toolbar bunu anlaşılır gösterebilir.
+
+Örneğin:
+
+SEO 78
+● 3 issues
+
+veya:
+
+SEO ⚠
+
+Ancak toolbarı alarm paneline çevirme.
+
+Detay:
+
+hover/click dropdown
+
+içinde gösterilsin.
+
+==================================================
+17. SEO CLICK
+==================================================
+
+SEO göstergesine tıklanınca:
+
+/admin/seo
 
 sayfasına gitmeli.
 
 ==================================================
-42. NOTIFICATIONS
+18. CURRENT PAGE CONTEXT
 ==================================================
 
-Analytics kaynaklı önemli uyarılar üretilebilir.
+Sağ bölümde referanstaki:
+
+Sayfa: anasayfa
+
+mantığını geliştir.
 
 Örneğin:
 
-WhatsApp clicks unusually increased
+Sayfa
+Anasayfa
 
-Organic traffic dropped
+veya daha kompakt:
 
-404 increased
+Anasayfa
 
-Product traffic increased
+göster.
 
-Ancak spam notification üretme.
-
-Threshold ayarlanabilir olmalı.
-
-==================================================
-43. AUTOMATIC INSIGHTS
-==================================================
-
-Gerçek veriler üzerinden basit otomatik analiz:
-
-"Son 7 günde WhatsApp tıklamaları %18 arttı."
-
-"Katlanır Duşakabin 05 en fazla WhatsApp talebi oluşturan ürün."
-
-"Organik trafik son 30 günde %12 arttı."
-
-Bu cümleler sadece gerçek hesaplamalardan oluşturulmalı.
-
-AI kullanılıyorsa AI veriyi uydurmamalı.
-
-==================================================
-44. ANOMALY DETECTION
-==================================================
-
-Basit anomaly detection sistemi oluştur.
+Page type'ı otomatik belirle.
 
 Örneğin:
 
-Normal:
-100 WhatsApp clicks/day
+PAGE · Anasayfa
 
-Bugün:
-12
+PRODUCT · Katlanır Duşakabin 05
 
-Dashboard:
+CATEGORY · Katlanır Duşakabin
 
-"WhatsApp click activity is significantly lower than usual."
-
-Ancak yeterli geçmiş veri yoksa anomaly üretme.
+BLOG · Duşakabin Cam Kalınlığı Rehberi
 
 ==================================================
-45. MOBILE
+19. CURRENT ENTITY RESOLUTION
 ==================================================
 
-Analytics tamamen mobile responsive.
+Public URL:
 
-Mobilde:
+/urunler/katlanir-dusakabin/katlanir-dusakabin-05
 
-KPI cards
-Charts
-Tables
-Filters
+ise toolbar mevcut route üzerinden ilgili gerçek product kaydını bulmalı.
 
-kullanılabilir olmalı.
+Göster:
 
-Yatay taşma olmamalı.
+Ürün:
+Katlanır Duşakabin 05
 
-==================================================
-46. UX
-==================================================
+Hardcoded route listesi oluşturma.
 
-Premium ERAYDUŞ admin design.
-
-Ancak analytics ekranı:
-
-gösterişli değil,
-okunabilir,
-hızlı,
-veri odaklı
-
-olmalı.
-
-Charts sade.
-
-Tooltip detaylı.
-
-KPI trendleri anlaşılır.
+Mevcut database/entity mapping sistemini kullan.
 
 ==================================================
-47. ERROR HANDLING
+20. EDIT CURRENT PAGE
 ==================================================
 
-Analytics query başarısız olursa:
+Referanstaki:
 
-"Analytics data could not be loaded."
+✎ Düzenle
 
-Retry
+aksiyonu Erayduş için çok kullanışlı.
+
+Public entity türüne göre doğru admin edit route'una götür.
+
+Örneğin:
+
+Homepage:
+
+Düzenle
+→ mevcut page/content editor
+
+Product:
+
+Düzenle
+→ /admin/products/[id]/edit
+veya projedeki gerçek edit route
+
+Category:
+
+Düzenle
+→ category editor
+
+Blog:
+
+Düzenle
+→ blog editor
+
+==================================================
+21. DYNAMIC EDIT BUTTON
+==================================================
+
+Edit button sadece gerçekten düzenlenebilir entity varsa göster.
+
+Örneğin:
+
+404
+search results
+system route
+
+gibi sayfalarda yanlış Edit link oluşturma.
+
+==================================================
+22. EDIT PERMISSION
+==================================================
+
+Kullanıcının edit permission'ı yoksa:
+
+Düzenle
+
+butonunu gösterme veya readonly state göster.
+
+Server-side permission yine zorunlu.
+
+==================================================
+23. QUICK PAGE ACTIONS
+==================================================
+
+Current page yanında optional three-dot menu olabilir:
+
+•••
+
+Örneğin Product Page'de:
+
+Edit Product
+Open SEO
+Copy URL
+Open Analytics
+View Sitemap Status
+
+gibi context-sensitive aksiyonlar.
+
+Ancak sadece gerçekten çalışan fonksiyonları göster.
+
+==================================================
+24. PAGE SEO QUICK VIEW
+==================================================
+
+Current page bir indexable public sayfa ise:
+
+küçük SEO quick status gösterebilir.
+
+Örneğin:
+
+SEO
+✓ Indexable
+
+veya tooltip:
+
+Title ✓
+Description ✓
+Canonical ✓
+Schema ✓
+Sitemap ✓
+
+Bu bilgiler gerçek page SEO analysis'ten gelmeli.
+
+==================================================
+25. PAGE PERFORMANCE QUICK VIEW
+==================================================
+
+Mevcut sayfanın ayrı performance sonucu varsa:
+
+Current Page Performance
+
+gösterilebilir.
+
+Yoksa global performance değerini current page sonucu gibi sunma.
+
+==================================================
+26. ADMIN USER
+==================================================
+
+Sağ tarafta:
+
+Admin
+Avatar
 
 göster.
 
-Dashboard tamamen çökmemeli.
+Örneğin:
+
+Ahmet
+A
+
+veya:
+
+Admin
+avatar
+
+Tıklandığında dropdown:
+
+Account
+Security
+Admin Panel
+Logout
+
+gibi gerçek seçenekler.
 
 ==================================================
-48. EMPTY STATES
+27. LOGOUT
 ==================================================
 
-Yeni site ise:
+Logout gerçek Supabase Auth logout gerçekleştirmeli.
 
-"Analytics data is being collected."
+Sadece client-side route redirect yapma.
 
-göster.
-
-Fake 0 değerlerini gerçek veri gibi sunma.
+Logout sonrası admin toolbar tamamen kaybolmalı.
 
 ==================================================
-49. SECURITY
+28. SECURITY
 ==================================================
 
-Analytics sadece yetkili adminlere açık.
+Bu toolbar admin güvenliği açısından public bypass oluşturmamalı.
 
-RLS.
+Sadece:
 
-Server-side authorization.
+authenticated
++
+authorized
 
-Sensitive analytics data client'a gereksiz gönderilmeyecek.
+kullanıcılara server-side render edilmeli.
 
-Service role key browser'a gönderilmeyecek.
+Public kullanıcı toolbar endpointlerinden:
 
-==================================================
-50. TEST
-==================================================
+cache reset
+SEO update
+page edit
+admin data
 
-ŞU TESTLERİ GERÇEKTEN YAP:
-
-TEST 1
-
-Homepage aç.
-
-page_view oluşmalı.
-
-TEST 2
-
-Ürün sayfası aç.
-
-product_view oluşmalı.
-
-TEST 3
-
-Kategori aç.
-
-category_view oluşmalı.
-
-TEST 4
-
-WhatsApp butonuna tıkla.
-
-whatsapp_click oluşmalı.
-
-TEST 5
-
-Analytics dashboard.
-
-Event görünmeli.
-
-TEST 6
-
-Tarih filtresi değiştir.
-
-Veriler değişmeli.
-
-TEST 7
-
-Ürün filtresi.
-
-Sadece ilgili ürün verileri gelmeli.
-
-TEST 8
-
-Source filtresi.
-
-Gerçek source verileri filtrelenmeli.
-
-TEST 9
-
-Mobile.
-
-Responsive çalışmalı.
-
-TEST 10
-
-Analytics database bağlantısını geçici olarak boz.
-
-Fake data gösterilmemeli.
-
-Doğru error state gösterilmeli.
-
-TEST 11
-
-Admin olmayan kullanıcı:
-
-/admin/analytics
-
-erişememeli.
-
-TEST 12
-
-Production build:
-
-TypeScript errors = 0
-ESLint errors = 0
-Console errors = 0
+işlemlerini yapamamalı.
 
 ==================================================
-51. FINAL ARCHITECTURE
+29. NO ADMIN DATA LEAK
 ==================================================
 
-Sistem:
+Normal ziyaretçi:
 
-USER
+SEO internal score
+performance admin data
+profile information
+admin routes metadata
+permissions
+security status
+
+almamalı.
+
+Admin toolbar yalnızca admin authenticated request'lerde oluşturulmalı.
+
+==================================================
+30. TOPBAR PUBLIC PERFORMANCE
+==================================================
+
+ÇOK ÖNEMLİ.
+
+Anonymous ziyaretçiler için:
+
+Admin toolbar JavaScript bundle yükleme.
+
+Admin toolbar query çalıştırma.
+
+Admin toolbar CSS göndermeye gerek yoksa gönderme.
+
+Admin toolbar performance'ı normal ziyaretçinin:
+
+LCP
+INP
+CLS
+
+değerlerini etkilememeli.
+
+==================================================
+31. LAYOUT SHIFT
+==================================================
+
+Admin toolbar görünür olduğunda site içeriğini yanlış şekilde kapatmamalı.
+
+Admin session varsa:
+
+body / root üzerinde toolbar yüksekliği kadar offset oluştur.
+
+Örneğin:
+
+--admin-toolbar-height: 46px
+
+Site navigation:
+
+top:
+var(--admin-toolbar-height)
+
+gibi mevcut layouta uygun davranabilir.
+
+CLS oluşturma.
+
+==================================================
+32. STICKY WEBSITE HEADER SUPPORT
+==================================================
+
+ERAYDUŞ frontend header zaten sticky/fixed ise:
+
+ADMIN TOOLBAR
 ↓
-NEXT.JS
+WEBSITE NAVBAR
 ↓
-ANALYTICS EVENT TRACKER
-↓
-SUPABASE
-↓
-EVENT STORAGE
-↓
-AGGREGATION
-↓
-/admin/analytics
+CONTENT
 
-şeklinde çalışmalı.
+şeklinde doğru stacking oluştur.
 
-Özellikle:
-
-USER
-↓
-PRODUCT
-↓
-WHATSAPP CLICK
-
-akışı doğru ölçülmeli.
+İki header birbirinin üzerine binmemeli.
 
 ==================================================
-52. EN ÖNEMLİ KURAL
+33. DESKTOP DESIGN
 ==================================================
 
-BU SAYFAYI SADECE TASARLAMA.
+Desktop:
 
-GERÇEK ANALYTICS SİSTEMİ KUR.
+height ~46px
 
-MOCK DATA YOK.
+Left:
+brand
+create
+cache
+performance
+seo
 
-FAKE VISITOR YOK.
+Right:
+page context
+edit
+profile
 
-FAKE WHATSAPP CLICK YOK.
+Toolbar çok yüksek olmamalı.
 
-FAKE CONVERSION YOK.
+Spacing compact ama sıkışık olmamalı.
 
-FAKE GOOGLE DATA YOK.
+==================================================
+34. VISUAL SEPARATORS
+==================================================
 
-FAKE PAGESPEED YOK.
+Referanstaki gibi çok ince vertical separators kullan.
 
-FAKE ACTIVE USER YOK.
+Örneğin:
 
-Gerçek veri yoksa açıkça:
+ERAYDUŞ Yönetim
+|
+Yeni Ekle
+|
+Cache
+Performance
+SEO
 
-"Henüz yeterli veri yok"
+Ancak separator kullanımını abartma.
 
-veya
+==================================================
+35. ICONS
+==================================================
 
-"Bu entegrasyon yapılandırılmamış"
+Mevcut icon library kullan.
 
-göster.
+Lucide varsa Lucide kullan.
 
-MEVCUT SUPABASE SCHEMA'YI ÖNCE İNCELE.
+Yeni icon package ekleme.
 
-MEVCUT ANALYTICS SİSTEMİ VARSA ONU KULLAN.
+Örnek:
 
-GEREKSİZ TABLO OLUŞTURMA.
+LayoutDashboard
+Plus
+RefreshCw
+Zap
+Search
+Pencil
+User
+LogOut
+Settings
+ChevronDown
 
-GEREKSİZ EVENT TOPLAMA.
+==================================================
+36. MICRO INTERACTIONS
+==================================================
 
-PII TOPLAMA.
+Hover:
 
-KVKK / PRIVACY KURALLARINA UY.
+subtle background change
 
-PRODUCTION-READY KOD YAZ.
+Active:
 
-NEXT.JS 15
-REACT 19
-TYPESCRIPT
-TAILWIND
-SHADCN/UI
-SUPABASE
+slightly stronger surface
 
-mimarisine uy.
+Dropdown:
 
-HER BUTON, FILTER, SELECT, DATE PICKER, EXPORT VE REFRESH GERÇEKTEN ÇALIŞMALI.
+150–200ms smooth transition
 
-Sadece UI oluşturup bırakma.
-```
+Gereksiz:
 
-**Özellikle WhatsApp event tracking kısmını atlama.** Senin sitende en değerli metrik muhtemelen klasik “kaç kişi geldi?” değil:
+bounce
+glow
+large animations
+gradient animation
 
-> **Kaç kişi ürün gördü → kaç kişi WhatsApp'a tıkladı → hangi ürün/kategori bunu sağladı → hangi trafik kaynağı bunu getirdi?**
+kullanma.
 
-olacak.
+==================================================
+37. PREMIUM ERAYDUŞ STYLE
+==================================================
 
-Bunu kurduğumuzda Google'da yaptığın SEO çalışmalarının da ticari olarak işe yarayıp yaramadığını görebilirsin.
+Topbar:
+
+WordPress kadar kullanışlı
+
+ancak WordPress kadar eski görünmemeli.
+
+Visual inspiration:
+
+Linear
+Vercel
+Stripe Dashboard
+Modern CMS
+Premium architecture software
+
+gibi temiz hissiyat.
+
+ERAYDUŞ showroom markasıyla uyumlu.
+
+==================================================
+38. COLOR SYSTEM
+==================================================
+
+Background:
+
+near-black graphite.
+
+Text:
+
+primary light
+secondary muted.
+
+Accent sadece durumlarda:
+
+Performance
+SEO
+Warning
+Error
+Success
+
+için kullan.
+
+Toolbarı rengarenk yapma.
+
+==================================================
+39. PERFORMANCE COLOR
+==================================================
+
+Performance icon'da referanstaki kırmızı lightning icon yerine status'a göre semantic color kullanılabilir.
+
+Ancak accessibility için sadece renge güvenme.
+
+Icon + label/status da kullan.
+
+==================================================
+40. MOBILE VERSION
+==================================================
+
+Mobilde desktop toolbar'ın tamamını sıkıştırma.
+
+Mobil toolbar:
+
+[ERAYDUŞ]
+
+[+]
+
+[Edit]
+
+[•••]
+
+gibi compact olabilir.
+
+••• menüsü altında:
+
+Dashboard
+Performance
+SEO
+Cache
+Current Page
+Security
+Logout
+
+bulunabilir.
+
+==================================================
+41. TABLET
+==================================================
+
+Tablet'te daha az önemli label'ları icon-only yap.
+
+Tooltip kullan.
+
+==================================================
+42. COMMAND PALETTE
+==================================================
+
+Toolbar'dan:
+
+Cmd/Ctrl + K
+
+admin command palette açılabilir.
+
+Örneğin:
+
+Search Product
+New Product
+Edit Current Page
+Open SEO
+Open Analytics
+Clear Current Page Cache
+
+Ancak mevcut command palette varsa onu kullan.
+
+Gereksiz ikinci sistem oluşturma.
+
+==================================================
+43. KEYBOARD SHORTCUTS
+==================================================
+
+İsteğe bağlı:
+
+Ctrl/Cmd + K
+Search
+
+Ctrl/Cmd + E
+Edit current page
+
+gibi shortcutlar olabilir.
+
+Input içinde yazarken yanlışlıkla çalışmamalı.
+
+==================================================
+44. TOAST
+==================================================
+
+Toolbar işlemlerinde mevcut toast sistemi kullan.
+
+Örneğin:
+
+Cache refreshed.
+
+SEO audit started.
+
+Copied to clipboard.
+
+Logged out.
+
+İkinci toast library ekleme.
+
+==================================================
+45. LOADING STATES
+==================================================
+
+Cache işleminde:
+
+Refresh icon spin.
+
+SEO/performance load edilirken:
+
+küçük skeleton veya neutral indicator.
+
+Toolbarın tamamını skeleton yapma.
+
+==================================================
+46. ERROR STATES
+==================================================
+
+Performance API başarısız:
+
+Performance
+—
+
+tooltip:
+
+Unable to load latest performance data.
+
+SEO başarısız:
+
+SEO
+—
+
+Toolbar çökmemeli.
+
+==================================================
+47. DATA FRESHNESS
+==================================================
+
+SEO ve Performance tooltip/dropdown içinde:
+
+Last checked
+
+bilgisi göster.
+
+Bu kullanıcının gördüğü skorun ne kadar güncel olduğunu anlamasını sağlar.
+
+==================================================
+48. DO NOT FETCH HEAVY DATA ON EVERY NAVIGATION
+==================================================
+
+Toolbar her page navigation'da:
+
+PageSpeed API
+Search Console API
+full SEO crawl
+
+çalıştırmamalı.
+
+Son audit/cache verisini oku.
+
+Heavy operations background/on-demand olmalı.
+
+==================================================
+49. SEO AUDIT QUICK ACTION
+==================================================
+
+SEO dropdown içinde:
+
+Current Page SEO
+
+Score:
+92
+
+Warnings:
+2
+
+[Open SEO]
+
+ve gerekiyorsa:
+
+[Run Page Audit]
+
+olabilir.
+
+Audit gerçekten çalışmalı.
+
+==================================================
+50. PERFORMANCE QUICK ACTION
+==================================================
+
+Performance dropdown:
+
+Current Site
+
+Mobile:
+92
+
+Desktop:
+98
+
+Core Web Vitals:
+Passing
+
+Last checked:
+...
+
+[Analytics]
+
+[Run Check]
+
+Gerçek veri varsa göster.
+
+==================================================
+51. CACHE UX
+==================================================
+
+"Önbelleği Temizle"
+
+yerine kullanıcı açısından:
+
+"Önbelleği Yenile"
+
+veya:
+
+"Cache Yenile"
+
+daha doğru olabilir.
+
+Çünkü Next.js'de genellikle amaç sadece cache silmek değil veriyi yeniden doğrulamaktır.
+
+==================================================
+52. OPTIONAL DEPLOYMENT STATUS
+==================================================
+
+Mevcut Vercel deployment bilgisine gerçekten erişilebiliyorsa:
+
+Production
+● Live
+
+gibi küçük bir durum olabilir.
+
+Ancak entegrasyon yoksa fake deployment status gösterme.
+
+Bu özellik zorunlu değildir.
+
+==================================================
+53. OPTIONAL PREVIEW MODE
+==================================================
+
+CMS draft/preview sistemi gerçekten varsa:
+
+Preview
+
+durumu toolbar içinde gösterilebilir.
+
+Örneğin:
+
+PREVIEW MODE
+
+[Exit Preview]
+
+Gerçek preview sistemi yoksa oluşturma.
+
+==================================================
+54. ACCESSIBILITY
+==================================================
+
+Toolbar tamamen keyboard accessible olmalı.
+
+ARIA menu semantics.
+
+ARIA labels.
+
+Focus-visible.
+
+ESC closes dropdown.
+
+Arrow-key menu navigation.
+
+Contrast WCAG AA.
+
+==================================================
+55. NO DEAD UI
+==================================================
+
+KESİN KURAL:
+
+Yeni Ekle
+Cache
+Performance
+SEO
+Edit
+Profile
+Logout
+
+gibi görünen bütün kontroller çalışmalı.
+
+Placeholder button oluşturma.
+
+==================================================
+56. REAL DATA ONLY
+==================================================
+
+Performance = REAL DATA
+
+SEO = REAL AUDIT
+
+Current Page = REAL ROUTE/ENTITY
+
+User = REAL AUTH USER
+
+Permissions = REAL SERVER AUTHORIZATION
+
+Cache = REAL REVALIDATION
+
+Fake hiçbir data kullanma.
+
+==================================================
+57. EXISTING ARCHITECTURE FIRST
+==================================================
+
+Implementasyondan önce incele:
+
+existing layout
+public header
+admin layout
+authentication
+Supabase SSR
+RBAC
+permissions
+products
+categories
+blog/pages
+SEO
+analytics
+cache architecture
+design tokens
+icon library
+toast system
+routes
+
+Mevcut sistemi tekrar oluşturma.
+
+==================================================
+58. NEXT.JS IMPLEMENTATION
+==================================================
+
+Next.js 15 App Router conventions kullan.
+
+Server Components mümkün olduğunca kullan.
+
+Client Component sadece:
+
+dropdown
+tooltip
+command interaction
+cache button state
+mobile menu
+
+gibi gerçekten interaktif kısımlarda kullanılmalı.
+
+Toolbar'ın tamamını gereksiz yere:
+
+"use client"
+
+yapma.
+
+==================================================
+59. COMPONENT ARCHITECTURE
+==================================================
+
+Componentleri mantıklı ayır.
+
+Örneğin:
+
+AdminFrontendToolbar
+AdminToolbarBrand
+AdminCreateMenu
+AdminCacheControl
+AdminPerformanceIndicator
+AdminSeoIndicator
+AdminCurrentPage
+AdminPageActions
+AdminProfileMenu
+AdminMobileToolbar
+
+Ancak aşırı component fragmentation yapma.
+
+==================================================
+60. FINAL DESKTOP TARGET
+==================================================
+
+Final desktop görünüm yaklaşık:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ▦ ERAYDUŞ Yönetim │ + Yeni Ekle ▾ │ ↻ Cache │ ⚡ 96 │ SEO 94             │
+│                                                   ÜRÜN · Katlanır 05        │
+│                                                   ✎ Düzenle │ Admin ▾       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Ancak tek satırda, kompakt ve profesyonel şekilde uygulanmalı.
+
+==================================================
+61. FINAL MOBILE TARGET
+==================================================
+
+Mobile:
+
+┌─────────────────────────────────────┐
+│ ▦ ERAYDUŞ     +    ✎ Düzenle    ••• │
+└─────────────────────────────────────┘
+
+••• içinde:
+
+Dashboard
+New
+SEO
+Performance
+Cache
+Current Page
+Account
+Logout
+
+==================================================
+62. ERAYDUŞ'A ÖZEL KURAL
+==================================================
+
+Customers ve Quotes sistemleri kaldırıldı.
+
+Bu nedenle toolbar:
+
+Customer
+Quote
+CRM
+Lead
+Sales Pipeline
+
+aksiyonları içermemeli.
+
+Ana yönetim sistemleri:
+
+Products
+Categories
+Content / Blog
+Media
+Analytics
+SEO
+Settings
+
+üzerinden çalışmalı.
+
+==================================================
+63. ABSOLUTE ACCEPTANCE CRITERIA
+==================================================
+
+Normal visitor:
+
+Toolbar görmez.
+
+Authenticated authorized admin:
+
+Toolbar görür.
+
+ERAYDUŞ Yönetim:
+
+/admin/dashboard çalışır.
+
+Yeni Ekle:
+
+gerçek create route'larına gider.
+
+Cache:
+
+gerçek Next.js cache/revalidation işlemi yapar.
+
+Performance:
+
+gerçek son performance verisini gösterir.
+
+SEO:
+
+gerçek audit sonucunu gösterir.
+
+Current Page:
+
+gerçek entity'yi tanır.
+
+Düzenle:
+
+doğru admin edit sayfasını açar.
+
+Profile:
+
+gerçek auth user'ı kullanır.
+
+Logout:
+
+gerçek session'ı sonlandırır.
+
+Mobile:
+
+kullanılabilir.
+
+Public Lighthouse/performance:
+
+admin toolbar nedeniyle etkilenmez.
+
+Security:
+
+server-side authentication + authorization ile korunur.
+
+TypeScript clean.
+
+ESLint clean.
+
+Production build successful.
+
+Console errors = 0.
+
+==================================================
+FINAL RULE
+==================================================
+
+REFERANS GÖRSELDEKİ YAKLAŞIMI KULLAN:
+
+dark fixed topbar
+compact controls
+quick create
+cache
+SEO
+performance
+current page
+edit
+admin profile
+
+AMA GÖRSELİ BİREBİR KOPYALAMA.
+
+ERAYDUŞ'A ÖZEL, MODERN, PREMIUM VE DAHA İŞLEVSEL BİR SİSTEM OLUŞTUR.
+
+BU SADECE TASARIM DEĞİL.
+
+HER ELEMENT GERÇEK SİSTEME BAĞLI OLMALI.
+
+UI-ONLY IMPLEMENTATION KABUL EDİLMEZ.

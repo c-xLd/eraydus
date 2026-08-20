@@ -26,6 +26,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.98,
     },
     {
+      url: `${baseUrl}/dusakabin/80x80`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.92,
+    },
+    {
+      url: `${baseUrl}/dusakabin/90x90`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.92,
+    },
+    {
       url: `${baseUrl}/banyo-trendleri-2026`,
       lastModified: new Date(),
       changeFrequency: 'weekly',

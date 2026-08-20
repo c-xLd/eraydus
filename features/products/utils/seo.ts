@@ -67,35 +67,84 @@ export function generateProductMetadata(product: {
 
 // Generate Product JSON-LD structured data
 export function generateProductJsonLd(product: {
-  name: string; slug: string; description?: string | null;
+  id?: string; name: string; slug: string; description?: string | null;
   base_price?: number | null; starting_price?: number | null;
   main_image_url?: string | null; sku?: string | null;
   category?: { name: string; slug: string } | null;
   gallery?: { image_url: string }[];
-}): Record<string, unknown> {
-  return {
+}, reviews: Array<{
+  author_name?: string | null;
+  rating: number;
+  content: string;
+  created_at: string;
+}> = []): Record<string, unknown> {
+  const productUrl = `${SITE_URL}/urunler/${product.category?.slug || 'genel'}/${product.slug}`
+  const price = product.base_price && product.base_price > 0
+    ? product.base_price
+    : product.starting_price && product.starting_price > 0
+      ? product.starting_price
+      : null
+  const images = Array.from(new Set([
+    product.main_image_url,
+    ...(product.gallery?.map((item) => item.image_url) ?? []),
+  ].filter((image): image is string => Boolean(image))))
+  const validReviews = reviews.filter((review) => review.rating >= 1 && review.rating <= 5)
+  const ratingValue = validReviews.length > 0
+    ? validReviews.reduce((total, review) => total + review.rating, 0) / validReviews.length
+    : null
+
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
+    '@id': `${productUrl}#product`,
     name: product.name,
     description: product.description || `${product.name} - Erayduş lüks duşakabin`,
-    sku: product.sku || undefined,
+    sku: product.sku || product.id || undefined,
     brand: { '@type': 'Brand', name: SITE_NAME },
     manufacturer: { '@type': 'Organization', name: SITE_NAME },
-    image: product.gallery?.map(g => g.image_url) || (product.main_image_url ? [product.main_image_url] : []),
-    url: `${SITE_URL}/urunler/${product.category?.slug || 'genel'}/${product.slug}`,
-    offers: product.base_price && product.base_price > 0 ? {
-      '@type': 'Offer',
-      price: formatPriceForSchema(product.base_price),
-      priceCurrency: 'TRY',
-      availability: 'https://schema.org/InStock',
-      seller: { '@type': 'Organization', name: SITE_NAME },
-    } : {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      seller: { '@type': 'Organization', name: SITE_NAME },
-    },
+    image: images,
+    url: productUrl,
     category: product.category?.name || 'Duşakabin',
   }
+
+  if (price) {
+    schema.offers = {
+      '@type': 'Offer',
+      url: productUrl,
+      price: formatPriceForSchema(price),
+      priceCurrency: 'TRY',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: SITE_NAME },
+    }
+  }
+
+  if (ratingValue !== null) {
+    schema.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: Number(ratingValue.toFixed(2)),
+      reviewCount: validReviews.length,
+      bestRating: 5,
+      worstRating: 1,
+    }
+    schema.review = validReviews.map((review) => ({
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: review.author_name || 'Erayduş müşterisi',
+      },
+      datePublished: review.created_at,
+      reviewBody: review.content,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: review.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }))
+  }
+
+  return schema
 }
 
 // Generate BreadcrumbList JSON-LD

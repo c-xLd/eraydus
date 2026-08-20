@@ -155,6 +155,7 @@ export default async function RootLayout({
             </Script>
           )}
 
+
           {children}
           <Toaster position="top-right" richColors closeButton />
           <SpeedInsights />

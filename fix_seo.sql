@@ -1,0 +1,1 @@
+﻿UPDATE products SET seo_metadata = jsonb_build_object('title', name || ' - Erayduş Banyo', 'description', COALESCE(description, name || ' modelleri Erayduş kalitesiyle banyonuzda. Hemen inceleyin.')) WHERE seo_metadata IS NULL OR seo_metadata::text = '{}' OR NOT (seo_metadata ? 'title') OR NOT (seo_metadata ? 'description');

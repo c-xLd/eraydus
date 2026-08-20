@@ -16,6 +16,7 @@ export default async function AdminKumlamaPage() {
   const { data, error } = await supabase
     .from('sandblasted_models')
     .select('*')
+    .order('order_index', { ascending: true })
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -35,11 +36,11 @@ export default async function AdminKumlamaPage() {
   const models: AdminModel[] = ((data as SandblastedModelRow[]) || [])
     .map((row) => ({
       id: row.id,
-      title: row.name,
-      image_url: row.image_url ?? '',
+      title: row.title.trim() || 'Başlıksız Model',
+      image_url: row.image_url,
       created_at: row.created_at,
       is_active: row.is_active ?? undefined,
-      order_index: row.sort_order ?? undefined,
+      order_index: row.order_index,
     }))
     .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
 
