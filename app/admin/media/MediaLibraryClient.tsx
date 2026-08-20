@@ -356,7 +356,7 @@ export function MediaLibraryClient({ initialItems }: MediaLibraryClientProps) {
       </AnimatePresence>
 
       {/* Filter and Control Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-2 sm:p-2.5 rounded-[1.25rem] bg-white/70 backdrop-blur-xl border border-white shadow-xl shadow-black/5 ring-1 ring-black/5 sticky top-16 z-30">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-2 sm:p-2.5 rounded-[1.25rem] bg-white/70 backdrop-blur-xl border border-white shadow-xl shadow-black/5 ring-1 ring-black/5 sticky top-4 z-30">
         <div className="flex flex-1 items-center gap-2">
           {/* Search Input */}
           <div className="relative flex-1 max-w-md">
