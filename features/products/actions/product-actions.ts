@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 async function getSupabaseActionClient() {
   const cookieStore = await cookies()
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co'
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY'
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY'
 
   return createServerClient<any>(url, key, {
     cookies: {

@@ -33,10 +33,12 @@ export async function proxy(request: NextRequest) {
   // Fetch from Supabase with 60s Next.js cache to preserve Edge speed
   if (!pathname.startsWith('/admin') && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
     try {
-      const redirectsRes = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/seo_redirects?select=old_url,new_url,status_code&old_url=eq.${encodeURIComponent(pathname)}`, {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xzxutzjzjdyjheivdxdl.supabase.co'
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_g0itJI2YsAytCSuPGT18xw_Rl-VxHbY'
+      const redirectsRes = await fetch(`${supabaseUrl}/rest/v1/seo_redirects?select=old_url,new_url,status_code&old_url=eq.${encodeURIComponent(pathname)}`, {
         headers: {
-          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`
         },
         next: { revalidate: 60, tags: ['seo-redirects'] }
       })
