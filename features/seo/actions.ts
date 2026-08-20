@@ -73,5 +73,5 @@ export async function createRedirect(oldUrl: string, newUrl: string) {
   // Clean up any 404 logs matching this oldUrl
   await supabase.from('seo_404_logs').update({ resolved: true }).eq('url', oldUrl)
   
-  revalidatePath('/admin/seo/redirects')
+  revalidatePath('/admin/seo/technical')
 }

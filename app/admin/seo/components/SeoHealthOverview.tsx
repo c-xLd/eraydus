@@ -88,7 +88,7 @@ export default function SeoHealthOverview({ report }: Props) {
             →
           </div>
         </Link>
-        <Link href="/admin/seo/redirects" className="sm:col-span-2 bg-white border border-dashed border-gray-300 rounded-3xl p-6 flex items-center justify-between group hover:border-blue-300 hover:bg-blue-50/50 transition-all">
+        <Link href="/admin/seo/technical" className="sm:col-span-2 bg-white border border-dashed border-gray-300 rounded-3xl p-6 flex items-center justify-between group hover:border-blue-300 hover:bg-blue-50/50 transition-all">
           <div>
             <h3 className="text-gray-900 font-medium text-lg flex items-center gap-2">
               <LinkIcon className="size-5 text-blue-500" /> Redirect Manager
