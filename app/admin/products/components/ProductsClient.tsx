@@ -15,6 +15,8 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
   
   // State
   const [searchQuery, setSearchQuery] = useState('')
+  // Decouple input value from expensive filtering query to prevent typing lag and optimize INP
+  const [localSearchQuery, setLocalSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterSeo, setFilterSeo] = useState('all')
@@ -46,6 +48,17 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 15
+
+  // Debounce local search query updates to the filtered search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(localSearchQuery)
+      // Reset to first page when search changes to prevent blank pages
+      setCurrentPage(1)
+    }, 200)
+
+    return () => clearTimeout(timer)
+  }, [localSearchQuery])
 
   // Extract unique categories for filter
   const categories = useMemo(() => {
@@ -558,8 +571,8 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
             <input
               type="text"
               placeholder="Ürün adı, SKU veya kategori ara..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={localSearchQuery}
+              onChange={(e) => setLocalSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black font-medium transition-all"
             />
           </div>
